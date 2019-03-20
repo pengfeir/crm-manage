@@ -23,6 +23,10 @@
         <p class="tip">注册过的用户可凭账号密码登录</p>
       </section>
     </transition>
+    <el-upload class="avatar-uploader" :action="uploadImage" :headers="headers" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+      <img v-if="imageUrl" :src="imageUrl" class="avatar">
+      <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+    </el-upload>
   </div>
 </template>
 <script>
@@ -30,10 +34,17 @@ import { getInfo } from "@/api/api.js";
 export default {
   data() {
     return {
+      uploadImage: "/manage/admin/upload",
       loginForm: {
         username: "",
         password: ""
       },
+      headers: {
+        "x-access-token":
+          "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmeXoiLCJjcmVhdGVkIjoxNTUzMDY3MDA5OTk3LCJleHAiOjE1NTM2NzE4MDl9.DPrNvLt7AO-YqLo8xKXXAnbIRcnGDWICfnzO89-1prgiUT6iQPvgKwo3qidO5puzxhlP8-wQFhpIiRFvUyhIXQ"
+      },
+
+      imageUrl: "",
       rules: {
         username: [
           { required: true, message: "请输入用户名", trigger: "blur" }
@@ -48,10 +59,25 @@ export default {
   },
   created() {
     this.list();
-    console.log(this.getStore)
+    console.log(this.getStore);
   },
   computed: {},
   methods: {
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
+    },
     async list() {
       try {
         let params = {
@@ -107,5 +133,29 @@ export default {
 .form-fade-leave-active {
   transform: translate3d(0, -50px, 0);
   opacity: 0;
+}
+
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
 }
 </style>
