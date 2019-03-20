@@ -4,7 +4,6 @@ import './plugins/element.js'
 import router from './router'
 import { MyPlugin } from './util/common'
 Vue.use(MyPlugin)
-console.log('this', localStorage)
 Vue.config.productionTip = false
 
 new Vue({

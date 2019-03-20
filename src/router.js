@@ -16,14 +16,16 @@ const routerarr = [
     path: '/manage',
     component: manage,
     name: '',
-    children: [ {
-      path: '/group',
-      component: group
-    },
-    {
-      path: '/role',
-      component: role
-    } ]
+    redirect: '/manage/group',
+    children: [
+      {
+        path: 'group',
+        component: group
+      },
+      {
+        path: 'role',
+        component: role
+      } ]
   },
   { path: '*', component: login }
 ]
