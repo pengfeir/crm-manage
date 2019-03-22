@@ -35,11 +35,11 @@
         label="机构名称">
       </el-table-column>
       <el-table-column
-        prop="code"
+        prop="contacts"
         label="联系人">
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="contactNumber"
         label="电话">
       </el-table-column>
       <el-table-column
@@ -65,14 +65,28 @@
       :total="totalCount">
     </el-pagination>
     <el-dialog :title="popTitle" :visible.sync="popShow"  class="ui_dialog_02 spe carditem" :close-on-click-modal="false">
+      <ever-form2
+        :schema="infoQuerySchema" 
+        v-model="infoQueryObj"
+        ref="form"
+        class="package-sale"
+        :info="true"
+        labelWidth="80px"
+        label-position="right">
+      </ever-form2>
+      <div class="log-btn-container">
+        <el-button type="primary" @click="prev">保存</el-button>
+        <el-button @click="popShow = false">取消</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
 <script>
 import list from '@/plugins/list'
+import api from '@/api/api'
 let schema = [
   {
-    name: 'name',
+    name: 'orgName',
     label: '名称'
   },
   {
@@ -86,20 +100,53 @@ let schema = [
     comp: 'custom'
   }
 ]
+let infoSchema = [
+  {
+    name: 'orgName',
+    label: '机构名称'
+  },
+  {
+    name: 'contacts',
+    label: '联系人'
+  },
+  {
+    name: 'contactNumber',
+    label: '联系电话'
+  },
+  {
+    name: 'address',
+    label: '地址'
+  }
+]
+let rules = {
+  batchObj: [
+    {orgName: true, message: '请输入机构名称', trigger: 'change'}
+  ]
+}
 export default {
   mixins: [list],
   data () {
     var obj = this.createObjFromSchema(schema)
+    var infoObj = this.createObjFromSchema(infoSchema)
     return {
+      rules,
       popShow: false,
+      popTitle: '新建机构',
       querySchema: schema,
       queryObj: obj,
+      infoQueryObj: infoObj,
+      infoQuerySchema: infoSchema,
       listApiName: 'aaa',
       tableData: [
       ]
     }
   },
   methods: {
+    prev () {
+      api.createAgency(this.infoQueryObj).then(rs => {
+        console.log(rs)
+      })
+    },
     addAgency () {
       this.popShow = true
     },
