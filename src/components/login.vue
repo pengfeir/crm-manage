@@ -15,12 +15,9 @@
             <el-input type="password" placeholder="密码" v-model="loginForm.password"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" class="submit_btn">登陆</el-button>
+            <el-button type="primary" class="submit_btn" @click="login">登陆</el-button>
           </el-form-item>
         </el-form>
-        <p class="tip">温馨提示11111：</p>
-        <p class="tip">未登录过的新用户，自动注册</p>
-        <p class="tip">注册过的用户可凭账号密码登录</p>
       </section>
     </transition>
     <el-upload class="avatar-uploader" :action="uploadImage" :headers="headers" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
@@ -30,7 +27,7 @@
   </div>
 </template>
 <script>
-import { getInfo } from "@/api/api.js";
+import api from "@/api/api.js";
 export default {
   data() {
     return {
@@ -58,11 +55,21 @@ export default {
     this.showLogin = true;
   },
   created() {
+
     this.list();
-    console.log(this.getStore);
+    console.log(this.getStore, 1111);
   },
   computed: {},
   methods: {
+    login () {
+      api.login(this.loginForm).then(rs => {
+        if (rs.code === 200) {
+          localStorage.setItem('token', rs.data.token)
+          let path = this.$route.query.redirect || '/manage/group'
+          this.$router.push(path)
+        }
+      })
+    },
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
     },
@@ -97,7 +104,8 @@ export default {
 <style lang="less" scoped>
 @import "../style/mixin";
 .login_page {
-  background-color: #324057;
+  background: url('../assets/login_bg.jpg') no-repeat center;
+  background-size:100% 100%; 
 }
 .manage_tip {
   position: absolute;

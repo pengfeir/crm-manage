@@ -2,7 +2,7 @@
  * @Author: renpengfei
  * @Date: 2019-03-16 18:31:01
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-03-20 18:24:55
+ * @Last Modified time: 2019-03-21 18:36:15
  */
 import axios from 'axios'
 import router from '../router'
@@ -16,11 +16,9 @@ service
   .use(
     // Do something before request is sent
     config => {
-    //   if (localStorage.getItem('token')) {
-    //     config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
-    //   }
-      console.log(config)
-      config.headers['x-access-token'] = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmeXoiLCJjcmVhdGVkIjoxNTUzMDY3MDA5OTk3LCJleHAiOjE1NTM2NzE4MDl9.DPrNvLt7AO-YqLo8xKXXAnbIRcnGDWICfnzO89-1prgiUT6iQPvgKwo3qidO5puzxhlP8-wQFhpIiRFvUyhIXQ'
+      if (localStorage.getItem('token')) {
+        config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
+      }
       return config
     },
     // Do something with request error
@@ -56,5 +54,11 @@ service
       }
       return Promise.reject(error)
     })
-
+service.prototype.post = function (url, params) {
+  return service({
+    url: url,
+    data: params,
+    method: 'post'
+  })
+}
 export default service

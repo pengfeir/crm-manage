@@ -4,19 +4,24 @@
             <el-col :span="4" style="min-height: 100%; background-color: #324057;">
                 <left-menu></left-menu>
             </el-col>
-            <el-col :span="20" style="height: 100%;overflow: auto;">
-                <keep-alive>
+            <el-col :span="20" style="height: 100%;background-color:#ebedef;">
+                <head-top></head-top>
+                <div class="view-container">
+                  <keep-alive>
                     <router-view></router-view>
-                </keep-alive>
+                  </keep-alive>
+                </div>  
             </el-col>
         </el-row>
     </div>
 </template>
 <script>
 import leftMenu from "@/components/menu.vue";
+import headTop from "@/components/headtop.vue"
 export default {
   components: {
-    leftMenu
+    leftMenu,
+    headTop
   },
   computed: {
     // defaultActive: function() {
@@ -29,6 +34,4 @@ export default {
 
 <style lang="less" scoped>
 @import "../style/mixin";
-.manage_page {
-}
 </style>

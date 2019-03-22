@@ -93,3 +93,54 @@ html,body{
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+#app /deep/ .el-menu {
+  border-right: none;
+}
+.main-head {
+  .el-form {
+    border-bottom: 1px solid #eee;
+  }
+  .el-form /deep/ {
+    .el-input__inner {
+      height: 32px;
+      border-color: #bbbbbb;
+    }
+    .el-button {
+      height: 32px;
+      line-height: 32px;
+      padding: 0 10px;
+    }
+    .el-button--primary {
+      color: #fff;
+      background-color: #1c7bef;
+      border-color: #1c7bef;
+    }
+  }
+  .package-sale {
+    position:relative;
+  }
+  .package-sale /deep/ .el-date-editor.el-input {
+    width: 170px !important;
+  }
+  .package-sale /deep/ .el-form-item:last-child{
+    position: absolute;
+    right: 0;
+  }
+}
+.el-table.el-table--border {
+  border: 1px solid #ccc;
+  margin-top: 20px;
+}
+.el-table td, .el-table th {
+  padding: 8px 0 !important;
+  border: none !important;
+}
+.el-table th {
+  color: #000;
+  background-color: #eee !important;
+}
+.el-pagination {
+  float:right;
+  margin-top: 10px;
+  color: #000;
+}
