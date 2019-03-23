@@ -6,7 +6,10 @@ const login = r => require.ensure([], () => r(require('@/components/login')), 'l
 const manage = r => require.ensure([], () => r(require('@/components/manage')), 'manage')
 const group = r => require.ensure([], () => r(require('@/views/group')), 'group')
 const role = r => require.ensure([], () => r(require('@/views/role')), 'role')
-const AgencyStaffs = r => require.ensure([], () => r(require('@/components/page/agencystaffs.vue')), 'agencystaffs')
+const AgencyStaffsList = r => require.ensure([], () => r(require('@/components/page/agencystaffslist.vue')), 'agencystaffslist')
+const AgencyList = r => require.ensure([], () => r(require('@/components/page/agencylist.vue')), 'agencylist')
+const RoleList = r => require.ensure([], () => r(require('@/components/page/role/rolelist.vue')), 'rolelist')
+const RoleAdd = r => require.ensure([], () => r(require('@/components/page/role/roleadd.vue')), 'roleladd')
 const routerarr = [
   {
     path: '/',
@@ -28,8 +31,16 @@ const routerarr = [
         component: role
       },
       {
-        path: 'agencystaffs',
-        component: AgencyStaffs
+        path: 'agencylist',
+        component: AgencyList
+      },
+      {
+        path: 'rolelist',
+        component: RoleList
+      },
+      {
+        path: 'roleadd',
+        component: RoleAdd
       }
     ]
   },

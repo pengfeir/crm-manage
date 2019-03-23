@@ -27,72 +27,12 @@
     </div>
 </template>
 <script>
+import list from '@/plugins/list'
+import roleTree from '@/plugins/roletree'
 export default {
   data() {
     return {
-      menuArr: [
-        {
-          menuName: "机构设置",
-          menuUrl: "1",
-          childMenus: [
-            {
-              menuName: "权限管理",
-              menuUrl: "1-1",
-              childMenus: [
-                {
-                  menuName: "账号管理",
-                  menuUrl: "/manage/group",
-                  childMenus: []
-                },
-                {
-                  menuName: "角色管理",
-                  menuUrl: "",
-                  childMenus: []
-                }
-              ]
-            },
-            {
-              menuName: "机构管理",
-              menuUrl: "1-2",
-              childMenus: [
-                {
-                  menuName: "机构设置",
-                  menuUrl: "/manage/agencystaffs",
-                  childMenus: []
-                },
-              ]
-            },
-            {
-              menuName: "菜单管理",
-              menuUrl: "1-3",
-              childMenus: []
-            }
-          ]
-        },
-        {
-          menuName: "导航2",
-          menuUrl: "/24234",
-          childMenus: []
-        },
-        {
-          menuName: "权限管理",
-          menuUrl: "3",
-          childMenus: [
-            {
-              menuName: "人员管理",
-              menuUrl: "/manage/group",
-              childMenus: [
-              ]
-            },
-            {
-              menuName: "角色管理",
-              menuUrl: "role",
-              childMenus: [
-              ]
-            }
-          ]
-        }
-      ]
+      menuArr: roleTree
     };
   },
   computed: {

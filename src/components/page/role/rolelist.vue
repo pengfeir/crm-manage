@@ -32,26 +32,14 @@
       </el-table-column>
       <el-table-column
         prop="orgName"
-        label="机构名称">
-      </el-table-column>
-      <el-table-column
-        prop="contacts"
-        label="联系人">
-      </el-table-column>
-      <el-table-column
-        prop="contactNumber"
-        label="电话">
-      </el-table-column>
-      <el-table-column
-        prop="address"
-        label="地址">
+        label="角色名称">
       </el-table-column>
       <el-table-column
         prop="name"
         label="操作">
         <template slot-scope="scope">
-          <el-buttom type="primary" @click="emitInfo(scope.row)">编辑</el-buttom>
-          <el-buttom type="primary" @click="delInfo(scope.row)">删除</el-buttom>
+          <el-button size="small" type="primary" @click="emitInfo(scope.row)">编辑</el-button>
+          <el-button size="small" type="danger" @click="delInfo(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -64,7 +52,7 @@
       :layout="layout"
       :total="totalCount">
     </el-pagination>
-    <el-dialog :title="popTitle" :visible.sync="popShow"  class="ui_dialog_02 spe carditem" :close-on-click-modal="false">
+    <el-dialog :title="popTitle" :visible.sync="popShow" width="80%"  class="ui_dialog_02 spe carditem" :close-on-click-modal="false">
       <ever-form2
         :schema="infoQuerySchema" 
         v-model="infoQueryObj"
@@ -84,10 +72,11 @@
 <script>
 import list from '@/plugins/list'
 import api from '@/api/api'
+console.log(list)
 let schema = [
   {
     name: 'orgName',
-    label: '名称'
+    label: '角色名称'
   },
   {
     name: 'btn',
@@ -129,34 +118,60 @@ export default {
     var obj = this.createObjFromSchema(schema)
     var infoObj = this.createObjFromSchema(infoSchema)
     return {
+      api,
       rules,
       popShow: false,
       popTitle: '新建机构',
+      ageencyID: '',
       querySchema: schema,
       queryObj: obj,
       infoQueryObj: infoObj,
       infoQuerySchema: infoSchema,
-      listApiName: 'aaa',
-      tableData: [
-      ]
+      listApiName: 'agencyList',
+      tableData: []
     }
   },
   methods: {
     prev () {
-      api.createAgency(this.infoQueryObj).then(rs => {
-        console.log(rs)
+      api.agencyCreate(this.infoQueryObj).then(rs => {
+        if (rs.code === 200) {
+          this.popShow = false
+          this.query()
+          this.$messageTips(this, 'success', '新建成功')
+        }
       })
     },
     addAgency () {
       this.popShow = true
     },
     emitInfo (row) {
-
+      this.infoQueryObj.orgName = row.orgName
+      this.infoQueryObj.contacts = row.contacts
+      this.infoQueryObj.contactNumber = row.contactNumber
+      this.infoQueryObj.address = row.contactNumber
+      this.ageencyID = row.id
+      this.popShow = true
     },
     delInfo (row) {
 
     }
-  }
+  },
+  watch: {
+    'popShow': {
+      handler (newValue) {
+        if (!newValue) {
+          this.infoQueryObj.orgName = ''
+          this.infoQueryObj.contacts = ''
+          this.infoQueryObj.contactNumber = ''
+          this.infoQueryObj.address = ''
+          this.ageencyID = ''
+          this.popTitle = '新建机构'
+        }
+      },
+      immediate: true
+    }
+  },
 }
 </script>
+
 

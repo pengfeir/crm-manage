@@ -2,12 +2,12 @@
  * @Author: renpengfei
  * @Date: 2019-03-16 18:31:01
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-03-21 18:36:15
+ * @Last Modified time: 2019-03-23 18:45:08
  */
 import axios from 'axios'
 import router from '../router'
 const service = axios.create({
-  timeout: 6000 // 超时时间,
+  timeout: 60000 // 超时时间,
 })
 // Add a request interceptor
 service
@@ -17,7 +17,7 @@ service
     // Do something before request is sent
     config => {
       if (localStorage.getItem('token')) {
-        config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
+        config.headers.Authorization = `${localStorage.getItem('token')}`
       }
       return config
     },
@@ -32,6 +32,10 @@ service
     // Do something with response data
     response => {
       if (response.data) {
+        if (response.data.code !== 200) {
+          this.$messageTips(this, 'error', '操作失败')
+          return
+        }
         // return Promise.resolve(response.data)
         return response.data
       } else {
@@ -59,6 +63,13 @@ service.prototype.post = function (url, params) {
     url: url,
     data: params,
     method: 'post'
+  })
+}
+service.prototype.get = function (url, params) {
+  return service({
+    url: url,
+    data: params,
+    method: 'get'
   })
 }
 export default service

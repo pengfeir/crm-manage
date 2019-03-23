@@ -1,8 +1,7 @@
+//import api from '@/api/api'
 var component = {
   mounted () {
-    // if (!(this.queryObj && this.queryObj.requestSwitch)) {
-    //   this.list()
-    // }
+    this.query()
   },
   data () {
     return {
@@ -37,43 +36,21 @@ var component = {
           delete params[key]
         }
       }
-      params.offset = this.offset
-      params.pagesize = this.pagesize
-      params.sourceType = this.sourceType ? this.sourceType : ''
-      try {
-        this.tableData = []
+      params.pageNum = this.offset
+      params.pageSize = this.pagesize
+      this.tableData = []
         // this.listApiName 自定义api名称
+        console.log(this.api[this.listApiName || 'list'])
         this.api[this.listApiName || 'list'](params).then(result => {
           this.loading = false
           if (result) {
-            if (result.warningType) this.warningType = result.warningType
-            if ('list' in result) {
-              this.tableData = result.list
-            } else if ('data' in result) {
-              this.tableData = result.data
-            } else {
-              this.tableData = result
-            }
-            this.totalCount = result.totalCount ? result.totalCount : 0
-            if (this.tableData && 'resultList' in this.tableData) {
-              this.totalCount = this.tableData.totalCount
-              this.tableData = this.tableData.resultList
-            }
-            if (this.tableData && !this.tableData[0]) {
-              this.tableData = []
-              this.emptyData = true
-            }
-            this.afterList && this.afterList(result)
+            this.tableData = result.data.list
+            this.totalCount = result.data.totalCount ? result.data.totalCount : 0
           } else {
             this.emptyData = true
             this.totalCount = 0
           }
         })
-      } catch (err) {
-        this.loading = false
-        this.emptyData = false
-        // console.log(err)
-      }
     },
     handleSizeChange (val) {
       this.pagesize = val
