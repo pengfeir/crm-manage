@@ -70,6 +70,9 @@
     <el-dialog :title="popTitle" :visible.sync="popShow" class="ui_dialog_02 spe carditem" :close-on-click-modal="false">
       <div class="scroll">
         <ever-form2 :schema="infoQuerySchema" v-model="infoQueryObj" ref="form" class="package-sale" labelWidth="180px" label-position="right">
+          <template slot="acceptStatus">
+            <el-autocomplete class="inline-input" v-model="infoQueryObj.acceptStatus" :fetch-suggestions="queryComp" placeholder="请输入内容" style="width: 100%"></el-autocomplete>
+          </template>
           <template slot="default">
             <div></div>
           </template>
@@ -124,7 +127,8 @@ let schema = [
 let infoSchema = [
   {
     name: "acceptStatus",
-    label: "验收状态"
+    label: "验收状态",
+    comp: "custom"
   },
   {
     name: "alternativeAppendant",
@@ -275,6 +279,19 @@ export default {
     };
   },
   methods: {
+    async queryComp(query, cb) {
+        this.remarkoptions = [
+          {
+            name: "未验收",
+            value: "未验收"
+          },
+          {
+            name: "已验收",
+            value: "已验收"
+          }
+        ];
+        cb(this.remarkoptions);
+    },
     addAsset() {
       Object.keys(this.infoQueryObj).map(key => {
         this.infoQueryObj[key] = "";
