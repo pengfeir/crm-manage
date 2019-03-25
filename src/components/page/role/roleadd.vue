@@ -10,7 +10,7 @@
         :info="true"
         labelWidth="80px"
         label-position="right">
-        <template slot="treeVal">
+        <template slot="description">
           <el-tree
             :data="data"
             ref="tree"
@@ -34,11 +34,11 @@ import roleTree from '@/plugins/roletree'
 console.log(roleTree)
 let schema = [
   {
-    name: 'orgName',
+    name: 'name',
     label: '角色名称'
   },
   {
-    name: 'treeVal',
+    name: 'description',
     label:'权限',
     comp: 'custom'
   },
@@ -55,14 +55,23 @@ export default {
       api,
       querySchema: schema,
       queryObj: obj,
+      id: this.$route.query.id,
       data: []
     }
   },
   created () {
-    this.data = this.initTreeData(roleTree)
-    console.log(this.data)
+    this.init()
   },
   methods: {
+    init () {
+      this.queryObj.name = ''
+      this.data = this.initTreeData(roleTree)
+      if (this.id) {
+        this.setCheck()
+      } else {
+        this.$refs.tree.setCheckedKeys([])
+      }
+    },
     initTreeData (data) {
       let arr = []
       data.forEach(item => {
@@ -74,17 +83,47 @@ export default {
       })
       return arr
     },
-    handleCheckChange () {
-
+    handleCheckChange (val) {
+      console.log(val)
+    },
+    setCheck () {
+      api.roleInfo({id: this.id}).then(rs => {
+        this.$refs.tree.setCheckedKeys(['eeee'])
+      })
     },
     prev () {
-
+      let roleArr = this.$refs.tree.getCheckedKeys()
+      if (roleArr.length === 0) {
+        this.$messageTips(this, 'error', '请选择权限')
+        return
+      }
+      let params ={
+        name: this.queryObj.name,
+        description: roleArr.join(',')
+      }
+      api.roleCreate(params).then(rs => {
+        if (rs.code === 200) {
+          this.$messageTips(this, 'success', '保存成功')
+          this.$router.go(-1)
+        } else {
+          this.$messageTips(this, 'error', '保存失败')
+        }
+      })
     },
     cancel () {
 
     }
   },
   watch: {
-  },
+    $route: {
+      handler (value) {
+        if (value.path === '/manage/roleadd') {
+          this.id = this.$route.query.id || ''
+          this.init()
+        }
+      },
+      immediate: true
+    }
+  }
 }
 </script>

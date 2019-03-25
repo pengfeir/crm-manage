@@ -17,7 +17,7 @@ var a = [
           },
           {
             menuName: "角色管理",
-            menuUrl: "/manage/roleadd",
+            menuUrl: "/manage/rolelist",
             auth:'dddd',
             childMenus: []
           }
