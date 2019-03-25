@@ -38,7 +38,6 @@ MyPlugin.install = (Vue) => {
     schema.forEach(item => {
       arr[item.name] = arr[item.valType] || ''
     })
-    console.log('arr', arr)
     return arr
   }
 }

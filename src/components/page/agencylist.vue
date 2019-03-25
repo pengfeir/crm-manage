@@ -151,7 +151,7 @@ export default {
   },
   methods: {
     prev () {
-      let url = 'agencyCreate'
+      let url = 'createAsset'
       let tips = '新建'  
       let params = Object.assign({}, this.infoQueryObj)
       if (this.ageencyID) {
@@ -187,7 +187,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        return api.agencyDel({ids: [row.id]})
+        return api.agencyDel({id: row.id})
       }).then(() => {
         this.$message({
           type: 'success',
