@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import common from './common'
-let setProp =  (obj, path, value) => { // 234
+// import common from './common'
+let setProp = (obj, path, value) => { // 234
   if (!path) {
     return
   }
@@ -8,19 +8,20 @@ let setProp =  (obj, path, value) => { // 234
   var len = pList.length
   for (var i = 0; i < len - 1; i++) {
     var elem = pList[i]
-    if (!obj[elem]) obj[elem] = {}
+    if (!obj[elem]) { obj[elem] = {} }
     obj = obj[elem]
   }
   obj[pList[len - 1]] = value
-};
-let getProp = (obj, prop) =>
-  prop.reduce((xs, x) => {
-    if (xs && xs[x] && (typeof xs[x] === 'string')) {
-      return xs[x]
-    } else {
-      return (xs && xs[x]) ? xs[x] : null
-    }
-  }, obj);
+}
+let getProp = (obj, prop) => prop.reduce((xs, x) => {
+  if (xs && xs[x] && (typeof xs[x] === 'string')) {
+    return xs[x]
+  } else {
+    return (xs && xs[x])
+      ? xs[x]
+      : null
+  }
+}, obj)
 let compMap = {
   'input': 'el-input',
   'text': 'el-input',
@@ -62,58 +63,61 @@ function createEle (obj, item, createElement, form) {
   if (comp === 'textarea') {
     props.type = 'textarea'
     // 设置文本域自适应高度
-    props.autosize = { minRows: 2 }
+    props.autosize = {
+      minRows: 2
+    }
   }
   let comp1 = compMap[comp] || comp
   let slots = []
   if (item.slots) {
-    slots = item.slots.map(slot => {
-      return createElement(Vue.extend({
-        template: slot.template
-      }), {
-        slot: slot.name
+    slots = item
+      .slots
+      .map(slot => {
+        return createElement(Vue.extend({ template: slot.template }), { slot: slot.name })
       })
-    })
   }
   if (['el-select'].indexOf(comp1) > -1 && props.options) {
-    slots = props.options.map(option => {
-      return createElement('el-option', {
-        props: {
-          key: option.id || option.value,
-          label: option.name || option.label,
-          value: option.id || option.value
-        }
+    slots = props
+      .options
+      .map(option => {
+        return createElement('el-option', {
+          props: {
+            key: option.id || option.value,
+            label: option.name || option.label,
+            value: option.id || option.value
+          }
+        })
       })
-    })
   } else if (comp1 === 'el-radio-group') {
-    slots = props.options.map(option => {
-      return createElement('el-radio', {
-        props: {
-          key: option.id || option.value,
-          label: option.name || option.label || option.value
-        }
-      }, option.id || option.value)
-    })
+    slots = props
+      .options
+      .map(option => {
+        return createElement('el-radio', {
+          props: {
+            key: option.id || option.value,
+            label: option.name || option.label || option.value
+          }
+        }, option.id || option.value)
+      })
   } else if (comp1 === 'el-checkbox-group') {
-    slots = props.options.map(option => {
-      return createElement('el-checkbox', {
-        props: {
-          key: option.id || option.value,
-          label: option.name || option.label || option.value
-        }
-      }, option.id || option.value)
-    })
+    slots = props
+      .options
+      .map(option => {
+        return createElement('el-checkbox', {
+          props: {
+            key: option.id || option.value,
+            label: option.name || option.label || option.value
+          }
+        }, option.id || option.value)
+      })
   }
 
-  let extralProps = item.extralProps ? JSON.parse(item.extralProps) : {}
-  props = Object.assign(
-    {
-      value: getProp(obj, name.split('.'))
-    },
-    defaultProps[comp1],
-    props,
-    extralProps
-  )
+  let extralProps = item.extralProps
+    ? JSON.parse(item.extralProps)
+    : {}
+  props = Object.assign({
+    value: getProp(obj, name.split('.'))
+  }, defaultProps[comp1], props, extralProps)
   if (item.children) {
     slots = createFormItems(item.children, obj, createElement, {})
   }
@@ -121,8 +125,8 @@ function createEle (obj, item, createElement, form) {
     slots = item.plainContent
   }
   let extandAttrs = {}
-  if (props && props.placeholder) extandAttrs.placeholder = props.placeholder
-  if (props && props.maxlength) extandAttrs.maxlength = props.maxlength
+  if (props && props.placeholder) { extandAttrs.placeholder = props.placeholder }
+  if (props && props.maxlength) { extandAttrs.maxlength = props.maxlength }
   props.size = form.size || ''
   if (comp1 === 'el-input' && item.type === 'number') {
     props.type = 'number'
@@ -137,14 +141,14 @@ function createEle (obj, item, createElement, form) {
             } else {
               val = Number(val)
             }
-          } catch (e) {
-
-          }
+          } catch (e) {}
         }
         setProp(obj, name, val)
         // input 只有在用户有输入时候触发，这点与 change 事件不同
         if (ele.context.isQuery && comp1 !== 'el-input') {
-          ele.context.query()
+          ele
+            .context
+            .query()
         }
       },
       'focus': (e) => {
@@ -154,7 +158,9 @@ function createEle (obj, item, createElement, form) {
     nativeOn: {
       'keyup': (e) => {
         if (ele.context.isQuery && e.keyCode === 13) {
-          ele.context.query()
+          ele
+            .context
+            .query()
         }
       }
     },
@@ -183,7 +189,9 @@ function createFormItems (schema, obj, createElement, form) {
         var ComponentClass = Vue.component(compMap[v.comp] || v.comp)
         if (ComponentClass) {
           var instance = new ComponentClass({
-            propsData: { value: obj[name] },
+            propsData: {
+              value: obj[name]
+            },
             parent: form
           })
           if (instance.getStringVal) {
@@ -205,22 +213,21 @@ function createFormItems (schema, obj, createElement, form) {
     if (v.isInput === false) {
       formItem = ele
     } else {
-      formItem = createElement(
-        'el-form-item',
-        {
-          props: {
-            label: v.label,
-            prop: name,
-            labelWidth: v.labelWidth
-          },
-          'class': v.parentClass || ''
+      formItem = createElement('el-form-item', {
+        props: {
+          label: v.label,
+          prop: name,
+          labelWidth: v.labelWidth
         },
-        [ele])
+        'class': v.parentClass || ''
+      }, [ele])
     }
     if (form.inline) {
       return formItem
     } else {
-      let colProps = Object.assign({ span: v.span || form.span || 24 }, v.col)
+      let colProps = Object.assign({
+        span: v.span || form.span || 24
+      }, v.col)
       if (form.forceFullline) {
         colProps.span = 24
       }
@@ -248,44 +255,44 @@ function createRows (formItems, createElement, gutter, rowFlex) {
     let rowProps = {
       gutter: gutter || 0
     }
-    if (rowFlex) rowProps.type = 'flex'
-    return createElement('el-row', { props: rowProps }, v)
+    if (rowFlex) { rowProps.type = 'flex' }
+    return createElement('el-row', {
+      props: rowProps
+    }, v)
   })
 }
 
 export default Vue.component('everForm2', {
   render: function (createElement) {
     let obj = this.value
+    console.log('qw', obj)
     let formItems = createFormItems(this.schema, obj, createElement, this)
     if (!this.nosubmit) {
       let formComp = this
-      formItems.push(this.$slots['default'] || createElement(Vue.extend(
-        {
-          props: ['disabled'],
-          template: this.isQuery ? querybtn : savebtn,
-          data () {
-            return {
-              objId: formComp.objId
-            }
+      formItems.push(this.$slots['default'] || createElement(Vue.extend({
+        props: ['disabled'],
+        template: this.isQuery
+          ? querybtn
+          : savebtn,
+        data () {
+          return { objId: formComp.objId }
+        },
+        methods: {
+          submitForm () {
+            formComp.submitForm()
           },
-          methods: {
-            submitForm () {
-              formComp.submitForm()
-            },
-            resetForm () {
-              formComp.resetForm()
-            },
-            query () {
-              formComp.query()
-            }
-          }
-        }),
-        {
-          props: {
-            disabled: formComp.disabled
+          resetForm () {
+            formComp.resetForm()
+          },
+          query () {
+            formComp.query()
           }
         }
-      ))
+      }), {
+        props: {
+          disabled: formComp.disabled
+        }
+      }))
     }
 
     // 如果查询后面还需要附加其他按钮在这里处理（场景可能会很少）by lvjiangtao@everjiankang.com
@@ -296,28 +303,22 @@ export default Vue.component('everForm2', {
         </el-form-item>
       `
       let formComp = this
-      formItems.push(createElement(Vue.extend(
-        {
-          props: ['disabled'],
-          template: extbtn,
-          data () {
-            return {
-
-              objId: formComp.objId
-            }
-          },
-          methods: {
-            extAction () {
-              formComp.extAction()
-            }
-          }
-        }),
-        {
-          props: {
-            disabled: formComp.disabled
+      formItems.push(createElement(Vue.extend({
+        props: ['disabled'],
+        template: extbtn,
+        data () {
+          return { objId: formComp.objId }
+        },
+        methods: {
+          extAction () {
+            formComp.extAction()
           }
         }
-      ))
+      }), {
+        props: {
+          disabled: formComp.disabled
+        }
+      }))
     }
 
     let formProps = {
@@ -325,8 +326,12 @@ export default Vue.component('everForm2', {
       inline: this.inline,
       model: this.value,
       disabled: this.allDisabled,
-      validateOnRuleChange: this.validateOnRuleChange === undefined ? true : this.validateOnRuleChange,
-      showMessage: this.showMessage === undefined ? true : this.showMessage
+      validateOnRuleChange: this.validateOnRuleChange === undefined
+        ? true
+        : this.validateOnRuleChange,
+      showMessage: this.showMessage === undefined
+        ? true
+        : this.showMessage
     }
     let formChild = formItems
     if (!this.inline) {
@@ -336,16 +341,34 @@ export default Vue.component('everForm2', {
       })
       formChild = createRows(formItems, createElement, this.gutter, this.rowFlex)
     }
-    return createElement(
-      'el-form',
-      {
-        props: formProps,
-        ref: 'form'
-      },
-      formChild
-    )
+    return createElement('el-form', {
+      props: formProps,
+      ref: 'form'
+    }, formChild)
   },
-  props: ['schema', 'rules', 'value', 'labelWidth', 'labelPosition', 'inline', 'span', 'gutter', 'rowFlex', 'nosubmit', 'api', 'info', 'isQuery', 'readonly', 'allDisabled', 'hasExt', 'extBtnString', 'size', 'validateOnRuleChange', 'showMessage', 'forceFullline'],
+  props: [
+    'schema',
+    'rules',
+    'value',
+    'labelWidth',
+    'labelPosition',
+    'inline',
+    'span',
+    'gutter',
+    'rowFlex',
+    'nosubmit',
+    'api',
+    'info',
+    'isQuery',
+    'readonly',
+    'allDisabled',
+    'hasExt',
+    'extBtnString',
+    'size',
+    'validateOnRuleChange',
+    'showMessage',
+    'forceFullline'
+  ],
   data () {
     return {
       objId: this.value.id || (this.$route && this.$route.params && this.$route.params.id),
@@ -370,40 +393,54 @@ export default Vue.component('everForm2', {
           }
         }
       }
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          this.api.createOrUpdate(this.value).then(result => {
+      this
+        .$refs
+        .form
+        .validate(valid => {
+          if (valid) {
+            this
+              .api
+              .createOrUpdate(this.value)
+              .then(result => {
+                this.disabled = false
+                this.$emit('objsaved', result)
+              }, _ => {
+                this.disabled = false
+              })
+          } else {
             this.disabled = false
-            this.$emit('objsaved', result)
-          }, _ => {
-            this.disabled = false
-          })
-        } else {
-          this.disabled = false
-          this.autofocus()
-          return false
-        }
-      })
+            this.autofocus()
+            return false
+          }
+        })
     },
     // 第一个出错元素获得焦点
     autofocus () {
       setTimeout(() => {
         var isError = document.getElementsByClassName('is-error')
         if (isError.length) {
-          isError[0].querySelector('input').focus()
+          isError[0]
+            .querySelector('input')
+            .focus()
         }
       }, 1)
     },
     resetForm () {
       this.disabled = false
-      this.$refs.form.resetFields()
+      this
+        .$refs
+        .form
+        .resetFields()
     },
     getDetail: function (id) {
-      this.api.getById(id || this.objId).then(result => {
-        if (result && result.id) {
-          Object.assign(this.value, result)
-        }
-      })
+      this
+        .api
+        .getById(id || this.objId)
+        .then(result => {
+          if (result && result.id) {
+            Object.assign(this.value, result)
+          }
+        })
     },
     query () {
       this.$emit('query')

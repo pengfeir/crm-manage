@@ -1,4 +1,4 @@
-//import api from '@/api/api'
+// import api from '@/api/api'
 var component = {
   mounted () {
     this.query()
@@ -20,9 +20,8 @@ var component = {
     // 延迟400毫秒查询
     query () {
       setTimeout(queryObject => {
-        this.queryObj = queryObject
         this.handleCurrentChange(1)
-      } ,400)
+      }, 400)
     },
     list: function (refresh) {
       this.loading = true
@@ -39,18 +38,17 @@ var component = {
       params.pageNum = this.offset
       params.pageSize = this.pagesize
       this.tableData = []
-        // this.listApiName 自定义api名称
-        console.log(this.api[this.listApiName || 'list'])
-        this.api[this.listApiName || 'list'](params).then(result => {
-          this.loading = false
-          if (result) {
-            this.tableData = result.data.list
-            this.totalCount = result.data.totalCount ? result.data.totalCount : 0
-          } else {
-            this.emptyData = true
-            this.totalCount = 0
-          }
-        })
+      // this.listApiName 自定义api名称
+      this.api[this.listApiName || 'list'](params).then(result => {
+        this.loading = false
+        if (result) {
+          this.tableData = result.data.list
+          this.totalCount = result.data.totalCount ? result.data.totalCount : 0
+        } else {
+          this.emptyData = true
+          this.totalCount = 0
+        }
+      })
     },
     handleSizeChange (val) {
       this.pagesize = val
@@ -62,7 +60,7 @@ var component = {
       this.offset = (val - 1) * this.pagesize || 0
       this.list()
       return this.pageAfter && this.pageAfter(this.pagesize)
-    },
+    }
   },
   watch: {
     'queryObj.requestSwitch': {

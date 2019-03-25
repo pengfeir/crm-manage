@@ -2,7 +2,7 @@
  * @Author: renpengfei
  * @Date: 2019-03-18 15:55:28
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-03-22 11:33:57
+ * @Last Modified time: 2019-03-25 12:11:50
  */
 
 let MyPlugin = {}
@@ -15,8 +15,10 @@ MyPlugin.install = (Vue) => {
       .localStorage
       .getItem(name)
   }
-  Vue.prototype.setStore = (key,value) => {
-    return window.localStorage.setItem(key, value)
+  Vue.prototype.setStore = (key, value) => {
+    return window
+      .localStorage
+      .setItem(key, value)
   }
   /**
  * 删除localStorage
@@ -29,17 +31,14 @@ MyPlugin.install = (Vue) => {
   Vue.prototype.$messageTips = (_this, type, msg, title) => {
     msg = msg || '网络开小差了！请稍后重试'
     title = title || '提示'
-    _this.$notify({
-      title: title,
-      message: msg,
-      type: type
-    })
+    _this.$notify({ title: title, message: msg, type: type })
   }
   Vue.prototype.createObjFromSchema = (schema) => {
     let arr = {}
     schema.forEach(item => {
       arr[item.name] = arr[item.valType] || ''
     })
+    console.log('arr', arr)
     return arr
   }
 }

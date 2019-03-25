@@ -16,10 +16,14 @@ function agencyUpdate (params) { // 编辑机构
 function agencyDel (params) { // 删除机构
   return axios.post('/manage/organization/delete', params)
 }
+function assetList (params) { // 资产列表
+  return axios.post('/manage/asset/list', params)
+}
 export default {
   login,
   agencyDel,
   agencyList,
   agencyUpdate,
-  agencyCreate
+  agencyCreate,
+  assetList
 }
