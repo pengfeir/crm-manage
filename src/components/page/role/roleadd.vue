@@ -1,27 +1,30 @@
 <template>
   <div>
-    <ever-form2
-      :schema="querySchema" 
-      v-model="queryObj"
-      ref="form"
-      class="package-sale"
-      :info="true"
-      labelWidth="80px"
-      label-position="right">
-      <template slot="treeVal">
-        <el-tree
-          :data="data"
-          ref="tree"
-          show-checkbox
-          node-key="id"
-          @check-change="handleCheckChange"
-          :expand-on-click-node="false">
-        </el-tree>
-      </template>
-    </ever-form2>
-    <div>
-      <el-button type="primary" @click="prev">确认</el-button>
-      <el-button @click="cancel">取消</el-button>
+    <ever-bread-crumb></ever-bread-crumb>
+    <div class="layout_inner">
+      <ever-form2
+        :schema="querySchema" 
+        v-model="queryObj"
+        ref="form"
+        class="package-sale"
+        :info="true"
+        labelWidth="80px"
+        label-position="right">
+        <template slot="treeVal">
+          <el-tree
+            :data="data"
+            ref="tree"
+            show-checkbox
+            node-key="id"
+            @check-change="handleCheckChange"
+            :expand-on-click-node="false">
+          </el-tree>
+        </template>
+      </ever-form2>
+      <div>
+        <el-button type="primary" @click="prev">确认</el-button>
+        <el-button @click="cancel">取消</el-button>
+      </div>
     </div>
   </div>
 </template>
