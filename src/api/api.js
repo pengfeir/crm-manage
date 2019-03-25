@@ -25,8 +25,8 @@ function roleCreate (params) { // 添加角色
 function roleDel (params) { // 删除角色
   return axios.post('/manage/role/delete', params)
 }
-function roleUpdate (params) { // 编辑角色
-  return axios.post('/manage/role/update', params)
+function roleUpdate (params, id) { // 编辑角色
+  return axios.post('/manage/role/update/'+ id, params)
 }
 function roleInfo (params) { // 获取角色的详情信息
   return axios.post('/manage/admin/info', params)
@@ -44,6 +44,6 @@ export default {
   roleInfo,
   roleList,
   roleCreate,
-  roleUpdate
+  roleUpdate,
   assetList
 }

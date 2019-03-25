@@ -1,7 +1,7 @@
 <template>
   <div class="ever-bread-crumb">
     <el-button @click="go" class="diy-btn-style"><i class="el-icon-arrow-left"></i></el-button>
-    <span>{{showTitle}}</span>
+    <span>{{title}}</span>
   </div>
 </template>
 <script>
@@ -31,9 +31,9 @@ export default {
     init () {
       this.isShow = !this.isAddEdit
       if (this.id) {
-        this.showTitle = '编辑'
+        this.title = '编辑'
       } else {
-        this.showTitle = '新建'
+        this.title = '新建'
       }
       if (this.showTitle) {
         this.title = this.showTitle

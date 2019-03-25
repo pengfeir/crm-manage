@@ -2,7 +2,7 @@
  * @Author: renpengfei
  * @Date: 2019-03-16 18:31:01
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-03-25 15:34:02
+ * @Last Modified time: 2019-03-25 18:52:41
  */
 import axios from 'axios'
 import router from '../router'
@@ -33,10 +33,18 @@ service
     // Do something with response data
     response => {
       if (response.data) {
+        if (response.data.code === 401) {
+          router.replace({
+            path: 'login',
+            query: {
+              redirect: router.currentRoute.path
+            }
+          })
+        }
         if (response.data.code !== 200) {
           Notification.error('操作失败')
           return
-        }
+        } else 
         // return Promise.resolve(response.data)
         return response.data
       } else {
@@ -51,13 +59,13 @@ service
       if (error.response) {
         switch (error.response.status) {
           case 401:
-            // // 返回 401 清除token信息并跳转到登录页面
-            // router.currentRoute.path !== 'login' && router.replace({
-            //   path: 'login',
-            //   query: {
-            //     redirect: router.currentRoute.path
-            //   }
-            // })
+            // 返回 401 清除token信息并跳转到登录页面
+            router.currentRoute.path !== 'login' && router.replace({
+              path: 'login',
+              query: {
+                redirect: router.currentRoute.path
+              }
+            })
         }
       }
       return Promise.reject(error)

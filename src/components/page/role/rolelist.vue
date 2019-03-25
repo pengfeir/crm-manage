@@ -70,7 +70,7 @@ import api from '@/api/api'
 console.log(list)
 let schema = [
   {
-    name: 'orgName',
+    name: 'name',
     label: '角色名称'
   },
   {
@@ -84,18 +84,12 @@ let schema = [
     comp: 'custom'
   }
 ]
-let rules = {
-  batchObj: [
-    {orgName: true, message: '请输入机构名称', trigger: 'change'}
-  ]
-}
 export default {
   mixins: [list],
   data () {
     var obj = this.createObjFromSchema(schema)
     return {
       api,
-      rules,
       querySchema: schema,
       queryObj: obj,
       listApiName: 'roleList',
@@ -107,7 +101,7 @@ export default {
       this.$router.push('/manage/roleadd')
     },
     list () {
-      api[this.listApiName]().then(rs => {
+      api[this.listApiName]({name:this.queryObj.name || '', id: ''}).then(rs => {
         if (rs.code === 200) {
           this.tableData = rs.data
         }
@@ -117,7 +111,19 @@ export default {
       this.$router.push('/manage/roleadd?id=' + row.id)
     },
     delInfo (row) {
-
+      this.$confirm('确定要删除该角色?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        return api.roleDel({ids: [row.id]})
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+        this.query()
+      })
     }
   },
   watch: {

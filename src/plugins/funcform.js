@@ -41,15 +41,7 @@ let defaultProps = {
   }
 }
 
-let savebtn = `
-  <el-col class="submit-zone">
-    <el-form-item>
-      <el-button :disabled="disabled" type="primary" @click="submitForm()" v-if="!objId">创建</el-button>
-      <el-button :disabled="disabled" type="primary" @click="submitForm()" v-if="objId">保存</el-button>
-      <el-button @click="resetForm()" v-if="!objId">重置</el-button>
-    </el-form-item>
-  </el-col>
-  `
+let savebtn = ``
 let querybtn = `
   <el-form-item>
     <el-button type="primary" @click="query()">查询</el-button>
@@ -265,7 +257,6 @@ function createRows (formItems, createElement, gutter, rowFlex) {
 export default Vue.component('everForm2', {
   render: function (createElement) {
     let obj = this.value
-    console.log('qw', obj)
     let formItems = createFormItems(this.schema, obj, createElement, this)
     if (!this.nosubmit) {
       let formComp = this

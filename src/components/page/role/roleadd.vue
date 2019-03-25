@@ -21,7 +21,7 @@
           </el-tree>
         </template>
       </ever-form2>
-      <div>
+      <div class="log-btn-container">
         <el-button type="primary" @click="prev">确认</el-button>
         <el-button @click="cancel">取消</el-button>
       </div>
@@ -68,8 +68,6 @@ export default {
       this.data = this.initTreeData(roleTree)
       if (this.id) {
         this.setCheck()
-      } else {
-        this.$refs.tree.setCheckedKeys([])
       }
     },
     initTreeData (data) {
@@ -87,12 +85,15 @@ export default {
       console.log(val)
     },
     setCheck () {
-      api.roleInfo({id: this.id}).then(rs => {
-        this.$refs.tree.setCheckedKeys(['eeee'])
+      api.roleList({name: '',id: this.id}).then(rs => {
+        if (rs.code === 200 && rs.data.length>0)
+        this.queryObj.name = rs.data[0]['name']
+        this.$refs.tree.setCheckedKeys(rs.data[0]['description'].split(','))
       })
     },
     prev () {
       let roleArr = this.$refs.tree.getCheckedKeys()
+      let url = 'roleCreate'
       if (roleArr.length === 0) {
         this.$messageTips(this, 'error', '请选择权限')
         return
@@ -101,7 +102,11 @@ export default {
         name: this.queryObj.name,
         description: roleArr.join(',')
       }
-      api.roleCreate(params).then(rs => {
+      if (this.id) {
+        params.id = this.id
+        url = 'roleUpdate'
+      }
+      api[url](params).then(rs => {
         if (rs.code === 200) {
           this.$messageTips(this, 'success', '保存成功')
           this.$router.go(-1)
@@ -111,7 +116,7 @@ export default {
       })
     },
     cancel () {
-
+      this.$router.go(-1)
     }
   },
   watch: {
