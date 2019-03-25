@@ -265,7 +265,6 @@ function createRows (formItems, createElement, gutter, rowFlex) {
 export default Vue.component('everForm2', {
   render: function (createElement) {
     let obj = this.value
-    console.log('qw', obj)
     let formItems = createFormItems(this.schema, obj, createElement, this)
     if (!this.nosubmit) {
       let formComp = this

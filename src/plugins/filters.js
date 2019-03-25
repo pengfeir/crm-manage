@@ -2,7 +2,7 @@
  * @Author: renpengfei
  * @Date: 2019-03-25 14:56:51
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-03-25 15:05:28
+ * @Last Modified time: 2019-03-25 18:39:20
  */
 /**
  * 设备装机状态
@@ -32,9 +32,9 @@ export const getSteps = status => {
  */
 export const getAppendant = isDedicatedAppendant => {
   switch (isDedicatedAppendant) {
-    case 0 :
+    case '0' :
       return '否'
-    case 1 :
+    case '1' :
       return '是'
     default:
       return '无'

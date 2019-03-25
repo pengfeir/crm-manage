@@ -19,11 +19,23 @@ function agencyDel (params) { // 删除机构
 function assetList (params) { // 资产列表
   return axios.post('/manage/asset/list', params)
 }
+function deleteAsset (params) { // 删除资产列表
+  return axios.post('/manage/asset/delete', params)
+}
+function createAsset (params) { // 创建资产列表
+  return axios.post('/manage/asset/create', params)
+}
+function updateAsset (params) { // 更新资产列表
+  return axios.post('/manage/asset/update', params)
+}
 export default {
   login,
   agencyDel,
   agencyList,
   agencyUpdate,
   agencyCreate,
-  assetList
+  assetList,
+  deleteAsset,
+  createAsset,
+  updateAsset
 }
