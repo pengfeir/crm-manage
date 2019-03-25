@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="layout_inner">
     <div class="main-head">
       <ever-form2
         :schema="querySchema" 
@@ -60,15 +60,17 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="currentPage"
-      :page-sizes="pageSizes"
-      :page-size="20"
-      :layout="layout"
-      :total="totalCount">
-    </el-pagination>
+    <div style="overflow:hidden;margin-bottom:10px;">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="pageSizes"
+        :page-size="20"
+        :layout="layout"
+        :total="totalCount">
+      </el-pagination>
+    </div>
     <el-dialog :title="popTitle" :visible.sync="popShow"  class="ui_dialog_02 spe carditem" :close-on-click-modal="false">
       <ever-form2
         :schema="infoQuerySchema" 
@@ -175,7 +177,7 @@ export default {
       this.infoQueryObj.orgName = row.orgName
       this.infoQueryObj.contacts = row.contacts
       this.infoQueryObj.contactNumber = row.contactNumber
-      this.infoQueryObj.address = row.contactNumber
+      this.infoQueryObj.address = row.address
       this.ageencyID = row.id
       this.popShow = true
     },

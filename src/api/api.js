@@ -16,6 +16,21 @@ function agencyUpdate (params) { // 编辑机构
 function agencyDel (params) { // 删除机构
   return axios.post('/manage/organization/delete', params)
 }
+function roleList (params) { // 角色列表
+  return axios.post('/manage/role/list', params)
+}
+function roleCreate (params) { // 添加角色
+  return axios.post('/manage/role/create', params)
+}
+function roleDel (params) { // 删除角色
+  return axios.post('/manage/role/delete', params)
+}
+function roleUpdate (params) { // 编辑角色
+  return axios.post('/manage/role/update', params)
+}
+function roleInfo (params) { // 获取角色的详情信息
+  return axios.post('/manage/admin/info', params)
+}
 function assetList (params) { // 资产列表
   return axios.post('/manage/asset/list', params)
 }
@@ -37,5 +52,10 @@ export default {
   assetList,
   deleteAsset,
   createAsset,
-  updateAsset
+  updateAsset,
+  roleDel,
+  roleInfo,
+  roleList,
+  roleCreate,
+  roleUpdate
 }
