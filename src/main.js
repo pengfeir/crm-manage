@@ -6,6 +6,11 @@ import { MyPlugin } from './plugins/common'
 import everPagination from './plugins/pagination'
 import everBreadCrumb from './plugins/everbreadcrumb'
 import 'element-ui/lib/theme-chalk/index.css'
+import * as custom from './plugins/filters'
+
+Object.keys(custom).forEach(key => {
+  Vue.filter(key, custom[key])
+})
 require('./plugins/funcform')
 Vue.use(MyPlugin)
 Vue.use(Element)

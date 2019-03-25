@@ -31,6 +31,9 @@ function roleUpdate (params) { // 编辑角色
 function roleInfo (params) { // 获取角色的详情信息
   return axios.post('/manage/admin/info', params)
 }
+function assetList (params) { // 资产列表
+  return axios.post('/manage/asset/list', params)
+}
 export default {
   login,
   agencyDel,
@@ -42,4 +45,5 @@ export default {
   roleList,
   roleCreate,
   roleUpdate
+  assetList
 }
