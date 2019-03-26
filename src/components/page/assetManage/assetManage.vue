@@ -13,7 +13,9 @@
     <el-table :data="tableData" style="width: 100%" border stripe max-height="650">
       <el-table-column type="index" width="50" fixed>
       </el-table-column>
-      <el-table-column prop="acceptStatus" label="验收状态" fixed>
+      <el-table-column prop="name" label="资产名称" fixed>
+      </el-table-column>
+      <el-table-column prop="acceptStatus" label="验收状态">
       </el-table-column>
       <el-table-column prop="alternativeAppendant" label="耗材替代品" width="100">
       </el-table-column>
@@ -58,6 +60,8 @@
       </el-table-column>
       <el-table-column prop="mtime" label="更新时间" width="150">
       </el-table-column>
+      <el-table-column prop="userId" label="创建者ID" width="180">
+            </el-table-column>
       <el-table-column prop="name" label="操作" fixed="right" width="150">
         <template slot-scope="scope">
           <el-button size="small" type="primary" @click="emitInfo(scope.row)">编辑</el-button>
@@ -125,6 +129,10 @@ let schema = [
   }
 ];
 let infoSchema = [
+  {
+    name: "name",
+    label: "资产名称",
+  },
   {
     name: "acceptStatus",
     label: "验收状态",

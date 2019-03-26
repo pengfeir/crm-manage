@@ -79,6 +79,33 @@ function deleteComplaint (params) { // 删除投诉
 function updateComplaint (params) { // 更新投诉
   return axios.post('/manage/complaint/update', params)
 }
+function unPageList (params) { // 无分页资产列表
+  return axios.post('/manage/asset/unPageList', params)
+}
+function createRoom (params) { // 创建房间
+  return axios.post('/manage/room/create', params)
+}
+function deleteRoom (params) { // 删除房间
+  return axios.post('/manage/room/delete', params)
+}
+function updateRoom (params) { // 更新房间
+  return axios.post('/manage/room/update', params)
+}
+function roomList (params) { // 房间列表
+  return axios.post('/manage/room/list', params)
+}
+function createIotDevice (params) { // 创建物联
+  return axios.post('/manage/iotDevice/create', params)
+}
+function deleteIotDevice (params) { // 删除物联
+  return axios.post('/manage/iotDevice/delete', params)
+}
+function updateIotDevice (params) { // 更新物联
+  return axios.post('/manage/iotDevice/update', params)
+}
+function iotDeviceList (params) { // 房间物联
+  return axios.post('/manage/iotDevice/list', params)
+}
 export default {
   login,
   agencyDel,
@@ -105,5 +132,14 @@ export default {
   complaintList,
   createComplaint,
   deleteComplaint,
-  updateComplaint
+  updateComplaint,
+  unPageList,
+  createRoom,
+  deleteRoom,
+  updateRoom,
+  roomList,
+  createIotDevice,
+  deleteIotDevice,
+  updateIotDevice,
+  iotDeviceList
 }

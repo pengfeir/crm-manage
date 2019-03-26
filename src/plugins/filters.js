@@ -2,7 +2,7 @@
  * @Author: renpengfei
  * @Date: 2019-03-25 14:56:51
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-03-26 11:12:11
+ * @Last Modified time: 2019-03-26 17:11:22
  */
 /**
  * 设备装机状态
@@ -72,6 +72,26 @@ export const kindStatus = kind => {
       return '保养'
     case 'qa' :
       return '质控'
+    default:
+      return '未知'
+  }
+}
+/**
+ * 物联类别
+ * @param {*} kind
+ */
+export const deviceStatus = kind => {
+  switch (kind) {
+    case 'co' :
+      return '协调器'
+    case 'gw' :
+      return '网关'
+    case 'sensor' :
+      return '监测终端'
+    case 'qr' :
+      return '二维码'
+    case '4g' :
+      return '4G模块'
     default:
       return '未知'
   }

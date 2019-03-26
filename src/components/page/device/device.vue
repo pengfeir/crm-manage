@@ -13,28 +13,22 @@
         <el-table :data="tableData" style="width: 100%" border stripe max-height="650">
             <el-table-column type="index" width="50" fixed>
             </el-table-column>
-            <el-table-column prop="assetId" label="资产名称" fixed>
+            <el-table-column prop="model" label="设备型号" fixed>
             </el-table-column>
-            <el-table-column prop="actionDate" label="保养/质控的实际发生时间" width="200">
+            <el-table-column prop="ctime" label="创建时间">
             </el-table-column>
-            <el-table-column prop="contact" label="联系方式">
+            <el-table-column prop="extra" label="其他扩展信息">
             </el-table-column>
-            <el-table-column prop="ctime" label="创建时间" width="180">
-            </el-table-column>
-            <el-table-column prop="extra" label="其他扩展信息" width="150">
-            </el-table-column>
-            <el-table-column prop="kind" label="类别" width="150">
+            <el-table-column prop="kind" label="物联设备类别" width="180">
                 <template slot-scope="scope">
-                    {{scope.row.kind | kindStatus}}
+                    {{scope.row.kind | deviceStatus}}
                 </template>
             </el-table-column>
-            <el-table-column prop="mtime" label="更新时间" width="180">
+            <el-table-column prop="macAddr" label="设备的MAC地址" width="180">
             </el-table-column>
-            <el-table-column prop="planDate" label="保养/质控的计划时间" width="180">
+            <el-table-column prop="mtime" label="更新时间" width="150">
             </el-table-column>
-            <el-table-column prop="reportUrlList" label="保养/质控报告的地址列表" width="200">
-            </el-table-column>
-            <el-table-column prop="vender" label="服务提供方" width="150">
+            <el-table-column prop="urlList" label="设备资料的地址列表" width="180">
             </el-table-column>
             <el-table-column prop="userId" label="创建者ID" width="180">
             </el-table-column>
@@ -67,34 +61,37 @@ import list from "@/plugins/list";
 import api from "@/api/api";
 let schema = [
   {
-    name: "assetId",
-    label: "资产名称",
-    comp: "assets-select"
-  },
-  {
-    name: "actionUserId",
-    label: "实际保养/质控人的ID"
-  },
-  {
-    label: "类别",
     name: "kind",
+    label: "物联设备类别",
     comp: "el-select",
     props: {
       options: [
         {
-          id: "maintain",
-          name: "保养"
+          id: "co",
+          name: "协调器"
         },
         {
-          id: "qa",
-          name: "质控"
+          id: "gw",
+          name: "网关"
+        },
+        {
+          id: "sensor",
+          name: "监测终端"
+        },
+        {
+          id: "qr",
+          name: "二维码"
+        },
+        {
+          id: "4g",
+          name: "4G模块"
         }
       ]
     }
   },
   {
-    label: "服务提供方",
-    name: "vender"
+    name: "model",
+    label: "设备型号"
   },
   {
     name: "btn",
@@ -109,64 +106,49 @@ let schema = [
 ];
 let infoSchema = [
   {
-    name: "assetId",
-    label: "资产名称",
-    comp: "assets-select"
+    name: "model",
+    label: "设备型号"
   },
   {
-    name: "actionDate",
-    label: "保养/质控的实际发生时间",
-    comp: "el-date-picker",
+    name: "kind",
+    label: "物联设备类别",
+    comp: "el-select",
     props: {
-      type: "datetime",
-      valueFormat: "yyyy-MM-dd HH:mm:ss"
+      options: [
+        {
+          id: "co",
+          name: "协调器"
+        },
+        {
+          id: "gw",
+          name: "网关"
+        },
+        {
+          id: "sensor",
+          name: "监测终端"
+        },
+        {
+          id: "qr",
+          name: "二维码"
+        },
+        {
+          id: "4g",
+          name: "4G模块"
+        }
+      ]
     }
   },
   {
-    name: "actionUserId",
-    label: "实际保养/质控人的ID"
-  },
-  {
-    name: "contact",
-    label: "联系方式"
+    name: "macAddr",
+    label: "设备的MAC地址"
   },
   {
     name: "extra",
     label: "其他扩展信息"
   },
   {
-    name: "kind",
-    label: "类别",
-    comp: "el-select",
-    props: {
-      options: [
-        {
-          id: "maintain",
-          name: "保养"
-        },
-        {
-          id: "qa",
-          name: "质控"
-        }
-      ]
-    }
-  },
-  {
-    name: "planDate",
-    label: "保养/质控的计划时间",
-    comp: "el-date-picker",
-    props: {
-      type: "datetime",
-      valueFormat: "yyyy-MM-dd HH:mm:ss"
-    }
-  },
-  {
-    name: "reportUrlList",
-    label: "保养/质控报告的地址列表"
-  },
-  {
-    name: "vender",
-    label: "服务提供方"
+    name: "urlList",
+    label: "设备资料的地址列表"
   }
 ];
 export default {
@@ -179,7 +161,7 @@ export default {
       querySchema: schema,
       queryObj: obj,
       tableData: [],
-      listApiName: "mainList",
+      listApiName: "iotDeviceList",
       infoQueryObj: infoObj,
       infoQuerySchema: infoSchema,
       popShow: false,
@@ -194,12 +176,12 @@ export default {
       });
       this.popShow = true;
       this.detailId = "";
-      this.popTitle = "新建保养质检";
+      this.popTitle = "新建物联设备";
     },
     prev(id) {
-      let url = "createMain";
+      let url = "createIotDevice";
       if (this.detailId) {
-        url = "updateMain";
+        url = "updateIotDevice";
       }
       let tips = this.detailId ? "更新" : "创建";
       let params = Object.assign({}, this.infoQueryObj);
@@ -214,19 +196,19 @@ export default {
       });
     },
     emitInfo(row) {
-      this.popTitle = "编辑保养质检";
+      this.popTitle = "编辑物联设备";
       this.detailId = row.id;
       Object.assign(this.infoQueryObj, row);
       this.popShow = true;
     },
     delInfo(row) {
-      this.$confirm("确定要删除该保养质检记录?", "提示", {
+      this.$confirm("确定要删除该物联设备记录?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
-          return api.deleteMain({ id: row.id });
+          return api.deleteIotDevice({ id: row.id });
         })
         .then(() => {
           this.$message({

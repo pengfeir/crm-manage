@@ -13,38 +13,40 @@
         <el-table :data="tableData" style="width: 100%" border stripe max-height="650">
             <el-table-column type="index" width="50" fixed>
             </el-table-column>
-            <el-table-column prop="assetId" label="资产ID" fixed>
+            <el-table-column prop="assetId" label="资产名称" fixed>
             </el-table-column>
             <el-table-column prop="contact" label="联系方式">
             </el-table-column>
             <el-table-column prop="contractUrlList" label="维修合同照片的地址列表" width="180">
             </el-table-column>
-            <el-table-column prop="ctime" label="创建时间">
+            <el-table-column prop="ctime" label="创建时间"  width="180">
             </el-table-column>
             <el-table-column prop="dept" label="故障发生科室" width="150">
             </el-table-column>
             <el-table-column prop="extra" label="其他扩展信息" width="150">
             </el-table-column>
-            <el-table-column prop="faultAt" label="故障发生时间" width="150">
+            <el-table-column prop="faultAt" label="故障发生时间" width="180">
             </el-table-column>
             <el-table-column prop="faultUrlList" label="故障照片地址列表" width="180">
             </el-table-column>
             <el-table-column prop="fixStep" label="维修进度" >
                 <template slot-scope="scope">
-                    {{scope.row.isDedicatedAppendant | stepStatus}}
+                    {{scope.row.fixStep | stepStatus}}
                 </template>
             </el-table-column>
             <el-table-column prop="kind" label="故障类别">
             </el-table-column>
-            <el-table-column prop="mtime" label="更新时间">
+            <el-table-column prop="mtime" label="更新时间" width="180">
             </el-table-column>
             <el-table-column prop="offerPrice" label="维修报价">
             </el-table-column>
             <el-table-column prop="receiptUrlList" label="票据照片的地址列表" width="180">
             </el-table-column>
-            <el-table-column prop="reporter" label="故障上报人信息" width="150">
+            <el-table-column prop="reporter" label="故障上报人信息" width="180">
             </el-table-column>
             <el-table-column prop="vender" label="服务提供方" width="150">
+            </el-table-column>
+            <el-table-column prop="userId" label="创建者ID" width="180">
             </el-table-column>
             <el-table-column prop="name" label="操作" fixed="right" width="150">
                 <template slot-scope="scope">
@@ -76,7 +78,8 @@ import api from "@/api/api";
 let schema = [
   {
     name: "assetId",
-    label: "资产id"
+    label: "资产名称",
+    comp:'assets-select'
   },
   {
     name: "dept",
@@ -108,7 +111,8 @@ let schema = [
 let infoSchema = [
   {
     name: "assetId",
-    label: "资产",
+    label: "资产名称",
+    comp:'assets-select'
   },
   {
     name: "contact",
@@ -222,7 +226,7 @@ export default {
       });
       this.popShow = true;
       this.detailId = "";
-      this.popTitle = "新建资产";
+      this.popTitle = "新建资产故障";
     },
     prev(id) {
       let url = "createFault";
@@ -242,13 +246,13 @@ export default {
       });
     },
     emitInfo(row) {
-      this.popTitle = "编辑资产";
+      this.popTitle = "编辑资产故障";
       this.detailId = row.id;
       Object.assign(this.infoQueryObj, row);
       this.popShow = true;
     },
     delInfo(row) {
-      this.$confirm("确定要删除该设备信息?", "提示", {
+      this.$confirm("确定要删除该设备故障记录?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"

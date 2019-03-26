@@ -13,7 +13,7 @@
         <el-table :data="tableData" style="width: 100%" border stripe max-height="650">
             <el-table-column type="index" width="50">
             </el-table-column>
-            <el-table-column prop="assetId" label="资产ID">
+            <el-table-column prop="assetId" label="资产名称">
             </el-table-column>
             <el-table-column prop="ctime" label="创建时间">
             </el-table-column>
@@ -26,6 +26,8 @@
             <el-table-column prop="mtime" label="更新时间">
             </el-table-column>
             <el-table-column prop="urlList" label="投诉资料的地址列表" width="180">
+            </el-table-column>
+            <el-table-column prop="userId" label="创建者ID" width="180">
             </el-table-column>
             <el-table-column prop="name" label="操作"  width="150">
                 <template slot-scope="scope">
@@ -57,7 +59,8 @@ import api from "@/api/api";
 let schema = [
   {
     name: "assetId",
-    label: "资产ID"
+    label: "资产名称",
+    comp:'assets-select'
   },
   {
     label: "严重类别",
@@ -102,7 +105,8 @@ let schema = [
 let infoSchema = [
   {
     name: "assetId",
-    label: "资产"
+    label: "资产名称",
+    comp:'assets-select'
   },
   {
     name: "dept",
@@ -175,7 +179,7 @@ export default {
       });
       this.popShow = true;
       this.detailId = "";
-      this.popTitle = "新建资产";
+      this.popTitle = "新建投诉";
     },
     prev(id) {
       let url = "createComplaint";
@@ -195,13 +199,13 @@ export default {
       });
     },
     emitInfo(row) {
-      this.popTitle = "编辑资产";
+      this.popTitle = "编辑投诉";
       this.detailId = row.id;
       Object.assign(this.infoQueryObj, row);
       this.popShow = true;
     },
     delInfo(row) {
-      this.$confirm("确定要删除该设备信息?", "提示", {
+      this.$confirm("确定要删除该投诉记录?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
