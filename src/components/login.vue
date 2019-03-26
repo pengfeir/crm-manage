@@ -55,20 +55,18 @@ export default {
     this.showLogin = true;
   },
   created() {
-
     this.list();
-    console.log(this.getStore, 1111);
   },
   computed: {},
   methods: {
-    login () {
-      api.login(this.loginForm).then(rs => {
-        if (rs.code === 200) {
-          localStorage.setItem('token', rs.data.token)
-          let path = this.$route.query.redirect || '/manage/group'
-          this.$router.push(path)
-        }
-      })
+    async login () {
+      let tokenRs = await api.login(this.loginForm)
+      localStorage.setItem('token', tokenRs.data.token)
+      let rolesRs = await api.userInfo()
+      localStorage.setItem('orgId', rolesRs.data.orgId)
+      localStorage.setItem('curUserId', rolesRs.data.id)
+      localStorage.setItem('username', rolesRs.data.username)
+      this.$router.push(this.$route.query.redirect || '/manage/group')
     },
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);

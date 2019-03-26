@@ -11,7 +11,7 @@ var a = [
         childMenus: [
           {
             menuName: '账号管理',
-            menuUrl: '/manage/group',
+            menuUrl: '/manage/userslist',
             auth: 'cccc',
             childMenus: []
           },

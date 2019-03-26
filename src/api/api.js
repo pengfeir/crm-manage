@@ -28,8 +28,20 @@ function roleDel (params) { // 删除角色
 function roleUpdate (params, id) { // 编辑角色
   return axios.post('/manage/role/update/'+ id, params)
 }
-function roleInfo (params) { // 获取角色的详情信息
+function userInfo (params) { // 获取当前用户
   return axios.post('/manage/admin/info', params)
+}
+function userCreate (params) { // 创建用户
+  return axios.post('/manage/admin/create', params)
+}
+function userDel (params) { // 批量删除用户
+  return axios.post('/manage/admin/delete', params)
+}
+function userList (params) { // 获取用户列表
+  return axios.post('/manage/admin/list', params)
+}
+function userUpdate (params) { // 更新用户信息
+  return axios.post('/manage/admin/update', params)
 }
 function assetList (params) { // 资产列表
   return axios.post('/manage/asset/list', params)
@@ -54,10 +66,14 @@ export default {
   createAsset,
   updateAsset,
   roleDel,
-  roleInfo,
   roleList,
   roleCreate,
   roleUpdate,
+  userInfo,
+  userCreate,
+  userDel,
+  userList,
+  userUpdate,
   assetList,
   roleUpdate
 }

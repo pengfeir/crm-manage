@@ -10,7 +10,10 @@ const AgencyStaffsList = r => require.ensure([], () => r(require('@/components/p
 const AgencyList = r => require.ensure([], () => r(require('@/components/page/agencylist.vue')), 'agencylist')
 const RoleList = r => require.ensure([], () => r(require('@/components/page/role/rolelist.vue')), 'rolelist')
 const RoleAdd = r => require.ensure([], () => r(require('@/components/page/role/roleadd.vue')), 'roleladd')
+const UserList = r => require.ensure([], () => r(require('@/components/page/users/userslist.vue')), 'userslist')
+const UsersAdd = r => require.ensure([], () => r(require('@/components/page/users/usersadd.vue')), 'usersadd')
 const assetManage = r => require.ensure([], () => r(require('@/components/page/assetManage/assetManage.vue')), 'assetManage')
+
 const routerarr = [
   {
     path: '/',
@@ -44,6 +47,14 @@ const routerarr = [
         component: RoleAdd
       },
       {
+        path: 'userslist',
+        component: UserList
+      },
+      {
+        path: 'usersadd',
+        component: UsersAdd
+      },
+      {
         path: 'assetmanage',
         component: assetManage
       }
@@ -54,19 +65,19 @@ const routerarr = [
 const router = new Router({ mode: 'history', base: process.env.BASE_URL, routes: routerarr })
 router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {
-    // // 判断该路由是否需要登录权限
-    // if (localStorage.getItem('token')) {
-    //   // 通过vuex state获取当前的token是否存在
-    //   next()
-    // } else {
-    //   next({
-    //     path: '/login',
-    //     query: {
-    //       redirect: to.fullPath
-    //     }
-    //     // 将跳转的路由path作为参数，登录成功后跳转到该路由
-    //   })
-    // }
+    // 判断该路由是否需要登录权限
+    if (localStorage.getItem('token')) {
+      // 通过vuex state获取当前的token是否存在
+      next()
+    } else {
+      next({
+        path: '/login',
+        query: {
+          redirect: to.fullPath
+        }
+        // 将跳转的路由path作为参数，登录成功后跳转到该路由
+      })
+    }
   } else {
     next()
   }

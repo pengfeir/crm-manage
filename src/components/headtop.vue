@@ -5,9 +5,9 @@
 			<el-breadcrumb-item v-for="(item, index) in $route.meta" :key="index">{{item}}</el-breadcrumb-item>
 		</el-breadcrumb>
 		<el-dropdown @command="handleCommand" menu-align='start'>
-			<img  class="avator">
+			<div style="cursor: pointer;">欢迎您, {{username}}</div>
 			<el-dropdown-menu slot="dropdown">
-				<el-dropdown-item command="home">首页</el-dropdown-item>
+				<el-dropdown-item command="home">修改密码</el-dropdown-item>
 				<el-dropdown-item command="signout">退出</el-dropdown-item>
 			</el-dropdown-menu>
 		</el-dropdown>
@@ -18,10 +18,12 @@
   export default {
     data(){
       return {
-        baseImgPath: '',
+				baseImgPath: '',
+				username: ''
       }
     },
     created(){
+			this.username = this.getStore('username')
     },
     computed: {
 
@@ -58,7 +60,8 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding-left: 20px;
+		padding: 0 20px;
+
 	}
 	.avator{
 		.wh(36px, 36px);

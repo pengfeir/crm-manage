@@ -2,7 +2,7 @@
  * @Author: renpengfei
  * @Date: 2019-03-16 18:31:01
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-03-25 18:52:41
+ * @Last Modified time: 2019-03-26 15:05:44
  */
 import axios from 'axios'
 import router from '../router'
@@ -40,6 +40,7 @@ service
               redirect: router.currentRoute.path
             }
           })
+          return
         }
         if (response.data.code !== 200) {
           Notification.error('操作失败')

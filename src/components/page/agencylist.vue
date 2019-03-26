@@ -151,7 +151,7 @@ export default {
   },
   methods: {
     prev () {
-      let url = 'createAsset'
+      let url = 'agencyCreate'
       let tips = '新建'  
       let params = Object.assign({}, this.infoQueryObj)
       if (this.ageencyID) {
