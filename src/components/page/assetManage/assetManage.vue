@@ -13,7 +13,9 @@
     <el-table :data="tableData" style="width: 100%" border stripe max-height="650">
       <el-table-column type="index" width="50" fixed>
       </el-table-column>
-      <el-table-column prop="acceptStatus" label="验收状态" fixed>
+      <el-table-column prop="name" label="资产名称" fixed>
+      </el-table-column>
+      <el-table-column prop="acceptStatus" label="验收状态">
       </el-table-column>
       <el-table-column prop="alternativeAppendant" label="耗材替代品" width="100">
       </el-table-column>
@@ -58,6 +60,8 @@
       </el-table-column>
       <el-table-column prop="mtime" label="更新时间" width="150">
       </el-table-column>
+      <el-table-column prop="userId" label="创建者ID" width="180">
+            </el-table-column>
       <el-table-column prop="name" label="操作" fixed="right" width="150">
         <template slot-scope="scope">
           <el-button size="small" type="primary" @click="emitInfo(scope.row)">编辑</el-button>
@@ -70,6 +74,9 @@
     <el-dialog :title="popTitle" :visible.sync="popShow" class="ui_dialog_02 spe carditem" :close-on-click-modal="false">
       <div class="scroll">
         <ever-form2 :schema="infoQuerySchema" v-model="infoQueryObj" ref="form" class="package-sale" labelWidth="180px" label-position="right">
+          <template slot="acceptStatus">
+            <el-autocomplete class="inline-input" v-model="infoQueryObj.acceptStatus" :fetch-suggestions="queryComp" placeholder="请输入内容" style="width: 100%"></el-autocomplete>
+          </template>
           <template slot="default">
             <div></div>
           </template>
@@ -123,8 +130,13 @@ let schema = [
 ];
 let infoSchema = [
   {
+    name: "name",
+    label: "资产名称",
+  },
+  {
     name: "acceptStatus",
-    label: "验收状态"
+    label: "验收状态",
+    comp: "custom"
   },
   {
     name: "alternativeAppendant",
@@ -275,6 +287,19 @@ export default {
     };
   },
   methods: {
+    async queryComp(query, cb) {
+        this.remarkoptions = [
+          {
+            name: "未验收",
+            value: "未验收"
+          },
+          {
+            name: "已验收",
+            value: "已验收"
+          }
+        ];
+        cb(this.remarkoptions);
+    },
     addAsset() {
       Object.keys(this.infoQueryObj).map(key => {
         this.infoQueryObj[key] = "";

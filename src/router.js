@@ -14,6 +14,14 @@ const UserList = r => require.ensure([], () => r(require('@/components/page/user
 const UsersAdd = r => require.ensure([], () => r(require('@/components/page/users/usersadd.vue')), 'usersadd')
 const assetManage = r => require.ensure([], () => r(require('@/components/page/assetManage/assetManage.vue')), 'assetManage')
 
+const assetFailure = r => require.ensure([], () => r(require('@/components/page/assetManage/assetFailure.vue')), 'assetFailure')
+const maintenance = r => require.ensure([], () => r(require('@/components/page/assetManage/maintenance.vue')), 'maintenance')
+const complaint = r => require.ensure([], () => r(require('@/components/page/assetManage/complaint.vue')), 'complaint')
+const assetRun = r => require.ensure([], () => r(require('@/components/page/assetManage/assetRun.vue')), 'assetRun')
+const device = r => require.ensure([], () => r(require('@/components/page/device/device.vue')), 'device')
+const house = r => require.ensure([], () => r(require('@/components/page/device/house.vue')), 'house')
+const deviceAndHouse = r => require.ensure([], () => r(require('@/components/page/device/deviceAndHouse.vue')), 'deviceAndHouse')
+const deviceAndAsset = r => require.ensure([], () => r(require('@/components/page/device/deviceAndAsset.vue')), 'deviceAndAsset')
 const routerarr = [
   {
     path: '/',
@@ -57,6 +65,38 @@ const routerarr = [
       {
         path: 'assetmanage',
         component: assetManage
+      },
+      {
+        path: 'assetfailure',
+        component: assetFailure
+      },
+      {
+        path: 'assetRun',
+        component: assetRun
+      },
+      {
+        path: 'maintenance',
+        component: maintenance
+      },
+      {
+        path: 'complaint',
+        component: complaint
+      },
+      {
+        path: 'device',
+        component: device
+      },
+      {
+        path: 'house',
+        component: house
+      },
+      {
+        path: 'deviceAndHouse',
+        component: deviceAndHouse
+      },
+      {
+        path: 'deviceAndAsset',
+        component: deviceAndAsset
       }
     ]
   },

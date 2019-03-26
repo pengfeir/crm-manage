@@ -6,16 +6,20 @@ import { MyPlugin } from './plugins/common'
 import everPagination from './plugins/pagination'
 import everBreadCrumb from './plugins/everbreadcrumb'
 import 'element-ui/lib/theme-chalk/index.css'
+import assetsSelect from './components/assetsselect'
 import * as custom from './plugins/filters'
-
-Object.keys(custom).forEach(key => {
-  Vue.filter(key, custom[key])
-})
+Object
+  .keys(custom)
+  .forEach(key => {
+    Vue.filter(key, custom[key])
+  })
 require('./plugins/funcform')
 Vue.use(MyPlugin)
 Vue.use(Element)
 Vue.component('everPagination', everPagination)
 Vue.component('everBreadCrumb', everBreadCrumb)
+Vue.component('assetsSelect', assetsSelect)
+
 Vue.config.productionTip = false
 new Vue({
   router,

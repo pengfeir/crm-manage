@@ -55,6 +55,69 @@ function createAsset (params) { // 创建资产列表
 function updateAsset (params) { // 更新资产列表
   return axios.post('/manage/asset/update', params)
 }
+function faultList (params) { // 资产故障列表
+  return axios.post('/manage/fault/list', params)
+}
+function createFault (params) { // 创建故障列表
+  return axios.post('/manage/fault/create', params)
+}
+function deleteFault (params) { // 删除故障列表
+  return axios.post('/manage/fault/delete', params)
+}
+function updateFault (params) { // 更新故障列表
+  return axios.post('/manage/fault/update', params)
+}
+function mainList (params) { // 保养质检列表
+  return axios.post('/manage/maintainQa/list', params)
+}
+function createMain (params) { // 创建保养质检
+  return axios.post('/manage/maintainQa/create', params)
+}
+function deleteMain (params) { // 删除保养质检
+  return axios.post('/manage/maintainQa/delete', params)
+}
+function updateMain (params) { // 更新保养质检
+  return axios.post('/manage/maintainQa/update', params)
+}
+function complaintList (params) { // 投诉列表
+  return axios.post('/manage/complaint/list', params)
+}
+function createComplaint (params) { // 创建投诉
+  return axios.post('/manage/complaint/create', params)
+}
+function deleteComplaint (params) { // 删除投诉
+  return axios.post('/manage/complaint/delete', params)
+}
+function updateComplaint (params) { // 更新投诉
+  return axios.post('/manage/complaint/update', params)
+}
+function unPageList (params) { // 无分页资产列表
+  return axios.post('/manage/asset/unPageList', params)
+}
+function createRoom (params) { // 创建房间
+  return axios.post('/manage/room/create', params)
+}
+function deleteRoom (params) { // 删除房间
+  return axios.post('/manage/room/delete', params)
+}
+function updateRoom (params) { // 更新房间
+  return axios.post('/manage/room/update', params)
+}
+function roomList (params) { // 房间列表
+  return axios.post('/manage/room/list', params)
+}
+function createIotDevice (params) { // 创建物联
+  return axios.post('/manage/iotDevice/create', params)
+}
+function deleteIotDevice (params) { // 删除物联
+  return axios.post('/manage/iotDevice/delete', params)
+}
+function updateIotDevice (params) { // 更新物联
+  return axios.post('/manage/iotDevice/update', params)
+}
+function iotDeviceList (params) { // 房间物联
+  return axios.post('/manage/iotDevice/list', params)
+}
 export default {
   login,
   agencyDel,
@@ -75,5 +138,26 @@ export default {
   userList,
   userUpdate,
   assetList,
-  roleUpdate
+  roleUpdate,
+  faultList,
+  createFault,
+  deleteFault,
+  updateFault,
+  mainList,
+  createMain,
+  deleteMain,
+  updateMain,
+  complaintList,
+  createComplaint,
+  deleteComplaint,
+  updateComplaint,
+  unPageList,
+  createRoom,
+  deleteRoom,
+  updateRoom,
+  roomList,
+  createIotDevice,
+  deleteIotDevice,
+  updateIotDevice,
+  iotDeviceList
 }
