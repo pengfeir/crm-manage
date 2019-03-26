@@ -11,6 +11,9 @@ const AgencyList = r => require.ensure([], () => r(require('@/components/page/ag
 const RoleList = r => require.ensure([], () => r(require('@/components/page/role/rolelist.vue')), 'rolelist')
 const RoleAdd = r => require.ensure([], () => r(require('@/components/page/role/roleadd.vue')), 'roleladd')
 const assetManage = r => require.ensure([], () => r(require('@/components/page/assetManage/assetManage.vue')), 'assetManage')
+const assetFailure = r => require.ensure([], () => r(require('@/components/page/assetManage/assetFailure.vue')), 'assetFailure')
+const maintenance = r => require.ensure([], () => r(require('@/components/page/assetManage/maintenance.vue')), 'maintenance')
+const complaint = r => require.ensure([], () => r(require('@/components/page/assetManage/complaint.vue')), 'complaint')
 const routerarr = [
   {
     path: '/',
@@ -46,6 +49,18 @@ const routerarr = [
       {
         path: 'assetmanage',
         component: assetManage
+      },
+      {
+        path: 'assetfailure',
+        component: assetFailure
+      },
+      {
+        path: 'maintenance',
+        component: maintenance
+      },
+      {
+        path: 'complaint',
+        component: complaint
       }
     ]
   },

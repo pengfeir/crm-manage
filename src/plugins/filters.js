@@ -2,7 +2,7 @@
  * @Author: renpengfei
  * @Date: 2019-03-25 14:56:51
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-03-25 18:39:20
+ * @Last Modified time: 2019-03-26 11:12:11
  */
 /**
  * 设备装机状态
@@ -38,5 +38,41 @@ export const getAppendant = isDedicatedAppendant => {
       return '是'
     default:
       return '无'
+  }
+}
+/**
+ * 维修进度
+ * @param {*} fixStep
+ */
+export const stepStatus = fixStep => {
+  switch (fixStep) {
+    case 'unknown' :
+      return '未知'
+    case 'reported' :
+      return '已上报'
+    case 'todo' :
+      return '待维修'
+    case 'doing' :
+      return '正在维修'
+    case 'done' :
+      return '完成'
+    case 'abort' :
+      return '取消'
+    default:
+      return '未知'
+  }
+}
+/**
+ * 类别
+ * @param {*} kind
+ */
+export const kindStatus = kind => {
+  switch (kind) {
+    case 'maintain' :
+      return '保养'
+    case 'qa' :
+      return '质控'
+    default:
+      return '未知'
   }
 }

@@ -43,6 +43,42 @@ function createAsset (params) { // 创建资产列表
 function updateAsset (params) { // 更新资产列表
   return axios.post('/manage/asset/update', params)
 }
+function faultList (params) { // 资产故障列表
+  return axios.post('/manage/fault/list', params)
+}
+function createFault (params) { // 创建故障列表
+  return axios.post('/manage/fault/create', params)
+}
+function deleteFault (params) { // 删除故障列表
+  return axios.post('/manage/fault/delete', params)
+}
+function updateFault (params) { // 更新故障列表
+  return axios.post('/manage/fault/update', params)
+}
+function mainList (params) { // 保养质检列表
+  return axios.post('/manage/maintainQa/list', params)
+}
+function createMain (params) { // 创建保养质检
+  return axios.post('/manage/maintainQa/create', params)
+}
+function deleteMain (params) { // 删除保养质检
+  return axios.post('/manage/maintainQa/delete', params)
+}
+function updateMain (params) { // 更新保养质检
+  return axios.post('/manage/maintainQa/update', params)
+}
+function complaintList (params) { // 投诉列表
+  return axios.post('/manage/complaint/list', params)
+}
+function createComplaint (params) { // 创建投诉
+  return axios.post('/manage/complaint/create', params)
+}
+function deleteComplaint (params) { // 删除投诉
+  return axios.post('/manage/complaint/delete', params)
+}
+function updateComplaint (params) { // 更新投诉
+  return axios.post('/manage/complaint/update', params)
+}
 export default {
   login,
   agencyDel,
@@ -57,5 +93,17 @@ export default {
   roleInfo,
   roleList,
   roleCreate,
-  roleUpdate
+  roleUpdate,
+  faultList,
+  createFault,
+  deleteFault,
+  updateFault,
+  mainList,
+  createMain,
+  deleteMain,
+  updateMain,
+  complaintList,
+  createComplaint,
+  deleteComplaint,
+  updateComplaint
 }
