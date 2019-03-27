@@ -8,7 +8,7 @@
 			<div style="cursor: pointer;">欢迎您, {{username}}</div>
 			<el-dropdown-menu slot="dropdown">
 				<el-dropdown-item command="home">修改密码</el-dropdown-item>
-				<el-dropdown-item command="signout" @click="signOut">退出</el-dropdown-item>
+				<el-dropdown-item command="signout">退出</el-dropdown-item>
 			</el-dropdown-menu>
 		</el-dropdown>
   </div>
@@ -23,7 +23,8 @@
       }
     },
     created(){
-			this.username = this.getStore('username')
+			let currentUser = JSON.parse(this.getStore('currentUser'))
+			this.username = currentUser ? currentUser.username : ''
     },
     computed: {
 

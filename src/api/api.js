@@ -43,6 +43,9 @@ function userList (params) { // 获取用户列表
 function userUpdate (params) { // 更新用户信息
   return axios.post('/manage/admin/update', params)
 }
+function updatePassword (params) { // 修改密码
+  return axios.post('/manage/admin/updatePassword', params)
+}
 function assetList (params) { // 资产列表
   return axios.post('/manage/asset/list', params)
 }
