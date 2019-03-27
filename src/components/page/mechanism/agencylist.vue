@@ -77,7 +77,6 @@
         v-model="infoQueryObj"
         ref="form"
         class="package-sale"
-        :info="true"
         labelWidth="80px"
         label-position="right">
       </ever-form2>
@@ -125,11 +124,6 @@ let infoSchema = [
     label: '地址'
   }
 ]
-let rules = {
-  batchObj: [
-    {orgName: true, message: '请输入机构名称', trigger: 'change'}
-  ]
-}
 export default {
   mixins: [list],
   data () {
@@ -137,7 +131,6 @@ export default {
     var infoObj = this.createObjFromSchema(infoSchema)
     return {
       api,
-      rules,
       popShow: false,
       popTitle: '新建机构',
       ageencyID: '',

@@ -65,7 +65,7 @@ export default {
       let rolesRs = await api.userInfo()
       localStorage.setItem('orgId', rolesRs.data.orgId)
       localStorage.setItem('curUserId', rolesRs.data.id)
-      localStorage.setItem('username', rolesRs.data.username)
+      localStorage.setItem('currentUser', JSON.stringify(rolesRs.data))
       this.$router.push(this.$route.query.redirect || '/manage/group')
     },
     handleAvatarSuccess(res, file) {
