@@ -2,7 +2,7 @@
  * @Author: renpengfei
  * @Date: 2019-03-25 14:56:51
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-03-26 17:11:22
+ * @Last Modified time: 2019-03-27 10:49:15
  */
 /**
  * 设备装机状态
@@ -92,6 +92,24 @@ export const deviceStatus = kind => {
       return '二维码'
     case '4g' :
       return '4G模块'
+    default:
+      return '未知'
+  }
+}
+/**
+ * 资产状态
+ * @param {*} assetStatus
+ */
+export const filterAssetStatus = assetStatus => {
+  switch (assetStatus) {
+    case '10' :
+      return '关机'
+    case '20' :
+      return '开机'
+    case '30' :
+      return '待机'
+    case '40' :
+      return '激活'
     default:
       return '未知'
   }

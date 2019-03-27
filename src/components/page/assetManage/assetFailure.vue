@@ -11,23 +11,15 @@
             </ever-form2>
         </div>
         <el-table :data="tableData" style="width: 100%" border stripe max-height="650">
-            <el-table-column type="index" width="50" fixed>
+            <el-table-column type="index" width="50" label="序号" fixed>
             </el-table-column>
             <el-table-column prop="assetId" label="资产名称" fixed>
             </el-table-column>
             <el-table-column prop="contact" label="联系方式">
             </el-table-column>
-            <el-table-column prop="contractUrlList" label="维修合同照片的地址列表" width="180">
-            </el-table-column>
-            <el-table-column prop="ctime" label="创建时间"  width="180">
-            </el-table-column>
             <el-table-column prop="dept" label="故障发生科室" width="150">
             </el-table-column>
-            <el-table-column prop="extra" label="其他扩展信息" width="150">
-            </el-table-column>
             <el-table-column prop="faultAt" label="故障发生时间" width="180">
-            </el-table-column>
-            <el-table-column prop="faultUrlList" label="故障照片地址列表" width="180">
             </el-table-column>
             <el-table-column prop="fixStep" label="维修进度" >
                 <template slot-scope="scope">
@@ -36,15 +28,23 @@
             </el-table-column>
             <el-table-column prop="kind" label="故障类别">
             </el-table-column>
-            <el-table-column prop="mtime" label="更新时间" width="180">
-            </el-table-column>
             <el-table-column prop="offerPrice" label="维修报价">
+            </el-table-column>
+            <el-table-column prop="faultUrlList" label="故障照片地址列表" width="180">
+            </el-table-column>
+            <el-table-column prop="contractUrlList" label="维修合同照片的地址列表" width="180">
             </el-table-column>
             <el-table-column prop="receiptUrlList" label="票据照片的地址列表" width="180">
             </el-table-column>
             <el-table-column prop="reporter" label="故障上报人信息" width="180">
             </el-table-column>
             <el-table-column prop="vender" label="服务提供方" width="150">
+            </el-table-column>
+            <el-table-column prop="ctime" label="创建时间"  width="180">
+            </el-table-column>
+            <el-table-column prop="mtime" label="更新时间" width="180">
+            </el-table-column>
+            <el-table-column prop="extra" label="其他扩展信息" width="150">
             </el-table-column>
             <el-table-column prop="userId" label="创建者ID" width="180">
             </el-table-column>
@@ -119,20 +119,12 @@ let infoSchema = [
     label: "联系方式"
   },
   {
-    name: "contractUrlList",
-    label: "维修合同照片的地址列表"
-  },
-  {
     name: "dept",
     label: "故障发生的科室"
   },
   {
     name: "descr",
     label: "故障描述"
-  },
-  {
-    name: "extra",
-    label: "其他扩展信息"
   },
   {
     name: "faultAt",
@@ -142,10 +134,6 @@ let infoSchema = [
       type: "datetime",
       valueFormat: "yyyy-MM-dd HH:mm:ss"
     }
-  },
-  {
-    name: "faultUrlList",
-    label: "故障照片的地址列表",
   },
   {
     name: "fixStep",
@@ -189,6 +177,14 @@ let infoSchema = [
     label: "维修报价"
   },
   {
+    name: "contractUrlList",
+    label: "维修合同照片的地址列表"
+  },
+  {
+    name: "faultUrlList",
+    label: "故障照片的地址列表",
+  },
+  {
     name: "receiptUrlList",
     label: "票据照片的地址列表"
   },
@@ -199,7 +195,11 @@ let infoSchema = [
   {
     name: "vender",
     label: "服务提供方"
-  }
+  },
+  {
+    name: "extra",
+    label: "其他扩展信息"
+  },
 ];
 export default {
   mixins: [list],
