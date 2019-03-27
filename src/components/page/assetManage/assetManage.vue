@@ -11,9 +11,11 @@
       </ever-form2>
     </div>
     <el-table :data="tableData" style="width: 100%" border stripe max-height="650">
-      <el-table-column type="index" width="50" fixed>
+      <el-table-column type="index" width="50" label="序号" fixed>
       </el-table-column>
       <el-table-column prop="name" label="资产名称" fixed>
+      </el-table-column>
+      <el-table-column prop="no" label="资产编号">
       </el-table-column>
       <el-table-column prop="acceptStatus" label="验收状态">
       </el-table-column>
@@ -23,11 +25,13 @@
       </el-table-column>
       <el-table-column prop="contact" label="联系方式">
       </el-table-column>
-      <el-table-column prop="contractUrlList" label="采购合同照片的地址列表" width="180">
-      </el-table-column>
       <el-table-column prop="dept" label="临床科室">
       </el-table-column>
-      <el-table-column prop="extra" label="其他拓展信息" width="150">
+      <el-table-column prop="contractUrlList" label="采购合同照片的地址列表" width="180">
+      </el-table-column>
+      <el-table-column prop="receiptUrlList" label="票据照片的地址列表" width="150">
+      </el-table-column>
+      <el-table-column prop="manualUrlList" label="用户手册照片地址列表" width="160">
       </el-table-column>
       <el-table-column prop="isDedicatedAppendant" label="配套耗材是否专机专用" width="160">
         <template slot-scope="scope">
@@ -36,15 +40,9 @@
       </el-table-column>
       <el-table-column prop="kind" label="设备类别">
       </el-table-column>
-      <el-table-column prop="manualUrlList" label="用户手册照片地址列表" width="160">
-      </el-table-column>
       <el-table-column prop="model" label="设备型号">
       </el-table-column>
-      <el-table-column prop="no" label="资产编号">
-      </el-table-column>
       <el-table-column prop="prodDate" label="生产日期" width="180">
-      </el-table-column>
-      <el-table-column prop="receiptUrlList" label="票据照片的地址列表" width="150">
       </el-table-column>
       <el-table-column prop="setupStartAt" label="装机开始时间" width="180">
       </el-table-column>
@@ -60,8 +58,10 @@
       </el-table-column>
       <el-table-column prop="mtime" label="更新时间" width="150">
       </el-table-column>
+      <el-table-column prop="extra" label="其他拓展信息" width="150">
+      </el-table-column>
       <el-table-column prop="userId" label="创建者ID" width="180">
-            </el-table-column>
+      </el-table-column>
       <el-table-column prop="name" label="操作" fixed="right" width="150">
         <template slot-scope="scope">
           <el-button size="small" type="primary" @click="emitInfo(scope.row)">编辑</el-button>
@@ -94,6 +94,10 @@ import list from "@/plugins/list";
 import api from "@/api/api";
 let schema = [
   {
+    label: "资产编号",
+    name: "no"
+  },
+  {
     name: "dept",
     label: "临床科室"
   },
@@ -104,10 +108,6 @@ let schema = [
   {
     label: "设备型号",
     name: "model"
-  },
-  {
-    label: "资产编号",
-    name: "no"
   },
   {
     label: "SN序列号",
@@ -131,7 +131,11 @@ let schema = [
 let infoSchema = [
   {
     name: "name",
-    label: "资产名称",
+    label: "资产名称"
+  },
+  {
+    name: "no",
+    label: "资产编号"
   },
   {
     name: "acceptStatus",
@@ -151,16 +155,8 @@ let infoSchema = [
     label: "联系方式"
   },
   {
-    name: "contractUrlList",
-    label: "采购合同照片的地址列表"
-  },
-  {
     name: "dept",
     label: "临床科室"
-  },
-  {
-    name: "extra",
-    label: "其他扩展信息"
   },
   {
     name: "isDedicatedAppendant",
@@ -184,16 +180,8 @@ let infoSchema = [
     label: "设备类别"
   },
   {
-    name: "manualUrlList",
-    label: "用户手册照片地址列表"
-  },
-  {
     name: "model",
     label: "设备型号"
-  },
-  {
-    name: "no",
-    label: "资产编号"
   },
   {
     name: "prodDate",
@@ -203,10 +191,6 @@ let infoSchema = [
       type: "datetime",
       valueFormat: "yyyy-MM-dd HH:mm:ss"
     }
-  },
-  {
-    name: "receiptUrlList",
-    label: "票据照片的地址列表"
   },
   {
     name: "setupStartAt",
@@ -225,6 +209,18 @@ let infoSchema = [
       type: "datetime",
       valueFormat: "yyyy-MM-dd HH:mm:ss"
     }
+  },
+  {
+    name: "manualUrlList",
+    label: "用户手册照片地址列表"
+  },
+  {
+    name: "receiptUrlList",
+    label: "票据照片的地址列表"
+  },
+  {
+    name: "contractUrlList",
+    label: "采购合同照片的地址列表"
   },
   {
     name: "setupStep",
@@ -266,6 +262,10 @@ let infoSchema = [
   {
     name: "vender",
     label: "厂家"
+  },
+  {
+    name: "extra",
+    label: "其他扩展信息"
   }
 ];
 export default {
@@ -288,17 +288,17 @@ export default {
   },
   methods: {
     async queryComp(query, cb) {
-        this.remarkoptions = [
-          {
-            name: "未验收",
-            value: "未验收"
-          },
-          {
-            name: "已验收",
-            value: "已验收"
-          }
-        ];
-        cb(this.remarkoptions);
+      this.remarkoptions = [
+        {
+          name: "未验收",
+          value: "未验收"
+        },
+        {
+          name: "已验收",
+          value: "已验收"
+        }
+      ];
+      cb(this.remarkoptions);
     },
     addAsset() {
       Object.keys(this.infoQueryObj).map(key => {
@@ -332,7 +332,7 @@ export default {
       this.popShow = true;
     },
     delInfo(row) {
-      this.$confirm("确定要删除该设备信息?", "提示", {
+      this.$confirm("确定要删除该资产信息?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"

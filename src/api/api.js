@@ -26,7 +26,7 @@ function roleDel (params) { // 删除角色
   return axios.post('/manage/role/delete', params)
 }
 function roleUpdate (params, id) { // 编辑角色
-  return axios.post('/manage/role/update/'+ id, params)
+  return axios.post('/manage/role/update/' + id, params)
 }
 function userInfo (params) { // 获取当前用户
   return axios.post('/manage/admin/info', params)
@@ -118,6 +118,18 @@ function updateIotDevice (params) { // 更新物联
 function iotDeviceList (params) { // 房间物联
   return axios.post('/manage/iotDevice/list', params)
 }
+function createAssetMetrics (params) { // 创建资产运行
+  return axios.post('/manage/assetMetrics/create', params)
+}
+function deleteAssetMetrics (params) { // 删除物联
+  return axios.post('/manage/assetMetrics/delete', params)
+}
+function updateAssetMetrics (params) { // 更新物联
+  return axios.post('/manage/assetMetrics/update', params)
+}
+function assetMetricsList (params) { // 房间物联
+  return axios.post('/manage/assetMetrics/list', params)
+}
 export default {
   login,
   agencyDel,
@@ -137,8 +149,6 @@ export default {
   userDel,
   userList,
   userUpdate,
-  assetList,
-  roleUpdate,
   faultList,
   createFault,
   deleteFault,
@@ -159,5 +169,9 @@ export default {
   createIotDevice,
   deleteIotDevice,
   updateIotDevice,
-  iotDeviceList
+  iotDeviceList,
+  createAssetMetrics,
+  deleteAssetMetrics,
+  updateAssetMetrics,
+  assetMetricsList
 }

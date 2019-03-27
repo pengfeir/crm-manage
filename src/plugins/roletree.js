@@ -81,16 +81,6 @@ var a = [
         menuUrl: '/manage/device',
         auth: 'bbbb',
         childMenus: []
-      }, {
-        menuName: '物联设备和房间管理',
-        menuUrl: '/manage/deviceAndHouse',
-        auth: 'bbbb',
-        childMenus: []
-      }, {
-        menuName: '物联设备和资产管理',
-        menuUrl: '/manage/deviceAndAsset',
-        auth: 'bbbb',
-        childMenus: []
       }
     ]
   }

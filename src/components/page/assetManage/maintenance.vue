@@ -11,22 +11,22 @@
             </ever-form2>
         </div>
         <el-table :data="tableData" style="width: 100%" border stripe max-height="650">
-            <el-table-column type="index" width="50" fixed>
+            <el-table-column type="index" width="50" label="序号" fixed>
             </el-table-column>
             <el-table-column prop="assetId" label="资产名称" fixed>
             </el-table-column>
-            <el-table-column prop="actionDate" label="保养/质控的实际发生时间" width="200">
-            </el-table-column>
             <el-table-column prop="contact" label="联系方式">
-            </el-table-column>
-            <el-table-column prop="ctime" label="创建时间" width="180">
-            </el-table-column>
-            <el-table-column prop="extra" label="其他扩展信息" width="150">
             </el-table-column>
             <el-table-column prop="kind" label="类别" width="150">
                 <template slot-scope="scope">
                     {{scope.row.kind | kindStatus}}
                 </template>
+            </el-table-column>
+            <el-table-column prop="vender" label="服务提供方" width="150">
+            </el-table-column>
+            <el-table-column prop="actionDate" label="保养/质控的实际发生时间" width="200">
+            </el-table-column>
+            <el-table-column prop="ctime" label="创建时间" width="180">
             </el-table-column>
             <el-table-column prop="mtime" label="更新时间" width="180">
             </el-table-column>
@@ -34,7 +34,7 @@
             </el-table-column>
             <el-table-column prop="reportUrlList" label="保养/质控报告的地址列表" width="200">
             </el-table-column>
-            <el-table-column prop="vender" label="服务提供方" width="150">
+            <el-table-column prop="extra" label="其他扩展信息" width="150">
             </el-table-column>
             <el-table-column prop="userId" label="创建者ID" width="180">
             </el-table-column>

@@ -11,21 +11,21 @@
             </ever-form2>
         </div>
         <el-table :data="tableData" style="width: 100%" border stripe max-height="650">
-            <el-table-column type="index" width="50">
+            <el-table-column type="index" width="50" label="序号">
             </el-table-column>
             <el-table-column prop="assetId" label="资产名称">
             </el-table-column>
-            <el-table-column prop="ctime" label="创建时间">
-            </el-table-column>
             <el-table-column prop="descr" label="事件描述">
-            </el-table-column>
-            <el-table-column prop="extra" label="其他扩展信息" width="150">
             </el-table-column>
             <el-table-column prop="levelName" label="严重类别" width="150">
             </el-table-column>
+            <el-table-column prop="urlList" label="投诉资料的地址列表" width="180">
+            </el-table-column>
+            <el-table-column prop="extra" label="其他扩展信息" width="150">
+            </el-table-column>
             <el-table-column prop="mtime" label="更新时间">
             </el-table-column>
-            <el-table-column prop="urlList" label="投诉资料的地址列表" width="180">
+            <el-table-column prop="ctime" label="创建时间">
             </el-table-column>
             <el-table-column prop="userId" label="创建者ID" width="180">
             </el-table-column>
