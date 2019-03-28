@@ -4,8 +4,7 @@
     </div>
 </template>
 <script>
-import echarts from 'echarts'
-import echartsContainer from '@/plugins/echartscontainer'
+import echartsContainer from '@/components/page/echarts/echartscontainer'
 export default {
   components:{
     echartsContainer
