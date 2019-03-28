@@ -23,7 +23,8 @@
       }
     },
     created(){
-			this.username = this.getStore('username')
+			let currentUser = JSON.parse(this.getStore('currentUser'))
+			this.username = currentUser ? currentUser.username : ''
     },
     computed: {
 
@@ -31,25 +32,13 @@
 		methods: {
 			async handleCommand(command) {
 				if (command == 'home') {
-					this.$router.push('/manage');
 				}else if(command == 'signout'){
-					const res = await signout()
-					if (res.status == 1) {
-						this.$message({
-	            type: 'success',
-	            message: '退出成功'
-	          });
-	          this.$router.push('/');
-					}else{
-						this.$message({
-              type: 'error',
-              message: res.message
-            });
-					}
+					window.localStorage.clear()
+					this.$router.push('/manage/login');
 				}
 			}
 		}
-  }
+	}
 </script>
 
 <style lang="less">

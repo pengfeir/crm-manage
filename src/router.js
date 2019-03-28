@@ -3,15 +3,12 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 const login = r => require.ensure([], () => r(require('@/components/login')), 'login')
-const manage = r => require.ensure([], () => r(require('@/components/manage')), 'manage')
+const page = r => require.ensure([], () => r(require('@/components/manage')), 'manage')
 const group = r => require.ensure([], () => r(require('@/views/group')), 'group')
 const role = r => require.ensure([], () => r(require('@/views/role')), 'role')
-const AgencyStaffsList = r => require.ensure([], () => r(require('@/components/page/agencystaffslist.vue')), 'agencystaffslist')
-const AgencyList = r => require.ensure([], () => r(require('@/components/page/agencylist.vue')), 'agencylist')
-const RoleList = r => require.ensure([], () => r(require('@/components/page/role/rolelist.vue')), 'rolelist')
-const RoleAdd = r => require.ensure([], () => r(require('@/components/page/role/roleadd.vue')), 'roleladd')
-const UserList = r => require.ensure([], () => r(require('@/components/page/users/userslist.vue')), 'userslist')
-const UsersAdd = r => require.ensure([], () => r(require('@/components/page/users/usersadd.vue')), 'usersadd')
+const AgencyList = r => require.ensure([], () => r(require('@/components/page/mechanism/agencylist.vue')), 'agencylist')
+const RoleList = r => require.ensure([], () => r(require('@/components/page/mechanism/rolelist.vue')), 'rolelist')
+const UserList = r => require.ensure([], () => r(require('@/components/page/mechanism/userslist.vue')), 'userslist')
 const assetManage = r => require.ensure([], () => r(require('@/components/page/assetManage/assetManage.vue')), 'assetManage')
 
 const assetFailure = r => require.ensure([], () => r(require('@/components/page/assetManage/assetFailure.vue')), 'assetFailure')
@@ -27,10 +24,10 @@ const routerarr = [
     component: login
   },
   {
-    path: '/manage',
-    component: manage,
+    path: '/page',
+    component: page,
     name: '',
-    redirect: '/manage/group',
+    redirect: '/page/group',
     children: [
       {
         path: 'group',
@@ -49,16 +46,8 @@ const routerarr = [
         component: RoleList
       },
       {
-        path: 'roleadd',
-        component: RoleAdd
-      },
-      {
         path: 'userslist',
         component: UserList
-      },
-      {
-        path: 'usersadd',
-        component: UsersAdd
       },
       {
         path: 'assetmanage',

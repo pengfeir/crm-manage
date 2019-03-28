@@ -60,13 +60,17 @@ export default {
   computed: {},
   methods: {
     async login () {
+      this.clearStore()
       let tokenRs = await api.login(this.loginForm)
       localStorage.setItem('token', tokenRs.data.token)
       let rolesRs = await api.userInfo()
       localStorage.setItem('orgId', rolesRs.data.orgId)
       localStorage.setItem('curUserId', rolesRs.data.id)
-      localStorage.setItem('username', rolesRs.data.username)
-      this.$router.push(this.$route.query.redirect || '/manage/group')
+      localStorage.setItem('currentUser', JSON.stringify(rolesRs.data))
+      this.$router.push(this.$route.query.redirect || '/page/group')
+    },
+    clearStore () {
+      window.localStorage.clear()
     },
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);

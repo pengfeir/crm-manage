@@ -2,13 +2,13 @@
  * @Author: renpengfei
  * @Date: 2019-03-16 18:31:01
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-03-26 15:05:44
+ * @Last Modified time: 2019-03-27 17:00:35
  */
 import axios from 'axios'
 import router from '../router'
 import { Notification } from 'element-ui'
 const service = axios.create({
-  timeout: 60000 // 超时时间,
+  timeout: 6000 // 超时时间,
 })
 // Add a request interceptor
 service
@@ -18,6 +18,7 @@ service
     // Do something before request is sent
     config => {
       if (localStorage.getItem('token')) {
+        console.log(service, 111222333)
         config.headers.Authorization = `${localStorage.getItem('token')}`
       }
       return config

@@ -5,33 +5,20 @@ var a = [
     auth: 'aaaa',
     childMenus: [
       {
-        menuName: '权限管理',
-        menuUrl: '1-1',
-        auth: 'bbbb',
-        childMenus: [
-          {
-            menuName: '账号管理',
-            menuUrl: '/manage/userslist',
-            auth: 'cccc',
-            childMenus: []
-          }, {
-            menuName: '角色管理',
-            menuUrl: '/manage/rolelist',
-            auth: 'dddd',
-            childMenus: []
-          }
-        ]
+        menuName: '账号管理',
+        menuUrl: '/page/userslist',
+        auth: 'cccc',
+        childMenus: []
       }, {
-        menuName: '机构管理',
-        menuUrl: '1-2',
-        childMenus: [
-          {
-            menuName: '机构设置',
-            menuUrl: '/manage/agencylist',
-            auth: 'eeee',
-            childMenus: []
-          }
-        ]
+        menuName: '角色管理',
+        menuUrl: '/page/rolelist',
+        auth: 'dddd',
+        childMenus: []
+      }, {
+        menuName: '机构设置',
+        menuUrl: '/page/agencylist',
+        auth: 'eeee',
+        childMenus: []
       }
     ]
   }, {
@@ -41,45 +28,55 @@ var a = [
     childMenus: [
       {
         menuName: '资产',
-        menuUrl: '/manage/assetmanage',
-        auth: 'bbbb',
+        menuUrl: '/page/assetmanage',
+        auth: 'aawer',
         childMenus: []
       }, {
         menuName: '资产运行管理',
-        menuUrl: '/manage/assetRun',
-        auth: 'bbbb',
+        menuUrl: '/page/assetRun',
+        auth: 'erty',
         childMenus: []
       }, {
         menuName: '资产故障',
-        menuUrl: '/manage/assetfailure',
-        auth: 'bbbb',
+        menuUrl: '/page/assetfailure',
+        auth: 'wwq2',
         childMenus: []
       }, {
         menuName: '保养质检',
-        menuUrl: '/manage/maintenance',
-        auth: 'bbbb',
+        menuUrl: '/page/maintenance',
+        auth: 'erth',
         childMenus: []
       }, {
         menuName: '投诉',
-        menuUrl: '/manage/complaint',
-        auth: 'bbbb',
+        menuUrl: '/page/complaint',
+        auth: 'bbbrert',
         childMenus: []
       }
     ]
   }, {
     menuName: '物联管理',
     menuUrl: '21312312',
-    auth: 'ffff',
+    auth: 'ewrr22',
     childMenus: [
       {
         menuName: '房间管理',
-        menuUrl: '/manage/house',
-        auth: 'bbbb',
+        menuUrl: '/page/house',
+        auth: 'vvbrty',
         childMenus: []
       }, {
         menuName: '物联设备管理',
-        menuUrl: '/manage/device',
-        auth: 'bbbb',
+        menuUrl: '/page/device',
+        auth: 'wawerrt',
+        childMenus: []
+      }, {
+        menuName: '物联设备和房间管理',
+        menuUrl: '/page/deviceAndHouse',
+        auth: 'bbrty',
+        childMenus: []
+      }, {
+        menuName: '物联设备和资产管理',
+        menuUrl: '/page/deviceAndAsset',
+        auth: 'zzsgwt',
         childMenus: []
       }
     ]
