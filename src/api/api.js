@@ -4,6 +4,9 @@ import axios from './config'
 function login (params) { // 登陆
   return axios.post('/manage/admin/login', params)
 }
+function getUpToken (params) { // 七牛上传获取token
+  return axios.post('/manage/file/getUpToken', params)
+}
 function agencyCreate (params) { // 新建机构
   return axios.post('/manage/organization/create', params)
 }
@@ -132,6 +135,7 @@ function assetMetricsList (params) { // 房间物联
 }
 export default {
   login,
+  getUpToken,
   agencyDel,
   agencyList,
   agencyUpdate,
