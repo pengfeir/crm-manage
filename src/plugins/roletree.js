@@ -6,17 +6,17 @@ var a = [
     childMenus: [
       {
         menuName: '账号管理',
-        menuUrl: '/manage/userslist',
+        menuUrl: '/page/userslist',
         auth: 'cccc',
         childMenus: []
       }, {
         menuName: '角色管理',
-        menuUrl: '/manage/rolelist',
+        menuUrl: '/page/rolelist',
         auth: 'dddd',
         childMenus: []
       }, {
         menuName: '机构设置',
-        menuUrl: '/manage/agencylist',
+        menuUrl: '/page/agencylist',
         auth: 'eeee',
         childMenus: []
       }
@@ -28,27 +28,27 @@ var a = [
     childMenus: [
       {
         menuName: '资产',
-        menuUrl: '/manage/assetmanage',
+        menuUrl: '/page/assetmanage',
         auth: 'aawer',
         childMenus: []
       }, {
         menuName: '资产运行管理',
-        menuUrl: '/manage/assetRun',
+        menuUrl: '/page/assetRun',
         auth: 'erty',
         childMenus: []
       }, {
         menuName: '资产故障',
-        menuUrl: '/manage/assetfailure',
+        menuUrl: '/page/assetfailure',
         auth: 'wwq2',
         childMenus: []
       }, {
         menuName: '保养质检',
-        menuUrl: '/manage/maintenance',
+        menuUrl: '/page/maintenance',
         auth: 'erth',
         childMenus: []
       }, {
         menuName: '投诉',
-        menuUrl: '/manage/complaint',
+        menuUrl: '/page/complaint',
         auth: 'bbbrert',
         childMenus: []
       }
@@ -60,22 +60,22 @@ var a = [
     childMenus: [
       {
         menuName: '房间管理',
-        menuUrl: '/manage/house',
+        menuUrl: '/page/house',
         auth: 'vvbrty',
         childMenus: []
       }, {
         menuName: '物联设备管理',
-        menuUrl: '/manage/device',
+        menuUrl: '/page/device',
         auth: 'wawerrt',
         childMenus: []
       }, {
         menuName: '物联设备和房间管理',
-        menuUrl: '/manage/deviceAndHouse',
+        menuUrl: '/page/deviceAndHouse',
         auth: 'bbrty',
         childMenus: []
       }, {
         menuName: '物联设备和资产管理',
-        menuUrl: '/manage/deviceAndAsset',
+        menuUrl: '/page/deviceAndAsset',
         auth: 'zzsgwt',
         childMenus: []
       }
