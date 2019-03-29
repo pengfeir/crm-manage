@@ -8,6 +8,7 @@ import everPagination from './plugins/pagination'
 import everBreadCrumb from './plugins/everbreadcrumb'
 import 'element-ui/lib/theme-chalk/index.css'
 import assetsSelect from './components/assetsselect'
+import fileshow from './components/fileshow'
 import * as custom from './plugins/filters'
 Object
   .keys(custom)
@@ -21,6 +22,7 @@ Vue.use(echarts)
 Vue.component('everPagination', everPagination)
 Vue.component('everBreadCrumb', everBreadCrumb)
 Vue.component('assetsSelect', assetsSelect)
+Vue.component('fileshow', fileshow)
 
 Vue.config.productionTip = false
 new Vue({

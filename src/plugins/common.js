@@ -2,7 +2,7 @@
  * @Author: renpengfei
  * @Date: 2019-03-18 15:55:28
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-03-26 19:12:44
+ * @Last Modified time: 2019-03-29 14:46:46
  */
 
 let MyPlugin = {}
@@ -39,6 +39,54 @@ MyPlugin.install = (Vue) => {
       arr[item.name] = arr[item.valType] || ''
     })
     return arr
+  }
+  Vue.prototype.sliceArr = (arr, item, key) => {
+    let newarr = arr.filter(v => v[key] !== (item[key] || item.response[key]))
+    return newarr
+  }
+  Vue.prototype.getFileType = (file) => {
+    let type = file.split('.')
+    let a = type[type.length - 1]
+    switch (a) {
+      case 'doc':
+        return 'word'
+      case 'docx':
+        return 'word'
+      case 'xls':
+        return 'excel'
+      case 'xlsx':
+        return 'excel'
+      case 'ppt':
+        return 'ppt'
+      case 'pdf':
+        return 'pdf'
+      case 'jpg':
+        return 'img'
+      case 'image/jpeg':
+        return 'img'
+      case 'jpeg':
+        return 'img'
+      case 'png':
+        return 'img'
+      case 'gif':
+        return 'img'
+      default:
+        return 'img'
+    }
+  }
+  Vue.prototype.generateUUID = () => {
+    var d = new Date().getTime()
+    if (window.performance && typeof window.performance.now === 'function') {
+      d += performance.now() // use high-precision timer if available
+    }
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = ((d + Math.random() * 16) % 16) | 0
+      d = Math.floor(d / 16)
+      return (c === 'x'
+        ? r
+        : (r & 0x3) | 0x8).toString(16)
+    })
+    return uuid
   }
 }
 export { MyPlugin }

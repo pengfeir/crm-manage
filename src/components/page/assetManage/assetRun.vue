@@ -10,7 +10,7 @@
                 </template>
             </ever-form2>
         </div>
-        <el-table v-loading.body="loading" :data="tableData" style="width: 100%" border stripe max-height="650">
+        <el-table v-loading="loading" :data="tableData" style="width: 100%" border stripe max-height="650">
             <el-table-column type="index" width="50" label="序号" fixed>
             </el-table-column>
             <el-table-column prop="assetStatus" label="资产状态" fixed>

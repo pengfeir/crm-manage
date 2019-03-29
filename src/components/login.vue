@@ -1,7 +1,7 @@
 <template>
   <div class="login_page fillcontain">
     <transition name="form-fade" mode="in-out">
-      <section class="form_contianer" v-show="showLogin">
+      <section class="form_contianer">
         <div class="manage_tip">
           <p>elm后台管理系统</p>
         </div>
@@ -20,10 +20,6 @@
         </el-form>
       </section>
     </transition>
-    <el-upload class="avatar-uploader" :action="uploadImage" :headers="headers" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-      <img v-if="imageUrl" :src="imageUrl" class="avatar">
-      <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-    </el-upload>
   </div>
 </template>
 <script>
@@ -31,33 +27,18 @@ import api from "@/api/api.js";
 export default {
   data() {
     return {
-      uploadImage: "/manage/admin/upload",
       loginForm: {
         username: "",
         password: ""
       },
-      headers: {
-        "x-access-token":
-          "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmeXoiLCJjcmVhdGVkIjoxNTUzMDY3MDA5OTk3LCJleHAiOjE1NTM2NzE4MDl9.DPrNvLt7AO-YqLo8xKXXAnbIRcnGDWICfnzO89-1prgiUT6iQPvgKwo3qidO5puzxhlP8-wQFhpIiRFvUyhIXQ"
-      },
-
-      imageUrl: "",
       rules: {
         username: [
           { required: true, message: "请输入用户名", trigger: "blur" }
         ],
         password: [{ required: true, message: "请输入密码", trigger: "blur" }]
-      },
-      showLogin: false
+      }
     };
   },
-  mounted() {
-    this.showLogin = true;
-  },
-  created() {
-    this.list();
-  },
-  computed: {},
   methods: {
     async login () {
       this.clearStore()
@@ -72,33 +53,6 @@ export default {
     clearStore () {
       window.localStorage.clear()
     },
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
-    },
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isJPG && isLt2M;
-    },
-    async list() {
-      try {
-        let params = {
-          username: "fyz",
-          password: "1"
-        };
-        let data = await getInfo(params);
-        console.log(data);
-      } catch (err) {
-        console.log(err);
-      }
-    }
   }
 };
 </script>
