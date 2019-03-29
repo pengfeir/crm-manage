@@ -31,9 +31,19 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="nickName"
         align="center"
         label="用户名">
+      </el-table-column>
+      <el-table-column
+        prop="username"
+        align="center"
+        label="账号">
+      </el-table-column>
+      <el-table-column
+        prop="email"
+        align="center"
+        label="邮箱">
       </el-table-column>
       <el-table-column
         prop="createTime"
@@ -256,14 +266,14 @@ export default {
     prev () {
       let url = 'userCreate'
       let title = '保存成功'
-      let params = Object.assign({}, this.queryObj)
+      let params = Object.assign({}, this.queryInfoObj)
       if (this.id) {
         url = 'userUpdate'
         params.id = this.id
         title = '修改成功'
       }
       api[url](params).then(rs => {
-        if (rs.code === '200') {
+        if (rs.code === 200) {
           this.$messageTips(this, 'success', title)
           this.dialogInfo.popShow = false
           this.list()
@@ -286,7 +296,7 @@ export default {
   watch: {
     $route: {
       handler (value) {
-        if (value.path === '/manage/rolelist') {
+        if (value.path === '/page/rolelist') {
           this.query()
         }
       },
