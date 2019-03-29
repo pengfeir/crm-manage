@@ -39,43 +39,73 @@ const routerarr = [
       },
       {
         path: 'agencylist',
-        component: AgencyList
+        component: AgencyList,
+        meta: {
+          name: '机构设置'
+        }
       },
       {
         path: 'rolelist',
-        component: RoleList
+        component: RoleList,
+        meta: {
+          name: '角色管理'
+        }
       },
       {
         path: 'userslist',
-        component: UserList
+        component: UserList,
+        meta: {
+          name: '账号管理'
+        }
       },
       {
         path: 'assetmanage',
-        component: assetManage
+        component: assetManage,
+        meta: {
+          name: '资产'
+        }
       },
       {
         path: 'assetfailure',
-        component: assetFailure
+        component: assetFailure,
+        meta: {
+          name: '资产故障'
+        }
       },
       {
         path: 'assetRun',
-        component: assetRun
+        component: assetRun,
+        meta: {
+          name: '资产运行管理'
+        }
       },
       {
         path: 'maintenance',
-        component: maintenance
+        component: maintenance,
+        meta: {
+          name: '保养质检'
+        }
       },
       {
         path: 'complaint',
-        component: complaint
+        component: complaint,
+        meta: {
+          name: '投诉'
+        }
       },
       {
         path: 'device',
-        component: device
+        component: device,
+        meta: {
+          name: '物联设备管理'
+        }
       },
       {
         path: 'house',
-        component: house
+        component: house,
+        meta: {
+          name: '房间管理'
+        }
       }
     ]
   },

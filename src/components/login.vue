@@ -1,7 +1,7 @@
 <template>
   <div class="login_page fillcontain">
     <transition name="form-fade" mode="in-out">
-      <section class="form_contianer" v-show="showLogin">
+      <section class="form_contianer">
         <div class="manage_tip">
           <p>elm后台管理系统</p>
         </div>
@@ -47,12 +47,8 @@ export default {
           { required: true, message: "请输入用户名", trigger: "blur" }
         ],
         password: [{ required: true, message: "请输入密码", trigger: "blur" }]
-      },
-      showLogin: false
+      }
     };
-  },
-  mounted() {
-    this.showLogin = true;
   },
   created() {
     this.list();
