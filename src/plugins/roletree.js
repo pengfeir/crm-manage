@@ -1,4 +1,4 @@
-var a = [
+var menuArr = [
   {
     menuName: '机构设置',
     menuUrl: '1',
@@ -82,4 +82,4 @@ var a = [
     ]
   }
 ]
-export default a
+export default menuArr

@@ -1,11 +1,10 @@
 <template>
   <div class="header_container">
 		<el-breadcrumb separator="/">
-			<el-breadcrumb-item :to="{ path: '/manage' }">首页</el-breadcrumb-item>
 			<el-breadcrumb-item v-for="(item, index) in $route.meta" :key="index">{{item}}</el-breadcrumb-item>
 		</el-breadcrumb>
 		<el-dropdown @command="handleCommand" menu-align='start'>
-			<div style="cursor: pointer;">欢迎您, {{username}}</div>
+			<div style="cursor: pointer;">欢迎您, {{nickName}}</div>
 			<el-dropdown-menu slot="dropdown">
 				<el-dropdown-item command="home">修改密码</el-dropdown-item>
 				<el-dropdown-item command="signout">退出</el-dropdown-item>
@@ -19,12 +18,12 @@
     data(){
       return {
 				baseImgPath: '',
-				username: ''
+				nickName: ''
       }
     },
     created(){
 			let currentUser = JSON.parse(this.getStore('currentUser'))
-			this.username = currentUser ? currentUser.username : ''
+			this.nickName = currentUser ? currentUser.nickName : ''
     },
     computed: {
 
@@ -34,7 +33,7 @@
 				if (command == 'home') {
 				}else if(command == 'signout'){
 					window.localStorage.clear()
-					this.$router.push('/manage/login');
+					this.$router.push('/page/login');
 				}
 			}
 		}

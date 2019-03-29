@@ -2,7 +2,7 @@
  * @Author: renpengfei
  * @Date: 2019-03-16 18:31:01
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-03-27 17:00:35
+ * @Last Modified time: 2019-03-29 15:18:23
  */
 import axios from 'axios'
 import router from '../router'
@@ -18,7 +18,6 @@ service
     // Do something before request is sent
     config => {
       if (localStorage.getItem('token')) {
-        console.log(service, 111222333)
         config.headers.Authorization = `${localStorage.getItem('token')}`
       }
       return config

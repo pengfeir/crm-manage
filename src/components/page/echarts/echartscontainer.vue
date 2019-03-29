@@ -10,7 +10,7 @@
     <el-row class="ec-container">
       <el-col :span="12">
         <el-card class="demo_css">
-          <el-button type="primary" @click="seeHistory()">历史数据</el-button>
+          <el-button type="primary" @click="seeHistory('1')">历史数据</el-button>
           <echarts-module key="dianliu" :title="'输入电流'" :eData='inputIObj' :unit="'A'"></echarts-module>
         </el-card>
       </el-col>
@@ -51,7 +51,7 @@
         </el-card>
       </el-col>
     </el-row>
-    <echarts-history :dialogVisibile="logInfo.visibile" @cancel="logInfo.visibile=false"></echarts-history>
+    <echarts-history :dialogVisibile="logInfo.visibile" :type="logInfo.type" @cancel="logInfo.visibile=false"></echarts-history>
   </div>
 </template>
 <script>
@@ -74,13 +74,15 @@ export default {
       powerHzObj: {x:'12:00:00',y:'0'}, // 电源频率
       energyObj: {x:'12:00:00',y:'0'}, // 电能计量
       logInfo: {
-        visibile: false
+        visibile: false,
+        type: ''
       }
     }
   },
   methods: {
     seeHistory (key) {
       this.logInfo.visibile = true
+      this.logInfo.type = key
     },
     initData (obj) {
       let x = obj.x
