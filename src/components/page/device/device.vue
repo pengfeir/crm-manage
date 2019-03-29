@@ -26,7 +26,10 @@
       </el-table-column>
       <el-table-column prop="mtime" label="更新时间" width="150">
       </el-table-column>
-      <el-table-column prop="urlList" label="设备资料的地址列表" width="180">
+      <el-table-column prop="urlList" label="设备资料" width="250">
+         <template slot-scope="scope">
+          <fileshow :type="'img'" :fileurlList="scope.row.urlList"></fileshow>
+        </template>
       </el-table-column>
       <el-table-column prop="extra" label="其他扩展信息">
       </el-table-column>
@@ -41,9 +44,14 @@
     </el-table>
     <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="20" :layout="layout" :total="totalCount">
     </el-pagination>
-    <el-dialog :title="popTitle" :visible.sync="popShow" class="ui_dialog_02 spe carditem" :close-on-click-modal="false">
+    <el-dialog :title="popTitle" :visible.sync="popShow" class="ui_dialog_02 spe carditem" :close-on-click-modal="false" :before-close="handleClose">
       <div class="scroll">
         <ever-form2 :schema="infoQuerySchema" v-model="infoQueryObj" ref="form" class="package-sale" labelWidth="180px" label-position="right">
+          <template slot="urlList">
+            <el-upload :action="uploadUrl" list-type="picture" :file-list="detailId?filelistObj.reportList:[]" :on-remove="handleReportRemove" :on-success="handleReportContractSuccess" :data="uploadData" :before-upload="beforeUploadGetKey">
+              <el-button size="small" type="primary">点击上传</el-button>
+            </el-upload>
+          </template>
           <template slot="default">
             <div></div>
           </template>
@@ -51,7 +59,7 @@
       </div>
       <div class="log-btn-container">
         <el-button type="primary" @click="prev">保存</el-button>
-        <el-button @click="popShow = false">取消</el-button>
+        <el-button @click="handleClose">取消</el-button>
       </div>
     </el-dialog>
   </div>
@@ -59,6 +67,7 @@
 <script>
 import list from "@/plugins/list";
 import api from "@/api/api";
+import token from "@/plugins/getUploadToken";
 let schema = [
   {
     name: "kind",
@@ -144,7 +153,8 @@ let infoSchema = [
   },
   {
     name: "urlList",
-    label: "设备资料的地址列表"
+    label: "设备资料",
+    comp: "custom"
   },
   {
     name: "extra",
@@ -152,7 +162,7 @@ let infoSchema = [
   }
 ];
 export default {
-  mixins: [list],
+  mixins: [list,token],
   data() {
     var obj = this.createObjFromSchema(schema);
     var infoObj = this.createObjFromSchema(infoSchema);
@@ -166,13 +176,52 @@ export default {
       infoQuerySchema: infoSchema,
       popShow: false,
       popTitle: "新建",
-      detailId: ""
+      detailId: "",
+      // 保存图片地址
+      imgObj: {
+        reportImg: []
+      },
+      // 回显图片地址
+      filelistObj: {
+        reportList: []
+      }
     };
   },
   methods: {
+    handleClose() {
+      Object.keys(this.filelistObj).map(v => {
+        this.filelistObj[v] = [];
+      });
+      this.popShow = false;
+    },
+    //删除数组里面删除的图片地址
+    handleReportRemove(file, fileList) {
+      this.imgObj.reportImg = this.sliceArr(this.imgObj.reportImg, file, "key");
+    },
+    // 保存上传的图片地址
+    handleReportContractSuccess(response, file, fileList) {
+      this.imgObj.reportImg.push({
+        name: file.name,
+        url: `${this.imgBaseUrl}/${file.response.key}`,
+        type: this.getFileType(file.raw.name),
+        key: file.response.key
+      });
+    },
+    beforeUploadGetKey(file) {
+      console.log(file);
+      //每个文件上传之前 给它一个 名字
+      this.uploadData.key = this.generateUUID();
+      this.uploadData.token = this.uploadToken;
+    },
     addAsset() {
       Object.keys(this.infoQueryObj).map(key => {
         this.infoQueryObj[key] = "";
+      });
+      Object.keys(this.imgObj).map(key => {
+        this.imgObj[key] = [];
+      });
+      Object.keys(this.filelistObj).map(key => {
+        this.filelistObj[key] = [];
       });
       this.popShow = true;
       this.detailId = "";
@@ -185,6 +234,7 @@ export default {
       }
       let tips = this.detailId ? "更新" : "创建";
       let params = Object.assign({}, this.infoQueryObj);
+      params.urlList = JSON.stringify(this.imgObj.reportImg);
       api[url](params).then(rs => {
         this.popShow = false;
         if (rs.code === 200) {
@@ -199,6 +249,8 @@ export default {
       this.popTitle = "编辑物联设备";
       this.detailId = row.id;
       Object.assign(this.infoQueryObj, row);
+      this.filelistObj.reportList = this.infoQueryObj.urlList&&JSON.parse(this.infoQueryObj.urlList) || [];
+      this.imgObj.reportImg = this.infoQueryObj.urlList&&JSON.parse(this.infoQueryObj.urlList) || [];
       this.popShow = true;
     },
     delInfo(row) {

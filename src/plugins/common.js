@@ -2,7 +2,7 @@
  * @Author: renpengfei
  * @Date: 2019-03-18 15:55:28
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-03-28 16:28:33
+ * @Last Modified time: 2019-03-29 14:46:46
  */
 
 let MyPlugin = {}
@@ -43,6 +43,36 @@ MyPlugin.install = (Vue) => {
   Vue.prototype.sliceArr = (arr, item, key) => {
     let newarr = arr.filter(v => v[key] !== (item[key] || item.response[key]))
     return newarr
+  }
+  Vue.prototype.getFileType = (file) => {
+    let type = file.split('.')
+    let a = type[type.length - 1]
+    switch (a) {
+      case 'doc':
+        return 'word'
+      case 'docx':
+        return 'word'
+      case 'xls':
+        return 'excel'
+      case 'xlsx':
+        return 'excel'
+      case 'ppt':
+        return 'ppt'
+      case 'pdf':
+        return 'pdf'
+      case 'jpg':
+        return 'img'
+      case 'image/jpeg':
+        return 'img'
+      case 'jpeg':
+        return 'img'
+      case 'png':
+        return 'img'
+      case 'gif':
+        return 'img'
+      default:
+        return 'img'
+    }
   }
   Vue.prototype.generateUUID = () => {
     var d = new Date().getTime()

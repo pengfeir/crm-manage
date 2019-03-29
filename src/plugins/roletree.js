@@ -68,16 +68,6 @@ var a = [
         menuUrl: '/page/device',
         auth: 'wawerrt',
         childMenus: []
-      }, {
-        menuName: '物联设备和房间管理',
-        menuUrl: '/page/deviceAndHouse',
-        auth: 'bbrty',
-        childMenus: []
-      }, {
-        menuName: '物联设备和资产管理',
-        menuUrl: '/page/deviceAndAsset',
-        auth: 'zzsgwt',
-        childMenus: []
       }
     ]
   }
