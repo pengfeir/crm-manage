@@ -60,7 +60,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <div style="overflow:hidden;margin-bottom:10px;">
+    <div class="page-container">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"

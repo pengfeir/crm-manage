@@ -1,5 +1,5 @@
 <template>
-  <div v-loading.body="loading">
+  <div class="layout_inner">
     <div class="main-head">
       <ever-form2 :schema="querySchema" v-model="queryObj" @query="query" ref="form" class="package-sale" :info="true" :labelWidth="140" label-position="right" :nosubmit="true" :inline="true">
         <template slot="btn">
@@ -10,7 +10,7 @@
         </template>
       </ever-form2>
     </div>
-    <el-table :data="tableData" style="width: 100%" border stripe max-height="650">
+    <el-table v-loading.body="loading" :data="tableData" style="width: 100%" border stripe max-height="650">
       <el-table-column type="index" width="50" label="序号" fixed>
       </el-table-column>
       <el-table-column prop="area" label="院区" fixed>
@@ -40,8 +40,10 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="20" :layout="layout" :total="totalCount">
-    </el-pagination>
+    <div class="page-container">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="20" :layout="layout" :total="totalCount">
+      </el-pagination>
+    </div>
     <el-dialog :title="popTitle" :visible.sync="popShow" class="ui_dialog_02 spe carditem" :close-on-click-modal="false">
       <div class="scroll">
         <ever-form2 :schema="infoQuerySchema" v-model="infoQueryObj" ref="form" class="package-sale" labelWidth="180px" label-position="right">

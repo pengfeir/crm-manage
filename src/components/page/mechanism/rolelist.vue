@@ -154,7 +154,7 @@ export default {
   },
   methods: {
     addAgency () {
-      this.popTitle = '新建角色'
+      this.dialogInfo.popTitle = '新建角色'
       this.dialogInfo.popShow = true
     },
     list () {
@@ -166,9 +166,12 @@ export default {
     },
     emitInfo (row) {
       this.dialogInfo.id = row.id
-      this.queryInfoObj
-      this.popTitle = '编辑角色'
-      this.setCheck()
+      this.dialogInfo.popTitle = '编辑角色'
+      this.queryInfoObj.name = row.name
+      this.dialogInfo.popShow = true
+      this.$nextTick(_ => {
+        this.$refs.tree.setCheckedKeys(row.description.split(','))
+      })
     },
     delInfo (row) {
       this.$confirm('确定要删除该角色?', '提示', {
@@ -199,14 +202,6 @@ export default {
     handleCheckChange (val) {
       console.log(val)
     },
-    setCheck () {
-      api.roleList({name: '',id: this.id}).then(rs => {
-        if (rs.code === 200 && rs.data.length>0)
-        this.queryObj.name = rs.data[0]['name']
-        this.$refs.tree.setCheckedKeys(rs.data[0]['description'].split(','))
-        this.dialogInfo.popShow = true
-      })
-    },
     prev () {
       let roleArr = this.$refs.tree.getCheckedKeys()
       let url = 'roleCreate'
@@ -218,8 +213,8 @@ export default {
         name: this.queryObj.name,
         description: roleArr.join(',')
       }
-      if (this.id) {
-        params.id = this.id
+      if (this.queryInfoObj.id) {
+        params.id = this.queryInfoObj.id
         url = 'roleUpdate'
       }
       api[url](params).then(rs => {
