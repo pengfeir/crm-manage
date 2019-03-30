@@ -2,6 +2,16 @@
   <div class="layout_inner">
     <div class="main-head">
       <ever-form2 :schema="querySchema" v-model="queryObj" @query="query" ref="form" class="package-sale" :info="true" :labelWidth="140" label-position="right" :nosubmit="true" :inline="true">
+        <template slot="actionUserId">
+          <el-select v-model="infoQueryObj.actionUserId" clearable placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.id"
+              :label="item.nickName"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </template>
         <template slot="btn">
           <el-button type="primary" @click="query">查询</el-button>
         </template>
@@ -17,22 +27,17 @@
       </el-table-column>
       <el-table-column prop="contact" label="联系方式">
       </el-table-column>
-      <el-table-column prop="kind" label="类别" width="150">
-        <template slot-scope="scope">
-          {{scope.row.kind | kindStatus}}
-        </template>
-      </el-table-column>
       <el-table-column prop="vender" label="服务提供方" width="150">
       </el-table-column>
-      <el-table-column prop="actionDate" label="保养/质控的实际发生时间" width="200">
+      <el-table-column prop="actionDate" label="保养实际发生时间" width="200">
       </el-table-column>
       <el-table-column prop="ctime" label="创建时间" width="180">
       </el-table-column>
       <el-table-column prop="mtime" label="更新时间" width="180">
       </el-table-column>
-      <el-table-column prop="planDate" label="保养/质控的计划时间" width="180">
+      <el-table-column prop="planDate" label="保养计划时间" width="180">
       </el-table-column>
-      <el-table-column prop="reportUrlList" label="保养/质控报告" width="250">
+      <el-table-column prop="reportUrlList" label="保养报告" width="250">
         <template slot-scope="scope">
           <fileshow :type="'img'" :fileurlList="scope.row.reportUrlList"></fileshow>
         </template>
@@ -62,6 +67,16 @@
               <el-button size="small" type="primary">点击上传</el-button>
             </el-upload>
           </template>
+          <template slot="actionUserId">
+            <el-select v-model="infoQueryObj.actionUserId" clearable placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.id"
+                :label="item.nickName"
+                :value="item.id">
+              </el-option>
+            </el-select>
+          </template>
           <template slot="default">
             <div></div>
           </template>
@@ -86,24 +101,8 @@ let schema = [
   },
   {
     name: "actionUserId",
-    label: "实际保养/质控人的ID"
-  },
-  {
-    label: "类别",
-    name: "kind",
-    comp: "el-select",
-    props: {
-      options: [
-        {
-          id: "maintain",
-          name: "保养"
-        },
-        {
-          id: "qa",
-          name: "质控"
-        }
-      ]
-    }
+    label: "实际保养人",
+    comp: "custom"
   },
   {
     label: "服务提供方",
@@ -128,7 +127,7 @@ let infoSchema = [
   },
   {
     name: "actionDate",
-    label: "保养/质控的实际发生时间",
+    label: "保养实际发生时间",
     comp: "el-date-picker",
     props: {
       type: "datetime",
@@ -137,32 +136,16 @@ let infoSchema = [
   },
   {
     name: "actionUserId",
-    label: "实际保养/质控人的ID"
+    label: "实际保养人",
+    comp: "custom"
   },
   {
     name: "contact",
     label: "联系方式"
   },
   {
-    name: "kind",
-    label: "类别",
-    comp: "el-select",
-    props: {
-      options: [
-        {
-          id: "maintain",
-          name: "保养"
-        },
-        {
-          id: "qa",
-          name: "质控"
-        }
-      ]
-    }
-  },
-  {
     name: "planDate",
-    label: "保养/质控的计划时间",
+    label: "保养计划时间",
     comp: "el-date-picker",
     props: {
       type: "datetime",
@@ -171,7 +154,7 @@ let infoSchema = [
   },
   {
     name: "reportUrlList",
-    label: "保养/质控报告",
+    label: "保养报告",
     comp: "custom"
   },
   {
@@ -188,6 +171,7 @@ export default {
   data() {
     var obj = this.createObjFromSchema(schema);
     var infoObj = this.createObjFromSchema(infoSchema);
+    obj.kind = 'maintain'
     return {
       api,
       querySchema: schema,
@@ -199,6 +183,7 @@ export default {
       popShow: false,
       popTitle: "新建",
       detailId: "",
+      options: [],
       // 保存图片地址
       imgObj: {
         reportImg: []
@@ -255,7 +240,7 @@ export default {
       });
       this.popShow = true;
       this.detailId = "";
-      this.popTitle = "新建保养质检";
+      this.popTitle = "新建保养";
     },
     prev(id) {
       this.$refs.form.$refs.form.validate(valid => {
@@ -266,6 +251,7 @@ export default {
           }
           let tips = this.detailId ? "更新" : "创建";
           let params = Object.assign({}, this.infoQueryObj);
+          params.kind = 'maintain'
           params.reportUrlList =
             this.imgObj.reportImg.length > 0
               ? JSON.stringify(this.imgObj.reportImg)
@@ -283,8 +269,9 @@ export default {
       });
     },
     emitInfo(row) {
-      this.popTitle = "编辑保养质检";
+      this.popTitle = "编辑保养";
       this.detailId = row.id;
+      row.actionUserId = String(row.actionUserId);
       Object.assign(this.infoQueryObj, row);
       this.filelistObj.reportList =
         (this.infoQueryObj.reportUrlList &&
@@ -297,7 +284,7 @@ export default {
       this.popShow = true;
     },
     delInfo(row) {
-      this.$confirm("确定要删除该保养质检记录?", "提示", {
+      this.$confirm("确定要删除该质检记录?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -318,6 +305,13 @@ export default {
         })
         .then(() => {});
     }
+  },
+  created () {
+    api.userList().then(rs => {
+      if (rs.code === 200 && rs.data.length > 0) {
+        this.options = rs.data
+      }
+    })
   }
 };
 </script>
@@ -328,5 +322,3 @@ export default {
   overflow-y: scroll;
 }
 </style>
-
-

@@ -338,14 +338,6 @@ export default {
     }
   },
   watch: {
-    $route: {
-      handler(value) {
-        if (value.path === "/page/rolelist") {
-          this.query();
-        }
-      },
-      immediate: true
-    },
     "dialogInfo.popShow": {
       handler(value) {
         if (!value) {

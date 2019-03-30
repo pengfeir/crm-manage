@@ -12,7 +12,8 @@ const UserList = r => require.ensure([], () => r(require('@/components/page/mech
 const assetManage = r => require.ensure([], () => r(require('@/components/page/assetManage/assetManage.vue')), 'assetManage')
 
 const assetFailure = r => require.ensure([], () => r(require('@/components/page/assetManage/assetFailure.vue')), 'assetFailure')
-const maintenance = r => require.ensure([], () => r(require('@/components/page/assetManage/maintenance.vue')), 'maintenance')
+const maintenanceQa = r => require.ensure([], () => r(require('@/components/page/assetManage/maintenanceqa.vue')), 'maintenanceqa')
+const maintenanceMain = r => require.ensure([], () => r(require('@/components/page/assetManage/maintenancemain.vue')), 'maintenancemain')
 const complaint = r => require.ensure([], () => r(require('@/components/page/assetManage/complaint.vue')), 'complaint')
 const assetRun = r => require.ensure([], () => r(require('@/components/page/assetManage/assetRun.vue')), 'assetRun')
 const device = r => require.ensure([], () => r(require('@/components/page/device/device.vue')), 'device')
@@ -80,10 +81,17 @@ const routerarr = [
         }
       },
       {
-        path: 'maintenance',
-        component: maintenance,
+        path: 'maintenanceMain',
+        component: maintenanceMain,
         meta: {
-          name: '保养质检'
+          name: '保养'
+        }
+      },
+      {
+        path: 'maintenanceQa',
+        component: maintenanceQa,
+        meta: {
+          name: '质控'
         }
       },
       {

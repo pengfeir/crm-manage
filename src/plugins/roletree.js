@@ -42,9 +42,14 @@ var menuArr = [
         auth: 'wwq2',
         childMenus: []
       }, {
-        menuName: '保养质检',
-        menuUrl: '/page/maintenance',
+        menuName: '保养',
+        menuUrl: '/page/maintenanceMain',
         auth: 'erth',
+        childMenus: []
+      },{
+        menuName: '质控',
+        menuUrl: '/page/maintenanceQa',
+        auth: 'erthwer',
         childMenus: []
       }, {
         menuName: '投诉',
