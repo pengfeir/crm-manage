@@ -6,7 +6,6 @@
                     <el-button type="primary" @click="query">查询</el-button>
                 </template>
                 <template slot="rightbtn">
-                    <el-button type="primary" @click="addAsset">新建</el-button>
                 </template>
             </ever-form2>
         </div>
@@ -50,8 +49,7 @@
             </el-table-column>
             <el-table-column prop="name" label="操作" fixed="right" width="150">
                 <template slot-scope="scope">
-                    <el-button size="small" type="primary" @click="emitInfo(scope.row)">编辑</el-button>
-                    <el-button size="small" type="danger" @click="delInfo(scope.row)">删除</el-button>
+                    <el-button size="small" type="primary" @click="seeDetails(scope.row)">查看</el-button>
                 </template>
             </el-table-column>
         </el-table>

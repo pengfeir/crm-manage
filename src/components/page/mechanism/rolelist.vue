@@ -231,7 +231,6 @@ export default {
             name: this.queryInfoObj.name,
             description: roleArr.join(',')
           }
-          console.log(this.dialogInfo.id, 1123344)
           if (this.dialogInfo.id) {
             params.id = this.dialogInfo.id
             url = 'roleUpdate'
@@ -255,6 +254,7 @@ export default {
       this.queryInfoObj.name = ''
       this.dialogInfo.id = ''
       this.queryInfoObj.description = []
+      this.$refs.tree.setCheckedKeys([])
     },
   },
   watch: {

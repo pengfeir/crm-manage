@@ -183,10 +183,29 @@ export default {
     let infoObj = this.createObjFromSchema(infoSchema)
     infoObj.roleIds = []
     let validatePass = (rule, value, callback) => {
-      if (this.queryInfoObj.password !== this.queryInfoObj.checkpassword) {
-        callback(new Error('密码不一致'))
+      if (this.dialogInfo.id) {
+        if (this.queryInfoObj.password && this.queryInfoObj.password !== this.queryInfoObj.checkpassword) {
+          callback(new Error('密码不一致'))
+        } else {
+          callback()
+        }
       } else {
+        if (this.queryInfoObj.password !== this.queryInfoObj.checkpassword) {
+          callback(new Error('密码不一致'))
+        } else {
+          callback()
+        }
+      }
+    }
+    let validatePasss = (rule, value, callback) => {
+      if (this.dialogInfo.id) {
         callback()
+      } else {
+        if (!this.queryInfoObj.password) {
+          callback(new Error('密码不能为空'))
+        } else {
+          callback()
+        }
       }
     }
     let rules = {
@@ -194,7 +213,7 @@ export default {
         { required: true, message: '必填项', trigger: 'blur' }
       ],
       'password': [
-        { required: true, message: '必填项', trigger: 'blur' }
+        { validator: validatePasss, trigger: 'blur' }
       ],
       'checkpassword': [
         { validator: validatePass, trigger: 'blur' }
@@ -249,6 +268,7 @@ export default {
     },
     emitInfo (row) {
       this.dialogInfo.popTitle = '编辑账号'
+      this.dialogInfo.id = row.id
       this.queryInfoObj = Object.assign(this.queryInfoObj, row)
       this.init()
       this.dialogInfo.popShow = true
@@ -307,12 +327,14 @@ export default {
           let url = 'userCreate'
           let title = '保存成功'
           let params = Object.assign({}, this.queryInfoObj)
-          console.log(params)
           delete params.checkpassword
-          if (this.id) {
+          if (this.dialogInfo.id) {
             url = 'userUpdate'
-            params.id = this.id
+            params.id = this.dialogInfo.id
             title = '修改成功'
+            if (!params.password) {
+              delete params.password
+            }
           }
           api[url](params).then(rs => {
             if (rs.code === 200) {
