@@ -1,7 +1,16 @@
 <template>
   <div class="layout_inner">
     <div class="main-head">
-      <ever-form2 :schema="querySchema" v-model="queryObj" @query="query" ref="form" class="package-sale" :info="true" :labelWidth="140" label-position="right" :nosubmit="true" :inline="true">
+      <ever-form2
+        :schema="querySchema" 
+        v-model="queryObj"
+        @query="query"
+        class="package-sale"
+        :info="true"
+        :labelWidth="140"
+        label-position="right"
+        :nosubmit="true"
+        :inline="true">
         <template slot="btn">
           <el-button type="primary" @click="query">查询</el-button>
         </template>
@@ -39,8 +48,22 @@
         :total="totalCount">
       </el-pagination>
     </div> -->
-    <el-dialog :title="dialogInfo.popTitle" :visible.sync="dialogInfo.popShow" class="ui_dialog_02 spe carditem" :close-on-click-modal="false">
-      <ever-form2 :schema="queryInfoSchema" v-model="queryInfoObj" ref="form" :rules="rules" class="package-sale" :info="true" labelWidth="80px" label-position="right">
+    <el-dialog :title="dialogInfo.popTitle" :visible.sync="dialogInfo.popShow"  class="ui_dialog_02 spe carditem" :close-on-click-modal="false">
+      <ever-form2
+        :schema="queryInfoSchema" 
+        v-model="queryInfoObj"
+        ref="form"
+        :rules="rules"
+        class="package-sale"
+        :info="true"
+        labelWidth="80px"
+        label-position="right">
+        <template slot="password">
+          <el-input v-model="queryInfoObj.password" type="password" autocomplete="new-password"></el-input>
+        </template>
+        <template slot="checkpassword">
+          <el-input v-model="queryInfoObj.checkpassword" type="password" autocomplete="new-password"></el-input>
+        </template>
         <template slot="orgId">
           <el-select v-model="queryInfoObj.orgId" :disabled="!dialogInfo.superAdmin" placeholder="请选择">
             <el-option v-for="item in dialogInfo.orgs" :key="item.id" :label="item.orgName" :value="item.id">
@@ -90,8 +113,14 @@ let infoSchema = [
     label: "账号"
   },
   {
-    name: "password",
-    label: "密码"
+    name: 'password',
+    label: '密码',
+    comp: 'custom'
+  },
+  {
+    name: 'checkpassword',
+    label: '确认密码',
+    comp: 'custom'
   },
   {
     name: "orgId",
@@ -99,36 +128,65 @@ let infoSchema = [
     comp: "custom"
   },
   {
-    name: "nickName",
-    label: "用户名"
+    name: 'roleIds',
+    label:'角色',
+    comp: 'custom'
+  },
+  {
+    name: 'nickName',
+    label: '用户名'
   },
   {
     name: "email",
     label: "邮箱"
   },
   {
-    name: "note",
-    label: "备注"
-  },
-  {
-    name: "roleIds",
-    label: "角色",
-    comp: "custom"
+    name: 'note',
+    label: '备注'
   }
 ];
 export default {
   mixins: [list],
-  data() {
-    var obj = this.createObjFromSchema(schema);
-    var queryObj = this.createObjFromSchema(infoSchema);
+  data () {
+    let obj = this.createObjFromSchema(schema)
+    let infoObj = this.createObjFromSchema(infoSchema)
+    infoObj.roleIds = []
+    let validatePass = (rule, value, callback) => {
+      if (this.queryInfoObj.password !== this.queryInfoObj.checkpassword) {
+        callback(new Error('密码不一致'))
+      } else {
+        callback()
+      }
+    }
+    let rules = {
+      'username': [
+        { required: true, message: '必填项', trigger: 'blur' }
+      ],
+      'password': [
+        { required: true, message: '必填项', trigger: 'blur' }
+      ],
+      'checkpassword': [
+        { validator: validatePass, trigger: 'blur' }
+      ],
+      'orgId': [
+        { required: true, message: '必填项', trigger: 'blur' }
+      ],
+      'roleIds': [
+        { required: true, message: '必填项', trigger: 'blur' }
+      ],
+      'nickName': [
+        { required: true, message: '必填项', trigger: 'blur' }
+      ]
+    }
     return {
       api,
+      rules,
       querySchema: schema,
       queryObj: obj,
       queryInfoSchema: infoSchema,
-      queryInfoObj: queryObj,
-      listApiName: "userList",
-      currentUser: JSON.parse(this.getStore("currentUser")),
+      queryInfoObj: infoObj,
+      listApiName: 'userList',
+      currentUser: JSON.parse(this.getStore('currentUser')),
       tableData: [],
       popShow: false,
       dialogInfo: {
@@ -138,29 +196,6 @@ export default {
         superAdmin: false,
         orgs: [],
         options: []
-      },
-      rules: {
-        username: [
-          {
-            required: true,
-            message: "必填项",
-            trigger: ["blur"]
-          }
-        ],
-        password: [
-          {
-            required: true,
-            message: "必填项",
-            trigger: ["blur"]
-          }
-        ],
-        roleIds: [
-          {
-            required: true,
-            message: "必填项",
-            trigger: ["change"]
-          }
-        ]
       }
     };
   },
@@ -183,10 +218,11 @@ export default {
         }
       );
     },
-    emitInfo(row) {
-      this.dialogInfo.popTitle = "编辑账号";
-      this.init();
-      this.dialogInfo.popShow = true;
+    emitInfo (row) {
+      this.dialogInfo.popTitle = '编辑账号'
+      this.queryInfoObj = Object.assign(this.queryInfoObj, row)
+      this.init()
+      this.dialogInfo.popShow = true
     },
     delInfo(row) {
       this.$confirm("确定要删除该账号?", "提示", {
@@ -210,11 +246,7 @@ export default {
         })
         .then(() => {});
     },
-    init() {
-      if (this.id) {
-        this.getInfo();
-      }
-      console.log(typeof this.currentUser.orgId);
+    init () {
       if (this.currentUser.orgId === 0) {
         this.dialogInfo.superAdmin = true;
       } else {
@@ -246,38 +278,41 @@ export default {
         this.$refs.tree.setCheckedKeys(rs.data[0]["description"].split(","));
       });
     },
-    prev() {
-      let url = "userCreate";
-      let title = "保存成功";
-      let params = Object.assign({}, this.queryInfoObj);
-      if (this.id) {
-        url = "userUpdate";
-        params.id = this.id;
-        title = "修改成功";
-      }
+    prev () {
       this.$refs.form.$refs.form.validate(valid => {
         if (valid) {
+          let url = 'userCreate'
+          let title = '保存成功'
+          let params = Object.assign({}, this.queryInfoObj)
+          console.log(params)
+          delete params.checkpassword
+          if (this.id) {
+            url = 'userUpdate'
+            params.id = this.id
+            title = '修改成功'
+          }
           api[url](params).then(rs => {
             if (rs.code === 200) {
-              this.$messageTips(this, "success", title);
-              this.dialogInfo.popShow = false;
-              this.list();
+              this.$messageTips(this, 'success', title)
+              this.dialogInfo.popShow = false
+              this.list()
             }
-          });
+          })
         }
       });
     },
     cancel() {
       this.dialogInfo.popShow = false;
     },
-    clearInfo() {
-      this.queryInfoObj.username = "";
-      this.queryInfoObj.password = "";
-      this.queryInfoObj.orgId = "";
-      this.queryInfoObj.nickName = "";
-      this.queryInfoObj.email = "";
-      this.queryInfoObj.note = "";
-      this.queryInfoObj.roleIds = [];
+    clearInfo () {
+      this.queryInfoObj.username = ''
+      this.queryInfoObj.password = ''
+      this.queryInfoObj.checkpassword = ''
+      this.queryInfoObj.orgId = ''
+      this.queryInfoObj.nickName = ''
+      this.queryInfoObj.email = ''
+      this.queryInfoObj.note = ''
+      this.queryInfoObj.roleIds = []
     }
   },
   watch: {

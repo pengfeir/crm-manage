@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-menu  router style="min-height: 100%;" collapse-transition background-color="#324157" text-color="#bfcbd9"
+        <el-menu  router style="min-height: 100%;" background-color="#324157" text-color="#bfcbd9"
       active-text-color="#20a0ff">
             <template v-for="amenu in menuArr">
                 <!-- 有多级菜单 -->

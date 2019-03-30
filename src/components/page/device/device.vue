@@ -1,5 +1,5 @@
 <template>
-  <div v-loading.body="loading">
+  <div class="layout_inner">
     <div class="main-head">
       <ever-form2 :schema="querySchema" v-model="queryObj" @query="query" ref="form" class="package-sale" :info="true" :labelWidth="140" label-position="right" :nosubmit="true" :inline="true">
         <template slot="btn">
@@ -10,7 +10,7 @@
         </template>
       </ever-form2>
     </div>
-    <el-table :data="tableData" style="width: 100%" border stripe max-height="650">
+    <el-table v-loading="loading" :data="tableData" style="width: 100%" border stripe max-height="650">
       <el-table-column type="index" width="50" label="序号" fixed>
       </el-table-column>
       <el-table-column prop="macAddr" label="MAC地址" width="180" fixed>
@@ -44,8 +44,10 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="20" :layout="layout" :total="totalCount">
-    </el-pagination>
+    <div class="page-container">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="20" :layout="layout" :total="totalCount">
+      </el-pagination>
+    </div>
     <el-dialog :title="popTitle" :visible.sync="popShow" class="ui_dialog_02 spe carditem" :close-on-click-modal="false" :before-close="handleClose">
       <div class="scroll">
         <ever-form2 :schema="infoQuerySchema" v-model="infoQueryObj" ref="form" :rules="rules" class="package-sale" labelWidth="180px" label-position="right">
@@ -238,18 +240,18 @@ export default {
       this.popTitle = "新建物联设备";
     },
     prev(id) {
-      let url = "createIotDevice";
-      if (this.detailId) {
-        url = "updateIotDevice";
-      }
-      let tips = this.detailId ? "更新" : "创建";
-      let params = Object.assign({}, this.infoQueryObj);
-      params.urlList =
-        this.imgObj.reportImg.length > 0
-          ? JSON.stringify(this.imgObj.reportImg)
-          : "";
       this.$refs.form.$refs.form.validate(valid => {
         if (valid) {
+          let url = "createIotDevice";
+          if (this.detailId) {
+            url = "updateIotDevice";
+          }
+          let tips = this.detailId ? "更新" : "创建";
+          let params = Object.assign({}, this.infoQueryObj);
+          params.urlList =
+            this.imgObj.reportImg.length > 0
+              ? JSON.stringify(this.imgObj.reportImg)
+              : "";
           api[url](params).then(rs => {
             this.popShow = false;
             if (rs.code === 200) {

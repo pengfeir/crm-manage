@@ -1,5 +1,5 @@
 <template>
-  <div v-loading.body="loading">
+  <div class="layout_inner" v-loading.body="loading">
     <div class="main-head">
       <ever-form2 :schema="querySchema" v-model="queryObj" @query="query" ref="form" class="package-sale" :info="true" :labelWidth="140" label-position="right" :nosubmit="true" :inline="true">
         <template slot="btn">
@@ -41,8 +41,10 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="20" :layout="layout" :total="totalCount">
-    </el-pagination>
+    <div class="page-container">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="20" :layout="layout" :total="totalCount">
+      </el-pagination>
+    </div>
     <el-dialog :title="popTitle" :visible.sync="popShow" class="ui_dialog_02 spe carditem" :close-on-click-modal="false" :before-close="handleClose">
       <div class="scroll">
         <ever-form2 :schema="infoQuerySchema" v-model="infoQueryObj" ref="form" :rules="rules" class="package-sale" labelWidth="180px" label-position="right">
@@ -71,7 +73,7 @@ let schema = [
   {
     name: "assetId",
     label: "资产名称",
-    comp: "assets-select",
+    comp: "assets-select"
   },
   {
     label: "严重类别",
@@ -117,7 +119,7 @@ let infoSchema = [
   {
     name: "assetId",
     label: "资产名称",
-    comp: "assets-select",
+    comp: "assets-select"
   },
   {
     name: "dept",
@@ -195,7 +197,7 @@ export default {
           {
             required: true,
             message: "必填项",
-            trigger: ["blur","change"]
+            trigger: ["blur", "change"]
           }
         ]
       }
@@ -241,18 +243,18 @@ export default {
       this.popTitle = "新建投诉";
     },
     prev(id) {
-      let url = "createComplaint";
-      if (this.detailId) {
-        url = "updateComplaint";
-      }
-      let tips = this.detailId ? "更新" : "创建";
-      let params = Object.assign({}, this.infoQueryObj);
-      params.urlList =
-        this.imgObj.reportImg.length > 0
-          ? JSON.stringify(this.imgObj.reportImg)
-          : "";
       this.$refs.form.$refs.form.validate(valid => {
         if (valid) {
+          let url = "createComplaint";
+          if (this.detailId) {
+            url = "updateComplaint";
+          }
+          let tips = this.detailId ? "更新" : "创建";
+          let params = Object.assign({}, this.infoQueryObj);
+          params.urlList =
+            this.imgObj.reportImg.length > 0
+              ? JSON.stringify(this.imgObj.reportImg)
+              : "";
           api[url](params).then(rs => {
             this.popShow = false;
             if (rs.code === 200) {

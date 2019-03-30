@@ -1,7 +1,16 @@
 <template>
   <div class="layout_inner">
     <div class="main-head">
-      <ever-form2 :schema="querySchema" v-model="queryObj" @query="query" ref="form" class="package-sale" :info="true" :labelWidth="140" label-position="right" :nosubmit="true" :inline="true">
+      <ever-form2
+        :schema="querySchema" 
+        v-model="queryObj"
+        @query="query"
+        class="package-sale"
+        :info="true"
+        :labelWidth="140"
+        label-position="right"
+        :nosubmit="true"
+        :inline="true">
         <template slot="btn">
           <el-button type="primary" @click="query">查询</el-button>
         </template>
@@ -10,8 +19,15 @@
         </template>
       </ever-form2>
     </div>
-    <el-table v-loading.body="loading" :data="tableData" style="width: 100%" border stripe>
-      <el-table-column type="index" width="50">
+    <el-table
+      v-loading="loading"
+      :data="tableData"
+      style="width: 100%"
+      border
+      stripe>
+      <el-table-column
+        type="index"
+        width="50">
       </el-table-column>
       <el-table-column prop="orgName" label="机构名称">
       </el-table-column>
@@ -33,12 +49,26 @@
         </template>
       </el-table-column>
     </el-table>
-    <div style="overflow:hidden;margin-bottom:10px;">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="20" :layout="layout" :total="totalCount">
+    <div class="page-container">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="pageSizes"
+        :page-size="20"
+        :layout="layout"
+        :total="totalCount">
       </el-pagination>
     </div>
     <el-dialog :title="popTitle" :visible.sync="popShow"  class="ui_dialog_02 spe carditem" :close-on-click-modal="false">
-      <ever-form2 :schema="infoQuerySchema" v-model="infoQueryObj" :rules="rules" ref="form" class="package-sale" labelWidth="80px" label-position="right">
+      <ever-form2
+        :schema="infoQuerySchema" 
+        v-model="infoQueryObj"
+        ref="form"
+        :rules="rules"
+        class="package-sale"
+        labelWidth="80px"
+        label-position="right">
         <template slot="default">
           <div></div>
         </template>
@@ -89,11 +119,17 @@ let infoSchema = [
 ];
 export default {
   mixins: [list],
-  data() {
-    var obj = this.createObjFromSchema(schema);
-    var infoObj = this.createObjFromSchema(infoSchema);
+  data () {
+    let obj = this.createObjFromSchema(schema)
+    let infoObj = this.createObjFromSchema(infoSchema)
+    let rules = {
+      'orgName': [
+          { required: true, message: '必填项', trigger: 'blur' }
+      ]
+    }
     return {
       api,
+      rules,
       popShow: false,
       popTitle: "新建机构",
       ageencyID: "",
@@ -103,38 +139,29 @@ export default {
       infoQuerySchema: infoSchema,
       listApiName: "agencyList",
       tableData: [],
-      rules: {
-        orgName: [
-          {
-            required: true,
-            message: "必填项",
-            trigger: ["blur"]
-          }
-        ]
-      }
     };
   },
   methods: {
-    prev() {
-      let url = "agencyCreate";
-      let tips = "新建";
-      let params = Object.assign({}, this.infoQueryObj);
-      if (this.ageencyID) {
-        url = "agencyUpdate";
-        tips = "修改";
-        params["id"] = this.ageencyID;
-      }
+    prev () {
       this.$refs.form.$refs.form.validate(valid => {
         if (valid) {
+          let url = 'agencyCreate'
+          let tips = '新建'  
+          let params = Object.assign({}, this.infoQueryObj)
+          if (this.ageencyID) {
+            url = 'agencyUpdate'
+            tips = '修改'
+            params['id'] = this.ageencyID
+          }
           api[url](params).then(rs => {
-            this.popShow = false;
+            this.popShow = false
             if (rs.code === 200) {
-              this.query();
-              this.$messageTips(this, "success", tips + "成功");
+              this.query()
+              this.$messageTips(this, 'success', tips + '成功')
             } else {
-              this.$messageTips(this, "error", tips + "失败");
+              this.$messageTips(this, 'error', tips + '失败')
             }
-          });
+          })
         }
       });
     },
