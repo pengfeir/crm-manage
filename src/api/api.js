@@ -28,8 +28,8 @@ function roleCreate (params) { // 添加角色
 function roleDel (params) { // 删除角色
   return axios.post('/manage/role/delete', params)
 }
-function roleUpdate (params, id) { // 编辑角色
-  return axios.post('/manage/role/update/' + id, params)
+function roleUpdate (params) { // 编辑角色
+  return axios.post('/manage/role/update', params)
 }
 function userInfo (params) { // 获取当前用户
   return axios.post('/manage/admin/info', params)

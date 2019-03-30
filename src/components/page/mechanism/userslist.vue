@@ -180,7 +180,8 @@ export default {
   mixins: [list],
   data () {
     let obj = this.createObjFromSchema(schema)
-    let queryObj = this.createObjFromSchema(infoSchema)
+    let infoObj = this.createObjFromSchema(infoSchema)
+    infoObj.roleIds = []
     let validatePass = (rule, value, callback) => {
       if (this.queryInfoObj.password !== this.queryInfoObj.checkpassword) {
         callback(new Error('密码不一致'))
@@ -214,7 +215,7 @@ export default {
       querySchema: schema,
       queryObj: obj,
       queryInfoSchema: infoSchema,
-      queryInfoObj: queryObj,
+      queryInfoObj: infoObj,
       listApiName: 'userList',
       currentUser: JSON.parse(this.getStore('currentUser')),
       tableData: [],
@@ -248,6 +249,7 @@ export default {
     },
     emitInfo (row) {
       this.dialogInfo.popTitle = '编辑账号'
+      this.queryInfoObj = Object.assign(this.queryInfoObj, row)
       this.init()
       this.dialogInfo.popShow = true
     },
@@ -267,10 +269,6 @@ export default {
       })
     },
     init () {
-      if (this.id) {
-        this.getInfo()
-      }
-      console.log(typeof this.currentUser.orgId)
       if (this.currentUser.orgId === 0) {
         this.dialogInfo.superAdmin = true
       } else {
@@ -304,20 +302,25 @@ export default {
       })
     },
     prev () {
-      let url = 'userCreate'
-      let title = '保存成功'
-      let params = Object.assign({}, this.queryInfoObj)
-      delete params.checkpassword
-      if (this.id) {
-        url = 'userUpdate'
-        params.id = this.id
-        title = '修改成功'
-      }
-      api[url](params).then(rs => {
-        if (rs.code === 200) {
-          this.$messageTips(this, 'success', title)
-          this.dialogInfo.popShow = false
-          this.list()
+      this.$refs.form.$refs.form.validate(valid => {
+        if (valid) {
+          let url = 'userCreate'
+          let title = '保存成功'
+          let params = Object.assign({}, this.queryInfoObj)
+          console.log(params)
+          delete params.checkpassword
+          if (this.id) {
+            url = 'userUpdate'
+            params.id = this.id
+            title = '修改成功'
+          }
+          api[url](params).then(rs => {
+            if (rs.code === 200) {
+              this.$messageTips(this, 'success', title)
+              this.dialogInfo.popShow = false
+              this.list()
+            }
+          })
         }
       })
     },

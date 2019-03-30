@@ -195,7 +195,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        return api.roleDel({ids: [row.id]})
+        return api.roleDel({id: row.id})
       }).then(() => {
         this.$message({
           type: 'success',
@@ -228,11 +228,12 @@ export default {
             return
           }
           let params ={
-            name: this.queryObj.name,
+            name: this.queryInfoObj.name,
             description: roleArr.join(',')
           }
-          if (this.queryInfoObj.id) {
-            params.id = this.queryInfoObj.id
+          console.log(this.dialogInfo.id, 1123344)
+          if (this.dialogInfo.id) {
+            params.id = this.dialogInfo.id
             url = 'roleUpdate'
           }
           api[url](params).then(rs => {
@@ -252,6 +253,7 @@ export default {
     },
     clearInfo () {
       this.queryInfoObj.name = ''
+      this.dialogInfo.id = ''
       this.queryInfoObj.description = []
     },
   },
