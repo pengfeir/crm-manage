@@ -179,6 +179,7 @@ export default {
     },
     // 保存上传的图片地址
     handleReportContractSuccess(response, file, fileList) {
+      console.log(response, file);
       this.imgObj.reportImg.push({
         name: file.name,
         url: `${this.imgBaseUrl}/${file.response.key}`,

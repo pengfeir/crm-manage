@@ -58,7 +58,7 @@ export default {
   created() {},
   methods: {
     showimg(item) {
-      window.open(item.url);
+      window.open(`${item.url}?attname=${item.name}`);
     },
     more() {
       this.dialogTableVisible = true;

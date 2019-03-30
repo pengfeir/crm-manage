@@ -31,7 +31,7 @@
           <fileshow :type="'img'" :fileurlList="scope.row.urlList"></fileshow>
         </template>
       </el-table-column>
-      <el-table-column prop="extra" label="其他扩展信息">
+      <el-table-column prop="extra" label="其他扩展信息" width="180">
       </el-table-column>
       <el-table-column prop="orgName" label="机构" width="180">
       </el-table-column>
