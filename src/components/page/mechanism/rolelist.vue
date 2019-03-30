@@ -5,7 +5,6 @@
         :schema="querySchema" 
         v-model="queryObj"
         @query="query"
-        ref="form"
         class="package-sale"
         :info="true"
         :labelWidth="140"
@@ -21,7 +20,7 @@
       </ever-form2>
     </div>
     <el-table
-      v-loading.body="loading"
+      v-loading="loading"
       :data="tableData"
       style="width: 100%"
       border
@@ -69,6 +68,7 @@
         ref="form"
         class="package-sale"
         :info="true"
+        :rules="rules"
         labelWidth="80px"
         label-position="right">
         <template slot="description">
@@ -131,10 +131,26 @@ let infoSchema = [
 export default {
   mixins: [list],
   data () {
-    var obj = this.createObjFromSchema(schema)
-    var infoObj = this.createObjFromSchema(infoSchema)
+    let obj = this.createObjFromSchema(schema)
+    let infoObj = this.createObjFromSchema(infoSchema)
+    let validatePass = (rule, value, callback) => {
+      if (this.$refs.tree.getCheckedKeys().length === 0) {
+        callback(new Error('权限不能为空'))
+      } else {
+        callback()
+      }
+    }
+    let rules = {
+      'name': [
+        { required: true, message: '必填项', trigger: 'blur' }
+      ],
+      'description': [
+        { validator: validatePass, trigger: 'blur' }
+      ]
+    }
     return {
       api,
+      rules,
       querySchema: schema,
       queryObj: obj,
       queryInfoSchema: infoSchema,
@@ -203,27 +219,31 @@ export default {
       console.log(val)
     },
     prev () {
-      let roleArr = this.$refs.tree.getCheckedKeys()
-      let url = 'roleCreate'
-      if (roleArr.length === 0) {
-        this.$messageTips(this, 'error', '请选择权限')
-        return
-      }
-      let params ={
-        name: this.queryObj.name,
-        description: roleArr.join(',')
-      }
-      if (this.queryInfoObj.id) {
-        params.id = this.queryInfoObj.id
-        url = 'roleUpdate'
-      }
-      api[url](params).then(rs => {
-        if (rs.code === 200) {
-          this.$messageTips(this, 'success', '保存成功')
-          this.dialogInfo.popShow = false
-          this.query()
-        } else {
-          this.$messageTips(this, 'error', '保存失败')
+      this.$refs.form.$refs.form.validate(valid => {
+        if (valid) {
+          let roleArr = this.$refs.tree.getCheckedKeys()
+          let url = 'roleCreate'
+          if (roleArr.length === 0) {
+            this.$messageTips(this, 'error', '请选择权限')
+            return
+          }
+          let params ={
+            name: this.queryObj.name,
+            description: roleArr.join(',')
+          }
+          if (this.queryInfoObj.id) {
+            params.id = this.queryInfoObj.id
+            url = 'roleUpdate'
+          }
+          api[url](params).then(rs => {
+            if (rs.code === 200) {
+              this.$messageTips(this, 'success', '保存成功')
+              this.dialogInfo.popShow = false
+              this.query()
+            } else {
+              this.$messageTips(this, 'error', '保存失败')
+            }
+          })
         }
       })
     },
@@ -247,5 +267,13 @@ export default {
   }
 }
 </script>
+<style lang='less' scoped>
+  .ui_dialog_02 /deep/ .el-col .el-form-item>label::before {
+    content: '*';
+    color: #F56C6C;
+    margin-right: 4px;
+  }
+</style>
+
 
 

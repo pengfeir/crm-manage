@@ -5,7 +5,6 @@
         :schema="querySchema" 
         v-model="queryObj"
         @query="query"
-        ref="form"
         class="package-sale"
         :info="true"
         :labelWidth="140"
@@ -77,10 +76,17 @@
         :schema="queryInfoSchema" 
         v-model="queryInfoObj"
         ref="form"
+        :rules="rules"
         class="package-sale"
         :info="true"
         labelWidth="80px"
         label-position="right">
+        <template slot="password">
+          <el-input v-model="queryInfoObj.password" type="password" autocomplete="new-password"></el-input>
+        </template>
+        <template slot="checkpassword">
+          <el-input v-model="queryInfoObj.checkpassword" type="password" autocomplete="new-password"></el-input>
+        </template>
         <template slot="orgId">
           <el-select v-model="queryInfoObj.orgId" :disabled="!dialogInfo.superAdmin" placeholder="请选择">
             <el-option
@@ -139,11 +145,22 @@ let infoSchema = [
   },
   {
     name: 'password',
-    label: '密码'
+    label: '密码',
+    comp: 'custom'
+  },
+  {
+    name: 'checkpassword',
+    label: '确认密码',
+    comp: 'custom'
   },
   {
     name: 'orgId',
     label: '机构',
+    comp: 'custom'
+  },
+  {
+    name: 'roleIds',
+    label:'角色',
     comp: 'custom'
   },
   {
@@ -157,20 +174,43 @@ let infoSchema = [
   {
     name: 'note',
     label: '备注'
-  },
-  {
-    name: 'roleIds',
-    label:'角色',
-    comp: 'custom'
   }
 ]
 export default {
   mixins: [list],
   data () {
-    var obj = this.createObjFromSchema(schema)
-    var queryObj = this.createObjFromSchema(infoSchema)
+    let obj = this.createObjFromSchema(schema)
+    let queryObj = this.createObjFromSchema(infoSchema)
+    let validatePass = (rule, value, callback) => {
+      if (this.queryInfoObj.password !== this.queryInfoObj.checkpassword) {
+        callback(new Error('密码不一致'))
+      } else {
+        callback()
+      }
+    }
+    let rules = {
+      'username': [
+        { required: true, message: '必填项', trigger: 'blur' }
+      ],
+      'password': [
+        { required: true, message: '必填项', trigger: 'blur' }
+      ],
+      'checkpassword': [
+        { validator: validatePass, trigger: 'blur' }
+      ],
+      'orgId': [
+        { required: true, message: '必填项', trigger: 'blur' }
+      ],
+      'roleIds': [
+        { required: true, message: '必填项', trigger: 'blur' }
+      ],
+      'nickName': [
+        { required: true, message: '必填项', trigger: 'blur' }
+      ]
+    }
     return {
       api,
+      rules,
       querySchema: schema,
       queryObj: obj,
       queryInfoSchema: infoSchema,
@@ -267,6 +307,7 @@ export default {
       let url = 'userCreate'
       let title = '保存成功'
       let params = Object.assign({}, this.queryInfoObj)
+      delete params.checkpassword
       if (this.id) {
         url = 'userUpdate'
         params.id = this.id
@@ -286,6 +327,7 @@ export default {
     clearInfo () {
       this.queryInfoObj.username = ''
       this.queryInfoObj.password = ''
+      this.queryInfoObj.checkpassword = ''
       this.queryInfoObj.orgId = ''
       this.queryInfoObj.nickName = ''
       this.queryInfoObj.email = ''

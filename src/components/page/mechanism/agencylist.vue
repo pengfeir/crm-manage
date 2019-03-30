@@ -5,7 +5,6 @@
         :schema="querySchema" 
         v-model="queryObj"
         @query="query"
-        ref="form"
         class="package-sale"
         :info="true"
         :labelWidth="140"
@@ -21,7 +20,7 @@
       </ever-form2>
     </div>
     <el-table
-      v-loading.body="loading"
+      v-loading="loading"
       :data="tableData"
       style="width: 100%"
       border
@@ -76,9 +75,13 @@
         :schema="infoQuerySchema" 
         v-model="infoQueryObj"
         ref="form"
+        :rules="rules"
         class="package-sale"
         labelWidth="80px"
         label-position="right">
+        <template slot="default">
+          <div></div>
+        </template>
       </ever-form2>
       <div class="log-btn-container">
         <el-button type="primary" @click="prev">保存</el-button>
@@ -127,10 +130,16 @@ let infoSchema = [
 export default {
   mixins: [list],
   data () {
-    var obj = this.createObjFromSchema(schema)
-    var infoObj = this.createObjFromSchema(infoSchema)
+    let obj = this.createObjFromSchema(schema)
+    let infoObj = this.createObjFromSchema(infoSchema)
+    let rules = {
+      'orgName': [
+          { required: true, message: '必填项', trigger: 'blur' }
+      ]
+    }
     return {
       api,
+      rules,
       popShow: false,
       popTitle: '新建机构',
       ageencyID: '',
@@ -144,21 +153,25 @@ export default {
   },
   methods: {
     prev () {
-      let url = 'agencyCreate'
-      let tips = '新建'  
-      let params = Object.assign({}, this.infoQueryObj)
-      if (this.ageencyID) {
-        url = 'agencyUpdate'
-        tips = '修改'
-        params['id'] = this.ageencyID
-      }
-      api[url](params).then(rs => {
-        this.popShow = false
-        if (rs.code === 200) {
-          this.query()
-          this.$messageTips(this, 'success', tips + '成功')
-        } else {
-          this.$messageTips(this, 'error', tips + '失败')
+      this.$refs.form.$refs.form.validate(valid => {
+        if (valid) {
+          let url = 'agencyCreate'
+          let tips = '新建'  
+          let params = Object.assign({}, this.infoQueryObj)
+          if (this.ageencyID) {
+            url = 'agencyUpdate'
+            tips = '修改'
+            params['id'] = this.ageencyID
+          }
+          api[url](params).then(rs => {
+            this.popShow = false
+            if (rs.code === 200) {
+              this.query()
+              this.$messageTips(this, 'success', tips + '成功')
+            } else {
+              this.$messageTips(this, 'error', tips + '失败')
+            }
+          })
         }
       })
     },

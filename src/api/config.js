@@ -2,7 +2,7 @@
  * @Author: renpengfei
  * @Date: 2019-03-16 18:31:01
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-03-29 15:18:23
+ * @Last Modified time: 2019-03-29 17:56:30
  */
 import axios from 'axios'
 import router from '../router'
@@ -43,7 +43,7 @@ service
           return
         }
         if (response.data.code !== 200) {
-          Notification.error('操作失败')
+          Notification.error(response.data.message)
           return
         } else 
         // return Promise.resolve(response.data)

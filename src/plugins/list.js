@@ -48,6 +48,8 @@ var component = {
           this.emptyData = true
           this.totalCount = 0
         }
+      }).catch(rj => {
+        this.loading = false
       })
     },
     handleSizeChange (val) {
