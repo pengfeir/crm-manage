@@ -13,25 +13,27 @@
     <el-table :data="tableData" style="width: 100%" border stripe max-height="650">
       <el-table-column type="index" width="50" label="序号" fixed>
       </el-table-column>
-      <el-table-column prop="model" label="设备型号" fixed>
+      <el-table-column prop="macAddr" label="MAC地址" width="180" fixed>
+      </el-table-column>
+      <el-table-column prop="model" label="设备型号">
       </el-table-column>
       <el-table-column prop="kind" label="物联设备类别" width="180">
         <template slot-scope="scope">
           {{scope.row.kind | deviceStatus}}
         </template>
       </el-table-column>
-      <el-table-column prop="macAddr" label="设备的MAC地址" width="180">
-      </el-table-column>
       <el-table-column prop="ctime" label="创建时间">
       </el-table-column>
       <el-table-column prop="mtime" label="更新时间" width="150">
       </el-table-column>
       <el-table-column prop="urlList" label="设备资料" width="250">
-         <template slot-scope="scope">
+        <template slot-scope="scope">
           <fileshow :type="'img'" :fileurlList="scope.row.urlList"></fileshow>
         </template>
       </el-table-column>
       <el-table-column prop="extra" label="其他扩展信息">
+      </el-table-column>
+      <el-table-column prop="orgName" label="机构" width="180">
       </el-table-column>
       <el-table-column prop="userId" label="创建者ID" width="180">
       </el-table-column>
@@ -46,7 +48,7 @@
     </el-pagination>
     <el-dialog :title="popTitle" :visible.sync="popShow" class="ui_dialog_02 spe carditem" :close-on-click-modal="false" :before-close="handleClose">
       <div class="scroll">
-        <ever-form2 :schema="infoQuerySchema" v-model="infoQueryObj" ref="form" class="package-sale" labelWidth="180px" label-position="right">
+        <ever-form2 :schema="infoQuerySchema" v-model="infoQueryObj" ref="form" :rules="rules" class="package-sale" labelWidth="180px" label-position="right">
           <template slot="urlList">
             <el-upload :action="uploadUrl" list-type="picture" :file-list="detailId?filelistObj.reportList:[]" :on-remove="handleReportRemove" :on-success="handleReportContractSuccess" :data="uploadData" :before-upload="beforeUploadGetKey">
               <el-button size="small" type="primary">点击上传</el-button>
@@ -115,6 +117,10 @@ let schema = [
 ];
 let infoSchema = [
   {
+    name: "macAddr",
+    label: "MAC地址"
+  },
+  {
     name: "model",
     label: "设备型号"
   },
@@ -148,10 +154,6 @@ let infoSchema = [
     }
   },
   {
-    name: "macAddr",
-    label: "设备的MAC地址"
-  },
-  {
     name: "urlList",
     label: "设备资料",
     comp: "custom"
@@ -162,7 +164,7 @@ let infoSchema = [
   }
 ];
 export default {
-  mixins: [list,token],
+  mixins: [list, token],
   data() {
     var obj = this.createObjFromSchema(schema);
     var infoObj = this.createObjFromSchema(infoSchema);
@@ -184,6 +186,15 @@ export default {
       // 回显图片地址
       filelistObj: {
         reportList: []
+      },
+      rules: {
+        macAddr: [
+          {
+            required: true,
+            message: "必填项",
+            trigger: ["blur"]
+          }
+        ]
       }
     };
   },
@@ -208,7 +219,6 @@ export default {
       });
     },
     beforeUploadGetKey(file) {
-      console.log(file);
       //每个文件上传之前 给它一个 名字
       this.uploadData.key = this.generateUUID();
       this.uploadData.token = this.uploadToken;
@@ -234,14 +244,21 @@ export default {
       }
       let tips = this.detailId ? "更新" : "创建";
       let params = Object.assign({}, this.infoQueryObj);
-      params.urlList = JSON.stringify(this.imgObj.reportImg);
-      api[url](params).then(rs => {
-        this.popShow = false;
-        if (rs.code === 200) {
-          this.query();
-          this.$messageTips(this, "success", tips + "成功");
-        } else {
-          this.$messageTips(this, "error", tips + "失败");
+      params.urlList =
+        this.imgObj.reportImg.length > 0
+          ? JSON.stringify(this.imgObj.reportImg)
+          : "";
+      this.$refs.form.$refs.form.validate(valid => {
+        if (valid) {
+          api[url](params).then(rs => {
+            this.popShow = false;
+            if (rs.code === 200) {
+              this.query();
+              this.$messageTips(this, "success", tips + "成功");
+            } else {
+              this.$messageTips(this, "error", tips + "失败");
+            }
+          });
         }
       });
     },
@@ -249,8 +266,12 @@ export default {
       this.popTitle = "编辑物联设备";
       this.detailId = row.id;
       Object.assign(this.infoQueryObj, row);
-      this.filelistObj.reportList = this.infoQueryObj.urlList&&JSON.parse(this.infoQueryObj.urlList) || [];
-      this.imgObj.reportImg = this.infoQueryObj.urlList&&JSON.parse(this.infoQueryObj.urlList) || [];
+      this.filelistObj.reportList =
+        (this.infoQueryObj.urlList && JSON.parse(this.infoQueryObj.urlList)) ||
+        [];
+      this.imgObj.reportImg =
+        (this.infoQueryObj.urlList && JSON.parse(this.infoQueryObj.urlList)) ||
+        [];
       this.popShow = true;
     },
     delInfo(row) {
@@ -259,16 +280,21 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       })
-        .then(() => {
-          return api.deleteIotDevice({ id: row.id });
+        .then(async () => {
+          try {
+            let data = await api.deleteIotDevice({ id: row.id });
+            if (data && data.code === 200) {
+              this.$message({
+                type: "success",
+                message: "删除成功!"
+              });
+              this.query();
+            }
+          } catch (err) {
+            console.log(err);
+          }
         })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
-          this.query();
-        });
+        .then(() => {});
     }
   }
 };

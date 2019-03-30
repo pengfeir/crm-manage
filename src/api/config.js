@@ -2,7 +2,7 @@
  * @Author: renpengfei
  * @Date: 2019-03-16 18:31:01
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-03-29 15:18:23
+ * @Last Modified time: 2019-03-30 15:26:38
  */
 import axios from 'axios'
 import router from '../router'
@@ -15,7 +15,7 @@ service
   .interceptors
   .request
   .use(
-    // Do something before request is sent
+  // Do something before request is sent
     config => {
       if (localStorage.getItem('token')) {
         config.headers.Authorization = `${localStorage.getItem('token')}`
@@ -30,7 +30,7 @@ service
   .interceptors
   .response
   .use(
-    // Do something with response data
+  // Do something with response data
     response => {
       if (response.data) {
         if (response.data.code === 401) {
@@ -43,11 +43,11 @@ service
           return
         }
         if (response.data.code !== 200) {
-          Notification.error('操作失败')
-          return
-        } else 
+          Notification.error(response.data.message || '操作失败')
+        } else {
+          return response.data
+        }
         // return Promise.resolve(response.data)
-        return response.data
       } else {
         Notification.error('操作失败')
         return Promise.reject(response)
@@ -60,7 +60,7 @@ service
       if (error.response) {
         switch (error.response.status) {
           case 401:
-            // 返回 401 清除token信息并跳转到登录页面
+          // 返回 401 清除token信息并跳转到登录页面
             router.currentRoute.path !== 'login' && router.replace({
               path: 'login',
               query: {
@@ -72,17 +72,9 @@ service
       return Promise.reject(error)
     })
 service.prototype.post = function (url, params) {
-  return service({
-    url: url,
-    data: params,
-    method: 'post'
-  })
+  return service({ url: url, data: params, method: 'post' })
 }
 service.prototype.get = function (url, params) {
-  return service({
-    url: url,
-    data: params,
-    method: 'get'
-  })
+  return service({ url: url, data: params, method: 'get' })
 }
 export default service

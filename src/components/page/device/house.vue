@@ -34,6 +34,8 @@
       </el-table-column>
       <el-table-column prop="extra" label="其他扩展信息" width="150">
       </el-table-column>
+      <el-table-column prop="orgName" label="机构" width="180">
+      </el-table-column>
       <el-table-column prop="userId" label="创建者ID" width="180">
       </el-table-column>
       <el-table-column prop="name" label="操作" fixed="right" width="150">
@@ -80,11 +82,15 @@ let schema = [
   },
   {
     label: "楼层",
-    name: "dept"
+    name: "floorNo"
   },
   {
     label: "房间号",
     name: "roomNo"
+  },
+  {
+    label: "科室",
+    name: "dept"
   },
   {
     name: "btn",
@@ -179,7 +185,6 @@ export default {
       });
     },
     beforeUploadGetKey(file) {
-      console.log(file);
       //每个文件上传之前 给它一个 名字
       this.uploadData.key = this.generateUUID();
       this.uploadData.token = this.uploadToken;
@@ -205,7 +210,10 @@ export default {
       }
       let tips = this.detailId ? "更新" : "创建";
       let params = Object.assign({}, this.infoQueryObj);
-      params.urlList = JSON.stringify(this.imgObj.reportImg);
+      params.urlList =
+        this.imgObj.reportImg.length > 0
+          ? JSON.stringify(this.imgObj.reportImg)
+          : "";
       api[url](params).then(rs => {
         this.popShow = false;
         if (rs.code === 200) {
@@ -220,8 +228,12 @@ export default {
       this.popTitle = "编辑房间";
       this.detailId = row.id;
       Object.assign(this.infoQueryObj, row);
-      this.filelistObj.reportList = this.infoQueryObj.urlList&&JSON.parse(this.infoQueryObj.urlList) || [];
-      this.imgObj.reportImg = this.infoQueryObj.urlList&&JSON.parse(this.infoQueryObj.urlList) || [];
+      this.filelistObj.reportList =
+        (this.infoQueryObj.urlList && JSON.parse(this.infoQueryObj.urlList)) ||
+        [];
+      this.imgObj.reportImg =
+        (this.infoQueryObj.urlList && JSON.parse(this.infoQueryObj.urlList)) ||
+        [];
       this.popShow = true;
     },
     delInfo(row) {
@@ -230,16 +242,21 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       })
-        .then(() => {
-          return api.deleteRoom({ id: row.id });
+        .then(async () => {
+          try {
+            let data = await api.deleteRoom({ id: row.id });
+            if (data && data.code === 200) {
+              this.$message({
+                type: "success",
+                message: "删除成功!"
+              });
+              this.query();
+            }
+          } catch (err) {
+            console.log(err);
+          }
         })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
-          this.query();
-        });
+        .then(() => {});
     }
   }
 };

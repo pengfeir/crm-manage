@@ -7,9 +7,9 @@
             <el-col :span="20" style="height: 100%;background-color:#ebedef;">
                 <head-top></head-top>
                 <div class="view-container">
-                  <keep-alive>
+                  <!-- <keep-alive> -->
                     <router-view></router-view>
-                  </keep-alive>
+                  <!-- </keep-alive> -->
                 </div>  
             </el-col>
         </el-row>

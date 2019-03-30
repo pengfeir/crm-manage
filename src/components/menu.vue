@@ -1,12 +1,11 @@
 <template>
     <div>
-        <el-menu  router  style="min-height: 100%;"  background-color="#324157" text-color="#bfcbd9"
+        <el-menu  router style="min-height: 100%;" collapse-transition background-color="#324157" text-color="#bfcbd9"
       active-text-color="#20a0ff">
             <template v-for="amenu in menuArr">
                 <!-- 有多级菜单 -->
                 <el-submenu :index="amenu.menuUrl" v-if="amenu.childMenus.length>0" :key="amenu.menuUrl">
                     <template slot="title">
-                        <i class="el-icon-location"></i>
                         <span>{{amenu.menuName}}</span>
                     </template>
                     <template v-for="secmenu in amenu.childMenus">
@@ -19,7 +18,6 @@
                 </el-submenu>
                 <!-- 无多级菜单 -->
                 <el-menu-item :index="amenu.menuUrl" v-if="amenu.childMenus.length===0" :key="amenu.menuUrl">
-                    <i class="el-icon-menu"></i>
                     <span slot="title">{{amenu.menuName}}</span>
                 </el-menu-item>
             </template>

@@ -1,17 +1,7 @@
 <template>
   <div class="layout_inner">
     <div class="main-head">
-      <ever-form2
-        :schema="querySchema" 
-        v-model="queryObj"
-        @query="query"
-        ref="form"
-        class="package-sale"
-        :info="true"
-        :labelWidth="140"
-        label-position="right"
-        :nosubmit="true"
-        :inline="true">
+      <ever-form2 :schema="querySchema" v-model="queryObj" @query="query" ref="form" class="package-sale" :info="true" :labelWidth="140" label-position="right" :nosubmit="true" :inline="true">
         <template slot="btn">
           <el-button type="primary" @click="query">查询</el-button>
         </template>
@@ -20,31 +10,14 @@
         </template>
       </ever-form2>
     </div>
-    <el-table
-      v-loading.body="loading"
-      :data="tableData"
-      style="width: 100%"
-      border
-      stripe>
-      <el-table-column
-        type="index"
-        width="50">
+    <el-table v-loading.body="loading" :data="tableData" style="width: 100%" border stripe>
+      <el-table-column type="index" width="50">
       </el-table-column>
-      <el-table-column
-        prop="name"
-        align="center"
-        label="角色名称">
+      <el-table-column prop="name" align="center" label="角色名称">
       </el-table-column>
-      <el-table-column
-        prop="createTime"
-        align="center"
-        label="更新时间">
+      <el-table-column prop="createTime" align="center" label="更新时间">
       </el-table-column>
-      <el-table-column
-        prop="name"
-        align="center"
-        width="150"
-        label="操作">
+      <el-table-column prop="name" align="center" width="150" label="操作">
         <template slot-scope="scope">
           <el-button size="small" type="primary" @click="emitInfo(scope.row)">编辑</el-button>
           <el-button size="small" type="danger" @click="delInfo(scope.row)">删除</el-button>
@@ -62,23 +35,10 @@
         :total="totalCount">
       </el-pagination>
     </div> -->
-    <el-dialog :title="dialogInfo.popTitle" :visible.sync="dialogInfo.popShow"  class="ui_dialog_02 spe carditem" :close-on-click-modal="false">
-      <ever-form2
-        :schema="queryInfoSchema" 
-        v-model="queryInfoObj"
-        ref="form"
-        class="package-sale"
-        :info="true"
-        labelWidth="80px"
-        label-position="right">
+    <el-dialog :title="dialogInfo.popTitle" :visible.sync="dialogInfo.popShow" class="ui_dialog_02 spe carditem" :close-on-click-modal="false">
+      <ever-form2 :schema="queryInfoSchema" v-model="queryInfoObj" ref="form" class="package-sale" :info="true" labelWidth="80px" label-position="right">
         <template slot="description">
-          <el-tree
-            :data="treeData"
-            ref="tree"
-            show-checkbox
-            node-key="id"
-            @check-change="handleCheckChange"
-            :expand-on-click-node="false">
+          <el-tree :data="treeData" ref="tree" show-checkbox node-key="id" @check-change="handleCheckChange" :expand-on-click-node="false">
           </el-tree>
         </template>
         <template slot="default">
@@ -93,164 +53,173 @@
   </div>
 </template>
 <script>
-import list from '@/plugins/list'
-import api from '@/api/api'
-import roleTree from '@/plugins/roletree'
+import list from "@/plugins/list";
+import api from "@/api/api";
+import roleTree from "@/plugins/roletree";
 let schema = [
   {
-    name: 'name',
-    label: '角色名称'
+    name: "name",
+    label: "角色名称"
   },
   {
-    name: 'btn',
-    label: '',
-    comp: 'custom'
+    name: "btn",
+    label: "",
+    comp: "custom"
   },
   {
-    label: '',
-    name: 'rightbtn',
-    comp: 'custom'
+    label: "",
+    name: "rightbtn",
+    comp: "custom"
   }
-]
+];
 let infoSchema = [
   {
-    name: 'name',
-    label: '角色名称'
+    name: "name",
+    label: "角色名称"
   },
   {
-    name: 'description',
-    label:'权限',
-    comp: 'custom'
+    name: "description",
+    label: "权限",
+    comp: "custom"
   },
   {
-    name: 'btn',
-    label: '',
-    comp: 'custom'
+    name: "btn",
+    label: "",
+    comp: "custom"
   }
-]
+];
 export default {
   mixins: [list],
-  data () {
-    var obj = this.createObjFromSchema(schema)
-    var infoObj = this.createObjFromSchema(infoSchema)
+  data() {
+    var obj = this.createObjFromSchema(schema);
+    var infoObj = this.createObjFromSchema(infoSchema);
     return {
       api,
       querySchema: schema,
       queryObj: obj,
       queryInfoSchema: infoSchema,
       queryInfoObj: infoObj,
-      listApiName: 'roleList',
+      listApiName: "roleList",
       tableData: [],
       treeData: [],
       dialogInfo: {
         popShow: false,
-        popTitle: '',
-        id: '',
+        popTitle: "",
+        id: ""
       }
-    }
+    };
   },
-  created () {
-    this.treeData = this.initTreeData(roleTree)
+  created() {
+    this.treeData = this.initTreeData(roleTree);
   },
   methods: {
-    addAgency () {
-      this.popTitle = '新建角色'
-      this.dialogInfo.popShow = true
+    addAgency() {
+      this.popTitle = "新建角色";
+      this.dialogInfo.popShow = true;
     },
-    list () {
-      api[this.listApiName]({name:this.queryObj.name || '', id: ''}).then(rs => {
-        if (rs.code === 200) {
-          this.tableData = rs.data
+    list() {
+      api[this.listApiName]({ name: this.queryObj.name || "", id: "" }).then(
+        rs => {
+          if (rs.code === 200) {
+            this.tableData = rs.data;
+          }
         }
+      );
+    },
+    emitInfo(row) {
+      this.dialogInfo.id = row.id;
+      this.queryInfoObj;
+      this.popTitle = "编辑角色";
+      this.setCheck();
+    },
+    delInfo(row) {
+      this.$confirm("确定要删除该角色?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
       })
-    },
-    emitInfo (row) {
-      this.dialogInfo.id = row.id
-      this.queryInfoObj
-      this.popTitle = '编辑角色'
-      this.setCheck()
-    },
-    delInfo (row) {
-      this.$confirm('确定要删除该角色?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        return api.roleDel({ids: [row.id]})
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
+        .then(async () => {
+          try {
+            let data = await api.roleDel({ id: row.id });
+            if (data && data.code === 200) {
+              this.$message({
+                type: "success",
+                message: "删除成功!"
+              });
+              this.query();
+            }
+          } catch (err) {
+            console.log(err);
+          }
         })
-        this.query()
-      })
+        .then(() => {
+        });
     },
-    initTreeData (data) {
-      let arr = []
+    initTreeData(data) {
+      let arr = [];
       data.forEach(item => {
-        let obj = {label: item.menuName, id: item.auth}
+        let obj = { label: item.menuName, id: item.auth };
         if (item.childMenus && item.childMenus.length > 0) {
-          obj.children = this.initTreeData(item.childMenus)
+          obj.children = this.initTreeData(item.childMenus);
         }
-        arr.push(obj)
-      })
-      return arr
+        arr.push(obj);
+      });
+      return arr;
     },
-    handleCheckChange (val) {
-      console.log(val)
+    handleCheckChange(val) {
     },
-    setCheck () {
-      api.roleList({name: '',id: this.id}).then(rs => {
-        if (rs.code === 200 && rs.data.length>0)
-        this.queryObj.name = rs.data[0]['name']
-        this.$refs.tree.setCheckedKeys(rs.data[0]['description'].split(','))
-        this.dialogInfo.popShow = true
-      })
+    setCheck() {
+      api.roleList({ name: "", id: this.id }).then(rs => {
+        if (rs.code === 200 && rs.data.length > 0)
+          this.queryObj.name = rs.data[0]["name"];
+        this.$refs.tree.setCheckedKeys(rs.data[0]["description"].split(","));
+        this.dialogInfo.popShow = true;
+      });
     },
-    prev () {
-      let roleArr = this.$refs.tree.getCheckedKeys()
-      let url = 'roleCreate'
+    prev() {
+      let roleArr = this.$refs.tree.getCheckedKeys();
+      let url = "roleCreate";
       if (roleArr.length === 0) {
-        this.$messageTips(this, 'error', '请选择权限')
-        return
+        this.$messageTips(this, "error", "请选择权限");
+        return;
       }
-      let params ={
+      let params = {
         name: this.queryObj.name,
-        description: roleArr.join(',')
-      }
+        description: roleArr.join(",")
+      };
       if (this.id) {
-        params.id = this.id
-        url = 'roleUpdate'
+        params.id = this.id;
+        url = "roleUpdate";
       }
       api[url](params).then(rs => {
         if (rs.code === 200) {
-          this.$messageTips(this, 'success', '保存成功')
-          this.dialogInfo.popShow = false
-          this.query()
+          this.$messageTips(this, "success", "保存成功");
+          this.dialogInfo.popShow = false;
+          this.query();
         } else {
-          this.$messageTips(this, 'error', '保存失败')
+          this.$messageTips(this, "error", "保存失败");
         }
-      })
+      });
     },
-    cancel () {
-      this.dialogInfo.popShow = false
+    cancel() {
+      this.dialogInfo.popShow = false;
     },
-    clearInfo () {
-      this.queryInfoObj.name = ''
-      this.queryInfoObj.description = []
-    },
+    clearInfo() {
+      this.queryInfoObj.name = "";
+      this.queryInfoObj.description = [];
+    }
   },
   watch: {
-    'dialogInfo.popShow': {
-      handler (value) {
+    "dialogInfo.popShow": {
+      handler(value) {
         if (!value) {
-          this.clearInfo()
+          this.clearInfo();
         }
       },
       immediate: true
     }
   }
-}
+};
 </script>
 
 

@@ -1,4 +1,3 @@
-
 import axios from './config'
 
 function login (params) { // 登陆
@@ -124,6 +123,9 @@ function updateIotDevice (params) { // 更新物联
 function iotDeviceList (params) { // 房间物联
   return axios.post('/manage/iotDevice/list', params)
 }
+function unPageiotDeviceList (params) { // 物联设备列表
+  return axios.post('/manage/iotDevice/unPageList', params)
+}
 function createAssetMetrics (params) { // 创建资产运行
   return axios.post('/manage/assetMetrics/create', params)
 }
@@ -176,6 +178,7 @@ export default {
   createIotDevice,
   deleteIotDevice,
   updateIotDevice,
+  unPageiotDeviceList,
   iotDeviceList,
   createAssetMetrics,
   deleteAssetMetrics,
