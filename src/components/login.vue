@@ -44,10 +44,6 @@ export default {
       this.clearStore()
       let tokenRs = await api.login(this.loginForm)
       localStorage.setItem('token', tokenRs.data.token)
-      let rolesRs = await api.userInfo()
-      localStorage.setItem('orgId', rolesRs.data.orgId)
-      localStorage.setItem('curUserId', rolesRs.data.id)
-      localStorage.setItem('currentUser', JSON.stringify(rolesRs.data))
       this.$router.push(this.$route.query.redirect || '/page/group')
     },
     clearStore () {
