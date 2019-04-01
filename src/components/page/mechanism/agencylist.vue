@@ -182,8 +182,7 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      })
-        .then(async () => {
+      }) .then(async () => {
           try {
             let data = await api.agencyDel({ id: row.id });
             if (data && data.code === 200) {
