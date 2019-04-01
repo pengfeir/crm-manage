@@ -315,7 +315,7 @@ export default {
     }
   },
   created () {
-    api.userList().then(rs => {
+    api.userList({id:'', name: ''}).then(rs => {
       if (rs.code === 200 && rs.data.length > 0) {
         this.options = rs.data
       }
