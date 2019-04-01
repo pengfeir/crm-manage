@@ -5,7 +5,7 @@
         <left-menu @getinfo="getinfo" :status="status"></left-menu>
       </el-col>
       <el-col :span="20" style="height: 100%;background-color:#ebedef;">
-        <head-top :nickName="nickName"></head-top>
+        <head-top :currentUser="currentUser"></head-top>
         <div class="view-container">
           <router-view :currentUser="currentUser" @getstatus="getstatus"></router-view>
         </div>
