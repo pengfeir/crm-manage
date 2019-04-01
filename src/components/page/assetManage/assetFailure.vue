@@ -70,7 +70,7 @@
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="20" :layout="layout" :total="totalCount">
       </el-pagination>
     </div>
-    <el-dialog :title="popTitle" :visible.sync="popShow" class="ui_dialog_02 spe carditem" :close-on-click-modal="false" :before-close="handleClose">
+    <el-dialog :title="popTitle" :visible.sync="popShow" class="ui_dialog_02 spe carditem" :close-on-click-modal="false" :before-close="handleClose" lock-scroll>
       <div class="scroll">
         <ever-form2 :schema="infoQuerySchema" v-model="infoQueryObj" ref="form" :rules="rules" class="package-sale" labelWidth="180px" label-position="right">
           <template slot="faultUrlList">
@@ -119,7 +119,7 @@ let schema = [
     label: "故障类别"
   },
   {
-    label: "故障上报信息",
+    label: "故障上报人信息",
     name: "reporter"
   },
   {
@@ -353,12 +353,12 @@ export default {
             this.imgObj.faultImg.length > 0
               ? JSON.stringify(this.imgObj.faultImg)
               : "";
-          params.receiptImg =
-            this.imgObj.faultImg.length > 0
+          params.receiptUrlList =
+            this.imgObj.receiptImg.length > 0
               ? JSON.stringify(this.imgObj.receiptImg)
               : "";
-          params.contractImg =
-            this.imgObj.faultImg.length > 0
+          params.contractUrlList =
+            this.imgObj.contractImg.length > 0
               ? JSON.stringify(this.imgObj.contractImg)
               : "";
           api[url](params).then(rs => {
@@ -439,7 +439,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .scroll {
-  height: 600px;
+  height: 400px;
   overflow: hidden;
   overflow-y: scroll;
 }

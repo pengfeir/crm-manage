@@ -54,12 +54,12 @@ var component = {
     },
     handleSizeChange (val) {
       this.pagesize = val
-      this.offset = (this.current - 1) * this.pagesize
+      this.offset = (this.current - 1)
       this.list()
     },
     handleCurrentChange (val) {
       this.current = val
-      this.offset = (val - 1) * this.pagesize || 0
+      this.offset = val || 0
       this.list()
       return this.pageAfter && this.pageAfter(this.pagesize)
     }

@@ -7,7 +7,7 @@
             <el-option
               v-for="item in options"
               :key="item.id"
-              :label="item.nickName"
+              :label="item.username"
               :value="item.id">
             </el-option>
           </el-select>
@@ -72,7 +72,7 @@
               <el-option
                 v-for="item in options"
                 :key="item.id"
-                :label="item.nickName"
+                :label="item.username"
                 :value="item.id">
               </el-option>
             </el-select>
@@ -126,6 +126,11 @@ let infoSchema = [
     comp: "assets-select"
   },
   {
+    name: "actionUserId",
+    label: "实际保养人",
+    comp: "custom"
+  },
+  {
     name: "actionDate",
     label: "保养实际发生时间",
     comp: "el-date-picker",
@@ -133,11 +138,6 @@ let infoSchema = [
       type: "datetime",
       valueFormat: "yyyy-MM-dd HH:mm:ss"
     }
-  },
-  {
-    name: "actionUserId",
-    label: "实际保养人",
-    comp: "custom"
   },
   {
     name: "contact",
@@ -199,7 +199,15 @@ export default {
             message: "必填项",
             trigger: ["blur", "change"]
           }
-        ]
+        ],
+        actionUserId: [
+          {
+            required: true,
+            message: "必填项",
+            trigger: ["blur", "change"]
+          }
+        ],
+
       }
     };
   },

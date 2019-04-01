@@ -560,7 +560,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .scroll {
-  height: 600px;
+  height: 400px;
   overflow: hidden;
   overflow-y: scroll;
 }

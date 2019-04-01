@@ -140,6 +140,7 @@ function assetMetricsList (params) { // 房间物联
 }
 export default {
   login,
+  updatePassword,
   getUpToken,
   agencyDel,
   agencyList,
