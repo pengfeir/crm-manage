@@ -189,22 +189,6 @@ export default {
         })
         this.query()
       })
-        .then(async () => {
-          try {
-            let data = await api.roleDel({ id: row.id });
-            if (data && data.code === 200) {
-              this.$message({
-                type: "success",
-                message: "删除成功!"
-              });
-              this.query();
-            }
-          } catch (err) {
-            console.log(err);
-          }
-        })
-        .then(() => {
-        });
     },
     initTreeData(data) {
       let arr = [];

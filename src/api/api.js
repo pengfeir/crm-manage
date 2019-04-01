@@ -153,6 +153,7 @@ export default {
   roleList,
   roleCreate,
   roleUpdate,
+  updatePassword,
   userInfo,
   userCreate,
   userDel,
