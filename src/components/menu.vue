@@ -93,6 +93,7 @@ export default {
             menuUrl: cur.menuUrl,
             auth: cur.auth,
             icon: cur.icon,
+            level: cur.level,
             childMenus: childMenus
           });
         }
@@ -127,7 +128,6 @@ export default {
         let rolesRs = await api.userInfo();
         localStorage.setItem("currentUser", JSON.stringify(rolesRs.data));
         localStorage.setItem("icon", rolesRs.data.icon);
-        this.$emit("getinfo", rolesRs.data);
         // 超级管理员加载全部菜单
         if (!Number(rolesRs.data.orgId)) {
           this.menuArr = roleTree;
@@ -136,6 +136,8 @@ export default {
           this.icon = rolesRs.data.icon;
           this.menuArr = this.getSetTree(roleTree, rolesRs.data.orgId);
         }
+        rolesRs.data.menuArr = this.menuArr
+        this.$emit("getinfo", rolesRs.data);
       } catch (err) {}
     }
   }

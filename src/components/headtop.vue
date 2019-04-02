@@ -1,16 +1,23 @@
 <template>
 	<div class="header_container">
 		<el-breadcrumb separator="/">
-			<el-breadcrumb-item><el-button type="text" @click="emitCollapse"><i class="el-icon-menu" style="font-size:18px;">123</i></el-button></el-breadcrumb-item>
+			<el-breadcrumb-item>
+				<el-button type="text" @click="emitCollapse">
+					<i class="el-icon-menu" style="font-size:18px;">123</i>
+				</el-button>
+			</el-breadcrumb-item>
 			<el-breadcrumb-item v-for="(item, index) in $route.meta" :key="index">{{item}}</el-breadcrumb-item>
 		</el-breadcrumb>
-		<el-dropdown @command="handleCommand" menu-align='start'>
-			<div style="cursor: pointer;">欢迎您, {{currentUser.nickName || '--'}}</div>
-			<el-dropdown-menu slot="dropdown">
-				<el-dropdown-item command="emitPassword">修改密码</el-dropdown-item>
-				<el-dropdown-item command="signout">退出</el-dropdown-item>
-			</el-dropdown-menu>
-		</el-dropdown>
+		<div>
+			<el-autocomplete class="inline-input" v-model="state1" :fetch-suggestions="querySearch" placeholder="目录搜索" @select="handleSelect"></el-autocomplete>
+			<el-dropdown @command="handleCommand" menu-align='start'>
+				<div style="cursor: pointer;">欢迎您, {{currentUser.nickName || '--'}}</div>
+				<el-dropdown-menu slot="dropdown">
+					<el-dropdown-item command="emitPassword">修改密码</el-dropdown-item>
+					<el-dropdown-item command="signout">退出</el-dropdown-item>
+				</el-dropdown-menu>
+			</el-dropdown>
+		</div>
 		<el-dialog title="修改密码" :visible.sync="popShow" class="ui_dialog_02 spe carditem" :close-on-click-modal="false">
 			<ever-form2 :schema="querySchema" v-model="queryObj" ref="form" :rules="rules" class="package-sale" :info="true" labelWidth="80px" label-position="right">
 				<template slot="username">
@@ -97,13 +104,64 @@ export default {
       queryObj: obj,
       baseImgPath: "",
       popShow: false,
-      rules
+      rules,
+      restaurants: [],
+      menuArr: [],
+      state1: ""
     };
   },
+  watch: {
+    currentUser: {
+      handler: function(val, oldval) {
+        console.log(val, 1);
+        if (val.menuArr.length > 0) {
+          this.restaurants = this.loadAll();
+        }
+      },
+      deep: true
+    }
+  },
   methods: {
-		emitCollapse () {
-			this.$emit('collapse')
-		},
+    querySearch(queryString, cb) {
+      var restaurants = this.restaurants;
+      var results = queryString
+        ? restaurants.filter(this.createFilter(queryString))
+        : restaurants;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
+    createFilter(queryString) {
+      return restaurant => {
+        return (
+          restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) ===
+          0
+        );
+      };
+    },
+    flat(arr) {
+      let flatarr = arr.reduce((total, cur) => {
+        total = total.concat(
+          Array.isArray(cur.childMenus) && cur.childMenus.length > 0
+            ? this.flat(cur.childMenus)
+            : cur
+        );
+        return total;
+      }, []);
+      flatarr.map(v => {
+        v.value = v.menuName;
+      });
+      return flatarr;
+    },
+    loadAll() {
+      return this.flat(this.currentUser.menuArr);
+    },
+    handleSelect(item) {
+      this.$router.push(item.menuUrl);
+      this.state1 = "";
+    },
+    emitCollapse() {
+      this.$emit("collapse");
+    },
     async handleCommand(command) {
       if (command == "emitPassword") {
         this.queryObj.username = this.currentUser.username;
@@ -139,9 +197,12 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-	padding: 0 20px;
-	box-shadow: 2px 0 4px rgba(0,0,0,.1);
-	background-color: #fff;
+  padding: 0 20px;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+.el-autocomplete {
+  margin-right: 10px;
 }
 .avator {
   .wh(36px, 36px);
@@ -155,5 +216,9 @@ export default {
   content: "*";
   color: #f56c6c;
   margin-right: 4px;
+}
+.header_container .el-input__inner {
+  height: 32px;
+  border-color: #bbbbbb;
 }
 </style>
