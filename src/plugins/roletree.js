@@ -2,6 +2,7 @@ var menuArr = [
   {
     menuName: '机构设置',
     menuUrl: '1',
+    icon: 'icon iconfont iconzuzhijigou',
     auth: 'orgset',
     childMenus: [
       {
@@ -25,6 +26,7 @@ var menuArr = [
     menuName: '资产管理',
     menuUrl: '234324324443',
     auth: 'assetset',
+    icon: 'icon iconfont iconshebei2',
     childMenus: [
       {
         menuName: '资产',
@@ -62,6 +64,7 @@ var menuArr = [
     menuName: '物联管理',
     menuUrl: '21312312',
     auth: 'thingsset',
+    icon: 'icon iconfont iconshebei4',
     childMenus: [
       {
         menuName: '房间管理',

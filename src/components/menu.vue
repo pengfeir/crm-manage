@@ -5,6 +5,7 @@
                 <!-- 有多级菜单 -->
                 <el-submenu :index="amenu.menuUrl" v-if="amenu.childMenus.length>0" :key="amenu.menuUrl">
                     <template slot="title">
+                        <i :class="amenu.icon"></i>
                         <span>{{amenu.menuName}}</span>
                     </template>
                     <template v-for="secmenu in amenu.childMenus">
@@ -49,8 +50,8 @@ export default {
           this.getMenuTree();
         }
       },
-      immediate:true,
-      deep:true
+      immediate: true,
+      deep: true
     }
   },
   computed: {
@@ -87,6 +88,7 @@ export default {
             menuName: cur.menuName,
             menuUrl: cur.menuUrl,
             auth: cur.auth,
+            icon: cur.icon,
             childMenus: childMenus
           });
         }
