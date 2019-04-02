@@ -1,6 +1,7 @@
 <template>
 	<div class="header_container">
 		<el-breadcrumb separator="/">
+			<el-breadcrumb-item><el-button type="text" @click="emitCollapse"><i class="el-icon-menu" style="font-size:18px;">123</i></el-button></el-breadcrumb-item>
 			<el-breadcrumb-item v-for="(item, index) in $route.meta" :key="index">{{item}}</el-breadcrumb-item>
 		</el-breadcrumb>
 		<el-dropdown @command="handleCommand" menu-align='start'>
@@ -100,6 +101,9 @@ export default {
     };
   },
   methods: {
+		emitCollapse () {
+			this.$emit('collapse')
+		},
     async handleCommand(command) {
       if (command == "emitPassword") {
         this.queryObj.username = this.currentUser.username;
@@ -131,12 +135,13 @@ export default {
 <style lang="less">
 @import "../style/mixin";
 .header_container {
-  background-color: #eff2f7;
   height: 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
+	padding: 0 20px;
+	box-shadow: 2px 0 4px rgba(0,0,0,.1);
+	background-color: #fff;
 }
 .avator {
   .wh(36px, 36px);

@@ -104,6 +104,32 @@
 import list from "@/plugins/list";
 import token from "@/plugins/getUploadToken";
 import api from "@/api/api";
+let options = [
+  {
+    id: "unknown",
+    name: "未知"
+  },
+  {
+    id: "reported",
+    name: "已上报"
+  },
+  {
+    id: "todo",
+    name: "待维修"
+  },
+  {
+    id: "doing",
+    name: "正在维修"
+  },
+  {
+    id: "done",
+    name: "完成"
+  },
+  {
+    id: "abort",
+    name: "取消"
+  }
+]
 let schema = [
   {
     name: "assetId",
@@ -117,6 +143,14 @@ let schema = [
   {
     name: "kind",
     label: "故障类别"
+  },
+  {
+    name: "fixStep",
+    label: "维修进度",
+    comp: "el-select",
+    props: {
+      options: options
+    }
   },
   {
     label: "故障上报人信息",
@@ -169,32 +203,7 @@ let infoSchema = [
     label: "维修进度",
     comp: "el-select",
     props: {
-      options: [
-        {
-          id: "unknown",
-          name: "未知"
-        },
-        {
-          id: "reported",
-          name: "已上报"
-        },
-        {
-          id: "todo",
-          name: "待维修"
-        },
-        {
-          id: "doing",
-          name: "正在维修"
-        },
-        {
-          id: "done",
-          name: "完成"
-        },
-        {
-          id: "abort",
-          name: "取消"
-        }
-      ]
+      options: options
     }
   },
   {
@@ -270,7 +279,7 @@ export default {
           }
         ]
       }
-    };
+    }
   },
   methods: {
     //删除数组里面删除的图片地址

@@ -1,16 +1,14 @@
 <template>
   <div class="manage_page fillcontain">
-    <el-row style="height: 100%;">
-      <el-col :span="4" style="min-height: 100%; background-color: #324057;">
-        <left-menu @getinfo="getinfo" :status="status"></left-menu>
-      </el-col>
-      <el-col :span="20" style="height: 100%;background-color:#ebedef;">
-        <head-top :currentUser="currentUser"></head-top>
+    <left-menu @getinfo="getinfo" :status="status" :collapseVal="collapseVal" ></left-menu>
+    <div style="height:100%;">
+      <div class="right-content">
+        <head-top :currentUser="currentUser" @collapse="collapse"></head-top>
         <div class="view-container">
           <router-view :currentUser="currentUser" @getstatus="getstatus"></router-view>
         </div>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -28,6 +26,7 @@ export default {
   },
   data() {
     return {
+      collapseVal: false,
       nickName: "",
       currentUser: {
         icon: "",
@@ -50,6 +49,16 @@ export default {
     },
     getstatus(data) {
       Object.assign(this.status, data);
+    },
+    collapse (val) {
+      this.collapseVal = !this.collapseVal;
+      if (this.collapseVal) {
+        document.querySelector('.right-content').style.marginLeft = '68px';
+        document.querySelector('.menu-container').style.width = '68px';
+      } else {
+        document.querySelector('.right-content').style.marginLeft = '200px';
+        document.querySelector('.menu-container').style.width = '200px';
+      }
     }
   }
 };
@@ -58,4 +67,17 @@ export default {
 
 <style lang="less" scoped>
 @import "../style/mixin";
+.left-catalog {
+  box-shadow: 2px 0 4px rgba(0,0,0,.1);
+  background-color: #f8fafe;
+  min-height: 100%;
+}
+.right-content {
+  background-color: #f8fafe;
+  height: 100%;
+  margin-left:200px;
+}
+.view-container {
+  background-color: #f8fafe;
+}
 </style>
