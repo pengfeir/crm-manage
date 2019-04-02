@@ -1,10 +1,11 @@
 <template>
-    <div>
-        <el-menu router style="min-height: 100%;" background-color="#324157" text-color="#bfcbd9" active-text-color="#20a0ff" :default-active="defaultActive">
+    <div class="menu-container">
+        <el-menu router style="min-height: 100%;" active-text-color="#20a0ff" :default-active="defaultActive" :collapse="collapseVal">
             <template v-for="amenu in menuArr">
                 <!-- 有多级菜单 -->
                 <el-submenu :index="amenu.menuUrl" v-if="amenu.childMenus.length>0" :key="amenu.menuUrl">
                     <template slot="title">
+                        <i class="el-icon-location"></i>
                         <span>{{amenu.menuName}}</span>
                     </template>
                     <template v-for="secmenu in amenu.childMenus">
@@ -32,6 +33,10 @@ export default {
     status: {
       type: Object,
       default: () => {}
+    },
+    collapseVal: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -136,6 +141,12 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.menu-container {
+  width: 200px;
+  float: left;
+  height: 100%;
+  box-shadow: 2px 0 4px rgba(0,0,0,.1);
+}
 </style>
 
 
