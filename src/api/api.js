@@ -51,6 +51,9 @@ function updatePassword (params) { // 修改密码
 function assetList (params) { // 资产列表
   return axios.post('/manage/asset/list', params)
 }
+function assetFindById (params) { // 根据id获取资产信息
+  return axios.post('/manage/asset/findById', params)
+}
 function deleteAsset (params) { // 删除资产列表
   return axios.post('/manage/asset/delete', params)
 }
@@ -185,5 +188,6 @@ export default {
   createAssetMetrics,
   deleteAssetMetrics,
   updateAssetMetrics,
-  assetMetricsList
+  assetMetricsList,
+  assetFindById
 }

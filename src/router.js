@@ -10,6 +10,7 @@ const AgencyList = r => require.ensure([], () => r(require('@/components/page/me
 const RoleList = r => require.ensure([], () => r(require('@/components/page/mechanism/rolelist.vue')), 'rolelist')
 const UserList = r => require.ensure([], () => r(require('@/components/page/mechanism/userslist.vue')), 'userslist')
 const assetManage = r => require.ensure([], () => r(require('@/components/page/assetManage/assetManage.vue')), 'assetManage')
+const assetManageAdd = r => require.ensure([], () => r(require('@/components/page/assetManage/assetmanageadd.vue')), 'assetmanage')
 
 const assetFailure = r => require.ensure([], () => r(require('@/components/page/assetManage/assetFailure.vue')), 'assetFailure')
 const maintenanceQa = r => require.ensure([], () => r(require('@/components/page/assetManage/maintenanceqa.vue')), 'maintenanceqa')
@@ -63,7 +64,14 @@ const routerarr = [
         path: 'assetmanage',
         component: assetManage,
         meta: {
-          name: '资产'
+          name: '设备'
+        }
+      },
+      {
+        path: 'assetmanageadd',
+        component: assetManageAdd,
+        meta: {
+          name: '设备'
         }
       },
       {

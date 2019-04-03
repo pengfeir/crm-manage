@@ -106,14 +106,11 @@ html,body{
       border-color: #bbbbbb;
     }
     .el-button {
+      position: relative;
+      top: 1px;
       height: 32px;
       line-height: 32px;
       padding: 0 10px;
-    }
-    .el-button--primary {
-      color: #fff;
-      background-color: #1c7bef;
-      border-color: #1c7bef;
     }
   }
   .package-sale {
@@ -127,17 +124,26 @@ html,body{
     right: 0;
   }
 }
-.el-table.el-table--border {
-  border: 1px solid #ccc;
+.el-table {
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
   margin-top: 20px;
 }
 .el-table td, .el-table th {
   padding: 8px 0 !important;
   border: none !important;
 }
+.el-table td /deep/ .el-button--text {
+  padding: 4px 5px !important;
+}
 .el-table th {
-  color: #000;
-  background-color: #eee !important;
+  color: #666666;
+  border-bottom: 2px solid #eee !important;
+}
+.el-table th div {
+  border-right: 2px solid #eee;
+}
+.el-table th:last-child div{
+  border-right: none !important;
 }
 .el-pagination {
   float:right;
@@ -183,7 +189,7 @@ html,body{
   width: 100%!important;
 }
 .el-table.el-table--striped .el-table__body tr.el-table__row--striped td {
-  background: #eee;
+  background: rgba(37, 97, 239, 0.0862745098039216);
 }
 .page-container{
   overflow:hidden;
@@ -197,5 +203,10 @@ html,body{
 }
 .el-table__expanded-cell .el-form--inline .el-form-item .el-form-item__label{
   width: 150px;
-
+}
+.delete-btn-color {
+  color: #f56c6c !important;
+}
+.detail-log /deep/ .el-col {
+  margin-bottom: 20px;
 }

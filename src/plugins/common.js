@@ -2,7 +2,7 @@
  * @Author: renpengfei
  * @Date: 2019-03-18 15:55:28
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-04-01 18:51:16
+ * @Last Modified time: 2019-04-02 18:04:06
  */
 
 let MyPlugin = {}
@@ -32,6 +32,16 @@ MyPlugin.install = (Vue) => {
     msg = msg || '网络开小差了！请稍后重试'
     title = title || '提示'
     _this.$notify({ title: title, message: msg, type: type })
+  }
+  Vue.prototype.createArrFromSchema = (schema) => {
+    let arr = []
+    schema.forEach(item => {
+      let obj = {}
+      obj.id = item.name
+      obj.value = item.label
+      arr.push(obj)
+    })
+    return arr
   }
   Vue.prototype.createObjFromSchema = (schema) => {
     let arr = {}

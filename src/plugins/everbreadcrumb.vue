@@ -36,7 +36,7 @@ export default {
         this.title = '新建'
       }
       if (this.showTitle) {
-        this.title = this.showTitle
+        this.title = this.title + this.showTitle
       }
     },
     go () {
