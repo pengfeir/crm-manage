@@ -11,38 +11,38 @@
       </ever-form2>
     </div>
     <el-table v-loading="loading" :data="tableData" style="width: 100%" stripe>
-      <el-table-column type="index" width="50" label="序号" fixed>
+      <el-table-column type="index" width="30" label="">
       </el-table-column>
-      <el-table-column prop="name" label="资产名称" width="150" fixed>
+      <el-table-column prop="name" label="设备名称" width="150">
       </el-table-column>
-      <el-table-column prop="no" label="资产编号">
+      <el-table-column prop="no" label="设备编号">
       </el-table-column>
       <el-table-column prop="acceptStatus" label="验收状态">
       </el-table-column>
-      <el-table-column prop="alternativeAppendant" label="耗材替代品" width="100">
+      <!-- <el-table-column prop="alternativeAppendant" label="耗材替代品" width="100">
       </el-table-column>
       <el-table-column prop="appendant" label="配套耗材">
       </el-table-column>
       <el-table-column prop="contact" label="联系方式">
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column prop="dept" label="临床科室">
       </el-table-column>
-      <el-table-column prop="contractUrlList" label="采购合同照片" width="250">
+      <el-table-column prop="contractUrlList" label="采购合同照片" width="150">
         <template slot-scope="scope">
-          <fileshow :type="'img'" :fileurlList="scope.row.contractUrlList"></fileshow>
+          <fileshow :type="'img'" :tailor="true" :isNoShowBtn="true" :fileurlList="scope.row.contractUrlList"></fileshow>
         </template>
       </el-table-column>
-      <el-table-column prop="receiptUrlList" label="票据照片" width="250">
+      <el-table-column prop="receiptUrlList" label="票据照片" width="150">
         <template slot-scope="scope">
-          <fileshow :type="'img'" :fileurlList="scope.row.receiptUrlList"></fileshow>
+          <fileshow :type="'img'" :tailor="true" :isNoShowBtn="true" :fileurlList="scope.row.receiptUrlList"></fileshow>
         </template>
       </el-table-column>
-      <el-table-column prop="manualUrlList" label="用户手册照片" width="250">
+      <el-table-column prop="manualUrlList" label="用户手册照片" width="150">
         <template slot-scope="scope">
-          <fileshow :type="'img'" :fileurlList="scope.row.manualUrlList"></fileshow>
+          <fileshow :type="'img'" :tailor="true" :isNoShowBtn="true" :fileurlList="scope.row.manualUrlList"></fileshow>
         </template>
       </el-table-column>
-      <el-table-column prop="isDedicatedAppendant" label="配套耗材是否专机专用" width="160">
+      <!-- <el-table-column prop="isDedicatedAppendant" label="配套耗材是否专机专用" width="160">
         <template slot-scope="scope">
           {{scope.row.isDedicatedAppendant | getAppendant}}
         </template>
@@ -72,8 +72,8 @@
       <el-table-column prop="orgName" label="机构" width="180">
       </el-table-column>
       <el-table-column prop="userId" label="创建者ID" width="180">
-      </el-table-column>
-      <el-table-column prop="name" label="操作" fixed="right" width="250">
+      </el-table-column> -->
+      <el-table-column prop="name" align="center" label="操作" width="250">
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-search" @click="seeDetail(scope.row)">详情</el-button>
           <el-button type="text" icon="el-icon-edit" @click="emitInfo(scope.row)">编辑</el-button>
@@ -85,12 +85,12 @@
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="20" :layout="layout" :total="totalCount">
       </el-pagination>
     </div>
-    <el-dialog :title="'详情'" :visible.sync="popShow" class="ui_dialog_02 detail-log carditem" width="80%" :close-on-click-modal="false">
+    <el-dialog :title="'详情'" :visible.sync="popShow" class="ui_dialog_02 detail-log carditem" width="80%" :close-on-click-modal="false" :append-to-body="true">
       <div>
         <el-row>
           <el-col v-for="item in arr" :key="item.id" :span="item.id == 'contractUrlList' || item.id == 'receiptUrlList' || item.id == 'manualUrlList'?24:6">
             <div v-if="item.id == 'contractUrlList' || item.id == 'receiptUrlList' || item.id == 'manualUrlList'">
-               <label>{{item.label}}</label>: <span><fileshow :type="'img'" :fileurlList="item.value"></fileshow></span>
+               <label>{{item.label}}</label>: <span><fileshow class="maxsize" :type="'img'" :fileurlList="item.value" :isNoShowBtn="false" :tailor="false"></fileshow></span>
             </div>
             <div v-else-if="item.id == 'isDedicatedAppendant'">
               <label>{{item.label}}</label>: <span>{{item.value | getAppendant}}</span>
@@ -112,7 +112,7 @@ import api from "@/api/api";
 import list from "@/plugins/list";
 let schema = [
   {
-    label: "资产编号",
+    label: "设备编号",
     name: "no"
   },
   {
@@ -149,7 +149,7 @@ let schema = [
 let arr = [
   {
     id: "name",
-    label: "资产名称",
+    label: "设备名称",
     value:''
   },
   {
@@ -159,7 +159,7 @@ let arr = [
   },
   {
     id: "no",
-    label: "资产编号",
+    label: "设备编号",
     value:''
   },
   {
@@ -291,7 +291,7 @@ export default {
       this.$router.push('/page/assetmanageadd?id=' + row.id)
     },
     async delInfo(row) {
-      this.$confirm("确定要删除该资产信息?", "提示", {
+      this.$confirm("确定要删除该设备信息?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"

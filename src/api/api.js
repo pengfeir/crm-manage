@@ -66,6 +66,9 @@ function updateAsset (params) { // 更新资产列表
 function faultList (params) { // 资产故障列表
   return axios.post('/manage/fault/list', params)
 }
+function faultFindById (params) { // 通过id获取资产故障信息
+  return axios.post('/manage/asset/findById', params)
+}
 function createFault (params) { // 创建故障列表
   return axios.post('/manage/fault/create', params)
 }
@@ -143,7 +146,6 @@ function assetMetricsList (params) { // 房间物联
 }
 export default {
   login,
-  updatePassword,
   getUpToken,
   agencyDel,
   agencyList,
@@ -189,5 +191,6 @@ export default {
   deleteAssetMetrics,
   updateAssetMetrics,
   assetMetricsList,
-  assetFindById
+  assetFindById,
+  faultFindById
 }

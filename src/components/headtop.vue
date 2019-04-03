@@ -1,9 +1,7 @@
 <template>
 	<div class="header_container">
-		<el-breadcrumb separator="/">
-			<el-breadcrumb-item><el-button type="text" @click="emitCollapse"><i class="el-icon-menu" style="font-size:18px;"></i></el-button></el-breadcrumb-item>
-			<el-breadcrumb-item v-for="(item, index) in $route.meta" :key="index">{{item}}</el-breadcrumb-item>
-		</el-breadcrumb>
+    <el-button type="text" icon="el-icon-menu" style="font-size:30px;" @click="emitCollapse"></el-button>
+		<span style="position:absolute;margin-left:50px;">{{$route.meta.name}}</span>
 		<el-dropdown @command="handleCommand" menu-align='start'>
 			<div style="cursor: pointer;">欢迎您, {{currentUser.nickName || '--'}}</div>
 			<el-dropdown-menu slot="dropdown">

@@ -1,22 +1,22 @@
 <template>
   <div class="fileshow">
     <ul class="clear sl">
-      <li class="fileimg" v-for="item in fileurlList&&JSON.parse(fileurlList).slice(0,3)" :key="item.key">
-        <div class="zzp">
-          <img :src="item.url" alt="" v-if="item.type==='img'">
-          <img :src="require(`../assets/${item.type}.png`)" alt="" v-if="item.type!=='img'">
+      <li class="fileimg" v-for="item in urlData" :key="item.key">
+        <div class="zzp" ref="zzp">
+          <img :src="item.url" alt="" v-if="item.type==='img'" ref="form">
+          <img :src="require(`../assets/${item.type}.png`)" alt="" v-if="item.type!=='img'" ref="zzpimg2">
           <div class="zz" v-if="item.type==='img'">
-            <i class="el-icon-zoom-in" @click="showPicture(item.url)"></i>
+            <i class="el-icon-zoom-in" ref="icon" @click="showPicture(item.url)"></i>
           </div>
         </div>
-        <el-button class="name" type="text" small @click="showimg(item)">{{item.name}}</el-button>
+        <el-button v-if="!isNoShowBtn" class="name" type="text" small @click="showimg(item)">{{item.name}}</el-button>
       </li>
-      <li v-if="fileurlList&&JSON.parse(fileurlList).length>3">
-        <div class="null"></div>
-        <el-button type="text" small @click="more">更多</el-button>
+      <li v-if="tailor && (this.fileurlList?JSON.parse(this.fileurlList):[]).length > 1">
+        <!-- <div class="null"></div> -->
+        <el-button type="text" small @click="more">...</el-button>
       </li>
     </ul>
-    <el-dialog title="详情" :visible.sync="dialogTableVisible">
+    <!-- <el-dialog title="详情" :visible.sync="dialogTableVisible" :append-to-body="true" :close-on-click-modal="false">
       <ul class="clear nor">
         <li class="fileimg" v-for="item in fileurlList&&JSON.parse(fileurlList)" :key="item.key">
           <div class="przzp">
@@ -29,7 +29,7 @@
           <el-button class="name" type="text" small @click="showimg(item)">{{item.name}}</el-button>
         </li>
       </ul>
-    </el-dialog>
+    </el-dialog> -->
     <el-dialog :visible.sync="imgdialogVisible">
       <img width="100%" :src="dialogImageUrl" alt="">
     </el-dialog>
@@ -46,16 +46,34 @@ export default {
     fileurlList: {
       type: String,
       default: ""
+    },
+    isNoShowBtn: {
+      type: Boolean,
+      defatule: true
+    },
+    tailor: {
+      type: Boolean,
+      defatule: true
     }
   },
   data() {
     return {
       dialogTableVisible: false,
       imgdialogVisible: false,
-      dialogImageUrl: ""
+      dialogImageUrl: "",
+      urlData: []
     };
   },
-  created() {},
+  mounted () {
+    let arr = this.fileurlList ? JSON.parse(this.fileurlList) : []
+    if (this.tailor && arr.length > 0) {
+      this.urlData = arr.splice(0, 1)
+    } else if (!this.tailor && arr.length > 0) {
+      this.urlData = arr
+    }
+  },
+  created() {
+  },
   methods: {
     showimg(item) {
       window.open(`${item.url}?attname=${item.name}`);
@@ -72,12 +90,12 @@ export default {
 </script>
 <style lang="less" scoped>
 .sl img {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
 }
 .sl .zz .el-icon-zoom-in {
-  line-height: 40px;
-  font-size: 20px;
+  line-height: 30px;
+  font-size: 15px;
   cursor: pointer;
 }
 .nor img {
@@ -141,8 +159,8 @@ export default {
 }
 .zzp {
   position: relative;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
 }
 .zz:hover {
   opacity: 1;
@@ -160,6 +178,20 @@ export default {
   font-size: 20px;
   background-color: rgba(0, 0, 0, 0.5);
   transition: opacity 0.3s;
+}
+.maxsize {
+  .zzp {
+    width: 80px !important;
+    height: 80px !important;
+  }
+  .sl img {
+    width: 80px !important;
+    height: 80px !important;
+  }
+  .sl .zz .el-icon-zoom-in {
+    line-height: 80px !important;
+    font-size: 25px !important;
+  }
 }
 </style>
 

@@ -9,10 +9,11 @@ const role = r => require.ensure([], () => r(require('@/views/role')), 'role')
 const AgencyList = r => require.ensure([], () => r(require('@/components/page/mechanism/agencylist.vue')), 'agencylist')
 const RoleList = r => require.ensure([], () => r(require('@/components/page/mechanism/rolelist.vue')), 'rolelist')
 const UserList = r => require.ensure([], () => r(require('@/components/page/mechanism/userslist.vue')), 'userslist')
-const assetManage = r => require.ensure([], () => r(require('@/components/page/assetManage/assetManage.vue')), 'assetManage')
-const assetManageAdd = r => require.ensure([], () => r(require('@/components/page/assetManage/assetmanageadd.vue')), 'assetmanage')
+const assetManage = r => require.ensure([], () => r(require('@/components/page/assetManage/device/assetManage.vue')), 'assetManage')
+const assetManageAdd = r => require.ensure([], () => r(require('@/components/page/assetManage/device/assetmanageadd.vue')), 'assetmanage')
 
-const assetFailure = r => require.ensure([], () => r(require('@/components/page/assetManage/assetFailure.vue')), 'assetFailure')
+const assetFailure = r => require.ensure([], () => r(require('@/components/page/assetManage/fault/assetFailure.vue')), 'assetFailure')
+const assetFailurAdd = r => require.ensure([], () => r(require('@/components/page/assetManage/fault/assetfailureadd.vue')), 'assetFailureadd')
 const maintenanceQa = r => require.ensure([], () => r(require('@/components/page/assetManage/maintenanceqa.vue')), 'maintenanceqa')
 const maintenanceMain = r => require.ensure([], () => r(require('@/components/page/assetManage/maintenancemain.vue')), 'maintenancemain')
 const complaint = r => require.ensure([], () => r(require('@/components/page/assetManage/complaint.vue')), 'complaint')
@@ -78,14 +79,21 @@ const routerarr = [
         path: 'assetfailure',
         component: assetFailure,
         meta: {
-          name: '资产故障'
+          name: '设备故障'
+        }
+      },
+      {
+        path: 'assetfailuradd',
+        component: assetFailurAdd,
+        meta: {
+          name: '设备故障'
         }
       },
       {
         path: 'assetRun',
         component: assetRun,
         meta: {
-          name: '资产运行管理'
+          name: '设备运行管理'
         }
       },
       {
