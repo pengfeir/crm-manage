@@ -140,12 +140,11 @@ export default {
     },
     flat(arr) {
       let flatarr = arr.reduce((total, cur) => {
-        total = total.concat(
+        return total.concat(
           Array.isArray(cur.childMenus) && cur.childMenus.length > 0
             ? this.flat(cur.childMenus)
             : cur
         );
-        return total;
       }, []);
       flatarr.map(v => {
         v.value = v.menuName;

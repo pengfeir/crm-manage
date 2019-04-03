@@ -78,24 +78,26 @@ export default {
       let newArr = arr.reduce((total, cur) => {
         if (this.getFilterRoles().includes(cur.auth)) {
           let childMenus = [];
-          cur.childMenus.map(v => {
-            //非超级管理员屏蔽机构
-            if (
-              this.getFilterRoles().includes(v.auth) &&
-              v.auth !== "agencylist" &&
-              ((v.auth !== "rolelist" && this.icon == 2) || this.icon == 1)
-            ) {
-              childMenus.push(v);
-            }
-          });
-          total.push({
-            menuName: cur.menuName,
-            menuUrl: cur.menuUrl,
-            auth: cur.auth,
-            icon: cur.icon,
-            level: cur.level,
-            childMenus: childMenus
-          });
+          //   机构设置只有管理员才可以看到，普通用户不能看到角色，账号，机构
+          if ((this.icon == 2 && cur.auth != "orgset") || this.icon == 1) {
+            cur.childMenus.map(v => {
+              //非超级管理员屏蔽机构
+              if (
+                this.getFilterRoles().includes(v.auth) &&
+                v.auth !== "agencylist"
+              ) {
+                childMenus.push(v);
+              }
+            });
+            total.push({
+              menuName: cur.menuName,
+              menuUrl: cur.menuUrl,
+              auth: cur.auth,
+              icon: cur.icon,
+              level: cur.level,
+              childMenus: childMenus
+            });
+          }
         }
         return total;
       }, []);
@@ -136,7 +138,7 @@ export default {
           this.icon = rolesRs.data.icon;
           this.menuArr = this.getSetTree(roleTree, rolesRs.data.orgId);
         }
-        rolesRs.data.menuArr = this.menuArr
+        rolesRs.data.menuArr = this.menuArr;
         this.$emit("getinfo", rolesRs.data);
       } catch (err) {}
     }
@@ -148,9 +150,9 @@ export default {
   width: 200px;
   float: left;
   height: 100%;
-  box-shadow: 2px 0 4px rgba(0,0,0,.1);
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
 }
-.iconfont{
+.iconfont {
   font-size: 14px;
   margin: 0 5px;
 }
