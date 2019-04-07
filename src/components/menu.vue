@@ -36,7 +36,7 @@ export default {
     },
     collapseVal: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   data() {
