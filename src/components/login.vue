@@ -3,7 +3,7 @@
     <transition name="form-fade" mode="in-out">
       <section class="form_contianer">
         <div class="manage_tip">
-          <p>至数物联管理系统</p>
+          <p>库塔物联管理平台</p>
         </div>
         <el-form :model="loginForm" :rules="rules" ref="loginForm">
           <el-form-item prop="username">

@@ -27,26 +27,26 @@ var menuArr = [
       }
     ]
   }, {
-    menuName: '资产管理',
+    menuName: '设备管理',
     menuUrl: '234324324443',
     auth: 'assetset',
     icon: 'icon iconfont iconshebei2',
     level: 1,
     childMenus: [
       {
-        menuName: '资产',
+        menuName: '设备',
         menuUrl: '/page/assetmanage',
         auth: 'assetmanage',
         level: 2,
         childMenus: []
       }, {
-        menuName: '资产运行管理',
+        menuName: '设备运行管理',
         menuUrl: '/page/assetRun',
         auth: 'assetRun',
         level: 2,
         childMenus: []
       }, {
-        menuName: '资产故障',
+        menuName: '设备故障',
         menuUrl: '/page/assetfailure',
         auth: 'assetfailure',
         level: 2,

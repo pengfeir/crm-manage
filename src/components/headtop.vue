@@ -1,23 +1,14 @@
 <template>
 	<div class="header_container">
-		<el-breadcrumb separator="/">
-			<el-breadcrumb-item>
-				<el-button type="text" @click="emitCollapse">
-					<i class="el-icon-menu" style="font-size:18px;">123</i>
-				</el-button>
-			</el-breadcrumb-item>
-			<el-breadcrumb-item v-for="(item, index) in $route.meta" :key="index">{{item}}</el-breadcrumb-item>
-		</el-breadcrumb>
-		<div>
-			<el-autocomplete class="inline-input" v-model="state1" :fetch-suggestions="querySearch" placeholder="目录搜索" @select="handleSelect"></el-autocomplete>
-			<el-dropdown @command="handleCommand" menu-align='start'>
-				<div style="cursor: pointer;">欢迎您, {{currentUser.nickName || '--'}}</div>
-				<el-dropdown-menu slot="dropdown">
-					<el-dropdown-item command="emitPassword">修改密码</el-dropdown-item>
-					<el-dropdown-item command="signout">退出</el-dropdown-item>
-				</el-dropdown-menu>
-			</el-dropdown>
-		</div>
+    <el-button type="text" icon="el-icon-menu" style="font-size:30px;" @click="emitCollapse"></el-button>
+		<span style="position:absolute;margin-left:50px;">{{$route.meta.name}}</span>
+		<el-dropdown @command="handleCommand" menu-align='start'>
+			<div style="cursor: pointer;">欢迎您, {{currentUser.nickName || '--'}}</div>
+			<el-dropdown-menu slot="dropdown">
+				<el-dropdown-item command="emitPassword">修改密码</el-dropdown-item>
+				<el-dropdown-item command="signout">退出</el-dropdown-item>
+			</el-dropdown-menu>
+		</el-dropdown>
 		<el-dialog title="修改密码" :visible.sync="popShow" class="ui_dialog_02 spe carditem" :close-on-click-modal="false">
 			<ever-form2 :schema="querySchema" v-model="queryObj" ref="form" :rules="rules" class="package-sale" :info="true" labelWidth="80px" label-position="right">
 				<template slot="username">

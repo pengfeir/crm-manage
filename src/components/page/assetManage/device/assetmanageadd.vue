@@ -1,94 +1,10 @@
 <template>
-  <div class="layout_inner">
-    <div class="main-head">
-      <ever-form2 :schema="querySchema" v-model="queryObj" @query="query" ref="form" class="package-sale" :info="true" :labelWidth="140" label-position="right" :nosubmit="true" :inline="true">
-        <template slot="btn">
-          <el-button type="primary" @click="query">查询</el-button>
-        </template>
-        <template slot="rightbtn">
-          <el-button type="primary" @click="addAsset">新建</el-button>
-        </template>
-      </ever-form2>
-    </div>
-    <el-table v-loading="loading" :data="tableData" style="width: 100%" border stripe max-height="650">
-      <el-table-column type="index" width="50" label="序号" fixed>
-      </el-table-column>
-      <el-table-column prop="name" label="资产名称" width="150" fixed>
-      </el-table-column>
-      <el-table-column prop="no" label="资产编号">
-      </el-table-column>
-      <el-table-column prop="acceptStatus" label="验收状态">
-      </el-table-column>
-      <el-table-column prop="alternativeAppendant" label="耗材替代品" width="100">
-      </el-table-column>
-      <el-table-column prop="appendant" label="配套耗材">
-      </el-table-column>
-      <el-table-column prop="contact" label="联系方式">
-      </el-table-column>
-      <el-table-column prop="dept" label="临床科室">
-      </el-table-column>
-      <el-table-column prop="contractUrlList" label="采购合同照片" width="250">
-        <template slot-scope="scope">
-          <fileshow :type="'img'" :fileurlList="scope.row.contractUrlList"></fileshow>
-        </template>
-      </el-table-column>
-      <el-table-column prop="receiptUrlList" label="票据照片" width="250">
-        <template slot-scope="scope">
-          <fileshow :type="'img'" :fileurlList="scope.row.receiptUrlList"></fileshow>
-        </template>
-      </el-table-column>
-      <el-table-column prop="manualUrlList" label="用户手册照片" width="250">
-        <template slot-scope="scope">
-          <fileshow :type="'img'" :fileurlList="scope.row.manualUrlList"></fileshow>
-        </template>
-      </el-table-column>
-      <el-table-column prop="isDedicatedAppendant" label="配套耗材是否专机专用" width="160">
-        <template slot-scope="scope">
-          {{scope.row.isDedicatedAppendant | getAppendant}}
-        </template>
-      </el-table-column>
-      <el-table-column prop="kind" label="设备类别">
-      </el-table-column>
-      <el-table-column prop="model" label="设备型号">
-      </el-table-column>
-      <el-table-column prop="prodDate" label="生产日期" width="180">
-      </el-table-column>
-      <el-table-column prop="setupStartAt" label="装机开始时间" width="180">
-      </el-table-column>
-      <el-table-column prop="setupEndAt" label="装机结束时间" width="180">
-      </el-table-column>
-      <el-table-column prop="setupStepName" label="设备装机状态" width="180">
-      </el-table-column>
-      <el-table-column prop="sn" label="SN序列号" width="150">
-      </el-table-column>
-      <el-table-column prop="vender" label="厂家">
-      </el-table-column>
-      <el-table-column prop="ctime" label="创建时间" width="180">
-      </el-table-column>
-      <el-table-column prop="mtime" label="更新时间" width="180">
-      </el-table-column>
-      <el-table-column prop="extra" label="其他拓展信息" width="150">
-      </el-table-column>
-      <el-table-column prop="orgName" label="机构" width="180">
-      </el-table-column>
-      <el-table-column prop="userId" label="创建者ID" width="180">
-      </el-table-column>
-      <el-table-column prop="name" label="操作" fixed="right" width="150">
-        <template slot-scope="scope">
-          <el-button size="small" type="primary" @click="emitInfo(scope.row)">编辑</el-button>
-          <el-button size="small" type="danger" @click="delInfo(scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <div class="page-container">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="20" :layout="layout" :total="totalCount">
-      </el-pagination>
-    </div>
-    <el-dialog :title="popTitle" :visible.sync="popShow" class="ui_dialog_02 spe carditem" :close-on-click-modal="false" :before-close="handleClose">
-      <div class="scroll">
-        <ever-form2 :schema="infoQuerySchema" v-model="infoQueryObj" ref="form" class="package-sale" labelWidth="180px" label-position="right" :rules="rules">
+  <div>
+    <ever-bread-crumb :showTitle="'设备'"></ever-bread-crumb>
+    <div class="scroll">
+        <ever-form2 :schema="querySchema" v-model="queryObj" ref="form" class="package-sale" labelWidth="180px" label-position="right" :rules="rules">
           <template slot="acceptStatus">
-            <el-autocomplete class="inline-input" v-model="infoQueryObj.acceptStatus" :fetch-suggestions="queryComp" placeholder="请输入内容" style="width: 100%"></el-autocomplete>
+            <el-autocomplete class="inline-input" v-model="queryObj.acceptStatus" :fetch-suggestions="queryComp" placeholder="请输入内容" style="width: 100%"></el-autocomplete>
           </template>
           <template slot="manualUrlList">
             <el-upload :action="uploadUrl" list-type="picture" :file-list="detailId?filelistObj.manualList:[]" :on-remove="handleManualRemove" :on-success="handleManualSuccess" :data="uploadData" :before-upload="beforeUploadGetKey">
@@ -106,7 +22,7 @@
             </el-upload>
           </template>
           <template slot="iotDeviceIds">
-            <el-select v-model="infoQueryObj.iotDeviceIds" multiple placeholder="请选择">
+            <el-select v-model="queryObj.iotDeviceIds" multiple placeholder="请选择">
               <el-option v-for="item in iotDeviceIdsOptions" :key="item.id" :label="item.macAddr" :value="item.id">
               </el-option>
             </el-select>
@@ -116,54 +32,16 @@
           </template>
         </ever-form2>
       </div>
-      <div class="log-btn-container">
+      <div class="log-btn-container" style="margin-bottom:60px;padding-left:180px;">
         <el-button type="primary" @click="prev">保存</el-button>
         <el-button @click="handleClose">取消</el-button>
       </div>
-    </el-dialog>
   </div>
 </template>
 <script>
 import api from "@/api/api";
-import list from "@/plugins/list";
 import token from "@/plugins/getUploadToken";
 let schema = [
-  {
-    label: "资产编号",
-    name: "no"
-  },
-  {
-    name: "dept",
-    label: "临床科室"
-  },
-  {
-    name: "kind",
-    label: "设备类别"
-  },
-  {
-    label: "设备型号",
-    name: "model"
-  },
-  {
-    label: "SN序列号",
-    name: "sn"
-  },
-  {
-    label: "厂家",
-    name: "vender"
-  },
-  {
-    name: "btn",
-    label: "",
-    comp: "custom"
-  },
-  {
-    label: "",
-    name: "rightbtn",
-    comp: "custom"
-  }
-];
-let infoSchema = [
   {
     name: "name",
     label: "资产名称"
@@ -312,22 +190,14 @@ let infoSchema = [
   }
 ];
 export default {
-  mixins: [list, token],
-  data() {
+  mixins: [token],
+  data () {
     var obj = this.createObjFromSchema(schema);
-    var infoObj = this.createObjFromSchema(infoSchema);
-    infoObj.iotDeviceIds = [];
     return {
-      api,
       querySchema: schema,
       queryObj: obj,
-      tableData: [],
-      listApiName: "assetList",
-      infoQueryObj: infoObj,
-      infoQuerySchema: infoSchema,
-      popShow: false,
-      popTitle: "新建",
       detailId: "",
+      iotDeviceIdsOptions: [],
       // 保存图片地址
       imgObj: {
         manualImg: [],
@@ -340,7 +210,6 @@ export default {
         receiptList: [],
         contractList: []
       },
-      iotDeviceIdsOptions: [],
       rules: {
         name: [
           {
@@ -350,16 +219,6 @@ export default {
           }
         ]
       }
-    };
-  },
-  watch: {
-    popShow: {
-      handler: function(val, oldval) {
-        if (val) {
-          this.getDeviceIdsOptions();
-        }
-      },
-      immediate: true
     }
   },
   methods: {
@@ -369,6 +228,12 @@ export default {
 
         this.iotDeviceIdsOptions = data.data;
       } catch (err) {}
+    },
+    handleClose() {
+      Object.keys(this.filelistObj).map(v => {
+        this.filelistObj[v] = [];
+      });
+      this.popShow = false;
     },
     //删除数组里面删除的图片地址
     handleManualRemove(file, fileList) {
@@ -436,24 +301,6 @@ export default {
       ];
       cb(this.remarkoptions);
     },
-    addAsset() {
-      Object.keys(this.infoQueryObj).map(key => {
-        if (key === "iotDeviceIds") {
-          this.infoQueryObj[key] = [];
-        } else {
-          this.infoQueryObj[key] = "";
-        }
-      });
-      Object.keys(this.imgObj).map(key => {
-        this.imgObj[key] = [];
-      });
-      Object.keys(this.filelistObj).map(key => {
-        this.filelistObj[key] = [];
-      });
-      this.popShow = true;
-      this.detailId = "";
-      this.popTitle = "新建资产";
-    },
     prev(id) {
       this.$refs.form.$refs.form.validate(valid => {
         if (valid) {
@@ -462,7 +309,7 @@ export default {
             url = "updateAsset";
           }
           let tips = this.detailId ? "更新" : "创建";
-          let params = Object.assign({}, this.infoQueryObj);
+          let params = Object.assign({}, this.queryObj);
           params.manualUrlList =
             this.imgObj.manualImg.length > 0
               ? JSON.stringify(this.imgObj.manualImg)
@@ -478,8 +325,8 @@ export default {
           api[url](params).then(rs => {
             this.popShow = false;
             if (rs.code === 200) {
-              this.query();
               this.$messageTips(this, "success", tips + "成功");
+              this.$router.go(-1)
             } else {
               this.$messageTips(this, "error", tips + "失败");
             }
@@ -487,83 +334,80 @@ export default {
         }
       });
     },
-    handleClose() {
-      Object.keys(this.filelistObj).map(v => {
-        this.filelistObj[v] = [];
-      });
-      this.popShow = false;
-    },
     emitInfo(row) {
-      this.popTitle = "编辑资产";
       this.detailId = row.id;
-      Object.assign(this.infoQueryObj, row);
+      Object.assign(this.queryObj, row);
       if (
-        this.infoQueryObj.iotDeviceIds &&
-        this.infoQueryObj.iotDeviceIds.length > 0
+        this.queryObj.iotDeviceIds &&
+        this.queryObj.iotDeviceIds.length > 0
       ) {
       } else {
-        this.infoQueryObj.iotDeviceIds = [];
+        this.queryObj.iotDeviceIds = [];
       }
       this.filelistObj.manualList =
-        (this.infoQueryObj.manualUrlList &&
-          JSON.parse(this.infoQueryObj.manualUrlList)) ||
+        (this.queryObj.manualUrlList &&
+          JSON.parse(this.queryObj.manualUrlList)) ||
         [];
       this.imgObj.manualImg =
-        (this.infoQueryObj.manualUrlList &&
-          JSON.parse(this.infoQueryObj.manualUrlList)) ||
+        (this.queryObj.manualUrlList &&
+          JSON.parse(this.queryObj.manualUrlList)) ||
         [];
 
       this.filelistObj.receiptList =
-        (this.infoQueryObj.receiptUrlList &&
-          JSON.parse(this.infoQueryObj.receiptUrlList)) ||
+        (this.queryObj.receiptUrlList &&
+          JSON.parse(this.queryObj.receiptUrlList)) ||
         [];
       this.imgObj.receiptImg =
-        (this.infoQueryObj.receiptUrlList &&
-          JSON.parse(this.infoQueryObj.receiptUrlList)) ||
+        (this.queryObj.receiptUrlList &&
+          JSON.parse(this.queryObj.receiptUrlList)) ||
         [];
 
       this.filelistObj.contractList =
-        (this.infoQueryObj.contractUrlList &&
-          JSON.parse(this.infoQueryObj.contractUrlList)) ||
+        (this.queryObj.contractUrlList &&
+          JSON.parse(this.queryObj.contractUrlList)) ||
         [];
       this.imgObj.contractImg =
-        (this.infoQueryObj.contractUrlList &&
-          JSON.parse(this.infoQueryObj.contractUrlList)) ||
+        (this.queryObj.contractUrlList &&
+          JSON.parse(this.queryObj.contractUrlList)) ||
         [];
-
-      this.popShow = true;
     },
-    async delInfo(row) {
-      this.$confirm("确定要删除该资产信息?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+    clearInfo() {
+      Object.keys(this.queryObj).map(key => {
+        if (key === "iotDeviceIds") {
+          this.queryObj[key] = [];
+        } else {
+          this.queryObj[key] = "";
+        }
+      });
+      Object.keys(this.imgObj).map(key => {
+        this.imgObj[key] = [];
+      });
+      Object.keys(this.filelistObj).map(key => {
+        this.filelistObj[key] = [];
+      });
+    },
+  },
+  created (){
+    this.getDeviceIdsOptions();
+    if (this.$route.query.id) {
+      this.detailId = this.$route.query.id
+      api.assetFindById({id: this.detailId}).then(rs => {
+        if (rs.code === 200) {
+          this.emitInfo(rs.data)
+        }
       })
-        .then(async () => {
-          try {
-            let data = await api.deleteAsset({ id: row.id });
-            if (data && data.code === 200) {
-              this.$message({
-                type: "success",
-                message: "删除成功!"
-              });
-              this.query();
-            }
-          } catch (err) {
-            console.log(err);
-          }
-        })
-        .then(() => {});
+    }
+  },
+  watch: {
+    $route: {
+      handler(value) {
+        if (!value) {
+          this.clearInfo();
+        }
+      },
+      immediate: true
     }
   }
-};
-</script>
-<style lang="less" scoped>
-.scroll {
-  height: 400px;
-  overflow: hidden;
-  overflow-y: scroll;
 }
-</style>
-
+</script>
 

@@ -12,10 +12,10 @@
         :nosubmit="true"
         :inline="true">
         <template slot="btn">
-          <el-button type="primary" @click="query">查询</el-button>
+          <el-button @click="query">查询</el-button>
         </template>
         <template slot="rightbtn">
-          <el-button type="primary" @click="addAgency">新建</el-button>
+          <el-button type="primary" @click="addAgency" plain>新建</el-button>
         </template>
       </ever-form2>
     </div>
@@ -23,7 +23,6 @@
       v-loading="loading"
       :data="tableData"
       style="width: 100%"
-      border
       stripe>
       <el-table-column
         type="index"
@@ -44,8 +43,8 @@
       </el-table-column>
       <el-table-column prop="name" label="操作">
         <template slot-scope="scope">
-          <el-button size="small" type="primary" @click="emitInfo(scope.row)">编辑</el-button>
-          <el-button size="small" type="danger" @click="delInfo(scope.row)">删除</el-button>
+          <el-button type="text" icon="el-icon-edit" @click="emitInfo(scope.row)">编辑</el-button>
+          <el-button type="text" class="delete-btn-color"  icon="el-icon-delete" @click="delInfo(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>

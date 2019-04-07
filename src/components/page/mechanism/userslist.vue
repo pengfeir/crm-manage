@@ -3,14 +3,14 @@
     <div class="main-head">
       <ever-form2 :schema="querySchema" v-model="queryObj" @query="query" class="package-sale" :info="true" :labelWidth="140" label-position="right" :nosubmit="true" :inline="true">
         <template slot="btn">
-          <el-button type="primary" @click="query">查询</el-button>
+          <el-button @click="query" plain>查询</el-button>
         </template>
         <template slot="rightbtn">
-          <el-button type="primary" @click="addUsers" v-if="currentUser.icon!=2">新建</el-button>
+          <el-button type="primary" @click="addUsers" v-if="currentUser.icon!=2" plain>新建</el-button>
         </template>
       </ever-form2>
     </div>
-    <el-table v-loading.body="loading" :data="tableData" style="width: 100%" border stripe>
+    <el-table v-loading.body="loading" :data="tableData" style="width: 100%" stripe>
       <el-table-column type="index" width="50">
       </el-table-column>
       <el-table-column prop="nickName" align="center" label="用户名">
@@ -23,8 +23,8 @@
       </el-table-column>
       <el-table-column prop="name" align="center" width="150" label="操作">
         <template slot-scope="scope">
-          <el-button size="small" type="primary" @click="emitInfo(scope.row)">编辑</el-button>
-          <el-button size="small" type="danger" @click="delInfo(scope.row)">删除</el-button>
+          <el-button type="text" @click="emitInfo(scope.row)" icon="el-icon-edit">编辑</el-button>
+          <el-button type="text" class="delete-btn-color" @click="delInfo(scope.row)" icon="el-icon-delete">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
