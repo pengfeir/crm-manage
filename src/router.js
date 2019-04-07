@@ -19,6 +19,8 @@ const maintenanceMain = r => require.ensure([], () => r(require('@/components/pa
 const complaint = r => require.ensure([], () => r(require('@/components/page/assetManage/complaint.vue')), 'complaint')
 const assetRun = r => require.ensure([], () => r(require('@/components/page/assetManage/assetRun.vue')), 'assetRun')
 const device = r => require.ensure([], () => r(require('@/components/page/device/device.vue')), 'device')
+const deviceAdd = r => require.ensure([], () => r(require('@/components/page/device/deviceAdd.vue')), 'deviceAdd')
+const houseAdd = r => require.ensure([], () => r(require('@/components/page/device/houseAdd.vue')), 'houseAdd')
 const house = r => require.ensure([], () => r(require('@/components/page/device/house.vue')), 'house')
 const routerarr = [
   {
@@ -122,6 +124,20 @@ const routerarr = [
         component: device,
         meta: {
           name: '物联设备管理'
+        }
+      },
+      {
+        path: 'deviceAdd',
+        component: deviceAdd,
+        meta: {
+          name: '物联设备管理'
+        }
+      },
+      {
+        path: 'houseAdd',
+        component: houseAdd,
+        meta: {
+          name: '房间管理'
         }
       },
       {

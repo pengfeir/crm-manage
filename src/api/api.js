@@ -114,6 +114,9 @@ function deleteRoom (params) { // 删除房间
 function updateRoom (params) { // 更新房间
   return axios.post('/manage/room/update', params)
 }
+function roomFindById (params) { // 更新房间
+  return axios.post('/manage/room/findById', params)
+}
 function roomList (params) { // 房间列表
   return axios.post('/manage/room/list', params)
 }
@@ -131,6 +134,9 @@ function iotDeviceList (params) { // 房间物联
 }
 function unPageiotDeviceList (params) { // 物联设备列表
   return axios.post('/manage/iotDevice/unPageList', params)
+}
+function findById (params) { // 物联设备列表
+  return axios.post('/manage/iotDevice/findById', params)
 }
 function createAssetMetrics (params) { // 创建资产运行
   return axios.post('/manage/assetMetrics/create', params)
@@ -192,5 +198,7 @@ export default {
   updateAssetMetrics,
   assetMetricsList,
   assetFindById,
-  faultFindById
+  faultFindById,
+  findById,
+  roomFindById
 }
