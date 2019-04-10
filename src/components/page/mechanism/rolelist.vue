@@ -35,27 +35,11 @@
         :total="totalCount">
       </el-pagination>
     </div> -->
-    <el-dialog :title="dialogInfo.popTitle" :visible.sync="dialogInfo.popShow" class="ui_dialog_02 spe carditem" :close-on-click-modal="false">
-      <ever-form2 :schema="queryInfoSchema" v-model="queryInfoObj" ref="form" class="package-sale" :info="true" :rules="rules" labelWidth="80px" label-position="right">
-        <template slot="description">
-          <el-tree :data="treeData" ref="tree" show-checkbox node-key="id" @check-change="handleCheckChange" :expand-on-click-node="false">
-          </el-tree>
-        </template>
-        <template slot="default">
-          <div></div>
-        </template>
-      </ever-form2>
-      <div class="log-btn-container">
-        <el-button type="primary" @click="prev">确认</el-button>
-        <el-button @click="cancel">取消</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 <script>
 import list from "@/plugins/list";
 import api from "@/api/api";
-import roleTree from "@/plugins/roletree";
 let schema = [
   {
     name: "name",
@@ -72,62 +56,23 @@ let schema = [
     comp: "custom"
   }
 ];
-let infoSchema = [
-  {
-    name: "name",
-    label: "角色名称"
-  },
-  {
-    name: "description",
-    label: "权限",
-    comp: "custom"
-  },
-  {
-    name: "btn",
-    label: "",
-    comp: "custom"
-  }
-];
 export default {
   mixins: [list],
   data() {
     let obj = this.createObjFromSchema(schema);
-    let infoObj = this.createObjFromSchema(infoSchema);
-    let validatePass = (rule, value, callback) => {
-      if (this.$refs.tree.getCheckedKeys().length === 0) {
-        callback(new Error("权限不能为空"));
-      } else {
-        callback();
-      }
-    };
-    let rules = {
-      name: [{ required: true, message: "必填项", trigger: "blur" }],
-      description: [{ validator: validatePass, trigger: "blur" }]
-    };
     return {
       api,
-      rules,
       querySchema: schema,
       queryObj: obj,
-      queryInfoSchema: infoSchema,
-      queryInfoObj: infoObj,
       listApiName: "roleList",
-      tableData: [],
-      treeData: [],
-      dialogInfo: {
-        popShow: false,
-        popTitle: "",
-        id: ""
-      }
+      tableData: []
     };
   },
   created() {
-    this.treeData = this.initTreeData(roleTree);
   },
   methods: {
     addAgency() {
-      this.dialogInfo.popTitle = "新建角色";
-      this.dialogInfo.popShow = true;
+      this.$router.push('/page/roleadd')
     },
     list() {
       api[this.listApiName]({ name: this.queryObj.name || "", id: "" }).then(
@@ -139,13 +84,7 @@ export default {
       );
     },
     emitInfo(row) {
-      this.dialogInfo.id = row.id;
-      this.dialogInfo.popTitle = "编辑角色";
-      this.queryInfoObj.name = row.name;
-      this.dialogInfo.popShow = true;
-      this.$nextTick(_ => {
-        this.$refs.tree.setCheckedKeys(row.description.split(","));
-      });
+      this.$router.push('/page/roleadd?id=' + row.id)
     },
     delInfo(row) {
       this.$confirm("确定要删除该角色?", "提示", {
@@ -168,77 +107,9 @@ export default {
           }
         })
         .then(() => {});
-    },
-    initTreeData(data) {
-      let arr = [];
-      data.forEach(item => {
-        let obj = { label: item.menuName, id: item.auth };
-        if (item.childMenus && item.childMenus.length > 0) {
-          obj.children = this.initTreeData(item.childMenus);
-        }
-        arr.push(obj);
-      });
-      return arr;
-    },
-    handleCheckChange(val) {},
-    prev() {
-      this.$refs.form.$refs.form.validate(valid => {
-        if (valid) {
-          let roleArr = this.$refs.tree.getCheckedKeys();
-          let aa = this.$refs.tree.getCheckedNodes();
-          let url = "roleCreate";
-          if (roleArr.length === 0) {
-            this.$messageTips(this, "error", "请选择权限");
-            return;
-          }
-          let params = {
-            name: this.queryInfoObj.name,
-            description: roleArr.join(",")
-          };
-          if (this.dialogInfo.id) {
-            params.id = this.dialogInfo.id;
-            url = "roleUpdate";
-          }
-          api[url](params).then(rs => {
-            if (rs.code === 200) {
-              this.$messageTips(this, "success", "保存成功");
-              this.dialogInfo.popShow = false;
-              this.$emit("getstatus", {
-                data: new Date().getTime(),
-                isGetMenu: true
-              });
-              this.query();
-            } else {
-              this.$messageTips(this, "error", "保存失败");
-            }
-          });
-        }
-      });
-    },
-    cancel() {
-      this.dialogInfo.popShow = false;
-    },
-    clearInfo() {
-      this.queryInfoObj.name = "";
-      this.dialogInfo.id = "";
-      this.queryInfoObj.description = [];
-      this.$refs.tree.setCheckedKeys([]);
-    },
-    clearInfo() {
-      this.queryInfoObj.name = "";
-      this.queryInfoObj.description = [];
     }
   },
-  watch: {
-    "dialogInfo.popShow": {
-      handler(value) {
-        if (!value) {
-          this.clearInfo();
-        }
-      },
-      immediate: true
-    }
-  }
+  watch: {}
 };
 </script>
 <style lang='less' scoped>

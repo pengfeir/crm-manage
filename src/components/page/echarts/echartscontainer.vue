@@ -1,9 +1,14 @@
 <template>
   <div>
+    <div class="ever-bread-crumb">
+      <el-button @click="go" class="diy-btn-style"><i class="el-icon-arrow-left"></i></el-button>
+      <span>监测数据</span>
+    </div>
     <el-row>
       <el-col :span="24">
         <el-card class="">
-            资产状态：正常
+            资产状态：{{info.assetStatus | filterAssetStatus}}
+            时间：{{time}}
         </el-card>
       </el-col>
     </el-row>
@@ -23,31 +28,31 @@
       <el-col :span="12">
         <el-card class="demo_css">
           <el-button type="primary">历史数据</el-button>
-          <echarts-module key="gonglv" :title="'有功功率'" :eData='realPowerObj' :unit="'V'"></echarts-module>
+          <echarts-module key="gonglv" :title="'有功功率'" :eData='realPowerObj' :unit="'kW/H'"></echarts-module>
         </el-card>
       </el-col>
       <el-col :span="12">
         <el-card class="demo_css">
           <el-button type="primary">历史数据</el-button>
-          <echarts-module key="gonglv" :title="'功率因数'" :eData='powerFactorObj' :unit="'V'"></echarts-module>
+          <echarts-module key="gonglv" :title="'功率因数'" :eData='powerFactorObj' :unit="'--'"></echarts-module>
         </el-card>
       </el-col>
       <el-col :span="12">
         <el-card class="demo_css">
           <el-button type="primary">历史数据</el-button>
-          <echarts-module key="gonglvyinshu" :title="'温度'" :eData='temperatureObj' :unit="'V'"></echarts-module>
+          <echarts-module key="gonglvyinshu" :title="'温度'" :eData='temperatureObj' :unit="'°C'"></echarts-module>
         </el-card>
       </el-col>
       <el-col :span="12">
         <el-card class="demo_css">
           <el-button type="primary">历史数据</el-button>
-          <echarts-module key="wendu" :title="'电源频率'" :eData='powerHzObj' :unit="'V'"></echarts-module>
+          <echarts-module key="wendu" :title="'电源频率'" :eData='powerHzObj' :unit="'Hz'"></echarts-module>
         </el-card>
       </el-col>
       <el-col :span="12">
         <el-card class="demo_css">
           <el-button type="primary">历史数据</el-button>
-          <echarts-module key="energy" :title="'电能计量'" :eData='energyObj' :unit="'V'"></echarts-module>
+          <echarts-module key="energy" :title="'电能计量'" :eData='energyObj' :unit="'kW'"></echarts-module>
         </el-card>
       </el-col>
     </el-row>
@@ -55,10 +60,12 @@
   </div>
 </template>
 <script>
+import api from "@/api/api"
 import echartsModule from './echartsmodule'
 import echartsHistory from './echartshistory'
-import { setInterval } from 'timers';
+import { setInterval, clearInterval } from 'timers';
 export default {
+  props:['id', 'types'],
   components: {
     echartsModule,
     echartsHistory
@@ -66,20 +73,28 @@ export default {
   data () {
     return {
       time: '2019-03-27 ',
-      inputIObj: {x:'12:00:00',y:'0'}, // 输入电流
-      inputVObj: {x:'12:00:00',y:'0'}, // 输入电压
-      realPowerObj: {x:'12:00:00',y:'0'}, // 有功功率
-      powerFactorObj: {x:'12:00:00',y:'0'}, // 功率因数
-      temperatureObj: {x:'12:00:00',y:'0'}, // 温度
-      powerHzObj: {x:'12:00:00',y:'0'}, // 电源频率
-      energyObj: {x:'12:00:00',y:'0'}, // 电能计量
+      inputIObj: {x:'00:00:00',y:'0'}, // 输入电流
+      inputVObj: {x:'00:00:00',y:'0'}, // 输入电压
+      realPowerObj: {x:'00:00:00',y:'0'}, // 有功功率
+      powerFactorObj: {x:'00:00:00',y:'0'}, // 功率因数
+      temperatureObj: {x:'00:00:00',y:'0'}, // 温度
+      powerHzObj: {x:'00:00:00',y:'0'}, // 电源频率
+      energyObj: {x:'00:00:00',y:'0'}, // 电能计量
       logInfo: {
         visibile: false,
         type: ''
+      },
+      interval: null,
+      info: {
+        time: '',
+        assetStatus: ''
       }
     }
   },
   methods: {
+    go () {
+      this.$router.go(-1)
+    },
     seeHistory (key) {
       this.logInfo.visibile = true
       this.logInfo.type = key
@@ -92,21 +107,71 @@ export default {
       obj.x = time.getHours() + ':' + minutes + ':' + seconds
       obj.y = parseInt(Math.random()*100 + 100)
     },
+    getTime () {
+      let date = new Date ()
+      let time = ''
+      let minutes = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes()
+      let seconds = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds()
+      time = date.getHours() + ':' + minutes + ':' + seconds
+      let month = (date.getMonth() + 1 < 10 ? '0' : '') + (date.getMonth() + 1)
+      let dateval = (date.getDate() < 10 ? '0' : '') + date.getDate()
+      let curTime = date.getFullYear() + '-' + month + '-' + dateval
+      if (curTime !== this.time) {
+        this.time = curTime
+      }
+      console.log(this.time)
+      return this.time + ' ' + time
+    },
     objs () {
-      this.initData(this.inputIObj)
-      this.initData(this.inputVObj)
-      this.initData(this.realPowerObj)
-      this.initData(this.powerFactorObj)
-      this.initData(this.temperatureObj)
-      this.initData(this.powerHzObj)
-      this.initData(this.energyObj)
+      // beginDate endDate
+      let endDate = this.getTime()
+      api.assetMetricsList({macAddress: this.id, endDate: endDate, pageNum: 1, pageSize: 20}).then(rs => {
+        this.info = rs.data.list[rs.data.list.length-1]
+        this.initData(rs.data.list[rs.data.list.length-1])
+      })
+      // this.initData(this.inputIObj)
+      // this.initData(this.inputVObj)
+      // this.initData(this.realPowerObj)
+      // this.initData(this.powerFactorObj)
+      // this.initData(this.temperatureObj)
+      // this.initData(this.powerHzObj)
+      // this.initData(this.energyObj)
+    },
+    initData (data) {
+      let time = data.mtime.split(' ')[1]
+      if (this.inputIObj.x !== time) {
+        this.inputIObj.x = time
+        this.inputIObj.y = data.inputI
+
+        this.inputVObj.x = time
+        this.inputVObj.y = data.inputV
+
+        this.realPowerObj.x = time
+        this.realPowerObj.y = data.realPower
+
+        this.powerFactorObj.x = time
+        this.powerFactorObj.y = data.powerFactor
+
+        this.temperatureObj.x = time
+        this.temperatureObj.y = data.temperature
+
+        this.powerHzObj.x = time
+        this.powerHzObj.y = data.powerHz
+
+        this.energyObj.x = time
+        this.energyObj.y = data.energy
+      }
     }
   },
   mounted () {
     this.objs()
-    setInterval(_ => {
+    this.interval = setInterval(_ => {
       this.objs()
     }, 5000)
+  },
+  beforeDestroy () {
+    clearInterval(this.interval)
+    this.interval = null
   }
 }
 </script>
@@ -147,6 +212,10 @@ export default {
       z-index: 100;
       cursor: pointer;
     }
+  }
+  .diy-btn-style {
+    padding: 3px 4px;
+    margin: 8px;
   }
 </style>
 

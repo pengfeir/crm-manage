@@ -7,8 +7,11 @@ const page = r => require.ensure([], () => r(require('@/components/manage')), 'm
 const group = r => require.ensure([], () => r(require('@/views/group')), 'group')
 const role = r => require.ensure([], () => r(require('@/views/role')), 'role')
 const AgencyList = r => require.ensure([], () => r(require('@/components/page/mechanism/agencylist.vue')), 'agencylist')
+const AgencyAdd = r => require.ensure([], () => r(require('@/components/page/mechanism/agencyadd.vue')), 'agencyadd')
 const RoleList = r => require.ensure([], () => r(require('@/components/page/mechanism/rolelist.vue')), 'rolelist')
+const RoleAdd = r => require.ensure([], () => r(require('@/components/page/mechanism/roleadd.vue')), 'roleadd')
 const UserList = r => require.ensure([], () => r(require('@/components/page/mechanism/userslist.vue')), 'userslist')
+const UserAdd = r => require.ensure([], () => r(require('@/components/page/mechanism/usersadd.vue')), 'usersadd')
 const assetManage = r => require.ensure([], () => r(require('@/components/page/assetManage/device/assetManage.vue')), 'assetManage')
 const assetManageAdd = r => require.ensure([], () => r(require('@/components/page/assetManage/device/assetmanageadd.vue')), 'assetmanage')
 
@@ -17,7 +20,8 @@ const assetFailurAdd = r => require.ensure([], () => r(require('@/components/pag
 const maintenanceQa = r => require.ensure([], () => r(require('@/components/page/assetManage/maintenanceqa.vue')), 'maintenanceqa')
 const maintenanceMain = r => require.ensure([], () => r(require('@/components/page/assetManage/maintenancemain.vue')), 'maintenancemain')
 const complaint = r => require.ensure([], () => r(require('@/components/page/assetManage/complaint.vue')), 'complaint')
-const assetRun = r => require.ensure([], () => r(require('@/components/page/assetManage/assetRun.vue')), 'assetRun')
+const assetRun = r => require.ensure([], () => r(require('@/components/page/assetManage/assetrun/assetRun.vue')), 'assetRun')
+const assetRunEcharts = r => require.ensure([], () => r(require('@/components/page/assetManage/assetrun/assetecharts.vue')), 'assetecharts')
 const device = r => require.ensure([], () => r(require('@/components/page/device/device.vue')), 'device')
 const house = r => require.ensure([], () => r(require('@/components/page/device/house.vue')), 'house')
 const routerarr = [
@@ -48,6 +52,13 @@ const routerarr = [
         }
       },
       {
+        path: 'agencyadd',
+        component: AgencyAdd,
+        meta: {
+          name: '机构设置'
+        }
+      },
+      {
         path: 'rolelist',
         component: RoleList,
         meta: {
@@ -55,8 +66,22 @@ const routerarr = [
         }
       },
       {
+        path: 'roleadd',
+        component: RoleAdd,
+        meta: {
+          name: '角色管理'
+        }
+      },
+      {
         path: 'userslist',
         component: UserList,
+        meta: {
+          name: '账号管理'
+        }
+      },
+      {
+        path: 'useradd',
+        component: UserAdd,
         meta: {
           name: '账号管理'
         }
@@ -92,6 +117,13 @@ const routerarr = [
       {
         path: 'assetRun',
         component: assetRun,
+        meta: {
+          name: '设备运行管理'
+        }
+      },
+      {
+        path: 'assetRunSee',
+        component: assetRunEcharts,
         meta: {
           name: '设备运行管理'
         }
