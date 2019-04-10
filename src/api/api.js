@@ -90,6 +90,9 @@ function updateFault (params) { // 更新故障列表
 function mainList (params) { // 保养质检列表
   return axios.post('/manage/maintainQa/list', params)
 }
+function mainFindById (params) { // 保养质检列表
+  return axios.post('/manage/maintainQa/findById', params)
+}
 function createMain (params) { // 创建保养质检
   return axios.post('/manage/maintainQa/create', params)
 }
@@ -101,6 +104,9 @@ function updateMain (params) { // 更新保养质检
 }
 function complaintList (params) { // 投诉列表
   return axios.post('/manage/complaint/list', params)
+}
+function complaintFindById (params) { // 获取投诉详情
+  return axios.post('/manage/complaint/findById', params)
 }
 function createComplaint (params) { // 创建投诉
   return axios.post('/manage/complaint/create', params)
@@ -123,7 +129,7 @@ function deleteRoom (params) { // 删除房间
 function updateRoom (params) { // 更新房间
   return axios.post('/manage/room/update', params)
 }
-function roomFindById (params) { // 更新房间
+function roomFindById (params) { // 查询房间信息
   return axios.post('/manage/room/findById', params)
 }
 function roomList (params) { // 房间列表
@@ -144,7 +150,7 @@ function iotDeviceList (params) { // 房间物联
 function unPageiotDeviceList (params) { // 物联设备列表
   return axios.post('/manage/iotDevice/unPageList', params)
 }
-function findById (params) { // 物联设备列表
+function findById (params) { // 查询物联设备信息
   return axios.post('/manage/iotDevice/findById', params)
 }
 function createAssetMetrics (params) { // 创建资产运行
@@ -212,5 +218,7 @@ export default {
   roomFindById,
   userFindById,
   roleFindById,
-  agencyFindById
+  agencyFindById,
+  mainFindById,
+  complaintFindById
 }

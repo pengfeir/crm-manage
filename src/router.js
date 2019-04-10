@@ -16,9 +16,12 @@ const assetManageAdd = r => require.ensure([], () => r(require('@/components/pag
 
 const assetFailure = r => require.ensure([], () => r(require('@/components/page/assetManage/fault/assetFailure.vue')), 'assetFailure')
 const assetFailurAdd = r => require.ensure([], () => r(require('@/components/page/assetManage/fault/assetfailureadd.vue')), 'assetFailureadd')
-const maintenanceQa = r => require.ensure([], () => r(require('@/components/page/assetManage/maintenanceqa.vue')), 'maintenanceqa')
-const maintenanceMain = r => require.ensure([], () => r(require('@/components/page/assetManage/maintenancemain.vue')), 'maintenancemain')
-const complaint = r => require.ensure([], () => r(require('@/components/page/assetManage/complaint.vue')), 'complaint')
+const maintenanceQa = r => require.ensure([], () => r(require('@/components/page/assetManage/maintain/maintenanceqa.vue')), 'maintenanceqa')
+const maintenanceQaAdd = r => require.ensure([], () => r(require('@/components/page/assetManage/maintain/maintenanceqaadd.vue')), 'maintenanceqaadd')
+const maintenanceMain = r => require.ensure([], () => r(require('@/components/page/assetManage/maintain/maintenancemain.vue')), 'maintenancemain')
+const maintenanceMainAdd = r => require.ensure([], () => r(require('@/components/page/assetManage/maintain/maintenancemainadd.vue')), 'maintenancemain')
+const complaint = r => require.ensure([], () => r(require('@/components/page/assetManage/complaint/complaint.vue')), 'complaint')
+const complaintAdd = r => require.ensure([], () => r(require('@/components/page/assetManage/complaint/complaintadd.vue')), 'complaintadd')
 const assetRun = r => require.ensure([], () => r(require('@/components/page/assetManage/assetrun/assetRun.vue')), 'assetRun')
 const assetRunEcharts = r => require.ensure([], () => r(require('@/components/page/assetManage/assetrun/assetecharts.vue')), 'assetecharts')
 const device = r => require.ensure([], () => r(require('@/components/page/device/device.vue')), 'device')
@@ -133,6 +136,13 @@ const routerarr = [
         }
       },
       {
+        path: 'maintenanceMainadd',
+        component: maintenanceMainAdd,
+        meta: {
+          name: '保养'
+        }
+      },
+      {
         path: 'maintenanceQa',
         component: maintenanceQa,
         meta: {
@@ -140,8 +150,22 @@ const routerarr = [
         }
       },
       {
+        path: 'maintenanceQaAdd',
+        component: maintenanceQaAdd,
+        meta: {
+          name: '质控'
+        }
+      },
+      {
         path: 'complaint',
         component: complaint,
+        meta: {
+          name: '投诉'
+        }
+      },
+      {
+        path: 'complaintadd',
+        component: complaintAdd,
         meta: {
           name: '投诉'
         }

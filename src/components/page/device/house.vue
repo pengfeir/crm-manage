@@ -1,9 +1,9 @@
 <template>
   <div class="layout_inner">
     <div class="main-head">
-      <ever-form2 :schema="querySchema" v-model="queryObj" @query="query" ref="form" class="package-sale" :info="true" :labelWidth="140" label-position="right" :nosubmit="true" :inline="true">
+      <ever-form2 :schema="querySchema" v-model="queryObj" @query="query" ref="form" class="package-sale" :info="true" label-position="right" :nosubmit="true" :inline="true">
         <template slot="btn">
-          <el-button type="primary" @click="query">查询</el-button>
+          <el-button @click="query">查询</el-button>
         </template>
         <template slot="rightbtn">
           <el-button type="primary" @click="addAsset">新建</el-button>
@@ -11,34 +11,34 @@
       </ever-form2>
     </div>
     <el-table v-loading="loading" :data="tableData" style="width: 100%" border stripe max-height="650">
-      <el-table-column type="index" width="50" label="序号" fixed>
+      <el-table-column type="index" width="50" label="序号">
       </el-table-column>
-      <el-table-column prop="area" label="院区" fixed>
+      <el-table-column prop="area" label="院区">
       </el-table-column>
       <el-table-column prop="building" label="楼名">
       </el-table-column>
-      <el-table-column prop="dept" label="所属科室" width="150">
+      <el-table-column prop="dept" label="所属科室">
       </el-table-column>
-      <el-table-column prop="floorNo" label="楼层" width="180">
+      <el-table-column prop="floorNo" label="楼层">
       </el-table-column>
       <el-table-column prop="roomNo" label="房间号">
       </el-table-column>
-      <el-table-column prop="ctime" label="创建时间" width="180">
+      <!-- <el-table-column prop="ctime" label="创建时间" width="180">
       </el-table-column>
       <el-table-column prop="mtime" label="更新时间" width="180">
-      </el-table-column>
-      <el-table-column prop="urlList" label="房间资料" width="250">
+      </el-table-column> -->
+      <el-table-column prop="urlList" label="房间资料" width="150">
         <template slot-scope="scope">
-          <fileshow :type="'img'" :fileurlList="scope.row.urlList"></fileshow>
+          <fileshow :type="'img'" :tailor="true" :isNoShowBtn="true" :fileurlList="scope.row.urlList"></fileshow>
         </template>
       </el-table-column>
-      <el-table-column prop="extra" label="其他扩展信息" width="150">
+      <!-- <el-table-column prop="extra" label="其他扩展信息" width="150">
       </el-table-column>
       <el-table-column prop="orgName" label="机构" width="180">
       </el-table-column>
       <el-table-column prop="userId" label="创建者ID" width="180">
-      </el-table-column>
-      <el-table-column prop="name" label="操作" fixed="right" width="250">
+      </el-table-column> -->
+      <el-table-column prop="name" label="操作" align="center" width="250">
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-search" @click="seeDetail(scope.row)">详情</el-button>
           <el-button type="text" icon="el-icon-edit" @click="emitInfo(scope.row)">编辑</el-button>
@@ -218,6 +218,9 @@ export default {
   height: 400px;
   overflow: hidden;
   overflow-y: scroll;
+}
+.package-sale /deep/ .el-input {
+  width: 150px;
 }
 </style>
 
