@@ -44,7 +44,7 @@ export default {
       this.clearStore()
       let tokenRs = await api.login(this.loginForm)
       localStorage.setItem('token', tokenRs.data.token)
-      this.$router.push(this.$route.query.redirect || '/page/group')
+      this.$router.push(this.$route.query.redirect || '/page/home')
     },
     clearStore () {
       window.localStorage.clear()

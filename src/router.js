@@ -4,8 +4,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 const login = r => require.ensure([], () => r(require('@/components/login')), 'login')
 const page = r => require.ensure([], () => r(require('@/components/manage')), 'manage')
-const group = r => require.ensure([], () => r(require('@/views/group')), 'group')
-const role = r => require.ensure([], () => r(require('@/views/role')), 'role')
+const Home = r => require.ensure([], () => r(require('@/components/page/home.vue')), 'home')
 const AgencyList = r => require.ensure([], () => r(require('@/components/page/mechanism/agencylist.vue')), 'agencylist')
 const AgencyAdd = r => require.ensure([], () => r(require('@/components/page/mechanism/agencyadd.vue')), 'agencyadd')
 const RoleList = r => require.ensure([], () => r(require('@/components/page/mechanism/rolelist.vue')), 'rolelist')
@@ -36,15 +35,11 @@ const routerarr = [
     path: '/page',
     component: page,
     name: '',
-    redirect: '/page/group',
+    redirect: '/page/home',
     children: [
       {
-        path: 'group',
-        component: group
-      },
-      {
-        path: 'role',
-        component: role
+        path: 'home',
+        component: Home
       },
       {
         path: 'agencylist',
