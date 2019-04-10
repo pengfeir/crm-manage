@@ -59,24 +59,6 @@
         :total="totalCount">
       </el-pagination>
     </div>
-    <el-dialog :title="popTitle" :visible.sync="popShow"  class="ui_dialog_02 spe carditem" :close-on-click-modal="false">
-      <ever-form2
-        :schema="infoQuerySchema" 
-        v-model="infoQueryObj"
-        ref="form"
-        :rules="rules"
-        class="package-sale"
-        labelWidth="80px"
-        label-position="right">
-        <template slot="default">
-          <div></div>
-        </template>
-      </ever-form2>
-      <div class="log-btn-container">
-        <el-button type="primary" @click="prev">保存</el-button>
-        <el-button @click="popShow = false">取消</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 <script>
@@ -98,83 +80,24 @@ let schema = [
     comp: "custom"
   }
 ];
-let infoSchema = [
-  {
-    name: "orgName",
-    label: "机构名称"
-  },
-  {
-    name: "contacts",
-    label: "联系人"
-  },
-  {
-    name: "contactNumber",
-    label: "联系电话"
-  },
-  {
-    name: "address",
-    label: "地址"
-  }
-];
 export default {
   mixins: [list],
   data () {
-    let obj = this.createObjFromSchema(schema)
-    let infoObj = this.createObjFromSchema(infoSchema)
-    let rules = {
-      'orgName': [
-          { required: true, message: '必填项', trigger: 'blur' }
-      ]
-    }
+    let obj = this.createObjFromSchema(schema);
     return {
       api,
-      rules,
-      popShow: false,
-      popTitle: "新建机构",
-      ageencyID: "",
       querySchema: schema,
       queryObj: obj,
-      infoQueryObj: infoObj,
-      infoQuerySchema: infoSchema,
       listApiName: "agencyList",
       tableData: [],
     };
   },
   methods: {
-    prev () {
-      this.$refs.form.$refs.form.validate(valid => {
-        if (valid) {
-          let url = 'agencyCreate'
-          let tips = '新建'  
-          let params = Object.assign({}, this.infoQueryObj)
-          if (this.ageencyID) {
-            url = 'agencyUpdate'
-            tips = '修改'
-            params['id'] = this.ageencyID
-          }
-          api[url](params).then(rs => {
-            this.popShow = false
-            if (rs.code === 200) {
-              this.query()
-              this.$messageTips(this, 'success', tips + '成功')
-            } else {
-              this.$messageTips(this, 'error', tips + '失败')
-            }
-          })
-        }
-      });
-    },
     addAgency() {
-      this.popShow = true;
+      this.$router.push('/page/agencyadd')
     },
     emitInfo(row) {
-      this.popTitle = "编辑机构";
-      this.infoQueryObj.orgName = row.orgName;
-      this.infoQueryObj.contacts = row.contacts;
-      this.infoQueryObj.contactNumber = row.contactNumber;
-      this.infoQueryObj.address = row.address;
-      this.ageencyID = row.id;
-      this.popShow = true;
+      this.$router.push('/page/agencyadd?id=' + row.id)
     },
     delInfo(row) {
       this.$confirm("确定要删除该机构?", "提示", {
@@ -196,25 +119,9 @@ export default {
           }
         })
         .then(() => {});
-    },
-    clearInfo() {
-      this.infoQueryObj.orgName = "";
-      this.infoQueryObj.contacts = "";
-      this.infoQueryObj.contactNumber = "";
-      this.infoQueryObj.address = "";
-      this.ageencyID = "";
-      this.popTitle = "新建机构";
     }
   },
   watch: {
-    popShow: {
-      handler(newValue) {
-        if (!newValue) {
-          this.clearInfo();
-        }
-      },
-      immediate: true
-    }
   }
 };
 </script>

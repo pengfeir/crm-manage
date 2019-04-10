@@ -12,6 +12,9 @@ function agencyCreate (params) { // 新建机构
 function agencyList (params) { // 获取机构列表
   return axios.post('/manage/organization/list', params)
 }
+function agencyFindById (params) { // 获取机构信息
+  return axios.post('/manage/organization/findById', params)
+}
 function agencyUpdate (params) { // 编辑机构
   return axios.post('/manage/organization/update', params)
 }
@@ -20,6 +23,9 @@ function agencyDel (params) { // 删除机构
 }
 function roleList (params) { // 角色列表
   return axios.post('/manage/role/list', params)
+}
+function roleFindById (params) { // 角色列表
+  return axios.post('/manage/role/findById', params)
 }
 function roleCreate (params) { // 添加角色
   return axios.post('/manage/role/create', params)
@@ -41,6 +47,9 @@ function userDel (params) { // 批量删除用户
 }
 function userList (params) { // 获取用户列表
   return axios.post('/manage/admin/list', params)
+}
+function userFindById (params) { // 获取账号信息
+  return axios.post('/manage/admin/findById', params)
 }
 function userUpdate (params) { // 更新用户信息
   return axios.post('/manage/admin/update', params)
@@ -200,5 +209,8 @@ export default {
   assetFindById,
   faultFindById,
   findById,
-  roomFindById
+  roomFindById,
+  userFindById,
+  roleFindById,
+  agencyFindById
 }

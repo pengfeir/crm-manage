@@ -15,7 +15,6 @@
       >
         <template slot="btn">
           <el-button
-            type="primary"
             @click="query"
           >查询</el-button>
         </template>
@@ -32,40 +31,32 @@
       :data="tableData"
       style="width: 100%"
       border
-      stripe
-      max-height="650"
-    >
+      stripe>
       <el-table-column
         type="index"
         width="50"
-        label="序号"
-        fixed
-      >
+        label="序号">
       </el-table-column>
       <el-table-column
         prop="assetName"
         label="设备名称"
-        fixed
-        width="100"
       >
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         prop="contact"
         label="联系方式"
       >
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         prop="dept"
-        label="故障发生科室"
-        width="150"
+        label="发生科室"
       >
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         prop="faultAt"
         label="故障发生时间"
-        width="180"
       >
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         prop="fixStep"
         label="维修进度"
@@ -87,7 +78,7 @@
       <el-table-column
         prop="faultUrlList"
         label="故障照片"
-        width="250"
+        width="150"
       >
         <template slot-scope="scope">
           <fileshow
@@ -101,7 +92,7 @@
       <el-table-column
         prop="contractUrlList"
         label="维修合同照片"
-        width="250"
+        width="150"
       >
         <template slot-scope="scope">
           <fileshow
@@ -115,7 +106,7 @@
       <el-table-column
         prop="receiptUrlList"
         label="票据照片"
-        width="250"
+        width="150"
       >
         <template slot-scope="scope">
           <fileshow
@@ -126,7 +117,7 @@
           ></fileshow>
         </template>
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         prop="reporter"
         label="上报人信息"
         width="180"
@@ -167,12 +158,11 @@
         label="创建者ID"
         width="180"
       >
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         prop="name"
         label="操作"
         align="center"
-        fixed="right"
         width="250"
       >
         <template slot-scope="scope">
@@ -447,6 +437,12 @@ export default {
   height: 400px;
   overflow: hidden;
   overflow-y: scroll;
+}
+.package-sale /deep/ .el-form-item__label {
+  width: 100px;
+}
+.package-sale /deep/ .el-form-item:nth-child(5) .el-form-item__content {
+  width: 195px;
 }
 </style>
 
