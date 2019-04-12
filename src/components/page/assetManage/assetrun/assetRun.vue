@@ -2,6 +2,23 @@
   <div class="layout_inner">
     <div class="main-head">
       <ever-form2 :schema="querySchema" v-model="queryObj" @query="query" ref="form" class="package-sale" :info="true" :labelWidth="140" label-position="right" :nosubmit="true" :inline="true">
+        <template slot="keys">
+            <el-row style="margin-left:20px;">
+              <el-col :span="12">
+                <el-select v-model="queryObj.keys" @change="onChange" style="width:150px;">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id">
+                  </el-option>
+                </el-select>
+              </el-col>
+              <el-col :span="12">
+                <el-input v-model="queryObj.value"></el-input>  
+              </el-col>
+            </el-row>
+        </template>
         <template slot="btn">
           <el-button @click="query">查询</el-button>
         </template>
@@ -96,8 +113,9 @@ let schema = [
     }
   },
   {
-    name: "macAddress",
-    label: "设备的MAC地址"
+    name: "keys",
+    label: "",
+    comp: 'custom'
   },
   {
     name: "btn",
@@ -114,18 +132,30 @@ export default {
   mixins: [list],
   data() {
     var obj = this.createObjFromSchema(schema);
+    obj.value = '';
+    obj.keys = 1;
     return {
       api,
       querySchema: schema,
       queryObj: obj,
       tableData: [],
+      options: [
+        {id: 1, name: 'SN序列号'},
+        {id: 2, name: 'MAC地址'},
+        {id: 3, name: '资产编号'}
+      ],
       listApiName: "assetList"// "assetMetricsList"
     };
   },
   methods: {
+    onChange () {
+      this.queryObj.value = ''
+    },
     seeDetails (row) {
       this.$router.push('/page/assetRunSee?id=' + row.macAddr)
     }
+  },
+  watch: {
   }
 };
 </script>
