@@ -30,8 +30,20 @@
         </li>
       </ul>
     </el-dialog> -->
-    <el-dialog :visible.sync="imgdialogVisible">
-      <img width="100%" :src="dialogImageUrl" alt="">
+    <el-dialog :visible.sync="imgdialogVisible" width="1000px" class="img-log" :append-to-body="true">
+      <div style="position:relative;">
+        <div class="img-left-btn" @click="imgGo(-1)">
+          <div>
+            <i class="el-icon-arrow-left"></i>
+          </div> 
+        </div>      
+        <img width="100%" :src="dialogImageUrl" alt="">
+        <div class="img-left-btn right-btn"  @click="imgGo(1)">
+          <div>
+            <i class="el-icon-arrow-right"></i>
+          </div> 
+        </div>   
+      </div>
     </el-dialog>
   </div>
 
@@ -75,6 +87,27 @@ export default {
   created() {
   },
   methods: {
+    imgGo (val) {
+      let arr = this.fileurlList ? JSON.parse(this.fileurlList) : []
+      for(let i = 0; i < arr.length; i++) {
+        if (arr[i]['url'] === this.dialogImageUrl) {
+          if (val === -1) {
+            if (i !== 0) {
+              this.dialogImageUrl = arr[i-1]['url']
+            } else {
+              this.dialogImageUrl = arr[arr.length-1]['url']
+            }
+          } else {
+            if (i === arr.length-1) {
+              this.dialogImageUrl = arr[0]['url']
+            } else {
+              this.dialogImageUrl = arr[i+1]['url']
+            }
+          }
+          return
+        }
+      }
+    },
     showimg(item) {
       window.open(`${item.url}?attname=${item.name}`);
     },
@@ -180,18 +213,49 @@ export default {
   transition: opacity 0.3s;
 }
 .maxsize {
+  .fileimg {
+    margin:5px 5px 0 0;
+  }
   .zzp {
-    width: 80px !important;
-    height: 80px !important;
+    width: 60px !important;
+    height: 60px !important;
   }
   .sl img {
-    width: 80px !important;
-    height: 80px !important;
+    width: 60px !important;
+    height: 60px !important;
   }
   .sl .zz .el-icon-zoom-in {
-    line-height: 80px !important;
+    line-height: 60px !important;
     font-size: 25px !important;
   }
+}
+.img-log /deep/ .el-dialog {
+  margin-top: 5vh !important;
+}
+.img-left-btn {
+  cursor: pointer;
+  position: absolute; 
+  height:100%;
+  width: 50px;
+  opacity: 0;
+  div {
+    position:absolute;
+    top:50%;
+    margin-top:-50px;
+    background: rgba(0,0,0,0.5);
+    i {
+      font-size:40px;
+      color:#fff;
+    }
+  }
+}
+.right-btn {
+  right: 0;
+  top: 0;
+}
+.img-left-btn:hover{
+  visibility: visible;
+  opacity: 1;
 }
 </style>
 

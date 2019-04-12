@@ -207,6 +207,17 @@ html,body{
 .delete-btn-color {
   color: #f56c6c !important;
 }
-.detail-log /deep/ .el-col {
-  margin-bottom: 10px;
-}
+.detail-log /deep/ {
+  .el-col {
+    margin-bottom: 10px;
+  }
+  .el-dialog {
+    margin-top: 5vh !important;
+  }
+  .el-dialog__body {
+    padding-top: 10px !important;
+  }
+  .log-btn-container {
+    display: none;
+  }
+} 

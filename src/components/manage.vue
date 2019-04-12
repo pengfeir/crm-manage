@@ -26,7 +26,7 @@ export default {
   },
   data() {
     return {
-      collapseVal: false,
+      collapseVal: true,
       nickName: "",
       currentUser: {
         icon: "",
@@ -55,6 +55,12 @@ export default {
       if (this.collapseVal) {
         document.querySelector('.right-content').style.marginLeft = '68px';
         document.querySelector('.menu-container').style.width = '68px';
+        document.querySelectorAll('.el-menu span').forEach(e => {
+          e.style.display = 'none';
+        });
+        document.querySelectorAll('.el-menu-item').forEach(e => {
+          e.style.display = 'none';
+        })
       } else {
         document.querySelector('.right-content').style.marginLeft = '200px';
         document.querySelector('.menu-container').style.width = '200px';
@@ -75,7 +81,7 @@ export default {
 .right-content {
   background-color: #f8fafe;
   height: 100%;
-  margin-left:200px;
+  margin-left:68px;
 }
 .view-container {
   background-color: #f8fafe;

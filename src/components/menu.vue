@@ -147,14 +147,17 @@ export default {
 </script>
 <style lang="less" scoped>
 .menu-container {
-  width: 200px;
+  width: 68px;
   float: left;
   height: 100%;
   box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
 }
 .iconfont {
-  font-size: 14px;
+  font-size: 20px;
   margin: 0 5px;
+}
+.el-menu-item.max-left {
+  padding-left: 65px !important;
 }
 </style>
 
