@@ -6,6 +6,16 @@
           <template slot="acceptStatus">
             <el-autocomplete class="inline-input" v-model="queryObj.acceptStatus" :fetch-suggestions="queryComp" placeholder="请输入内容" style="width: 100%"></el-autocomplete>
           </template>
+          <template slot="aaaaa">
+            <el-select v-model="queryObj.aaaaa" clearable placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.id"
+                :label="item.username"
+                :value="item.id">
+              </el-option>
+            </el-select>
+          </template>
           <template slot="manualUrlList">
             <el-upload :action="uploadUrl" list-type="picture" :file-list="detailId?filelistObj.manualList:[]" :on-remove="handleManualRemove" :on-success="handleManualSuccess" :data="uploadData" :before-upload="beforeUploadGetKey">
               <el-button size="small" type="primary">点击上传</el-button>
@@ -44,34 +54,41 @@ import token from "@/plugins/getUploadToken";
 let schema = [
   {
     name: "name",
-    label: "设备名称"
+    label: "设备名称",
+    span: 12
   },
   {
     name: "iotDeviceIds",
     label: "物联设备",
-    comp: "custom"
+    comp: "custom",
+    span: 12
   },
   {
     name: "no",
-    label: "设备编号"
+    label: "设备编号",
+    span: 12
   },
   {
     name: "acceptStatus",
     label: "验收状态",
-    comp: "custom"
+    comp: "custom",
+    span: 12
   },
   {
     name: "kind",
-    label: "设备类别"
+    label: "设备类别",
+    span: 12
   },
   {
     name: "model",
-    label: "设备型号"
+    label: "设备型号",
+    span: 12
   },
   {
     name: "setupStep",
     label: "设备装机状态",
     comp: "el-select",
+    span: 12,
     props: {
       options: [
         {
@@ -103,19 +120,84 @@ let schema = [
   },
   {
     name: "alternativeAppendant",
-    label: "耗材替代品"
+    label: "耗材替代品",
+    span: 12
   },
   {
     name: "appendant",
-    label: "配套耗材"
+    label: "配套耗材",
+    span: 12
   },
   {
     name: "contact",
-    label: "联系方式"
+    label: "联系方式",
+    span: 12
   },
   {
     name: "dept",
-    label: "临床科室"
+    label: "临床科室",
+    span: 12
+  },
+  {
+    label: "采购价格",
+    name: "vender",
+    span: 12
+  },
+  {
+    label: "责任工程师",
+    name: "aaaaa",
+    comp: "custom",
+    span: 12
+  },
+  {
+    label: "保修截止日期",
+    name: "vender",
+    span: 12
+  },
+  {
+    name: "prodDate",
+    label: "生产日期",
+    comp: "el-date-picker",
+    props: {
+      type: "datetime",
+      valueFormat: "yyyy-MM-dd HH:mm:ss"
+    },
+    span: 12
+  },
+  {
+    name: "setupStartAt",
+    label: "装机开始时间",
+    comp: "el-date-picker",
+    props: {
+      type: "datetime",
+      valueFormat: "yyyy-MM-dd HH:mm:ss"
+    },
+    span: 12
+  },
+  {
+    name: "setupEndAt",
+    label: "装机结束时间",
+    comp: "el-date-picker",
+    props: {
+      type: "datetime",
+      valueFormat: "yyyy-MM-dd HH:mm:ss"
+    },
+    span: 12
+  },
+  {
+    name: "sn",
+    label: "SN序列号",
+    span: 12
+  },
+  {
+    name: "vender",
+    label: "厂家",
+    span: 12
+  },
+  {
+    name: "extra",
+    label: "其他扩展信息",
+    span: 12
   },
   {
     name: "isDedicatedAppendant",
@@ -132,34 +214,8 @@ let schema = [
           name: "是"
         }
       ]
-    }
-  },
-  {
-    name: "prodDate",
-    label: "生产日期",
-    comp: "el-date-picker",
-    props: {
-      type: "datetime",
-      valueFormat: "yyyy-MM-dd HH:mm:ss"
-    }
-  },
-  {
-    name: "setupStartAt",
-    label: "装机开始时间",
-    comp: "el-date-picker",
-    props: {
-      type: "datetime",
-      valueFormat: "yyyy-MM-dd HH:mm:ss"
-    }
-  },
-  {
-    name: "setupEndAt",
-    label: "装机结束时间",
-    comp: "el-date-picker",
-    props: {
-      type: "datetime",
-      valueFormat: "yyyy-MM-dd HH:mm:ss"
-    }
+    },
+    span: 12
   },
   {
     name: "manualUrlList",
@@ -175,18 +231,6 @@ let schema = [
     name: "contractUrlList",
     label: "采购合同照片",
     comp: "custom"
-  },
-  {
-    name: "sn",
-    label: "SN序列号"
-  },
-  {
-    name: "vender",
-    label: "厂家"
-  },
-  {
-    name: "extra",
-    label: "其他扩展信息"
   }
 ];
 export default {
@@ -210,6 +254,7 @@ export default {
         receiptList: [],
         contractList: []
       },
+      options: [],
       rules: {
         name: [
           {
@@ -397,6 +442,11 @@ export default {
         }
       })
     }
+    api.userList({name: '', id: ''}).then(rs => {
+      if (rs.code === 200 && rs.data.length > 0) {
+        this.options = rs.data
+      }
+    })
   },
   watch: {
     $route: {
@@ -410,4 +460,8 @@ export default {
   }
 }
 </script>
+<style lang="less" scoped>
+  
+</style>
+
 

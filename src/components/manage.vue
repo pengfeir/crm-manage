@@ -85,5 +85,6 @@ export default {
 }
 .view-container {
   background-color: #f8fafe;
+  min-width: 980px;
 }
 </style>

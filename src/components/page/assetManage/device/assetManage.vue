@@ -15,6 +15,12 @@
       </el-table-column>
       <el-table-column prop="name" label="设备名称" width="150">
       </el-table-column>
+      <el-table-column prop="no" label="采购价格">
+      </el-table-column>
+      <el-table-column prop="no" label="责任工程师">
+      </el-table-column>
+      <el-table-column prop="no" width="110" label="保修截止日期">
+      </el-table-column>
       <el-table-column prop="no" label="设备编号">
       </el-table-column>
       <el-table-column prop="acceptStatus" label="验收状态">
@@ -27,17 +33,17 @@
       </el-table-column> -->
       <el-table-column prop="dept" label="临床科室">
       </el-table-column>
-      <el-table-column prop="contractUrlList" label="采购合同照片" width="150">
+      <el-table-column prop="contractUrlList" label="采购合同照片" width="110">
         <template slot-scope="scope">
           <fileshow :type="'img'" :tailor="true" :isNoShowBtn="true" :fileurlList="scope.row.contractUrlList"></fileshow>
         </template>
       </el-table-column>
-      <el-table-column prop="receiptUrlList" label="票据照片" width="150">
+      <el-table-column prop="receiptUrlList" label="票据照片" width="100">
         <template slot-scope="scope">
           <fileshow :type="'img'" :tailor="true" :isNoShowBtn="true" :fileurlList="scope.row.receiptUrlList"></fileshow>
         </template>
       </el-table-column>
-      <el-table-column prop="manualUrlList" label="用户手册照片" width="150">
+      <el-table-column prop="manualUrlList" label="用户手册照片" width="110">
         <template slot-scope="scope">
           <fileshow :type="'img'" :tailor="true" :isNoShowBtn="true" :fileurlList="scope.row.manualUrlList"></fileshow>
         </template>
@@ -85,7 +91,7 @@
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="20" :layout="layout" :total="totalCount">
       </el-pagination>
     </div>
-    <el-dialog :title="'详情'" :visible.sync="popShow" class="ui_dialog_02 detail-log carditem" width="80%" :append-to-body="true">
+    <el-dialog :title="'设备详情'" :visible.sync="popShow" class="ui_dialog_02 detail-log carditem" width="80%" :append-to-body="true">
       <div>
         <el-row>
           <el-col v-for="item in arr" :key="item.id" :span="item.id == 'contractUrlList' || item.id == 'receiptUrlList' || item.id == 'manualUrlList'?24:6">
@@ -165,6 +171,21 @@ let arr = [
   {
     id: "acceptStatus",
     label: "验收状态",
+    value:''
+  },
+  {
+    id: "acceptStatus",
+    label: "采购价格",
+    value:''
+  },
+  {
+    id: "acceptStatus",
+    label: "责任工程师",
+    value:''
+  },
+  {
+    id: "acceptStatus",
+    label: "保修截止日期",
     value:''
   },
   {

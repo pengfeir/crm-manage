@@ -180,9 +180,10 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 @import "../style/mixin";
 .header_container {
+  min-width: 980px;
   height: 60px;
   display: flex;
   justify-content: space-between;
@@ -191,15 +192,15 @@ export default {
   box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
   background-color: #fff;
 }
-.el-autocomplete {
+.header_container /deep/ .el-autocomplete {
   margin-right: 10px;
 }
-.avator {
+.header_container /deep/ .avator {
   .wh(36px, 36px);
   border-radius: 50%;
   margin-right: 37px;
 }
-.el-dropdown-menu__item {
+.header_container /deep/ .el-dropdown-menu__item {
   text-align: center;
 }
 .ui_dialog_02 /deep/ .el-col:nth-child(4) label::before {
