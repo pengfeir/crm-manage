@@ -266,7 +266,7 @@ export default {
       this.$router.go(-1)
     },
     emitInfo(row) {
-      this.popTitle = "编辑资产故障";
+      this.popTitle = "编辑设备故障";
       this.detailId = row.id;
       Object.assign(this.infoQueryObj, row);
       this.filelistObj.faultList =

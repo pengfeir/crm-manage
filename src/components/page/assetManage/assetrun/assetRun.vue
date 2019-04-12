@@ -12,7 +12,7 @@
         <el-table v-loading="loading" :data="tableData" style="width: 100%" border stripe>
             <el-table-column type="index" width="50" label="序号">
             </el-table-column>
-            <el-table-column prop="assetStatus" label="资产状态">
+            <el-table-column prop="assetStatus" label="设备状态">
                 <template slot-scope="scope">
                     {{scope.row.assetStatus | filterAssetStatus}}
                 </template>
@@ -78,7 +78,7 @@ import api from "@/api/api";
 let schema = [
   {
     name: "assetStatus",
-    label: "资产状态",
+    label: "设备状态",
     comp: "el-select",
     props: {
       options: [
@@ -119,7 +119,7 @@ let schema = [
 let infoSchema = [
   {
     name: "assetStatus",
-    label: "资产状态",
+    label: "设备状态",
     comp: "el-select",
     props: {
       options: [
@@ -219,7 +219,7 @@ export default {
       });
       this.popShow = true;
       this.detailId = "";
-      this.popTitle = "新建资产运行";
+      this.popTitle = "新建设备运行";
     },
     prev(id) {
       let url = "createAssetMetrics";
@@ -239,13 +239,13 @@ export default {
       });
     },
     emitInfo(row) {
-      this.popTitle = "编辑资产运行";
+      this.popTitle = "编辑设备运行";
       this.detailId = row.id;
       Object.assign(this.infoQueryObj, row);
       this.popShow = true;
     },
     delInfo(row) {
-      this.$confirm("确定要删除该资产运行?记录", "提示", {
+      this.$confirm("确定要删除该设备运行记录?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"

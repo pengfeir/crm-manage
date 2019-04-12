@@ -44,7 +44,7 @@ import token from "@/plugins/getUploadToken";
 let schema = [
   {
     name: "name",
-    label: "资产名称"
+    label: "设备名称"
   },
   {
     name: "iotDeviceIds",
@@ -53,7 +53,7 @@ let schema = [
   },
   {
     name: "no",
-    label: "资产编号"
+    label: "设备编号"
   },
   {
     name: "acceptStatus",

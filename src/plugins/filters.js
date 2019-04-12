@@ -2,7 +2,7 @@
  * @Author: renpengfei
  * @Date: 2019-03-25 14:56:51
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-03-27 10:49:15
+ * @Last Modified time: 2019-04-12 15:53:07
  */
 /**
  * 设备装机状态
@@ -97,7 +97,7 @@ export const deviceStatus = kind => {
   }
 }
 /**
- * 资产状态
+ * 设备状态
  * @param {*} assetStatus
  */
 export const filterAssetStatus = assetStatus => {

@@ -62,14 +62,14 @@ const routerarr = [
         path: 'rolelist',
         component: RoleList,
         meta: {
-          name: '角色管理'
+          name: '权限管理'
         }
       },
       {
         path: 'roleadd',
         component: RoleAdd,
         meta: {
-          name: '角色管理'
+          name: '权限管理'
         }
       },
       {
@@ -90,84 +90,84 @@ const routerarr = [
         path: 'assetmanage',
         component: assetManage,
         meta: {
-          name: '设备'
+          name: '设备录入'
         }
       },
       {
         path: 'assetmanageadd',
         component: assetManageAdd,
         meta: {
-          name: '设备'
+          name: '设备录入'
         }
       },
       {
         path: 'assetfailure',
         component: assetFailure,
         meta: {
-          name: '设备故障'
+          name: '设备维修'
         }
       },
       {
         path: 'assetfailuradd',
         component: assetFailurAdd,
         meta: {
-          name: '设备故障'
+          name: '设备维修'
         }
       },
       {
         path: 'assetRun',
         component: assetRun,
         meta: {
-          name: '设备运行管理'
+          name: '设备监测'
         }
       },
       {
         path: 'assetRunSee',
         component: assetRunEcharts,
         meta: {
-          name: '设备运行管理'
+          name: '设备监测'
         }
       },
       {
         path: 'maintenanceMain',
         component: maintenanceMain,
         meta: {
-          name: '保养'
+          name: '设备保养'
         }
       },
       {
         path: 'maintenanceMainadd',
         component: maintenanceMainAdd,
         meta: {
-          name: '保养'
+          name: '设备保养'
         }
       },
       {
         path: 'maintenanceQa',
         component: maintenanceQa,
         meta: {
-          name: '质控'
+          name: '设备质控'
         }
       },
       {
         path: 'maintenanceQaAdd',
         component: maintenanceQaAdd,
         meta: {
-          name: '质控'
+          name: '设备质控'
         }
       },
       {
         path: 'complaint',
         component: complaint,
         meta: {
-          name: '投诉'
+          name: '不良事件/投诉'
         }
       },
       {
         path: 'complaintadd',
         component: complaintAdd,
         meta: {
-          name: '投诉'
+          name: '不良事件/投诉'
         }
       },
       {
@@ -188,14 +188,14 @@ const routerarr = [
         path: 'houseAdd',
         component: houseAdd,
         meta: {
-          name: '房间管理'
+          name: '物联网络配置'
         }
       },
       {
         path: 'house',
         component: house,
         meta: {
-          name: '房间管理'
+          name: '物联网络配置'
         }
       }
     ]

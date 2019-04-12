@@ -66,6 +66,7 @@ export default {
   top: -100px;
   left: 0;
   p.title {
+    text-shadow: 0 0 4px #666;
     font-size: 34px;
     color: #000;
   }

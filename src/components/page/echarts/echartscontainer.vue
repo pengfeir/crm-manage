@@ -7,7 +7,7 @@
     <el-row>
       <el-col :span="24">
         <el-card class="">
-            资产状态：{{info.assetStatus | filterAssetStatus}}
+            设备状态：{{info.assetStatus | filterAssetStatus}}
             时间：{{time}}
         </el-card>
       </el-col>

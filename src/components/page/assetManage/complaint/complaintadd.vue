@@ -23,7 +23,7 @@ import api from "@/api/api";
 let infoSchema = [
   {
     name: "assetId",
-    label: "资产名称",
+    label: "设备名称",
     comp: "assets-select"
   },
   {

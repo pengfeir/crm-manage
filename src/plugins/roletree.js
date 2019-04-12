@@ -13,7 +13,7 @@ var menuArr = [
         level: 2,
         childMenus: []
       }, {
-        menuName: '角色管理',
+        menuName: '权限管理',
         menuUrl: '/page/rolelist',
         auth: 'rolelist',
         level: 2,
@@ -34,37 +34,37 @@ var menuArr = [
     level: 1,
     childMenus: [
       {
-        menuName: '设备',
+        menuName: '设备录入',
         menuUrl: '/page/assetmanage',
         auth: 'assetmanage',
         level: 2,
         childMenus: []
       }, {
-        menuName: '设备运行管理',
+        menuName: '设备监测',
         menuUrl: '/page/assetRun',
         auth: 'assetRun',
         level: 2,
         childMenus: []
       }, {
-        menuName: '设备故障',
+        menuName: '设备维修',
         menuUrl: '/page/assetfailure',
         auth: 'assetfailure',
         level: 2,
         childMenus: []
       }, {
-        menuName: '保养',
+        menuName: '设备保养',
         menuUrl: '/page/maintenanceMain',
         auth: 'maintenanceMain',
         level: 2,
         childMenus: []
       }, {
-        menuName: '质控',
+        menuName: '设备质控',
         menuUrl: '/page/maintenanceQa',
         auth: 'maintenanceQa',
         level: 2,
         childMenus: []
       }, {
-        menuName: '投诉',
+        menuName: '不良事件/投诉',
         menuUrl: '/page/complaint',
         level: 2,
         auth: 'complaint',
@@ -79,7 +79,7 @@ var menuArr = [
     level: 1,
     childMenus: [
       {
-        menuName: '房间管理',
+        menuName: '物联网络配置',
         menuUrl: '/page/house',
         auth: 'house',
         level: 2,

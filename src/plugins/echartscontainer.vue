@@ -3,7 +3,7 @@
     <el-row>
       <el-col :span="24">
         <el-card class="">
-            资产状态：正常
+            设备状态：正常
         </el-card>
       </el-col>
     </el-row>

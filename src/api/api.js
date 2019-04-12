@@ -57,25 +57,25 @@ function userUpdate (params) { // 更新用户信息
 function updatePassword (params) { // 修改密码
   return axios.post('/manage/admin/updatePassword', params)
 }
-function assetList (params) { // 资产列表
+function assetList (params) { // 设备列表
   return axios.post('/manage/asset/list', params)
 }
-function assetFindById (params) { // 根据id获取资产信息
+function assetFindById (params) { // 根据id获取设备信息
   return axios.post('/manage/asset/findById', params)
 }
-function deleteAsset (params) { // 删除资产列表
+function deleteAsset (params) { // 删除设备列表
   return axios.post('/manage/asset/delete', params)
 }
-function createAsset (params) { // 创建资产列表
+function createAsset (params) { // 创建设备列表
   return axios.post('/manage/asset/create', params)
 }
-function updateAsset (params) { // 更新资产列表
+function updateAsset (params) { // 更新设备列表
   return axios.post('/manage/asset/update', params)
 }
-function faultList (params) { // 资产故障列表
+function faultList (params) { // 设备故障列表
   return axios.post('/manage/fault/list', params)
 }
-function faultFindById (params) { // 通过id获取资产故障信息
+function faultFindById (params) { // 通过id获取设备故障信息
   return axios.post('/manage/asset/findById', params)
 }
 function createFault (params) { // 创建故障列表
@@ -117,7 +117,7 @@ function deleteComplaint (params) { // 删除投诉
 function updateComplaint (params) { // 更新投诉
   return axios.post('/manage/complaint/update', params)
 }
-function unPageList (params) { // 无分页资产列表
+function unPageList (params) { // 无分页列表
   return axios.post('/manage/asset/unPageList', params)
 }
 function createRoom (params) { // 创建房间
@@ -153,7 +153,7 @@ function unPageiotDeviceList (params) { // 物联设备列表
 function findById (params) { // 查询物联设备信息
   return axios.post('/manage/iotDevice/findById', params)
 }
-function createAssetMetrics (params) { // 创建资产运行
+function createAssetMetrics (params) { // 创建设备运行
   return axios.post('/manage/assetMetrics/create', params)
 }
 function deleteAssetMetrics (params) { // 删除物联
