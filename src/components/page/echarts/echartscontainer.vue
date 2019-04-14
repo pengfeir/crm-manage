@@ -7,9 +7,9 @@
     <el-row>
       <el-col :span="24">
         <el-card class="">
-            设备名称：<span class="col-title">{{'设备111'}}</span>
-            设备型号：<span class="col-title">{{'设备111'}}</span>
-            设备SN序列号：<span class="col-title">{{'设备111'}}</span>
+            设备名称：<span class="col-title">{{'X光机'}}</span>
+            设备型号：<span class="col-title">{{'LT-480'}}</span>
+            设备SN序列号：<span class="col-title">{{'SERT245-WWER-EER$%'}}</span>
             设备状态：<span class="col-title"
              :class="{
                 red:info.assetStatus == 10,
