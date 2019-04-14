@@ -15,6 +15,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.iconshouye:before {
+  content: "\e61a";
+}
 .iconzuzhijigou:before {
   content: "\e63c";
 }

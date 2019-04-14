@@ -28,12 +28,8 @@
       </el-table-column>
       <el-table-column prop="mtime" align="center" label="更新时间" width="180">
       </el-table-column>
-      <!-- <el-table-column prop="ctime" label="创建时间" width="180">
+      <el-table-column prop="ctime" align="center" label="创建时间" width="180">
       </el-table-column>
-      <el-table-column prop="orgName" label="机构" width="180">
-      </el-table-column>
-      <el-table-column prop="userId" label="创建者ID" width="180">
-      </el-table-column> -->
       <el-table-column prop="name" label="操作" align="center" width="250">
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-search" @click="seeDetail(scope.row)">详情</el-button>
@@ -46,6 +42,23 @@
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="20" :layout="layout" :total="totalCount">
       </el-pagination>
     </div>
+    <el-dialog :title="'保养详情'" :visible.sync="popShow" class="ui_dialog_02 detail-log carditem" width="80%" :append-to-body="true">
+      <div>
+        <el-row>
+          <el-col v-for="item in arr" :key="item.id" :span="item.id == 'urlList'?24:6">
+            <div v-if="item.id == 'urlList'">
+               <label>{{item.label}}</label>: <span><fileshow class="maxsize" :type="'img'" :fileurlList="item.value" :isNoShowBtn="false" :tailor="false"></fileshow></span>
+            </div>
+            <div v-else>
+              <label>{{item.label}}</label>: <span>{{item.value}}</span>
+            </div>
+          </el-col>
+        </el-row>
+      </div>
+      <div class="log-btn-container">
+        <el-button @click="popShow = false">取消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -98,12 +111,56 @@ let schema = [
     comp: "custom"
   }
 ];
+let arr = [
+   {
+    id: "assetName",
+    label: "设备名称",
+    value: ''
+  },
+  {
+    id: "dept",
+    label: "事件发生的科室",
+    value: ''
+  },
+  {
+    id: "descr",
+    label: "事件描述",
+    value: ''
+  },
+  {
+    id: "levelName",
+    label: "严重类别",
+    value: ''
+  },
+  {
+    id: "extra",
+    label: "其他扩展信息",
+    value: ''
+  },
+  {
+    id: "mtime",
+    label: "更新时间",
+    value: ''
+  },
+  {
+    id: "ctime",
+    label: "创建时间",
+    value: ''
+  },
+  {
+    id: "urlList",
+    label: "投诉资料",
+    value: ''
+  }
+]
 export default {
   mixins: [list, token],
   data() {
     var obj = this.createObjFromSchema(schema);
     return {
       api,
+      arr,
+      popShow: false,
       querySchema: schema,
       queryObj: obj,
       tableData: [],
@@ -111,8 +168,11 @@ export default {
     };
   },
   methods: {
-    seeDetail() {
-
+    seeDetail(row) {
+      arr.forEach(item => {
+        item.value = row[item.id] || ''
+      })
+      this.popShow = true
     },
     addAsset() {
       this.$router.push('/page/complaintadd')

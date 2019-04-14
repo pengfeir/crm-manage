@@ -41,7 +41,7 @@
           </el-tooltip>
         </template> -->
       </el-table-column>
-      <el-table-column prop="name" label="操作">
+      <el-table-column prop="name" align="center" label="操作">
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-edit" @click="emitInfo(scope.row)">编辑</el-button>
           <el-button type="text" class="delete-btn-color"  icon="el-icon-delete" @click="delInfo(scope.row)">删除</el-button>

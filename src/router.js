@@ -42,7 +42,10 @@ const routerarr = [
     children: [
       {
         path: 'home',
-        component: Home
+        component: Home,
+        meta: {
+          name: '数据概览'
+        }
       },
       {
         path: 'agencylist',

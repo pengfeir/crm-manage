@@ -1,6 +1,6 @@
 <template>
     <div>
-        <ever-bread-crumb :showTitle="'设备'"></ever-bread-crumb>
+        <ever-bread-crumb :showTitle="'设备管理'"></ever-bread-crumb>
         <div class="scroll">
             <ever-form2 :schema="querySchema" v-model="queryObj" ref="form" class="package-sale" labelWidth="180px" label-position="right" :rules="rules">
                 <template slot="urlList">
@@ -100,10 +100,7 @@ export default {
   },
   methods: {
     handleClose() {
-      Object.keys(this.filelistObj).map(v => {
-        this.filelistObj[v] = [];
-      });
-      this.popShow = false;
+      this.$router.go(-1);
     },
 
     //删除数组里面删除的图片地址

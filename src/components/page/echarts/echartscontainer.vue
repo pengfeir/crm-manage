@@ -7,7 +7,17 @@
     <el-row>
       <el-col :span="24">
         <el-card class="">
-            设备状态：{{info.assetStatus | filterAssetStatus}}
+            设备名称：<span class="col-title">{{'设备111'}}</span>
+            设备型号：<span class="col-title">{{'设备111'}}</span>
+            设备SN序列号：<span class="col-title">{{'设备111'}}</span>
+            设备状态：<span class="col-title"
+             :class="{
+                red:info.assetStatus == 10,
+                green:info.assetStatus == 30,
+                blur:info.assetStatus == 20,
+                yellow: info.assetStatus == 40
+              }"
+             >{{info.assetStatus | filterAssetStatus}}</span>
             时间：{{time}}
         </el-card>
       </el-col>
@@ -216,6 +226,25 @@ export default {
   .diy-btn-style {
     padding: 3px 4px;
     margin: 8px;
+  }
+  .col-title {
+    margin-right:10px;
+  }
+  // 待机
+  .green {
+    color:#00FF00;
+  }
+  // 关机
+  .red {
+    color: red;
+  }
+  // 激活
+  .yellow {
+    color: yellow;
+  }
+  // 开机
+  .blur {
+    color: blue;
   }
 </style>
 

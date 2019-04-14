@@ -140,7 +140,7 @@ let schema = [
   },
   {
     label: "采购价格",
-    name: "vender",
+    name: "purchase_price",
     span: 12
   },
   {
@@ -367,6 +367,7 @@ export default {
             this.imgObj.contractImg.length > 0
               ? JSON.stringify(this.imgObj.contractImg)
               : "";
+          
           api[url](params).then(rs => {
             this.popShow = false;
             if (rs.code === 200) {

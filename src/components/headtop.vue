@@ -1,7 +1,10 @@
 <template>
 	<div class="header_container">
     <el-button type="text" icon="el-icon-menu" style="font-size:30px;" @click="emitCollapse"></el-button>
-		<span style="position:absolute;margin-left:50px;">{{$route.meta.name}}</span>
+    <span style="position:absolute;margin-left:45px;">
+      <el-button type="text" @click="goHome" style="font-size:16px;color:#000;">首页</el-button>
+      / <span>{{$route.meta.name}}</span>
+    </span>
 		<el-dropdown @command="handleCommand" menu-align='start'>
 			<div style="cursor: pointer;">欢迎您, {{currentUser.nickName || '--'}}</div>
 			<el-dropdown-menu slot="dropdown">
@@ -113,6 +116,9 @@ export default {
     }
   },
   methods: {
+    goHome () {
+      this.$router.push('/page/home');
+    },
     querySearch(queryString, cb) {
       var restaurants = this.restaurants;
       var results = queryString

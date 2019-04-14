@@ -62,6 +62,26 @@
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="20" :layout="layout" :total="totalCount">
       </el-pagination>
     </div>
+    <el-dialog :title="'质控详情'" :visible.sync="popShow" class="ui_dialog_02 detail-log carditem" width="80%" :append-to-body="true">
+      <div>
+        <el-row>
+          <el-col v-for="item in arr" :key="item.id" :span="item.id == 'reportUrlList'?24:6">
+            <div v-if="item.id == 'reportUrlList'">
+               <label>{{item.label}}</label>: <span><fileshow class="maxsize" :type="'img'" :fileurlList="item.value" :isNoShowBtn="false" :tailor="false"></fileshow></span>
+            </div>
+            <div v-else-if="item.id == 'isDedicatedAppendant'">
+              <label>{{item.label}}</label>: <span>{{item.value | getAppendant}}</span>
+            </div>
+            <div v-else>
+              <label>{{item.label}}</label>: <span>{{item.value}}</span>
+            </div>
+          </el-col>
+        </el-row>
+      </div>
+      <div class="log-btn-container">
+        <el-button @click="popShow = false">取消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -94,6 +114,58 @@ let schema = [
     comp: "custom"
   }
 ];
+let arr = [
+  {
+    id: "assetName",
+    label: "设备名称",
+    value: ''
+  },
+  {
+    id: "actionUserId",
+    label: "实际质控人",
+    value: ''
+  },
+  {
+    id: "vender",
+    label: "服务提供方",
+    value: ''
+  },
+  {
+    id: "actionDate",
+    label: "质控实际发生时间",
+    value: ''
+  },
+  {
+    id: "planDate",
+    label: "质控计划时间",
+    value: ''
+  },
+  {
+    id: "mtime",
+    label: "更新时间",
+    value: ''
+  },
+  {
+    id: "ctime",
+    label: "创建时间",
+    value: ''
+  },
+  {
+    id: "contact",
+    label: "联系方式",
+    value: ''
+  },
+  {
+    id: "extra",
+    label: "其他扩展信息",
+    value: ''
+  },
+  {
+    id: "reportUrlList",
+    label: "质控报告",
+    value: ''
+  }
+]
 export default {
   mixins: [list, token],
   data() {
@@ -101,16 +173,21 @@ export default {
     obj.kind = 'qa'
     return {
       api,
+      arr,
       querySchema: schema,
       queryObj: obj,
       tableData: [],
       options: [],
-      listApiName: "mainList"
+      listApiName: "mainList",
+      popShow: false
     };
   },
   methods: {
     seeDetail (row) {
-
+      arr.forEach(item => {
+        item.value = row[item.id] || ''
+      })
+      this.popShow = true
     },
     addAsset() {
       this.$router.push('/page/maintenanceQaAdd')
