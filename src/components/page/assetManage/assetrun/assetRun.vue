@@ -23,6 +23,7 @@
           <el-button @click="query">查询</el-button>
         </template>
         <template slot="rightbtn">
+          <el-button type="primary" @click="seeEcharts">数据概览</el-button>
         </template>
       </ever-form2>
     </div>
@@ -153,6 +154,9 @@ export default {
     },
     seeDetails (row) {
       this.$router.push('/page/assetRunSee?id=' + row.macAddr)
+    },
+    seeEcharts () {
+      this.$router.push('/page/home')
     }
   },
   watch: {

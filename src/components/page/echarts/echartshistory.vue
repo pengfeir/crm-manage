@@ -187,7 +187,8 @@ export default {
       handler: function (val) {
         if (val) {
           this.$nextTick(_ => {
-            this.init()
+            this.init();
+            this.queryObj.type = this.type;
           }) 
           this.visibile = true
         } else {

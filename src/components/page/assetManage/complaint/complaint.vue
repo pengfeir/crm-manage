@@ -24,7 +24,7 @@
           <fileshow :type="'img'" :tailor="true" :isNoShowBtn="true" :fileurlList="scope.row.urlList"></fileshow>
         </template>
       </el-table-column>
-      <el-table-column prop="extra" label="其他扩展信息">
+      <el-table-column prop="extra" width="120" label="其他扩展信息">
       </el-table-column>
       <el-table-column prop="mtime" align="center" label="更新时间" width="180">
       </el-table-column>

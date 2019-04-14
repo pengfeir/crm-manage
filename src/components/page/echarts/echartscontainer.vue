@@ -31,37 +31,37 @@
       </el-col>
       <el-col :span="12">
         <el-card class="demo_css">
-          <el-button type="primary">历史数据</el-button>
+          <el-button type="primary" @click="seeHistory('2')">历史数据</el-button>
           <echarts-module key="dianya" :title="'输入电压'" :eData='inputVObj' :unit="'V'"></echarts-module>
         </el-card>
       </el-col>
       <el-col :span="12">
         <el-card class="demo_css">
-          <el-button type="primary">历史数据</el-button>
+          <el-button type="primary" @click="seeHistory('3')">历史数据</el-button>
           <echarts-module key="gonglv" :title="'有功功率'" :eData='realPowerObj' :unit="'kW/H'"></echarts-module>
         </el-card>
       </el-col>
       <el-col :span="12">
         <el-card class="demo_css">
-          <el-button type="primary">历史数据</el-button>
+          <el-button type="primary" @click="seeHistory('4')">历史数据</el-button>
           <echarts-module key="gonglv" :title="'功率因数'" :eData='powerFactorObj' :unit="'--'"></echarts-module>
         </el-card>
       </el-col>
       <el-col :span="12">
         <el-card class="demo_css">
-          <el-button type="primary">历史数据</el-button>
+          <el-button type="primary" @click="seeHistory('5')">历史数据</el-button>
           <echarts-module key="gonglvyinshu" :title="'温度'" :eData='temperatureObj' :unit="'°C'"></echarts-module>
         </el-card>
       </el-col>
       <el-col :span="12">
         <el-card class="demo_css">
-          <el-button type="primary">历史数据</el-button>
+          <el-button type="primary" @click="seeHistory('6')">历史数据</el-button>
           <echarts-module key="wendu" :title="'电源频率'" :eData='powerHzObj' :unit="'Hz'"></echarts-module>
         </el-card>
       </el-col>
       <el-col :span="12">
         <el-card class="demo_css">
-          <el-button type="primary">历史数据</el-button>
+          <el-button type="primary" @click="seeHistory('7')">历史数据</el-button>
           <echarts-module key="energy" :title="'电能计量'" :eData='energyObj' :unit="'kW'"></echarts-module>
         </el-card>
       </el-col>
@@ -98,7 +98,8 @@ export default {
       info: {
         time: '',
         assetStatus: ''
-      }
+      },
+      len: 0
     }
   },
   methods: {
@@ -147,29 +148,40 @@ export default {
       // this.initData(this.powerHzObj)
       // this.initData(this.energyObj)
     },
+    initDate () {
+      let date = new Date(new Date().getTime() + this.len * 5000);
+      let time = ''
+      let minutes = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes()
+      let seconds = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds()
+      time = date.getHours() + ':' + minutes + ':' + seconds
+      let month = (date.getMonth() + 1 < 10 ? '0' : '') + (date.getMonth() + 1)
+      let dateval = (date.getDate() < 10 ? '0' : '') + date.getDate()
+      let curTime = date.getFullYear() + '-' + month + '-' + dateval
+      return curTime + ' ' + time
+    },
     initData (data) {
-      let time = data.mtime.split(' ')[1]
+      let time = this.initDate().split(' ')[1] //data.mtime.split(' ')[1]
       if (this.inputIObj.x !== time) {
         this.inputIObj.x = time
-        this.inputIObj.y = data.inputI
+        this.inputIObj.y = Math.floor ( Math.random ( ) * 20 + 1 ) // data.inputI
 
         this.inputVObj.x = time
-        this.inputVObj.y = data.inputV
+        this.inputVObj.y = Math.floor ( Math.random ( ) * 20 + 1 ) //  data.inputV
 
         this.realPowerObj.x = time
-        this.realPowerObj.y = data.realPower
+        this.realPowerObj.y = Math.floor ( Math.random ( ) * 20 + 1 ) //  data.realPower
 
         this.powerFactorObj.x = time
-        this.powerFactorObj.y = data.powerFactor
+        this.powerFactorObj.y = Math.floor ( Math.random ( ) * 20 + 1 ) //  data.powerFactor
 
         this.temperatureObj.x = time
-        this.temperatureObj.y = data.temperature
+        this.temperatureObj.y = Math.floor ( Math.random ( ) * 20 + 1 ) //  data.temperature
 
         this.powerHzObj.x = time
-        this.powerHzObj.y = data.powerHz
+        this.powerHzObj.y = Math.floor ( Math.random ( ) * 20 + 1 ) //  data.powerHz
 
         this.energyObj.x = time
-        this.energyObj.y = data.energy
+        this.energyObj.y = Math.floor ( Math.random ( ) * 20 + 1 ) //  data.energy
       }
     }
   },
