@@ -24,6 +24,7 @@ const complaint = r => require.ensure([], () => r(require('@/components/page/ass
 const complaintAdd = r => require.ensure([], () => r(require('@/components/page/assetManage/complaint/complaintadd.vue')), 'complaintadd')
 const assetRun = r => require.ensure([], () => r(require('@/components/page/assetManage/assetrun/assetRun.vue')), 'assetRun')
 const assetRunEcharts = r => require.ensure([], () => r(require('@/components/page/assetManage/assetrun/assetecharts.vue')), 'assetecharts')
+const assetDetail = r => require.ensure([], () => r(require('@/components/page/assetManage/assetrun/assetdetail.vue')), 'assetdetail')
 const device = r => require.ensure([], () => r(require('@/components/page/device/device.vue')), 'device')
 const deviceAdd = r => require.ensure([], () => r(require('@/components/page/device/deviceAdd.vue')), 'deviceAdd')
 const houseAdd = r => require.ensure([], () => r(require('@/components/page/device/houseAdd.vue')), 'houseAdd')
@@ -120,6 +121,13 @@ const routerarr = [
       {
         path: 'assetRun',
         component: assetRun,
+        meta: {
+          name: '设备监测'
+        }
+      },
+      {
+        path: 'assetdetail',
+        component: assetDetail,
         meta: {
           name: '设备监测'
         }

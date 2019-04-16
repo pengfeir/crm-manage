@@ -1,38 +1,35 @@
 <template>
   <div class="layout_inner">
+    <el-button @click="go" class="onily-btn-style"><i class="el-icon-arrow-left"></i></el-button>
+    <span>{{'设备数据监测'}}</span>
     <div class="main-head">
-      <ever-form2 :schema="querySchema" v-model="queryObj" @query="query" ref="form" class="package-sale" :info="true" :labelWidth="140" label-position="right" :nosubmit="true" :inline="true">
-        <template slot="keys">
-            <el-row style="margin-left:20px;">
-              <el-col :span="12">
-                <el-select v-model="queryObj.keys" @change="onChange" style="width:150px;">
-                  <el-option
-                    v-for="item in options"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id">
-                  </el-option>
-                </el-select>
-              </el-col>
-              <el-col :span="12">
-                <el-input v-model="queryObj.value"></el-input>  
-              </el-col>
-            </el-row>
-        </template>
-        <template slot="btn">
-          <el-button @click="query">查询</el-button>
-        </template>
-        <template slot="rightbtn">
-          <el-button style="margin-right:20px;" @click="exportExcel">导出</el-button>
-          <el-button type="primary" @click="seeEcharts">数据概览</el-button>
-        </template>
-      </ever-form2>
+      <el-row>
+        <!-- <el-col :span="20">
+          设备名称：<span class="col-title">{{'X光机'}}</span>
+          设备型号：<span class="col-title">{{'LT-480'}}</span>
+          设备SN序列号：<span class="col-title">{{'SERT245-WWER-EER$%'}}</span>
+          设备状态：<span class="col-title"
+            :class="{
+              red:info.assetStatus == 10,
+              green:info.assetStatus == 30,
+              blur:info.assetStatus == 20,
+              yellow: info.assetStatus == 40
+            }"
+            >{{info.assetStatus | filterAssetStatus}}</span>
+        </el-col> -->
+        <el-col :span="24">
+          <div class="el-form" style="border:none;text-align:right;">
+            <el-button @click="exportExcel">导出</el-button>
+            <el-button type="primary" @click="seeDetails">数据概览</el-button>
+          </div>
+        </el-col>
+      </el-row>
     </div>
     <div class="table-contant">
       <el-table v-loading="loading" :data="tableData" style="width: 100%" height="100%" border stripe>
-          <el-table-column type="index" width="50" label="序号">
+          <el-table-column type="index" width="50" label="序号" fixed>
           </el-table-column>
-          <el-table-column prop="temperature" label="设备名称" width="100">
+          <el-table-column prop="temperature" label="设备名称" width="100" fixed>
           </el-table-column>
           <el-table-column prop="temperature" label="设备型号" width="100">
           </el-table-column>
@@ -66,18 +63,6 @@
           <el-table-column prop="realPower" label="有功功率" width="80">
           </el-table-column>
           <el-table-column prop="mtime" label="更新时间" width="180">
-          </el-table-column>
-          <el-table-column prop="ctime" label="创建时间"  width="180">
-          </el-table-column>
-          <el-table-column prop="extra" label="其他扩展信息" width="150">
-          </el-table-column>
-          <!-- 
-          <el-table-column prop="userId" label="创建者ID" width="180">
-          </el-table-column> -->
-          <el-table-column prop="name" align="center" label="操作" fixed="right" width="100">
-            <template slot-scope="scope">
-              <el-button type="text" icon="el-icon-search" @click="seeDetails(scope.row)">查看</el-button>
-            </template>
           </el-table-column>
       </el-table>
     </div>
@@ -139,65 +124,16 @@ import list from "@/plugins/list";
 import api from "@/api/api";
 import FileSaver from 'file-saver';
 import XLSX from 'xlsx';
-let schema = [
-  {
-    name: "assetStatus",
-    label: "设备状态",
-    comp: "el-select",
-    props: {
-      options: [
-        {
-          id: "10",
-          name: "关机"
-        },
-        {
-          id: "20",
-          name: "开机"
-        },
-        {
-          id: "30",
-          name: "待机"
-        },
-        {
-          id: "40",
-          name: "激活"
-        }
-      ]
-    }
-  },
-  {
-    name: "keys",
-    label: "",
-    comp: 'custom'
-  },
-  {
-    name: "btn",
-    label: "",
-    comp: "custom"
-  },
-  {
-    label: "",
-    name: "rightbtn",
-    comp: "custom"
-  }
-];
 export default {
   mixins: [list],
   data() {
-    var obj = this.createObjFromSchema(schema);
-    obj.value = '';
-    obj.keys = 1;
     return {
       api,
-      querySchema: schema,
-      queryObj: obj,
       tableData: [],
-      options: [
-        {id: 1, name: 'SN序列号'},
-        {id: 2, name: 'MAC地址'},
-        {id: 3, name: '资产编号'}
-      ],
-      listApiName: "assetMetricsList"
+      listApiName: "assetMetricsList",
+      info: {
+
+      }
     };
   },
   methods: {
@@ -211,11 +147,14 @@ export default {
          } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
          return wbout
     },
+    go () {
+      this.$router.go(-1);
+    },
     onChange () {
       this.queryObj.value = ''
     },
     seeDetails (row) {
-      this.$router.push('/page/assetdetail?id=' + row.macAddr)
+      this.$router.push('/page/assetRunSee?id=' + row.macAddr)
     },
     seeEcharts () {
       this.$router.push('/page/home')
@@ -238,6 +177,28 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+  // 待机
+  .green {
+    color:#00FF00;
+  }
+  // 关机
+  .red {
+    color: red;
+  }
+  // 激活
+  .yellow {
+    color: yellow;
+  }
+  // 开机
+  .blur {
+    color: blue;
+  }
+  .col-title {
+    margin-right:20px;
+  }
+  .onily-btn-style {
+    padding:5px;
+    margin-bottom: 20px;
+    margin-right: 10px;
+  }
 </style>
-
-

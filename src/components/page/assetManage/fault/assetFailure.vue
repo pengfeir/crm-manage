@@ -11,18 +11,13 @@
         :labelWidth="140"
         label-position="right"
         :nosubmit="true"
-        :inline="true"
-      >
+        :inline="true">
         <template slot="btn">
-          <el-button
-            @click="query"
-          >查询</el-button>
+          <el-button @click="query">查询</el-button>
         </template>
         <template slot="rightbtn">
-          <el-button
-            type="primary"
-            @click="addAsset"
-          >新建</el-button>
+          <el-button style="margin-right:20px;" @click="exportExcel">导出</el-button>
+          <el-button type="primary" @click="addAsset">新建</el-button>
         </template>
       </ever-form2>
     </div>
@@ -39,24 +34,13 @@
       </el-table-column>
       <el-table-column
         prop="assetName"
-        label="设备名称"
-      >
+        label="设备名称">
       </el-table-column>
-      <!-- <el-table-column
-        prop="contact"
-        label="联系方式"
-      >
-      </el-table-column> -->
       <el-table-column
         prop="dept"
         label="发生科室"
       >
       </el-table-column>
-      <!-- <el-table-column
-        prop="faultAt"
-        label="故障发生时间"
-      >
-      </el-table-column> -->
       <el-table-column
         prop="fixStep"
         label="维修进度"
@@ -117,7 +101,127 @@
           ></fileshow>
         </template>
       </el-table-column>
-      <!-- <el-table-column
+      <el-table-column
+        prop="name"
+        label="操作"
+        align="center"
+        width="250">
+        <template slot-scope="scope">
+          <el-button
+            type="text"
+            icon="el-icon-search"
+            @click="seeDetail(scope.row)"
+          >详情</el-button>
+          <el-button
+            type="text"
+            icon="el-icon-edit"
+            @click="emitInfo(scope.row)"
+          >编辑</el-button>
+          <el-button
+            type="text"
+            class="delete-btn-color"
+            icon="el-icon-delete"
+            @click="delInfo(scope.row)"
+          >删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <div class="page-container">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="pageSizes"
+        :page-size="20"
+        :layout="layout"
+        :total="totalCount">
+      </el-pagination>
+    </div>
+    <div style="height: 50px;visibility: hidden;overflow: hidden;">
+      <el-table
+      id="excelTable"
+      :data="tableData"
+      style="width: 100%"
+      border
+      stripe>
+      <el-table-column
+        type="index"
+        width="50"
+        label="序号">
+      </el-table-column>
+      <el-table-column
+        prop="assetName"
+        label="设备名称"
+      >
+      </el-table-column>
+      <el-table-column
+        prop="contact"
+        label="联系方式"
+      >
+      </el-table-column>
+      <el-table-column
+        prop="dept"
+        label="发生科室">
+      </el-table-column>
+      <el-table-column
+        prop="faultAt"
+        label="故障发生时间">
+      </el-table-column>
+      <el-table-column
+        prop="fixStep"
+        label="维修进度">
+        <template slot-scope="scope">
+          {{scope.row.fixStep | stepStatus}}
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="kind"
+        label="故障类别">
+      </el-table-column>
+      <el-table-column
+        prop="offerPrice"
+        label="维修报价">
+      </el-table-column>
+      <el-table-column
+        prop="faultUrlList"
+        label="故障照片"
+        width="150">
+        <template slot-scope="scope">
+          <fileshow
+            :type="'img'"
+            :tailor="true"
+            :isNoShowBtn="true"
+            :fileurlList="scope.row.faultUrlList"
+          ></fileshow>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="contractUrlList"
+        label="维修合同照片"
+        width="150">
+        <template slot-scope="scope">
+          <fileshow
+            :type="'img'"
+            :tailor="true"
+            :isNoShowBtn="true"
+            :fileurlList="scope.row.contractUrlList"
+          ></fileshow>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="receiptUrlList"
+        label="票据照片"
+        width="150">
+        <template slot-scope="scope">
+          <fileshow
+            :type="'img'"
+            :tailor="true"
+            :isNoShowBtn="true"
+            :fileurlList="scope.row.receiptUrlList"
+          ></fileshow>
+        </template>
+      </el-table-column>
+      <el-table-column
         prop="reporter"
         label="上报人信息"
         width="180"
@@ -158,44 +262,8 @@
         label="创建者ID"
         width="180"
       >
-      </el-table-column> -->
-      <el-table-column
-        prop="name"
-        label="操作"
-        align="center"
-        width="250"
-      >
-        <template slot-scope="scope">
-          <el-button
-            type="text"
-            icon="el-icon-search"
-            @click="seeDetail(scope.row)"
-          >详情</el-button>
-          <el-button
-            type="text"
-            icon="el-icon-edit"
-            @click="emitInfo(scope.row)"
-          >编辑</el-button>
-          <el-button
-            type="text"
-            class="delete-btn-color"
-            icon="el-icon-delete"
-            @click="delInfo(scope.row)"
-          >删除</el-button>
-        </template>
       </el-table-column>
-    </el-table>
-    <div class="page-container">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="pageSizes"
-        :page-size="20"
-        :layout="layout"
-        :total="totalCount"
-      >
-      </el-pagination>
+      </el-table>
     </div>
     <el-dialog
       :title="'详情'"
@@ -204,7 +272,7 @@
       width="80%"
       :close-on-click-modal="false"
       :append-to-body="true"
-    >
+      >
       <div>
         <el-row>
           <el-col
@@ -241,6 +309,8 @@
 import list from "@/plugins/list";
 import token from "@/plugins/getUploadToken";
 import api from "@/api/api";
+import FileSaver from 'file-saver';
+import XLSX from 'xlsx';
 let options = [
   {
     id: "unknown",
@@ -395,6 +465,16 @@ export default {
     };
   },
   methods: {
+    exportExcel () {
+      /* generate workbook object from table */
+         var wb = XLSX.utils.table_to_book(document.querySelector('#excelTable'))
+         /* get binary string as output */
+         var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+         try {
+             FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '设备维修.xlsx')
+         } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
+         return wbout
+    },
     seeDetail(row) {
       arr.forEach(item => {
         item.value = row[item.id] || "";

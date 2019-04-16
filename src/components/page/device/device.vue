@@ -6,6 +6,7 @@
           <el-button @click="query">查询</el-button>
         </template>
         <template slot="rightbtn">
+          <el-button style="margin-right:20px;" @click="exportExcel">导出</el-button>
           <el-button type="primary" @click="addAsset">新建</el-button>
         </template>
       </ever-form2>
@@ -49,10 +50,40 @@
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="20" :layout="layout" :total="totalCount">
       </el-pagination>
     </div>
+    <div style="height: 50px;visibility: hidden;overflow: hidden;">
+     <el-table id="excelTable" :data="tableData" style="width: 100%" border stripe max-height="650">
+      <el-table-column type="index" width="50" label="序号">
+      </el-table-column>
+      <el-table-column prop="macAddr" label="MAC地址" width="180">
+      </el-table-column>
+      <el-table-column prop="model" label="设备型号">
+      </el-table-column>
+      <el-table-column prop="kind" label="物联设备类别" width="180">
+        <template slot-scope="scope">
+          {{scope.row.kind | deviceStatus}}
+        </template>
+      </el-table-column>
+      <el-table-column prop="ctime" label="创建时间">
+      </el-table-column>
+      <el-table-column prop="mtime" label="更新时间" width="150">
+      </el-table-column>
+      <el-table-column prop="urlList" label="设备资料" width="150">
+        <template slot-scope="scope">
+          <fileshow :type="'img'" :tailor="true" :isNoShowBtn="true" :fileurlList="scope.row.urlList"></fileshow>
+        </template>
+      </el-table-column>
+      <el-table-column prop="extra" label="其他扩展信息" width="180">
+      </el-table-column>
+      <el-table-column prop="orgName" label="机构" width="180">
+      </el-table-column>
+      <el-table-column prop="userId" label="创建者ID" width="180">
+      </el-table-column>
+    </el-table>
+    </div>
     <el-dialog :title="'详情'" :visible.sync="popShow" class="ui_dialog_02 detail-log carditem" width="80%" :close-on-click-modal="false" :append-to-body="true">
       <div>
         <el-row>
-          <el-col v-for="item in arr" :key="item.id" :span="item.id == 'urlList'?24:6">
+          <el-col v-for="item in arr" :key="item.id" :span="item.id == 'urlList' || item.id == 'threshold'?24:6">
             <div v-if="item.id == 'urlList'">
               <label>{{item.label}}</label>:
               <span>
@@ -62,6 +93,26 @@
             <div v-else-if="item.id == 'isDedicatedAppendant'">
               <label>{{item.label}}</label>:
               <span>{{item.value | getAppendant}}</span>
+            </div>
+            <div v-else-if="item.id == 'threshold'">
+              <div><label>{{item.label}}</label>:</div>
+              <div>
+                <el-table :data="thresholdData" style="width: 100%" border stripe>
+                  <el-table-column prop="name" align="center" label="阀值类型">
+                  </el-table-column>
+                  <el-table-column prop="value1" align="center" label="设定值">
+                  </el-table-column>
+                  <el-table-column prop="value2" align="center" label="设定值2(预留)">
+                  </el-table-column>
+                  <el-table-column prop="deviation" align="center" label="允许误差">
+                    <template slot-scope="scope">
+                      {{scope.row.deviation? scope.row.deviation + '%': ''}}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="company" align="center" label="单位">
+                  </el-table-column>
+                </el-table>
+              </div>
             </div>
             <div v-else>
               <label>{{item.label}}</label>:
@@ -80,6 +131,8 @@
 import list from "@/plugins/list";
 import api from "@/api/api";
 import token from "@/plugins/getUploadToken";
+import FileSaver from 'file-saver';
+import XLSX from 'xlsx';
 let schema = [
   {
     name: "kind",
@@ -161,6 +214,11 @@ let arr = [
     id: "urlList",
     label: "设备资料",
     value: ""
+  },
+  {
+    id: "threshold",
+    label: "阀值",
+    value: ""
   }
 ];
 export default {
@@ -183,10 +241,29 @@ export default {
             trigger: ["blur"]
           }
         ]
-      }
+      },
+      thresholdData: [
+        {name: '关机电流阀值', value1: '55',value2: '57', deviation: '1', company: 'A'},
+        {name: '待机电流阀值', value1: '20',value2: '23', deviation: '0.5', company: 'A'},
+        {name: '激活电流阀值', value1: '10',value2: '15', deviation: '2', company: 'A'},
+        {name: '报警电流阀值', value1: '80',value2: '90', deviation: '1', company: 'A'},
+        {name: '故障电流阀值', value1: '100',value2: '110', deviation: '1', company: 'A'},
+        {name: '电压下限报警', value1: '220',value2: '230', deviation: '1', company: 'V'},
+        {name: '电压上限报警', value1: '380',value2: '400', deviation: '2', company: 'V'}
+      ]
     };
   },
   methods: {
+    exportExcel () {
+      /* generate workbook object from table */
+        var wb = XLSX.utils.table_to_book(document.querySelector('#excelTable'))
+        /* get binary string as output */
+        var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+        try {
+            FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '物联设备管理.xlsx')
+        } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
+        return wbout
+    },
     seeDetail(row) {
       arr.forEach(item => {
         item.value = row[item.id] || "";

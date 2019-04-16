@@ -1,22 +1,56 @@
 <template>
     <div>
-        <ever-bread-crumb :showTitle="'设备管理'"></ever-bread-crumb>
-        <div class="scroll">
-            <ever-form2 :schema="querySchema" v-model="queryObj" ref="form" class="package-sale" labelWidth="180px" label-position="right" :rules="rules">
-                <template slot="urlList">
-                    <el-upload :action="uploadUrl" list-type="picture" :file-list="detailId?filelistObj.reportList:[]" :on-remove="handleReportRemove" :on-success="handleReportContractSuccess" :data="uploadData" :before-upload="beforeUploadGetKey">
-                        <el-button size="small" type="primary">点击上传</el-button>
-                    </el-upload>
-                </template>
-                <template slot="default">
-                    <div></div>
-                </template>
-            </ever-form2>
+      <ever-bread-crumb :showTitle="'设备管理'"></ever-bread-crumb>
+      <div class="scroll">
+        <ever-form2 :schema="querySchema" v-model="queryObj" ref="form" class="package-sale" labelWidth="180px" label-position="right" :rules="rules">
+          <template slot="urlList">
+            <el-upload :action="uploadUrl" list-type="picture" :file-list="detailId?filelistObj.reportList:[]" :on-remove="handleReportRemove" :on-success="handleReportContractSuccess" :data="uploadData" :before-upload="beforeUploadGetKey">
+              <el-button size="small" type="primary">点击上传</el-button>
+            </el-upload>
+          </template>
+          <template slot="thresholdArr">
+            <el-button size="small" type="primary" @click="popShow=true">设置</el-button>
+          </template>
+          <template slot="default">
+            <div></div>
+          </template>
+        </ever-form2>
+      </div>
+      <div class="log-btn-container" style="margin-bottom:60px;padding-left:180px;">
+        <el-button type="primary" @click="prev">保存</el-button>
+        <el-button @click="handleClose">取消</el-button>
+      </div>
+      <el-dialog :title="'阀值设置'" :visible.sync="popShow" class="ui_dialog_02 detail-log carditem" width="60%" :close-on-click-modal="false" :append-to-body="true">
+        <div>
+          <el-table :data="tableData" style="width: 100%" border stripe>
+            <el-table-column prop="name" align="center" label="阀值类型">
+            </el-table-column>
+            <el-table-column prop="value1" align="center" label="设定值">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.value1" type="number"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column prop="value2" align="center" label="设定值2(预留)">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.value2" type="number"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column prop="deviation" align="center" label="允许误差">
+              <template slot-scope="scope">
+                <div style="display:flex">
+                  <div><el-input v-model="scope.row.deviation" type="number"></el-input></div>
+                  <div style="line-height: 1;position: relative;top: 12px;margin-left: 10px;">%</div>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="company" align="center" label="单位">
+            </el-table-column>
+          </el-table>
         </div>
-        <div class="log-btn-container" style="margin-bottom:60px;padding-left:180px;">
-            <el-button type="primary" @click="prev">保存</el-button>
-            <el-button @click="handleClose">取消</el-button>
+        <div class="pop-btn" style="margin-top:20px;">
+          <el-button @click="popShow=false">取消</el-button>
         </div>
+      </el-dialog>
     </div>
 </template>
 <script>
@@ -61,6 +95,11 @@ let schema = [
     }
   },
   {
+    name: "thresholdArr",
+    label: "阀值",
+    comp: "custom"
+  },
+  {
     name: "urlList",
     label: "设备资料",
     comp: "custom"
@@ -95,7 +134,17 @@ export default {
             trigger: ["blur"]
           }
         ]
-      }
+      },
+      popShow: false,
+      tableData: [
+        {name: '关机电流阀值', value1: '',value2: '', deviation: '', company: 'A'},
+        {name: '待机电流阀值', value1: '',value2: '', deviation: '', company: 'A'},
+        {name: '激活电流阀值', value1: '',value2: '', deviation: '', company: 'A'},
+        {name: '报警电流阀值', value1: '',value2: '', deviation: '', company: 'A'},
+        {name: '故障电流阀值', value1: '',value2: '', deviation: '', company: 'A'},
+        {name: '电压下限报警', value1: '',value2: '', deviation: '', company: 'V'},
+        {name: '电压上限报警', value1: '',value2: '', deviation: '', company: 'V'}
+      ]
     };
   },
   methods: {
@@ -193,4 +242,19 @@ export default {
   }
 };
 </script>
+<style lang="less" scoped>
+  .pop-btn {
+    .el-button--primary {
+      color: #fff;
+      background-color: #1c7bef;
+      border-color: #1c7bef;
+    }
+    .el-button {
+      margin-right: 20px;
+      height: 36px;
+      line-height: 36px;
+      padding: 0 12px;
+    }
+  }
+</style>
 

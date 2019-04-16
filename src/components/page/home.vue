@@ -133,7 +133,7 @@
     </el-row>
     <el-row>
       <el-col style="background-color:#fff;padding-top:10px;" :span="24">
-        <span class="title title-sty">房间分布</span>
+        <span class="title title-sty">位置分布</span>
         <div ref="roomEc" class="roomEc" style="height:800px;width:100%;"></div>
       </el-col>
     </el-row>

@@ -6,6 +6,7 @@
           <el-button @click="query">查询</el-button>
         </template>
         <template slot="rightbtn">
+          <el-button style="margin-right:20px;" @click="exportExcel">导出</el-button>
           <el-button type="primary" @click="addAsset">新建</el-button>
         </template>
       </ever-form2>
@@ -23,21 +24,11 @@
       </el-table-column>
       <el-table-column prop="roomNo" label="房间号">
       </el-table-column>
-      <!-- <el-table-column prop="ctime" label="创建时间" width="180">
-      </el-table-column>
-      <el-table-column prop="mtime" label="更新时间" width="180">
-      </el-table-column> -->
       <el-table-column prop="urlList" label="房间资料" width="150">
         <template slot-scope="scope">
           <fileshow :type="'img'" :tailor="true" :isNoShowBtn="true" :fileurlList="scope.row.urlList"></fileshow>
         </template>
       </el-table-column>
-      <!-- <el-table-column prop="extra" label="其他扩展信息" width="150">
-      </el-table-column>
-      <el-table-column prop="orgName" label="机构" width="180">
-      </el-table-column>
-      <el-table-column prop="userId" label="创建者ID" width="180">
-      </el-table-column> -->
       <el-table-column prop="name" label="操作" align="center" width="250">
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-search" @click="seeDetail(scope.row)">详情</el-button>
@@ -49,6 +40,37 @@
     <div class="page-container">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="20" :layout="layout" :total="totalCount">
       </el-pagination>
+    </div>
+    <div style="height: 50px;visibility: hidden;overflow: hidden;">
+      <el-table id="excelTable" v-loading="loading" :data="tableData" style="width: 100%" border stripe max-height="650">
+        <el-table-column type="index" width="50" label="序号">
+        </el-table-column>
+        <el-table-column prop="area" label="院区">
+        </el-table-column>
+        <el-table-column prop="building" label="楼名">
+        </el-table-column>
+        <el-table-column prop="dept" label="所属科室">
+        </el-table-column>
+        <el-table-column prop="floorNo" label="楼层">
+        </el-table-column>
+        <el-table-column prop="roomNo" label="房间号">
+        </el-table-column>
+        <el-table-column prop="ctime" label="创建时间" width="180">
+        </el-table-column>
+        <el-table-column prop="mtime" label="更新时间" width="180">
+        </el-table-column>
+        <el-table-column prop="urlList" label="房间资料" width="150">
+          <template slot-scope="scope">
+            <fileshow :type="'img'" :tailor="true" :isNoShowBtn="true" :fileurlList="scope.row.urlList"></fileshow>
+          </template>
+        </el-table-column>
+        <el-table-column prop="extra" label="其他扩展信息" width="150">
+        </el-table-column>
+        <el-table-column prop="orgName" label="机构" width="180">
+        </el-table-column>
+        <el-table-column prop="userId" label="创建者ID" width="180">
+        </el-table-column>
+      </el-table>
     </div>
     <el-dialog :title="'详情'" :visible.sync="popShow" class="ui_dialog_02 detail-log carditem" width="80%" :close-on-click-modal="false" :append-to-body="true">
       <div>
@@ -81,6 +103,8 @@
 import list from "@/plugins/list";
 import token from "@/plugins/getUploadToken";
 import api from "@/api/api";
+import FileSaver from 'file-saver';
+import XLSX from 'xlsx';
 let schema = [
   {
     name: "area",
@@ -176,6 +200,16 @@ export default {
     };
   },
   methods: {
+    exportExcel () {
+      /* generate workbook object from table */
+         var wb = XLSX.utils.table_to_book(document.querySelector('#excelTable'))
+         /* get binary string as output */
+         var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+         try {
+             FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '物联网络配置.xlsx')
+         } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
+         return wbout
+    },
     seeDetail(row) {
       arr.forEach(item => {
         item.value = row[item.id] || "";

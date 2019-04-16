@@ -11,8 +11,10 @@
     "axios": "^0.18.0",
     "echarts": "^4.2.1",
     "element-ui": "^2.4.5",
+    "file-saver": "^2.0.1",
     "vue": "^2.6.6",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "xlsx": "^0.14.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.5.0",

@@ -61,6 +61,18 @@ export default {
             },
             type: 'value'
           },
+          // visualMap: {
+          //   top: 10,
+          //   right: 10,
+          //   pieces: [{
+          //       gt: 0,
+          //       lte: 10,
+          //       color: '#999'
+          //   }],
+          //   outOfRange: {
+          //       color: '#cc0033'
+          //   }
+          // },
           series: [{
             data: this.y,
             type: 'line'

@@ -66,9 +66,9 @@ export default {
   top: -100px;
   left: 0;
   p.title {
-    text-shadow: 0 0 4px #666;
+    text-shadow: 0 0 2px #1c7bef;
     font-size: 34px;
-    color: #000;
+    color: #1c7bef;
   }
   p.vice-title {
     font-size: 20px;
