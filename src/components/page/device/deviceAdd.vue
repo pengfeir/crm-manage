@@ -20,10 +20,10 @@
         <el-button type="primary" @click="prev">保存</el-button>
         <el-button @click="handleClose">取消</el-button>
       </div>
-      <el-dialog :title="'阀值设置'" :visible.sync="popShow" class="ui_dialog_02 detail-log carditem" width="60%" :close-on-click-modal="false" :append-to-body="true">
+      <el-dialog :title="'阈值设置'" :visible.sync="popShow" class="ui_dialog_02 detail-log carditem" width="60%" :close-on-click-modal="false" :append-to-body="true">
         <div>
           <el-table :data="tableData" style="width: 100%" border stripe>
-            <el-table-column prop="name" align="center" label="阀值类型">
+            <el-table-column prop="name" align="center" label="阈值类型">
             </el-table-column>
             <el-table-column prop="value1" align="center" label="设定值">
               <template slot-scope="scope">
@@ -96,7 +96,7 @@ let schema = [
   },
   {
     name: "thresholdArr",
-    label: "阀值",
+    label: "阈值",
     comp: "custom"
   },
   {
@@ -137,11 +137,11 @@ export default {
       },
       popShow: false,
       tableData: [
-        {name: '关机电流阀值', value1: '',value2: '', deviation: '', company: 'A'},
-        {name: '待机电流阀值', value1: '',value2: '', deviation: '', company: 'A'},
-        {name: '激活电流阀值', value1: '',value2: '', deviation: '', company: 'A'},
-        {name: '报警电流阀值', value1: '',value2: '', deviation: '', company: 'A'},
-        {name: '故障电流阀值', value1: '',value2: '', deviation: '', company: 'A'},
+        {name: '关机电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
+        {name: '待机电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
+        {name: '激活电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
+        {name: '报警电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
+        {name: '故障电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
         {name: '电压下限报警', value1: '',value2: '', deviation: '', company: 'V'},
         {name: '电压上限报警', value1: '',value2: '', deviation: '', company: 'V'}
       ]

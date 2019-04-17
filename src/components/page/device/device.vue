@@ -98,7 +98,7 @@
               <div><label>{{item.label}}</label>:</div>
               <div>
                 <el-table :data="thresholdData" style="width: 100%" border stripe>
-                  <el-table-column prop="name" align="center" label="阀值类型">
+                  <el-table-column prop="name" align="center" label="阈值类型">
                   </el-table-column>
                   <el-table-column prop="value1" align="center" label="设定值">
                   </el-table-column>
@@ -217,7 +217,7 @@ let arr = [
   },
   {
     id: "threshold",
-    label: "阀值",
+    label: "阈值",
     value: ""
   }
 ];
@@ -243,11 +243,11 @@ export default {
         ]
       },
       thresholdData: [
-        {name: '关机电流阀值', value1: '55',value2: '57', deviation: '1', company: 'A'},
-        {name: '待机电流阀值', value1: '20',value2: '23', deviation: '0.5', company: 'A'},
-        {name: '激活电流阀值', value1: '10',value2: '15', deviation: '2', company: 'A'},
-        {name: '报警电流阀值', value1: '80',value2: '90', deviation: '1', company: 'A'},
-        {name: '故障电流阀值', value1: '100',value2: '110', deviation: '1', company: 'A'},
+        {name: '关机电流阈值', value1: '55',value2: '57', deviation: '1', company: 'A'},
+        {name: '待机电流阈值', value1: '20',value2: '23', deviation: '0.5', company: 'A'},
+        {name: '激活电流阈值', value1: '10',value2: '15', deviation: '2', company: 'A'},
+        {name: '报警电流阈值', value1: '80',value2: '90', deviation: '1', company: 'A'},
+        {name: '故障电流阈值', value1: '100',value2: '110', deviation: '1', company: 'A'},
         {name: '电压下限报警', value1: '220',value2: '230', deviation: '1', company: 'V'},
         {name: '电压上限报警', value1: '380',value2: '400', deviation: '2', company: 'V'}
       ]

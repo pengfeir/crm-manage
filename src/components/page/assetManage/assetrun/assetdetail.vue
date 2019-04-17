@@ -177,6 +177,9 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+  .layout_inner {
+    padding: 10px !important;
+  }
   // 待机
   .green {
     color:#00FF00;
