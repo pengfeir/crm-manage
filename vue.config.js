@@ -1,39 +1,17 @@
-/*
- * @Author: renpengfei
- * @Date: 2019-03-16 18:46:59
- * @Last Modified by: renpengfei
- * @Last Modified time: 2019-04-17 15:12:34
- */
-
-// vue.config.js 修改
-const path = require('path')
- 
-function resolve(dir) {
- return path.join(__dirname, './', dir)
-}
- 
+const CompressionWebpackPlugin = require('compression-webpack-plugin')
 // cdn预加载使用
 const externals = {
- 'echarts': 'echarts'
+  'vue': 'Vue',
+  'vuex': 'Vuex',
+  'axios': 'axios',
+  'js-cookie': 'Cookies',
+  'nprogress': 'NProgress',
+  'echarts': 'echarts'
 }
- 
-const cdn = {
-  // 开发环境
-  dev: { 
-    css: [
-    ],
-    js: []
-  },
-  // 生产环境
-  build: {
-    css: [
-    ],
-    js: [
-      'https://cdn.bootcss.com/echarts/3.7.0/echarts.min.js'
-    ]
-  }
-}
- 
+// // 是否使用gzip
+// const productionGzip = true
+// // 需要gzip压缩的文件后缀
+// const productionGzipExtensions = ['js', 'css']
 module.exports = {
   devServer: {
     // proxy: {
@@ -54,11 +32,19 @@ module.exports = {
     const myConfig = {}
     if (process.env.NODE_ENV === 'production') {
       myConfig.externals = externals
+      myConfig.plugins = []
+      // 2. 构建时开启gzip，降低服务器压缩对CPU资源的占用，服务器也要相应开启gzip
+      myConfig.plugins.push(
+        new CompressionWebpackPlugin({
+          algorithm: 'gzip',
+          test: /\.(js|html|css)$/,
+          threshold: 10240,
+          minRatio: 0.8
+        })
+      )
     }
     if (process.env.NODE_ENV === 'development') {
-      myConfig.devServer = {
-        disableHostCheck: true
-      }
+      myConfig.externals = externals
     }
     return myConfig
   }
