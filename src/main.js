@@ -2,7 +2,6 @@ import Vue from 'vue'
 import App from './App.vue'
 import Element from 'element-ui'
 import router from './router'
-import echarts from 'echarts'
 import { MyPlugin } from './plugins/common'
 import everPagination from './plugins/pagination'
 import everBreadCrumb from './plugins/everbreadcrumb'
@@ -19,7 +18,6 @@ Object
 require('./plugins/funcform')
 Vue.use(MyPlugin)
 Vue.use(Element)
-Vue.use(echarts)
 Vue.component('everPagination', everPagination)
 Vue.component('everBreadCrumb', everBreadCrumb)
 Vue.component('assetsSelect', assetsSelect)
