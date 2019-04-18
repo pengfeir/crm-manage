@@ -5,30 +5,30 @@ Vue.use(Router)
 const login = r => require.ensure([], () => r(require('@/components/login')), 'login')
 const page = r => require.ensure([], () => r(require('@/components/manage')), 'manage')
 const Home = r => require.ensure([], () => r(require('@/components/page/home.vue')), 'home')
-const AgencyList = r => require.ensure([], () => r(require('@/components/page/mechanism/agencylist.vue')), 'agencylist')
-const AgencyAdd = r => require.ensure([], () => r(require('@/components/page/mechanism/agencyadd.vue')), 'agencyadd')
+const AgencyList = r => require.ensure([], () => r(require('@/components/page/agency/agency.list.vue')), 'agencylist')
+const AgencyAdd = r => require.ensure([], () => r(require('@/components/page/agency/agency.add.vue')), 'agencyadd')
 const RoleList = r => require.ensure([], () => r(require('@/components/page/mechanism/rolelist.vue')), 'rolelist')
 const RoleAdd = r => require.ensure([], () => r(require('@/components/page/mechanism/roleadd.vue')), 'roleadd')
 const UserList = r => require.ensure([], () => r(require('@/components/page/mechanism/userslist.vue')), 'userslist')
 const UserAdd = r => require.ensure([], () => r(require('@/components/page/mechanism/usersadd.vue')), 'usersadd')
-const assetManage = r => require.ensure([], () => r(require('@/components/page/assetManage/device/assetManage.vue')), 'assetManage')
-const assetManageAdd = r => require.ensure([], () => r(require('@/components/page/assetManage/device/assetmanageadd.vue')), 'assetmanage')
+const assetManage = r => require.ensure([], () => r(require('@/components/page/assetManage/asset.manage.list.vue')), 'assetManage')
+const assetManageAdd = r => require.ensure([], () => r(require('@/components/page/assetManage/asset.manage.add.vue')), 'assetmanage')
 
-const assetFailure = r => require.ensure([], () => r(require('@/components/page/assetManage/fault/assetFailure.vue')), 'assetFailure')
-const assetFailurAdd = r => require.ensure([], () => r(require('@/components/page/assetManage/fault/assetfailureadd.vue')), 'assetFailureadd')
-const maintenanceQa = r => require.ensure([], () => r(require('@/components/page/assetManage/maintain/maintenanceqa.vue')), 'maintenanceqa')
-const maintenanceQaAdd = r => require.ensure([], () => r(require('@/components/page/assetManage/maintain/maintenanceqaadd.vue')), 'maintenanceqaadd')
-const maintenanceMain = r => require.ensure([], () => r(require('@/components/page/assetManage/maintain/maintenancemain.vue')), 'maintenancemain')
-const maintenanceMainAdd = r => require.ensure([], () => r(require('@/components/page/assetManage/maintain/maintenancemainadd.vue')), 'maintenancemain')
-const complaint = r => require.ensure([], () => r(require('@/components/page/assetManage/complaint/complaint.vue')), 'complaint')
-const complaintAdd = r => require.ensure([], () => r(require('@/components/page/assetManage/complaint/complaintadd.vue')), 'complaintadd')
-const assetRun = r => require.ensure([], () => r(require('@/components/page/assetManage/assetrun/assetRun.vue')), 'assetRun')
-const assetRunEcharts = r => require.ensure([], () => r(require('@/components/page/assetManage/assetrun/assetecharts.vue')), 'assetecharts')
-const assetDetail = r => require.ensure([], () => r(require('@/components/page/assetManage/assetrun/assetdetail.vue')), 'assetdetail')
+const assetFailure = r => require.ensure([], () => r(require('@/components/page/fault/assetFailure.vue')), 'assetFailure')
+const assetFailurAdd = r => require.ensure([], () => r(require('@/components/page/fault/assetfailureadd.vue')), 'assetFailureadd')
+const maintenanceQa = r => require.ensure([], () => r(require('@/components/page/maintain/maintenanceqa.vue')), 'maintenanceqa')
+const maintenanceQaAdd = r => require.ensure([], () => r(require('@/components/page/maintain/maintenanceqaadd.vue')), 'maintenanceqaadd')
+const maintenanceMain = r => require.ensure([], () => r(require('@/components/page/maintain/maintenancemain.vue')), 'maintenancemain')
+const maintenanceMainAdd = r => require.ensure([], () => r(require('@/components/page/maintain/maintenancemainadd.vue')), 'maintenancemain')
+const complaint = r => require.ensure([], () => r(require('@/components/page/complaint/complaint.vue')), 'complaint')
+const complaintAdd = r => require.ensure([], () => r(require('@/components/page/complaint/complaintadd.vue')), 'complaintadd')
+const assetRun = r => require.ensure([], () => r(require('@/components/page/assetrun/assetRun.vue')), 'assetRun')
+const assetRunEcharts = r => require.ensure([], () => r(require('@/components/page/assetrun/assetecharts.vue')), 'assetecharts')
+const assetDetail = r => require.ensure([], () => r(require('@/components/page/assetrun/assetdetail.vue')), 'assetdetail')
 const device = r => require.ensure([], () => r(require('@/components/page/device/device.vue')), 'device')
-const deviceAdd = r => require.ensure([], () => r(require('@/components/page/device/deviceAdd.vue')), 'deviceAdd')
-const houseAdd = r => require.ensure([], () => r(require('@/components/page/device/houseAdd.vue')), 'houseAdd')
-const house = r => require.ensure([], () => r(require('@/components/page/device/house.vue')), 'house')
+const deviceAdd = r => require.ensure([], () => r(require('@/components/page/device/device.add.vue')), 'deviceAdd')
+const houseAdd = r => require.ensure([], () => r(require('@/components/page/house/house.add.vue')), 'houseAdd')
+const house = r => require.ensure([], () => r(require('@/components/page/house/house.list.vue')), 'house')
 const routerarr = [
   {
     path: '/',
@@ -189,7 +189,7 @@ const routerarr = [
         }
       },
       {
-        path: 'deviceAdd',
+        path: 'deviceadd',
         component: deviceAdd,
         meta: {
           name: '物联设备管理'
