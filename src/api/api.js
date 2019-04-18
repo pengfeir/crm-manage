@@ -76,7 +76,7 @@ function faultList (params) { // 设备故障列表
   return axios.post('/manage/fault/list', params)
 }
 function faultFindById (params) { // 通过id获取设备故障信息
-  return axios.post('/manage/asset/findById', params)
+  return axios.post('/manage/fault/findById', params)
 }
 function createFault (params) { // 创建故障列表
   return axios.post('/manage/fault/create', params)
