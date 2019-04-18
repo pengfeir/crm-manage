@@ -8,7 +8,7 @@
               <el-button size="small" type="primary">点击上传</el-button>
             </el-upload>
           </template>
-          <template slot="thresholdArr">
+          <template slot="extra">
             <el-button size="small" type="primary" @click="popShow=true">设置</el-button>
           </template>
           <template slot="default">
@@ -27,12 +27,12 @@
             </el-table-column>
             <el-table-column prop="value1" align="center" label="设定值">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.value1" type="number"></el-input>
+                <el-input v-model="scope.row.value1" @blur="thresholdCheck(scope.row)" type="number"></el-input>
               </template>
             </el-table-column>
             <el-table-column prop="value2" align="center" label="设定值2(预留)">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.value2" type="number"></el-input>
+                <el-input v-model="scope.row.value2" @blur="thresholdCheck(scope.row)" type="number"></el-input>
               </template>
             </el-table-column>
             <el-table-column prop="deviation" align="center" label="允许误差">
@@ -48,7 +48,8 @@
           </el-table>
         </div>
         <div class="pop-btn" style="margin-top:20px;">
-          <el-button @click="popShow=false">取消</el-button>
+          <el-button @click="empty">重置</el-button>
+          <el-button type="primary" @click="popShow=false">确认</el-button>
         </div>
       </el-dialog>
     </div>
@@ -95,7 +96,7 @@ let schema = [
     }
   },
   {
-    name: "thresholdArr",
+    name: "extra",
     label: "阈值",
     comp: "custom"
   },
@@ -103,10 +104,6 @@ let schema = [
     name: "urlList",
     label: "设备资料",
     comp: "custom"
-  },
-  {
-    name: "extra",
-    label: "其他扩展信息"
   }
 ];
 export default {
@@ -148,10 +145,24 @@ export default {
     };
   },
   methods: {
+    thresholdCheck (row) {
+      if (row.value1 && row.value2) {
+        if (Number(row.value1) < Number(row.value2)) {
+          let title =`${row.name}的设定值应大于设定值2`
+          this.$messageTips(this, 'error', title)
+        }
+      }
+    },
+    empty () {
+      this.tableData.forEach(item => {
+        item.value1 = ''
+        item.value2 = ''
+        item.deviation = ''
+      })
+    },
     handleClose() {
       this.$router.go(-1);
     },
-
     //删除数组里面删除的图片地址
     handleReportRemove(file, fileList) {
       this.imgObj.reportImg = this.sliceArr(this.imgObj.reportImg, file, "key");
@@ -184,6 +195,7 @@ export default {
             this.imgObj.reportImg.length > 0
               ? JSON.stringify(this.imgObj.reportImg)
               : "";
+          params.extra = JSON.stringify(this.tableData);
           api[url](params).then(rs => {
             this.popShow = false;
             if (rs.code === 200) {
@@ -203,6 +215,9 @@ export default {
         (this.queryObj.urlList && JSON.parse(this.queryObj.urlList)) || [];
       this.imgObj.reportImg =
         (this.queryObj.urlList && JSON.parse(this.queryObj.urlList)) || [];
+      if (row.extra) {
+        this.tableData = JSON.parse(row.extra);
+      }
     },
     clearInfo() {
       Object.keys(this.queryObj).map(key => {
@@ -231,14 +246,6 @@ export default {
     }
   },
   watch: {
-    $route: {
-      handler(value) {
-        if (!value) {
-          this.clearInfo();
-        }
-      },
-      immediate: true
-    }
   }
 };
 </script>

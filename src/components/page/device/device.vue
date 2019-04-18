@@ -83,7 +83,7 @@
     <el-dialog :title="'详情'" :visible.sync="popShow" class="ui_dialog_02 detail-log carditem" width="80%" :close-on-click-modal="false" :append-to-body="true">
       <div>
         <el-row>
-          <el-col v-for="item in arr" :key="item.id" :span="item.id == 'urlList' || item.id == 'threshold'?24:6">
+          <el-col v-for="item in arr" :key="item.id" :span="item.id == 'urlList' || item.id == 'extra'?24:6">
             <div v-if="item.id == 'urlList'">
               <label>{{item.label}}</label>:
               <span>
@@ -94,7 +94,7 @@
               <label>{{item.label}}</label>:
               <span>{{item.value | getAppendant}}</span>
             </div>
-            <div v-else-if="item.id == 'threshold'">
+            <div v-else-if="item.id == 'extra'">
               <div><label>{{item.label}}</label>:</div>
               <div>
                 <el-table :data="thresholdData" style="width: 100%" border stripe>
@@ -206,17 +206,12 @@ let arr = [
     value: ""
   },
   {
-    id: "extra",
-    label: "其他扩展信息",
-    value: ""
-  },
-  {
     id: "urlList",
     label: "设备资料",
     value: ""
   },
   {
-    id: "threshold",
+    id: "extra",
     label: "阈值",
     value: ""
   }
@@ -268,13 +263,16 @@ export default {
       arr.forEach(item => {
         item.value = row[item.id] || "";
       });
+      if (row.extra) {
+        this.thresholdData = JSON.parse(row.extra);
+      }
       this.popShow = true;
     },
     addAsset() {
-      this.$router.push("/page/deviceAdd");
+      this.$router.push("/page/deviceadd");
     },
     emitInfo(row) {
-      this.$router.push("/page/deviceAdd?id=" + row.id);
+      this.$router.push("/page/deviceadd?id=" + row.id);
     },
     delInfo(row) {
       this.$confirm("确定要删除该物联设备记录?", "提示", {
