@@ -2,7 +2,7 @@
  * @Author: renpengfei
  * @Date: 2019-03-27 18:46:48
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-04-15 16:39:33
+ * @Last Modified time: 2019-04-18 17:17:22
  */
 import api from '@/api/api'
 const token = {
@@ -12,7 +12,7 @@ const token = {
       // 七牛地址
       uploadUrl: 'http://upload.qiniup.com',
       // 图片下载地址
-      imgBaseUrl: 'http://smart-hcp.com',
+      imgBaseUrl: 'http://cdn.smart-hcp.com',
       uploadData: {
         token: '',
         key: ''
