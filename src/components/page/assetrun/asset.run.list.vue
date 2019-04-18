@@ -197,7 +197,7 @@ export default {
         {id: 2, name: 'MAC地址'},
         {id: 3, name: '资产编号'}
       ],
-      listApiName: "assetMetricsList"
+      listApiName: "tempList"
     };
   },
   methods: {

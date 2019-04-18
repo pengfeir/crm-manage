@@ -165,6 +165,9 @@ function updateAssetMetrics (params) { // 更新物联
 function assetMetricsList (params) { // 房间物联
   return axios.post('/manage/assetMetrics/list', params)
 }
+function tempList () { // 设备监测数据
+  return axios.post('/manage/assetMetrics/tempList')
+}
 export default {
   login,
   getUpToken,
@@ -220,5 +223,6 @@ export default {
   roleFindById,
   agencyFindById,
   mainFindById,
-  complaintFindById
+  complaintFindById,
+  tempList
 }

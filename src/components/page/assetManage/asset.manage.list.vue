@@ -16,11 +16,14 @@
       </el-table-column>
       <el-table-column prop="name" label="设备名称" width="150">
       </el-table-column>
-      <el-table-column prop="no" label="采购价格">
+      <el-table-column prop="purchasePrice" label="采购价格">
       </el-table-column>
       <el-table-column prop="no" label="责任工程师">
       </el-table-column>
-      <el-table-column prop="no" width="110" label="保修截止日期">
+      <el-table-column prop="matainExpiryDate" width="110" label="保修截止日期">
+        <template slot-scope="scope">
+          {{scope.row.matainExpiryDate&&scope.row.matainExpiryDate.split(' ')[0]}}
+        </template>
       </el-table-column>
       <el-table-column prop="no" label="设备编号">
       </el-table-column>
@@ -212,7 +215,17 @@ let arr = [
     value:''
   },
   {
-    id: "acceptStatus",
+    id: "brand",
+    label: "品牌",
+    value:''
+  },
+  {
+    id: "spec",
+    label: "规格型号",
+    value:''
+  },
+  {
+    id: "purchasePrice",
     label: "采购价格",
     value:''
   },
@@ -222,7 +235,7 @@ let arr = [
     value:''
   },
   {
-    id: "acceptStatus",
+    id: "matainExpiryDate",
     label: "保修截止日期",
     value:''
   },

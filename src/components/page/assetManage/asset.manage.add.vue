@@ -139,8 +139,18 @@ let schema = [
     span: 12
   },
   {
+    label: "品牌",
+    name: "brand",
+    span: 12
+  },
+  {
+    label: "规格型号",
+    name: "spec",
+    span: 12
+  },
+  {
     label: "采购价格",
-    name: "purchase_price",
+    name: "purchasePrice",
     span: 12
   },
   {
@@ -151,7 +161,12 @@ let schema = [
   },
   {
     label: "保修截止日期",
-    name: "vender",
+    name: "matainExpiryDate",
+    comp: "el-date-picker",
+    props: {
+      type: "date",
+      valueFormat: "yyyy-MM-dd HH:mm:ss"
+    },
     span: 12
   },
   {
@@ -159,7 +174,7 @@ let schema = [
     label: "生产日期",
     comp: "el-date-picker",
     props: {
-      type: "datetime",
+      type: "date",
       valueFormat: "yyyy-MM-dd HH:mm:ss"
     },
     span: 12
@@ -257,11 +272,10 @@ export default {
       options: [],
       rules: {
         name: [
-          {
-            required: true,
-            message: "必填项",
-            trigger: ["blur"]
-          }
+          {required: true, message: "必填项", trigger: ["blur"]}
+        ],
+        iotDeviceIds: [
+          {required: true, message: "必填项", trigger: ["blur"]}
         ]
       }
     }
