@@ -13,9 +13,13 @@
     <el-table v-loading="loading" :data="tableData" style="width: 100%" stripe>
       <el-table-column type="index" width="50">
       </el-table-column>
-      <el-table-column prop="name" align="center" label="角色名称">
+      <el-table-column prop="name" align="center" label="科室名称">
       </el-table-column>
-      <el-table-column prop="createTime" align="center" label="更新时间">
+      <el-table-column prop="remark" align="center" label="备注">
+      </el-table-column>
+      <el-table-column prop="mtime" align="center" label="更新时间">
+      </el-table-column>
+      <el-table-column prop="ctime" align="center" label="创建时间">
       </el-table-column>
       <el-table-column prop="name" align="center" width="150" label="操作">
         <template slot-scope="scope">
@@ -24,7 +28,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <!-- <div style="overflow:hidden;margin-bottom:10px;">
+    <div style="overflow:hidden;margin-bottom:10px;">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -34,7 +38,7 @@
         :layout="layout"
         :total="totalCount">
       </el-pagination>
-    </div> -->
+    </div>
   </div>
 </template>
 <script>
@@ -43,7 +47,7 @@ import api from "@/api/api";
 let schema = [
   {
     name: "name",
-    label: "角色名称"
+    label: "科室名称"
   },
   {
     name: "btn",
@@ -64,7 +68,7 @@ export default {
       api,
       querySchema: schema,
       queryObj: obj,
-      listApiName: "roleList",
+      listApiName: "deptList",
       tableData: []
     };
   },
@@ -72,29 +76,19 @@ export default {
   },
   methods: {
     addAgency() {
-      this.$router.push('/page/roleadd')
-    },
-    list() {
-      api[this.listApiName]({name: this.queryObj.name || ""}).then(
-        rs => {
-          if (rs.code === 200) {
-            this.tableData = rs.data;
-          }
-        }
-      );
+      this.$router.push('/page/sectionadd')
     },
     emitInfo(row) {
-      this.$router.push('/page/roleadd?id=' + row.id)
+      this.$router.push('/page/sectionadd?id=' + row.id)
     },
     delInfo(row) {
-      this.$confirm("确定要删除该角色?", "提示", {
+      this.$confirm("确定要删除该科室?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      })
-        .then(async () => {
+      }).then(async () => {
           try {
-            let data = await api.roleDel({ id: row.id });
+            let data = await api.delDept({ id: row.id });
             if (data && data.code === 200) {
               this.$message({
                 type: "success",
@@ -119,6 +113,3 @@ export default {
   margin-right: 4px;
 }
 </style>
-
-
-

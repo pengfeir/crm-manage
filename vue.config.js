@@ -2,7 +2,7 @@
  * @Author: renpengfei
  * @Date: 2019-03-16 18:46:59
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-03-25 15:44:25
+ * @Last Modified time: 2019-04-22 18:07:11
  */
 module.exports = {
   devServer: {
@@ -16,7 +16,7 @@ module.exports = {
     //     }
     //   }
     // }
-    proxy: 'http://47.104.232.127'
+    proxy: 'http://47.105.162.41'
 
   },
   runtimeCompiler: true

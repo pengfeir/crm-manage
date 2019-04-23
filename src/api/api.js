@@ -168,6 +168,51 @@ function assetMetricsList (params) { // 房间物联
 function tempList () { // 设备监测数据
   return axios.post('/manage/assetMetrics/tempList')
 }
+function areaList (params) { // 院区列表
+  return axios.post('/manage/area/list', params)
+}
+function delArea (params) { // 删除院区
+  return axios.post('/manage/area/delete', params)
+}
+function findByIdArea (params) { // 查看园区信息
+  return axios.post('/manage/area/findById', params)
+}
+function createArea (params) { // 新建院区
+  return axios.post('/manage/area/create', params)
+}
+function updateArea (params) { // 更新院区
+  return axios.post('/manage/area/update', params)
+}
+function buildingList (params) { // 建筑列表
+  return axios.post('/manage/building/list', params)
+}
+function delBuilding (params) { // 删除建筑
+  return axios.post('/manage/building/delete', params)
+}
+function findByIdBuilding (params) { // 查看建筑信息
+  return axios.post('/manage/building/findById', params)
+}
+function createBuilding (params) { // 新建建筑
+  return axios.post('/manage/building/create', params)
+}
+function updateBuilding (params) { // 更新建筑
+  return axios.post('/manage/building/update', params)
+}
+function deptList (params) { // 科室列表
+  return axios.post('/manage/dept/list', params)
+}
+function delDept (params) { // 删除科室
+  return axios.post('/manage/dept/delete', params)
+}
+function findByIdDept (params) { // 查看科室信息
+  return axios.post('/manage/dept/findById', params)
+}
+function createDept (params) { // 新建科室
+  return axios.post('/manage/dept/create', params)
+}
+function updateDept (params) { // 更新科室
+  return axios.post('/manage/dept/update', params)
+}
 export default {
   login,
   getUpToken,
@@ -224,5 +269,20 @@ export default {
   agencyFindById,
   mainFindById,
   complaintFindById,
-  tempList
+  tempList,
+  areaList,
+  delArea,
+  findByIdArea,
+  createArea,
+  updateArea,
+  buildingList,
+  delBuilding,
+  findByIdBuilding,
+  createBuilding,
+  updateBuilding,
+  deptList,
+  delDept,
+  findByIdDept,
+  createDept,
+  updateDept
 }

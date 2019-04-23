@@ -2,7 +2,7 @@
  * @Author: renpengfei
  * @Date: 2019-03-25 14:56:51
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-04-12 15:53:07
+ * @Last Modified time: 2019-04-19 17:13:04
  */
 /**
  * 设备装机状态
@@ -112,5 +112,17 @@ export const filterAssetStatus = assetStatus => {
       return '激活'
     default:
       return '未知'
+  }
+}
+export const filterSectionType = type => {
+  switch (type) {
+    case '1' :
+      return '门诊'
+    case '2' :
+      return '急诊'
+    case '3' :
+      return '住院'
+    default:
+      return ''
   }
 }

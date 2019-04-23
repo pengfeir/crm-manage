@@ -1,56 +1,52 @@
 <template>
-  <div>
+  <div class="layout_inner">
     <ever-bread-crumb :showTitle="'账号'"></ever-bread-crumb>
-    <div class="layout_inner">
-      <ever-form2
-        :schema="querySchema" 
-        v-model="queryObj"
-        ref="form"
-        class="package-sale"
-        :info="true"
-        :rules="rules"
-        labelWidth="80px"
-        label-position="right">
-        <template slot="password">
-          <el-input v-model="queryObj.password" type="password" autocomplete="new-password"></el-input>
-        </template>
-        <template slot="checkpassword">
-          <el-input v-model="queryObj.checkpassword" type="password" autocomplete="new-password"></el-input>
-        </template>
-        <template slot="orgId">
-          <el-select v-model="queryObj.orgId" :disabled="!superAdmin" placeholder="请选择">
-            <el-option v-for="item in orgs" :key="item.id" :label="item.orgName" :value="item.id">
-            </el-option>
-          </el-select>
-        </template>
-        <template slot="roleIds">
-          <el-select v-model="queryObj.roleIds" multiple placeholder="请选择">
-            <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
-            </el-option>
-          </el-select>
-        </template>
-        <template slot="icon">
-          <el-select v-model="queryObj.icon" placeholder="请选择">
-            <el-option v-for="item in iconoptions" :key="item.id" :label="item.name" :value="item.id">
-            </el-option>
-          </el-select>
-        </template>
-        <template slot="default">
-          <div></div>
-        </template>
-      </ever-form2>
-      <div class="log-btn-container">
-        <el-button type="primary" @click="prev">确认</el-button>
-        <el-button @click="cancel">取消</el-button>
-      </div>
+    <ever-form2
+      :schema="querySchema" 
+      v-model="queryObj"
+      ref="form"
+      class="package-sale"
+      :info="true"
+      :rules="rules"
+      labelWidth="100px"
+      label-position="right">
+      <template slot="password">
+        <el-input v-model="queryObj.password" type="password" autocomplete="new-password"></el-input>
+      </template>
+      <template slot="checkpassword">
+        <el-input v-model="queryObj.checkpassword" type="password" autocomplete="new-password"></el-input>
+      </template>
+      <template slot="orgId">
+        <el-select v-model="queryObj.orgId" :disabled="!superAdmin" placeholder="请选择">
+          <el-option v-for="item in orgs" :key="item.id" :label="item.orgName" :value="item.id">
+          </el-option>
+        </el-select>
+      </template>
+      <template slot="roleIds">
+        <el-select v-model="queryObj.roleIds" multiple placeholder="请选择">
+          <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
+          </el-option>
+        </el-select>
+      </template>
+      <template slot="icon">
+        <el-select v-model="queryObj.icon" placeholder="请选择">
+          <el-option v-for="item in iconoptions" :key="item.id" :label="item.name" :value="item.id">
+          </el-option>
+        </el-select>
+      </template>
+      <template slot="default">
+        <div></div>
+      </template>
+    </ever-form2>
+    <div class="log-btn-container">
+      <el-button type="primary" @click="prev">确认</el-button>
+      <el-button @click="cancel">取消</el-button>
     </div>
   </div>
 </template>
 <script>
 import api from '@/api/api'
 import roleTree from '@/plugins/roletree'
-console.log(roleTree)
-
 export default {
   props: {
     currentUser: {

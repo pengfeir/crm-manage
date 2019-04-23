@@ -1,12 +1,22 @@
 <template>
-    <div>
-      <ever-bread-crumb :showTitle="'设备管理'"></ever-bread-crumb>
+    <div class="layout_inner">
+      <ever-bread-crumb :showTitle="'物联设备'"></ever-bread-crumb>
       <div class="scroll">
-        <ever-form2 :schema="querySchema" v-model="queryObj" ref="form" class="package-sale" labelWidth="180px" label-position="right" :rules="rules">
+        <ever-form2 :schema="querySchema" v-model="queryObj" ref="form" class="package-sale" labelWidth="130px" label-position="right" :rules="rules">
           <template slot="urlList">
             <el-upload :action="uploadUrl" list-type="picture" :file-list="detailId?filelistObj.reportList:[]" :on-remove="handleReportRemove" :on-success="handleReportContractSuccess" :data="uploadData" :before-upload="beforeUploadGetKey">
               <el-button size="small" type="primary">点击上传</el-button>
             </el-upload>
+          </template>
+          <template slot="roomIds">
+            <el-select v-model="queryObj.roomIds" filterable placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
+            </el-select>
           </template>
           <template slot="extra">
             <el-button size="small" type="primary" @click="popShow=true">设置</el-button>
@@ -16,7 +26,7 @@
           </template>
         </ever-form2>
       </div>
-      <div class="log-btn-container" style="margin-bottom:60px;padding-left:180px;">
+      <div class="log-btn-container" style="margin-bottom:60px;padding-left:130px;">
         <el-button type="primary" @click="prev">保存</el-button>
         <el-button @click="handleClose">取消</el-button>
       </div>
@@ -96,6 +106,11 @@ let schema = [
     }
   },
   {
+    name: "roomIds",
+    label: "物联网络",
+    comp: "custom"
+  },
+  {
     name: "extra",
     label: "阈值",
     comp: "custom"
@@ -132,6 +147,7 @@ export default {
           }
         ]
       },
+      options: [],
       popShow: false,
       tableData: [
         {name: '关机电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
@@ -244,6 +260,18 @@ export default {
         }
       });
     }
+    api.roomList({pageNum: 1,pageSize: 1000}).then(rs => {
+      if (rs.code === 200) {
+        let data = [];
+        rs.data.list.forEach(item => {
+          let obj = {};
+          obj.name = `${item.building} > ${item.roomNo}`
+          obj.id = item.id
+          data.push(obj);
+        })
+        this.options = data
+      }
+    })
   },
   watch: {
   }

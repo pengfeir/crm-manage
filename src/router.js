@@ -29,6 +29,12 @@ const device = r => require.ensure([], () => r(require('@/components/page/device
 const deviceAdd = r => require.ensure([], () => r(require('@/components/page/device/device.add.vue')), 'deviceAdd')
 const houseAdd = r => require.ensure([], () => r(require('@/components/page/house/house.add.vue')), 'houseAdd')
 const house = r => require.ensure([], () => r(require('@/components/page/house/house.list.vue')), 'house')
+const sectionList = r => require.ensure([], () => r(require('@/components/page/section/section.list.vue')), 'sectionList')
+const sectionAdd = r => require.ensure([], () => r(require('@/components/page/section/section.add.vue')), 'sectionAdd')
+const parkList = r => require.ensure([], () => r(require('@/components/page/park/park.list.vue')), 'parkList')
+const parkAdd = r => require.ensure([], () => r(require('@/components/page/park/park.add.vue')), 'parkAdd')
+const agencybuildingsList = r => require.ensure([], () => r(require('@/components/page/agencybuildings/agencybuildings.list.vue')), 'agencybuildingsList')
+const agencybuildingsAdd = r => require.ensure([], () => r(require('@/components/page/agencybuildings/agencybuildings.add.vue')), 'agencybuildingsAdd')
 const routerarr = [
   {
     path: '/',
@@ -52,14 +58,14 @@ const routerarr = [
         path: 'agencylist',
         component: AgencyList,
         meta: {
-          name: '机构设置'
+          name: '机构管理'
         }
       },
       {
         path: 'agencyadd',
         component: AgencyAdd,
         meta: {
-          name: '机构设置'
+          name: '机构管理'
         }
       },
       {
@@ -207,6 +213,48 @@ const routerarr = [
         component: house,
         meta: {
           name: '物联网络配置'
+        }
+      },
+      {
+        path: 'sectionAdd',
+        component: sectionAdd,
+        meta: {
+          name: '科室管理'
+        }
+      },
+      {
+        path: 'sectionList',
+        component: sectionList,
+        meta: {
+          name: '科室管理'
+        }
+      },
+      {
+        path: 'parkList',
+        component: parkList,
+        meta: {
+          name: '院区管理'
+        }
+      },
+      {
+        path: 'parkAdd',
+        component: parkAdd,
+        meta: {
+          name: '院区管理'
+        }
+      },
+      {
+        path: 'agencybuildingsList',
+        component: agencybuildingsList,
+        meta: {
+          name: '建筑管理'
+        }
+      },
+      {
+        path: 'agencybuildingsAdd',
+        component: agencybuildingsAdd,
+        meta: {
+          name: '建筑管理'
         }
       }
     ]

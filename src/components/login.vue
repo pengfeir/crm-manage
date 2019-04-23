@@ -44,8 +44,11 @@ export default {
     async login () {
       this.clearStore()
       let tokenRs = await api.login(this.loginForm)
-      localStorage.setItem('token', tokenRs.data.token)
-      this.$router.push(this.$route.query.redirect || '/page/home')
+
+      if (tokenRs && tokenRs.code === 200) {
+        localStorage.setItem('token', tokenRs.data.token)
+        this.$router.push(this.$route.query.redirect || '/page/home')
+      }
     },
     clearStore () {
       window.localStorage.clear()

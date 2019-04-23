@@ -2,6 +2,46 @@
   <div class="layout_inner">
     <div class="main-head">
       <ever-form2 :schema="querySchema" v-model="queryObj" @query="query" ref="form" class="package-sale" :info="true" label-position="right" :nosubmit="true" :inline="true">
+        <template slot="area">
+          <el-select v-model="queryObj.area" filterable placeholder="请选择" clearable @change="val => {areaChange(val)}">
+            <el-option
+              v-for="item in options.areaArr"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </template>
+        <template slot="building">
+          <el-select v-model="queryObj.building" filterable placeholder="请选择" clearable>
+            <el-option
+              v-for="item in options.buildingArr"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </template>
+        <template slot="floorNo">
+          <el-select v-model="queryObj.floorNo" filterable placeholder="请选择" clearable>
+            <el-option
+              v-for="item in options.floorNoArr"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </template>
+        <template slot="dept">
+          <el-select v-model="queryObj.dept" filterable placeholder="请选择" clearable>
+            <el-option
+              v-for="item in options.deptArr"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </template>
         <template slot="btn">
           <el-button @click="query">查询</el-button>
         </template>
@@ -108,15 +148,18 @@ import XLSX from 'xlsx';
 let schema = [
   {
     name: "area",
-    label: "院区"
+    label: "院区",
+    comp: "custom"
   },
   {
     name: "building",
-    label: "楼名"
+    label: "楼名",
+    comp: "custom"
   },
   {
     label: "楼层",
-    name: "floorNo"
+    name: "floorNo",
+    comp: "custom"
   },
   {
     label: "房间号",
@@ -124,7 +167,8 @@ let schema = [
   },
   {
     label: "科室",
-    name: "dept"
+    name: "dept",
+    comp: "custom"
   },
   {
     name: "btn",
@@ -196,19 +240,69 @@ export default {
       popShow: false,
       arr,
       listApiName: "roomList",
-      detailId: ""
+      options: {
+        areaArr: [], //院区
+        buildingArr: [], // 建筑
+        floorNoArr: [
+          {id: 6,name: '6 层'},
+          {id: 5,name: '5 层'},
+          {id: 4,name: '4 层'},
+          {id: 3,name: '3 层'},
+          {id: 2,name: '2 层'},
+          {id: 1,name: '1 层'},
+          {id: -1,name: 'B1 层'},
+          {id: -2,name: 'B2 层'}
+        ], // 楼层
+        deptArr: [] // 科室
+      },
+      floorNoDefault: [
+        {id: 6,name: '6 层'},
+        {id: 5,name: '5 层'},
+        {id: 4,name: '4 层'},
+        {id: 3,name: '3 层'},
+        {id: 2,name: '2 层'},
+        {id: 1,name: '1 层'},
+        {id: -1,name: 'B1 层'},
+        {id: -2,name: 'B2 层'}
+      ],
+      allBuildingArr: {},
+      buildingArrt: []
     };
   },
   methods: {
+    areaChange(val) {
+      if (!val) {
+        this.options.buildingArr = this.buildingArrt;
+        return
+      }
+      this.options.buildingArr = this.allBuildingArr[val];
+      this.queryObj.building = this.allBuildingArr[val][0]['id'];
+      this.options.floorNoArr = this.initFloorNoArr(this.allBuildingArr[val][0]['floorsOnGround'], this.allBuildingArr[val][0]['floorsUnderground'])
+    },
+    initFloorNoArr(on, under) {
+      let arr = [];
+      for(let i = on; i > 0; i --) {
+        let obj = {id: i, name: i + ' 层'}
+        arr.push(obj);
+      }
+      for (let i = 1; i < under + 1; i ++) {
+        let obj = {id: '-' + i, name: 'B'+ i + ' 层'};
+        arr.push(obj);
+      }
+      if (arr.length === 0) {
+        arr = this.floorNoDefault;
+      }
+      return arr
+    },
     exportExcel () {
       /* generate workbook object from table */
-         var wb = XLSX.utils.table_to_book(document.querySelector('#excelTable'))
-         /* get binary string as output */
-         var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
-         try {
-             FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '物联网络配置.xlsx')
-         } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
-         return wbout
+      var wb = XLSX.utils.table_to_book(document.querySelector('#excelTable'))
+      /* get binary string as output */
+      var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+      try {
+          FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '物联网络配置.xlsx')
+      } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
+      return wbout
     },
     seeDetail(row) {
       arr.forEach(item => {
@@ -227,8 +321,7 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      })
-        .then(async () => {
+      }).then(async () => {
           try {
             let data = await api.deleteRoom({ id: row.id });
             if (data && data.code === 200) {
@@ -243,7 +336,34 @@ export default {
           }
         })
         .then(() => {});
+    },
+    async initOptions () {
+      let area = api.areaList({pageNum: 1, pageSize: 200});
+      let building = api.buildingList({pageNum: 1, pageSize: 1000});
+      let dept = api.deptList({pageNum: 1, pageSize: 100});
+      let areaArr = await area;
+      let buildingArr = await building;
+      let deptArr =await dept;
+      this.options.areaArr = areaArr.data.list || [];
+      (buildingArr.data.list || []).forEach(item => {
+        if (this.allBuildingArr[item.hospitalArea]) {
+          this.allBuildingArr[item.hospitalArea].push(item)
+        } else {
+          this.allBuildingArr[item.hospitalArea] = []
+          this.allBuildingArr[item.hospitalArea].push(item)
+        }
+        let curArea = this.options.areaArr.find(lab => lab.id === item.hospitalArea) || {name: ''};
+        item.hospitalAreaName = curArea.name;
+        item.composeName = item.name + ' < ' + item.hospitalAreaName
+      });
+      this.options.buildingArr = buildingArr.data.list || [];
+      this.buildingArrt = buildingArr.data.list || [];
+      this.options.deptArr = deptArr.data.list || [];
+      this.options.floorNoArr = this.floorNoDefault;
     }
+  },
+  created() {
+    this.initOptions();
   }
 };
 </script>

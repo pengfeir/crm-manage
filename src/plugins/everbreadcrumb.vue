@@ -48,7 +48,7 @@ export default {
 
 <style scoped>
   .ever-bread-crumb {
-    margin: 15px 0 10px 10px;
+    margin: 0px 0 20px 10px;
     color:#606266;
   }
   .diy-btn-style {
