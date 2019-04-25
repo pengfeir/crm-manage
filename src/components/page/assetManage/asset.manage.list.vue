@@ -18,7 +18,9 @@
       </el-table-column>
       <el-table-column prop="purchasePrice" label="采购价格">
       </el-table-column>
-      <el-table-column prop="no" label="责任工程师">
+      <el-table-column prop="depreciationCharge" label="折旧费">
+      </el-table-column>
+      <el-table-column prop="responsiblePersonName" label="责任工程师">
       </el-table-column>
       <el-table-column prop="matainExpiryDate" width="110" label="保修截止日期">
         <template slot-scope="scope">
@@ -29,8 +31,8 @@
       </el-table-column>
       <el-table-column prop="acceptStatus" label="验收状态">
       </el-table-column>
-      <el-table-column prop="dept" label="临床科室">
-      </el-table-column>
+      <!-- <el-table-column prop="dept" label="临床科室">
+      </el-table-column> -->
       <el-table-column prop="contractUrlList" label="采购合同照片" width="110">
         <template slot-scope="scope">
           <fileshow :type="'img'" :tailor="true" :isNoShowBtn="true" :fileurlList="scope.row.contractUrlList"></fileshow>
@@ -66,7 +68,9 @@
         </el-table-column>
         <el-table-column prop="no" label="采购价格">
         </el-table-column>
-        <el-table-column prop="no" label="责任工程师">
+        <el-table-column prop="no" label="折旧费">
+        </el-table-column>
+        <el-table-column prop="responsiblePersonName" label="责任工程师">
         </el-table-column>
         <el-table-column prop="no" label="保修截止日期">
         </el-table-column>
@@ -80,8 +84,8 @@
         </el-table-column>
         <el-table-column prop="contact" label="联系方式">
         </el-table-column>
-        <el-table-column prop="dept" label="临床科室">
-        </el-table-column>
+        <!-- <el-table-column prop="dept" label="临床科室">
+        </el-table-column> -->
         <el-table-column prop="contractUrlList" label="采购合同照片" width="110">
           <template slot-scope="scope">
             <fileshow :type="'img'" :tailor="true" :isNoShowBtn="true" :fileurlList="scope.row.contractUrlList"></fileshow>
@@ -230,7 +234,7 @@ let arr = [
     value:''
   },
   {
-    id: "acceptStatus",
+    id: "responsiblePersonName",
     label: "责任工程师",
     value:''
   },

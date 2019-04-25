@@ -40,9 +40,10 @@
     </el-dialog>
 </template>
 <script>
-import echarts from 'echarts/lib/echarts'
-import moment from 'moment'
-require('echarts/lib/chart/line') 
+import echarts from 'echarts/lib/echarts';
+import moment from 'moment';
+import api from "@/api/api";
+require('echarts/lib/chart/line');
 export default {
   props:['dialogVisibile', 'type'],
   data () {
@@ -71,13 +72,14 @@ export default {
     let obj = this.createObjFromSchema(schema)
     obj.date = [
       moment(new Date().getTime() - 86400000).format('YYYY-MM-DD HH:mm:ss'),
-      moment(new Date().getTime()).format('YYYY-MM-DD HH:mm:ss'),
+      moment(new Date().getTime()).format('YYYY-MM-DD HH:mm:ss')
     ]
     return {
       visibile: false,
       title: '',
       querySchema: schema,
       queryObj: obj,
+      oldDate: ['', ''],
       x: [],
       y: [],
       data: [],
@@ -107,17 +109,23 @@ export default {
     }
   },
   mounted () {
-    // this.init()
   },
   methods: {
     query () {
-      console.log(this.queryObj.date)
+      if (this.queryObj.date[0] === this.oldDate[0] && this.queryObj.date[1] === this.oldDate[1]) {
+        this.init();
+      } else {
+        this.getData();
+      }
     },
     clearInfo () {
-      this.queryObj.type = ''
-      this.queryObj.date =['', '']
-      this.x = []
-      this.y = []
+      this.queryObj.type = '';
+      this.queryObj.date = [
+        moment(new Date().getTime() - 86400000).format('YYYY-MM-DD HH:mm:ss'),
+        moment(new Date().getTime()).format('YYYY-MM-DD HH:mm:ss')
+      ];
+      this.x = [];
+      this.y = [];
     },
     randomData() {
         this.now = new Date(+this.now + this.oneDay);
@@ -125,10 +133,22 @@ export default {
         let minutes = (this.now.getMinutes() < 10 ? '0' : '') + this.now.getMinutes()
         let seconds = (this.now.getSeconds() < 10 ? '0' : '') + this.now.getSeconds()
         this.x.push(this.now.getFullYear()+'-'+(this.now.getMonth()+1) +'-'+ this.now.getDate()+' '+this.now.getHours() + ':' + minutes + ':' + seconds),
-        this.y.push(Math.round(this.value))
+        this.y.push(Math.round(this.value));
     },
     handleClose () {
-      this.$emit('cancel')
+      this.$emit('cancel');
+    },
+    getData () {
+      let params = {
+        endDate: this.queryObj.date[1],
+        beginDate: this.queryObj.date[0],
+        macAddress: this.$route.query.id,
+        pageNum: 1,
+        pageSize: 14400,
+      }
+      api.assetMetricsList(params).then(rs => {
+
+      })
     },
     init () {
       this.chart.showLoading({
@@ -196,7 +216,7 @@ export default {
           this.$nextTick(_ => {
             this.chart = echarts.init(this.$refs.historyEc);
             this.queryObj.type = this.type;
-            this.init();
+            this.getData();
           }) 
           this.visibile = true
         } else {

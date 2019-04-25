@@ -2,6 +2,16 @@
   <div class="layout_inner">
     <div class="main-head">
       <ever-form2 :schema="querySchema" v-model="queryObj" @query="query" class="package-sale" :info="true" :labelWidth="140" label-position="right" :nosubmit="true" :inline="true">
+        <template slot="hospitalArea">
+          <el-select v-model="queryObj.hospitalArea" clearable placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </template>
         <template slot="btn">
           <el-button @click="query">查询</el-button>
         </template>
@@ -15,7 +25,7 @@
       </el-table-column>
       <el-table-column prop="name" align="center" label="建筑名称">
       </el-table-column>
-      <el-table-column prop="hospitalArea" align="center" label="院区">
+      <el-table-column prop="areaName" align="center" label="院区">
       </el-table-column>
       <el-table-column prop="area" align="center" label="使用面积">
       </el-table-column>
@@ -59,6 +69,11 @@ import list from "@/plugins/list";
 import api from "@/api/api";
 let schema = [
   {
+    name: "hospitalArea",
+    label: "院区",
+    comp: "custom"
+  },
+  {
     name: "name",
     label: "建筑名称"
   },
@@ -82,10 +97,16 @@ export default {
       querySchema: schema,
       queryObj: obj,
       listApiName: "buildingList",
-      tableData: []
+      tableData: [],
+      options: []
     };
   },
   created() {
+    api.areaList({pageNum: 1, pageSize: 100}).then(rs => {
+      if (rs.code === 200) {
+        this.options = rs.data.list;
+      }
+    })
   },
   methods: {
     addAgency() {

@@ -6,7 +6,7 @@
       / <span>{{$route.meta.name}}</span>
     </span>
 		<el-dropdown @command="handleCommand" menu-align='start'>
-			<div style="cursor: pointer;">欢迎您, {{currentUser.nickName || '--'}}</div>
+			<div style="cursor: pointer;">欢迎您, {{currentUser.nickName || '--'}}<i class="el-icon-caret-bottom"></i></div>
 			<el-dropdown-menu slot="dropdown">
 				<el-dropdown-item command="emitPassword">修改密码</el-dropdown-item>
 				<el-dropdown-item command="signout">退出</el-dropdown-item>

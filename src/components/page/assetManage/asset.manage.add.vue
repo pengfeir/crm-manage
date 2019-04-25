@@ -6,8 +6,8 @@
           <template slot="acceptStatus">
             <el-autocomplete class="inline-input" v-model="queryObj.acceptStatus" :fetch-suggestions="queryComp" placeholder="请输入内容" style="width: 100%"></el-autocomplete>
           </template>
-          <template slot="aaaaa">
-            <el-select v-model="queryObj.aaaaa" clearable placeholder="请选择">
+          <template slot="responsiblePerson">
+            <el-select v-model="queryObj.responsiblePerson" clearable placeholder="请选择">
               <el-option
                 v-for="item in options"
                 :key="item.id"
@@ -133,11 +133,11 @@ let schema = [
     label: "联系方式",
     span: 12
   },
-  {
-    name: "dept",
-    label: "临床科室",
-    span: 12
-  },
+  // {
+  //   name: "dept",
+  //   label: "临床科室",
+  //   span: 12
+  // },
   {
     label: "品牌",
     name: "brand",
@@ -154,8 +154,13 @@ let schema = [
     span: 12
   },
   {
+    label: "折旧费",
+    name: "depreciationCharge",
+    span: 12
+  },
+  {
     label: "责任工程师",
-    name: "aaaaa",
+    name: "responsiblePerson",
     comp: "custom",
     span: 12
   },
@@ -209,11 +214,11 @@ let schema = [
     label: "厂家",
     span: 12
   },
-  {
-    name: "extra",
-    label: "其他扩展信息",
-    span: 12
-  },
+  // {
+  //   name: "extra",
+  //   label: "其他扩展信息",
+  //   span: 12
+  // },
   {
     name: "isDedicatedAppendant",
     label: "配套耗材是否专机专用",
@@ -289,10 +294,7 @@ export default {
       } catch (err) {}
     },
     handleClose() {
-      Object.keys(this.filelistObj).map(v => {
-        this.filelistObj[v] = [];
-      });
-      this.popShow = false;
+      this.$router.go(-1);
     },
     //删除数组里面删除的图片地址
     handleManualRemove(file, fileList) {
