@@ -77,7 +77,7 @@ export default {
     };
   },
   mounted () {
-    let arr = this.fileurlList ? JSON.parse(this.fileurlList) : []
+    let arr = this.fileurlList && this.fileurlList.indexOf('[') > -1 ? JSON.parse(this.fileurlList) : []
     if (this.tailor && arr.length > 0) {
       this.urlData = arr.splice(0, 1)
     } else if (!this.tailor && arr.length > 0) {

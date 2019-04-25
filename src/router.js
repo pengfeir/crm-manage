@@ -7,28 +7,34 @@ const page = r => require.ensure([], () => r(require('@/components/manage')), 'm
 const Home = r => require.ensure([], () => r(require('@/components/page/home.vue')), 'home')
 const AgencyList = r => require.ensure([], () => r(require('@/components/page/agency/agency.list.vue')), 'agencylist')
 const AgencyAdd = r => require.ensure([], () => r(require('@/components/page/agency/agency.add.vue')), 'agencyadd')
-const RoleList = r => require.ensure([], () => r(require('@/components/page/mechanism/rolelist.vue')), 'rolelist')
-const RoleAdd = r => require.ensure([], () => r(require('@/components/page/mechanism/roleadd.vue')), 'roleadd')
-const UserList = r => require.ensure([], () => r(require('@/components/page/mechanism/userslist.vue')), 'userslist')
-const UserAdd = r => require.ensure([], () => r(require('@/components/page/mechanism/usersadd.vue')), 'usersadd')
+const RoleList = r => require.ensure([], () => r(require('@/components/page/role/role.list.vue')), 'rolelist')
+const RoleAdd = r => require.ensure([], () => r(require('@/components/page/role/role.add.vue')), 'roleadd')
+const UserList = r => require.ensure([], () => r(require('@/components/page/users/users.list.vue')), 'userslist')
+const UserAdd = r => require.ensure([], () => r(require('@/components/page/users/users.add.vue')), 'usersadd')
 const assetManage = r => require.ensure([], () => r(require('@/components/page/assetManage/asset.manage.list.vue')), 'assetManage')
 const assetManageAdd = r => require.ensure([], () => r(require('@/components/page/assetManage/asset.manage.add.vue')), 'assetmanage')
 
-const assetFailure = r => require.ensure([], () => r(require('@/components/page/fault/assetFailure.vue')), 'assetFailure')
-const assetFailurAdd = r => require.ensure([], () => r(require('@/components/page/fault/assetfailureadd.vue')), 'assetFailureadd')
+const assetFailure = r => require.ensure([], () => r(require('@/components/page/fault/asset.failure.list.vue')), 'assetFailure')
+const assetFailurAdd = r => require.ensure([], () => r(require('@/components/page/fault/asset.failure.add.vue')), 'assetFailureadd')
 const maintenanceQa = r => require.ensure([], () => r(require('@/components/page/maintain/maintenanceqa.vue')), 'maintenanceqa')
 const maintenanceQaAdd = r => require.ensure([], () => r(require('@/components/page/maintain/maintenanceqaadd.vue')), 'maintenanceqaadd')
 const maintenanceMain = r => require.ensure([], () => r(require('@/components/page/maintain/maintenancemain.vue')), 'maintenancemain')
 const maintenanceMainAdd = r => require.ensure([], () => r(require('@/components/page/maintain/maintenancemainadd.vue')), 'maintenancemain')
-const complaint = r => require.ensure([], () => r(require('@/components/page/complaint/complaint.vue')), 'complaint')
-const complaintAdd = r => require.ensure([], () => r(require('@/components/page/complaint/complaintadd.vue')), 'complaintadd')
-const assetRun = r => require.ensure([], () => r(require('@/components/page/assetrun/assetRun.vue')), 'assetRun')
-const assetRunEcharts = r => require.ensure([], () => r(require('@/components/page/assetrun/assetecharts.vue')), 'assetecharts')
-const assetDetail = r => require.ensure([], () => r(require('@/components/page/assetrun/assetdetail.vue')), 'assetdetail')
-const device = r => require.ensure([], () => r(require('@/components/page/device/device.vue')), 'device')
+const complaint = r => require.ensure([], () => r(require('@/components/page/complaint/complaint.list.vue')), 'complaint')
+const complaintAdd = r => require.ensure([], () => r(require('@/components/page/complaint/complaint.add.vue')), 'complaintadd')
+const assetRun = r => require.ensure([], () => r(require('@/components/page/assetrun/asset.run.list.vue')), 'assetRun')
+const assetRunEcharts = r => require.ensure([], () => r(require('@/components/page/assetrun/asset.echarts.vue')), 'assetecharts')
+const assetDetail = r => require.ensure([], () => r(require('@/components/page/assetrun/asset.detail.vue')), 'assetdetail')
+const device = r => require.ensure([], () => r(require('@/components/page/device/device.list.vue')), 'device')
 const deviceAdd = r => require.ensure([], () => r(require('@/components/page/device/device.add.vue')), 'deviceAdd')
 const houseAdd = r => require.ensure([], () => r(require('@/components/page/house/house.add.vue')), 'houseAdd')
 const house = r => require.ensure([], () => r(require('@/components/page/house/house.list.vue')), 'house')
+const sectionList = r => require.ensure([], () => r(require('@/components/page/section/section.list.vue')), 'sectionList')
+const sectionAdd = r => require.ensure([], () => r(require('@/components/page/section/section.add.vue')), 'sectionAdd')
+const parkList = r => require.ensure([], () => r(require('@/components/page/park/park.list.vue')), 'parkList')
+const parkAdd = r => require.ensure([], () => r(require('@/components/page/park/park.add.vue')), 'parkAdd')
+const agencybuildingsList = r => require.ensure([], () => r(require('@/components/page/agencybuildings/agencybuildings.list.vue')), 'agencybuildingsList')
+const agencybuildingsAdd = r => require.ensure([], () => r(require('@/components/page/agencybuildings/agencybuildings.add.vue')), 'agencybuildingsAdd')
 const routerarr = [
   {
     path: '/',
@@ -52,14 +58,14 @@ const routerarr = [
         path: 'agencylist',
         component: AgencyList,
         meta: {
-          name: '机构设置'
+          name: '机构管理'
         }
       },
       {
         path: 'agencyadd',
         component: AgencyAdd,
         meta: {
-          name: '机构设置'
+          name: '机构管理'
         }
       },
       {
@@ -207,6 +213,48 @@ const routerarr = [
         component: house,
         meta: {
           name: '物联网络配置'
+        }
+      },
+      {
+        path: 'sectionAdd',
+        component: sectionAdd,
+        meta: {
+          name: '科室管理'
+        }
+      },
+      {
+        path: 'sectionList',
+        component: sectionList,
+        meta: {
+          name: '科室管理'
+        }
+      },
+      {
+        path: 'parkList',
+        component: parkList,
+        meta: {
+          name: '院区管理'
+        }
+      },
+      {
+        path: 'parkAdd',
+        component: parkAdd,
+        meta: {
+          name: '院区管理'
+        }
+      },
+      {
+        path: 'agencybuildingsList',
+        component: agencybuildingsList,
+        meta: {
+          name: '建筑管理'
+        }
+      },
+      {
+        path: 'agencybuildingsAdd',
+        component: agencybuildingsAdd,
+        meta: {
+          name: '建筑管理'
         }
       }
     ]

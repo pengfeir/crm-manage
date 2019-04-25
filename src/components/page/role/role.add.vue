@@ -1,7 +1,7 @@
 <template>
   <div class="layout_inner">
     <ever-bread-crumb :showTitle="'角色'"></ever-bread-crumb>
-    <ever-form2 :schema="queryInfoSchema" v-model="queryInfoObj" ref="form" class="package-sale" :info="true" :rules="rules" labelWidth="80px" label-position="right">
+    <ever-form2 :schema="queryInfoSchema" v-model="queryInfoObj" ref="form" class="package-sale" :info="true" :rules="rules" labelWidth="100px" label-position="right">
       <template slot="description">
         <el-tree :data="treeData" ref="tree" show-checkbox node-key="id" @check-change="handleCheckChange" :expand-on-click-node="false">
         </el-tree>

@@ -2,7 +2,7 @@
  * @Author: renpengfei
  * @Date: 2019-03-16 18:46:59
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-04-25 17:50:29
+ * @Last Modified time: 2019-04-25 18:04:42
  */
 module.exports = {
   devServer: {

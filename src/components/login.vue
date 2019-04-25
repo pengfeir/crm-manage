@@ -16,7 +16,7 @@
             <el-input type="password" placeholder="密码" v-model="loginForm.password"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" class="submit_btn" @click="login">登陆</el-button>
+            <el-button type="primary" class="submit_btn" @click="login">登 录</el-button>
           </el-form-item>
         </el-form>
       </section>
@@ -44,8 +44,11 @@ export default {
     async login () {
       this.clearStore()
       let tokenRs = await api.login(this.loginForm)
-      localStorage.setItem('token', tokenRs.data.token)
-      this.$router.push(this.$route.query.redirect || '/page/home')
+
+      if (tokenRs && tokenRs.code === 200) {
+        localStorage.setItem('token', tokenRs.data.token)
+        this.$router.push(this.$route.query.redirect || '/page/home')
+      }
     },
     clearStore () {
       window.localStorage.clear()

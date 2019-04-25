@@ -19,9 +19,27 @@ var menuArr = [
         level: 2,
         childMenus: []
       }, {
-        menuName: '机构设置',
+        menuName: '机构管理',
         menuUrl: '/page/agencylist',
         auth: 'agencylist',
+        level: 2,
+        childMenus: []
+      }, {
+        menuName: '科室管理',
+        menuUrl: '/page/sectionList',
+        auth: 'sectioList',
+        level: 2,
+        childMenus: []
+      }, {
+        menuName: '院区管理',
+        menuUrl: '/page/parkList',
+        auth: 'parkList',
+        level: 2,
+        childMenus: []
+      }, {
+        menuName: '建筑管理',
+        menuUrl: '/page/agencybuildingsList',
+        auth: 'parkList',
         level: 2,
         childMenus: []
       }

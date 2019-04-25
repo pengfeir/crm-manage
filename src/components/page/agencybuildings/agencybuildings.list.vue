@@ -2,6 +2,16 @@
   <div class="layout_inner">
     <div class="main-head">
       <ever-form2 :schema="querySchema" v-model="queryObj" @query="query" class="package-sale" :info="true" :labelWidth="140" label-position="right" :nosubmit="true" :inline="true">
+        <template slot="hospitalArea">
+          <el-select v-model="queryObj.hospitalArea" clearable placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </template>
         <template slot="btn">
           <el-button @click="query">查询</el-button>
         </template>
@@ -13,9 +23,26 @@
     <el-table v-loading="loading" :data="tableData" style="width: 100%" stripe>
       <el-table-column type="index" width="50">
       </el-table-column>
-      <el-table-column prop="name" align="center" label="角色名称">
+      <el-table-column prop="name" align="center" label="建筑名称">
       </el-table-column>
-      <el-table-column prop="createTime" align="center" label="更新时间">
+      <el-table-column prop="areaName" align="center" label="院区">
+      </el-table-column>
+      <el-table-column prop="area" align="center" label="使用面积">
+      </el-table-column>
+      <el-table-column prop="floorsOnGround" align="center" label="地上层高">
+      </el-table-column>
+      <el-table-column prop="floorsUnderground" align="center" label="地下层高">
+      </el-table-column>
+      <el-table-column prop="buildingPicture" align="center" label="建筑图">
+        <template slot-scope="scope">
+          <fileshow :type="'img'" :tailor="true" :isNoShowBtn="true" :fileurlList="scope.row.buildingPicture"></fileshow>
+        </template>
+      </el-table-column>
+      <el-table-column prop="extra" align="center" label="备注">
+      </el-table-column>
+      <el-table-column prop="mtime" align="center" label="更新时间">
+      </el-table-column>
+      <el-table-column prop="ctime" align="center" label="创建时间">
       </el-table-column>
       <el-table-column prop="name" align="center" width="150" label="操作">
         <template slot-scope="scope">
@@ -24,7 +51,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <!-- <div style="overflow:hidden;margin-bottom:10px;">
+    <div style="overflow:hidden;margin-bottom:10px;">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -34,7 +61,7 @@
         :layout="layout"
         :total="totalCount">
       </el-pagination>
-    </div> -->
+    </div>
   </div>
 </template>
 <script>
@@ -42,8 +69,13 @@ import list from "@/plugins/list";
 import api from "@/api/api";
 let schema = [
   {
+    name: "hospitalArea",
+    label: "院区",
+    comp: "custom"
+  },
+  {
     name: "name",
-    label: "角色名称"
+    label: "建筑名称"
   },
   {
     name: "btn",
@@ -64,37 +96,34 @@ export default {
       api,
       querySchema: schema,
       queryObj: obj,
-      listApiName: "roleList",
-      tableData: []
+      listApiName: "buildingList",
+      tableData: [],
+      options: []
     };
   },
   created() {
+    api.areaList({pageNum: 1, pageSize: 100}).then(rs => {
+      if (rs.code === 200) {
+        this.options = rs.data.list;
+      }
+    })
   },
   methods: {
     addAgency() {
-      this.$router.push('/page/roleadd')
-    },
-    list() {
-      api[this.listApiName]({ name: this.queryObj.name || "", id: "" }).then(
-        rs => {
-          if (rs.code === 200) {
-            this.tableData = rs.data;
-          }
-        }
-      );
+      this.$router.push('/page/agencybuildingsAdd')
     },
     emitInfo(row) {
-      this.$router.push('/page/roleadd?id=' + row.id)
+      this.$router.push('/page/agencybuildingsAdd?id=' + row.id)
     },
     delInfo(row) {
-      this.$confirm("确定要删除该角色?", "提示", {
+      this.$confirm("确定要删除该建筑?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(async () => {
           try {
-            let data = await api.roleDel({ id: row.id });
+            let data = await api.delBuilding({ id: row.id });
             if (data && data.code === 200) {
               this.$message({
                 type: "success",
@@ -119,6 +148,3 @@ export default {
   margin-right: 4px;
 }
 </style>
-
-
-
