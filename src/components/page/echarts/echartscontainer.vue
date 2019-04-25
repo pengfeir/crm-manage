@@ -7,18 +7,20 @@
     <el-row>
       <el-col :span="24">
         <el-card class="">
-            设备名称：<span class="col-title">{{'X光机'}}</span>
-            设备型号：<span class="col-title">{{'LT-480'}}</span>
-            设备SN序列号：<span class="col-title">{{'SERT245-WWER-EER$%'}}</span>
-            设备状态：<span class="col-title"
-             :class="{
-                red:info.assetStatus == 10,
-                green:info.assetStatus == 30,
-                blur:info.assetStatus == 20,
-                yellow: info.assetStatus == 40
-              }"
-             >{{info.assetStatus | filterAssetStatus}}</span>
-            时间：{{time}}
+          设备名称：<span class="col-title">{{info.assetName}}</span>
+          设备型号：<span class="col-title">{{info.assetModel}}</span>
+          设备编号：<span class="col-title">{{info.assetNo}}</span>
+          设备SN序列号：<span class="col-title">{{info.assetSn}}</span>
+          设备MAC地址：<span class="col-title">{{info.macAddr}}</span>
+          设备状态：<span class="col-title"
+            :class="{
+              red:info.assetStatus == 10,
+              green:info.assetStatus == 30,
+              blur:info.assetStatus == 20,
+              yellow: info.assetStatus == 40
+            }"
+            >{{info.assetStatus | filterAssetStatus}}</span>
+          时间：<span class="col-title">{{time}}</span>
         </el-card>
       </el-col>
     </el-row>
@@ -136,9 +138,9 @@ export default {
     objs () {
       // beginDate endDate
       let endDate = this.getTime()
-      api.assetMetricsList({macAddress: this.id, endDate: endDate, pageNum: 1, pageSize: 20}).then(rs => {
-        this.info = rs.data.list[rs.data.list.length-1]
-        this.initData(rs.data.list[rs.data.list.length-1])
+      api.tempList({macAddress: this.id}).then(rs => {
+        this.info = rs.data[rs.data.length-1]
+        this.initData(rs.data[rs.data.length-1])
       })
       // this.initData(this.inputIObj)
       // this.initData(this.inputVObj)
@@ -148,48 +150,48 @@ export default {
       // this.initData(this.powerHzObj)
       // this.initData(this.energyObj)
     },
-    initDate () {
-      let date = new Date(new Date().getTime() + this.len * 5000);
-      let time = ''
-      let minutes = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes()
-      let seconds = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds()
-      time = date.getHours() + ':' + minutes + ':' + seconds
-      let month = (date.getMonth() + 1 < 10 ? '0' : '') + (date.getMonth() + 1)
-      let dateval = (date.getDate() < 10 ? '0' : '') + date.getDate()
-      let curTime = date.getFullYear() + '-' + month + '-' + dateval
-      return curTime + ' ' + time
-    },
+    // initDate () {
+    //   let date = new Date(new Date().getTime() + this.len * 5000);
+    //   let time = ''
+    //   let minutes = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes()
+    //   let seconds = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds()
+    //   time = date.getHours() + ':' + minutes + ':' + seconds
+    //   let month = (date.getMonth() + 1 < 10 ? '0' : '') + (date.getMonth() + 1)
+    //   let dateval = (date.getDate() < 10 ? '0' : '') + date.getDate()
+    //   let curTime = date.getFullYear() + '-' + month + '-' + dateval
+    //   return curTime + ' ' + time
+    // },
     initData (data) {
-      let time = this.initDate().split(' ')[1] //data.mtime.split(' ')[1]
+      let time = data.mtime.split(' ')[1]
       if (this.inputIObj.x !== time) {
         this.inputIObj.x = time
-        this.inputIObj.y = Math.floor ( Math.random ( ) * 20 + 1 ) // data.inputI
+        this.inputIObj.y = data.inputI
 
         this.inputVObj.x = time
-        this.inputVObj.y = Math.floor ( Math.random ( ) * 20 + 1 ) //  data.inputV
+        this.inputVObj.y = data.inputV
 
         this.realPowerObj.x = time
-        this.realPowerObj.y = Math.floor ( Math.random ( ) * 20 + 1 ) //  data.realPower
+        this.realPowerObj.y = data.realPower
 
         this.powerFactorObj.x = time
-        this.powerFactorObj.y = Math.floor ( Math.random ( ) * 20 + 1 ) //  data.powerFactor
+        this.powerFactorObj.y = data.powerFactor
 
         this.temperatureObj.x = time
-        this.temperatureObj.y = Math.floor ( Math.random ( ) * 20 + 1 ) //  data.temperature
+        this.temperatureObj.y = data.temperature
 
         this.powerHzObj.x = time
-        this.powerHzObj.y = Math.floor ( Math.random ( ) * 20 + 1 ) //  data.powerHz
+        this.powerHzObj.y = data.powerHz
 
         this.energyObj.x = time
-        this.energyObj.y = Math.floor ( Math.random ( ) * 20 + 1 ) //  data.energy
+        this.energyObj.y = data.energy
       }
     }
   },
   mounted () {
     this.objs()
-    this.interval = setInterval(_ => {
-      this.objs()
-    }, 5000)
+    // this.interval = setInterval(_ => {
+    //   this.objs()
+    // }, 5000)
   },
   beforeDestroy () {
     clearInterval(this.interval)
@@ -241,22 +243,23 @@ export default {
   }
   .col-title {
     margin-right:10px;
+    color:#409EFF;
   }
   // 待机
   .green {
-    color:#00FF00;
+    color:#00FF00 !important;
   }
   // 关机
   .red {
-    color: red;
+    color: red !important;
   }
   // 激活
   .yellow {
-    color: yellow;
+    color: yellow !important;
   }
   // 开机
   .blur {
-    color: blue;
+    color: blue !important;
   }
 </style>
 

@@ -41,6 +41,7 @@
 </template>
 <script>
 import echarts from 'echarts/lib/echarts'
+import moment from 'moment'
 require('echarts/lib/chart/line') 
 export default {
   props:['dialogVisibile', 'type'],
@@ -68,7 +69,10 @@ export default {
       }
     ]
     let obj = this.createObjFromSchema(schema)
-    obj.date = ['', '']
+    obj.date = [
+      moment(new Date().getTime() - 86400000).format('YYYY-MM-DD HH:mm:ss'),
+      moment(new Date().getTime()).format('YYYY-MM-DD HH:mm:ss'),
+    ]
     return {
       visibile: false,
       title: '',
@@ -127,12 +131,14 @@ export default {
       this.$emit('cancel')
     },
     init () {
+      this.chart.showLoading({
+        text : '正在加载数据'
+      });
       console.log(typeof this.type, this.options.find(item => item.id === this.type))
       this.title = (this.options.find(item => item.id === this.type)||{name:''}).name+ '历史数据'
       for (var i = 0; i < 1000; i++) {
         this.data.push(this.randomData());
       }
-      this.chart = echarts.init(this.$refs.historyEc)
       var option = {
         toolbox: {
           feature: {
@@ -178,8 +184,9 @@ export default {
           data: this.y,
           large: true
         }]
-      }
-      this.chart.setOption(option, true)
+      };
+      this.chart.setOption(option, true);
+      this.chart.hideLoading();
     }
   },
   watch: {
@@ -187,8 +194,9 @@ export default {
       handler: function (val) {
         if (val) {
           this.$nextTick(_ => {
-            this.init();
+            this.chart = echarts.init(this.$refs.historyEc);
             this.queryObj.type = this.type;
+            this.init();
           }) 
           this.visibile = true
         } else {

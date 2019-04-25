@@ -54,13 +54,16 @@
     <el-table v-loading="loading" :data="tableData" style="width: 100%" border stripe max-height="650">
       <el-table-column type="index" width="50" label="序号">
       </el-table-column>
-      <el-table-column prop="area" label="院区">
+      <el-table-column prop="areaName" label="院区">
       </el-table-column>
-      <el-table-column prop="building" label="楼名">
+      <el-table-column prop="buildingName" label="楼名">
       </el-table-column>
-      <el-table-column prop="dept" label="所属科室">
+      <el-table-column prop="deptName" label="所属科室">
       </el-table-column>
       <el-table-column prop="floorNo" label="楼层">
+        <template slot-scope="scope">
+          {{Number(scope.row.floorNo) < 0 ?'B':''}}{{Math.abs(scope.row.floorNo) + " 层"}}
+        </template>
       </el-table-column>
       <el-table-column prop="roomNo" label="房间号">
       </el-table-column>
@@ -85,13 +88,16 @@
       <el-table id="excelTable" v-loading="loading" :data="tableData" style="width: 100%" border stripe max-height="650">
         <el-table-column type="index" width="50" label="序号">
         </el-table-column>
-        <el-table-column prop="area" label="院区">
+        <el-table-column prop="areaName" label="院区">
         </el-table-column>
-        <el-table-column prop="building" label="楼名">
+        <el-table-column prop="buildingName" label="楼名">
         </el-table-column>
-        <el-table-column prop="dept" label="所属科室">
+        <el-table-column prop="deptName" label="所属科室">
         </el-table-column>
         <el-table-column prop="floorNo" label="楼层">
+          <template slot-scope="scope">
+            {{Number(scope.row.floorNo) < 0 ?'B':''}}{{Math.abs(scope.row.floorNo) + " 层"}}
+          </template>
         </el-table-column>
         <el-table-column prop="roomNo" label="房间号">
         </el-table-column>
@@ -125,6 +131,10 @@
             <div v-else-if="item.id == 'isDedicatedAppendant'">
               <label>{{item.label}}</label>:
               <span>{{item.value | getAppendant}}</span>
+            </div>
+            <div v-else-if="item.id == 'floorNo'">
+              <label>{{item.label}}</label>:
+              <span>{{Number(item.value) < 0 ?'B':''}}{{Math.abs(item.value) + " 层"}}</span>
             </div>
             <div v-else>
               <label>{{item.label}}</label>:
@@ -183,17 +193,17 @@ let schema = [
 ];
 let arr = [
   {
-    id: "area",
+    id: "areaName",
     label: "院区",
     value: ""
   },
   {
-    id: "building",
+    id: "buildingName",
     label: "楼名",
     value: ""
   },
   {
-    id: "dept",
+    id: "deptName",
     label: "所属科室",
     value: ""
   },
@@ -243,27 +253,18 @@ export default {
       options: {
         areaArr: [], //院区
         buildingArr: [], // 建筑
-        floorNoArr: [
-          {id: 6,name: '6 层'},
-          {id: 5,name: '5 层'},
-          {id: 4,name: '4 层'},
-          {id: 3,name: '3 层'},
-          {id: 2,name: '2 层'},
-          {id: 1,name: '1 层'},
-          {id: -1,name: 'B1 层'},
-          {id: -2,name: 'B2 层'}
-        ], // 楼层
+        floorNoArr: [], // 楼层
         deptArr: [] // 科室
       },
       floorNoDefault: [
-        {id: 6,name: '6 层'},
-        {id: 5,name: '5 层'},
-        {id: 4,name: '4 层'},
-        {id: 3,name: '3 层'},
-        {id: 2,name: '2 层'},
-        {id: 1,name: '1 层'},
-        {id: -1,name: 'B1 层'},
-        {id: -2,name: 'B2 层'}
+        {id: '6',name: '6 层'},
+        {id: '5',name: '5 层'},
+        {id: '4',name: '4 层'},
+        {id: '3',name: '3 层'},
+        {id: '2',name: '2 层'},
+        {id: '1',name: '1 层'},
+        {id: '-1',name: 'B1 层'},
+        {id: '-2',name: 'B2 层'}
       ],
       allBuildingArr: {},
       buildingArrt: []
@@ -343,7 +344,7 @@ export default {
       let dept = api.deptList({pageNum: 1, pageSize: 100});
       let areaArr = await area;
       let buildingArr = await building;
-      let deptArr =await dept;
+      let deptArr = await dept;
       this.options.areaArr = areaArr.data.list || [];
       (buildingArr.data.list || []).forEach(item => {
         if (this.allBuildingArr[item.hospitalArea]) {

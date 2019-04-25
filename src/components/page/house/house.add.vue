@@ -134,14 +134,14 @@ export default {
         deptArr: [] // 科室
       },
       floorNoDefault: [
-        {id: 6,name: '6 层'},
-        {id: 5,name: '5 层'},
-        {id: 4,name: '4 层'},
-        {id: 3,name: '3 层'},
-        {id: 2,name: '2 层'},
-        {id: 1,name: '1 层'},
-        {id: -1,name: 'B1 层'},
-        {id: -2,name: 'B2 层'},
+        {id: '6',name: '6 层'},
+        {id: '5',name: '5 层'},
+        {id: '4',name: '4 层'},
+        {id: '3',name: '3 层'},
+        {id: '2',name: '2 层'},
+        {id: '1',name: '1 层'},
+        {id: '-1',name: 'B1 层'},
+        {id: '-2',name: 'B2 层'}
       ],
       allBuildingArr: {}
     }

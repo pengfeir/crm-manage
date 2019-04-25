@@ -153,20 +153,11 @@ function unPageiotDeviceList (params) { // 物联设备列表
 function findById (params) { // 查询物联设备信息
   return axios.post('/manage/iotDevice/findById', params)
 }
-function createAssetMetrics (params) { // 创建设备运行
-  return axios.post('/manage/assetMetrics/create', params)
-}
-function deleteAssetMetrics (params) { // 删除物联
-  return axios.post('/manage/assetMetrics/delete', params)
-}
-function updateAssetMetrics (params) { // 更新物联
-  return axios.post('/manage/assetMetrics/update', params)
-}
-function assetMetricsList (params) { // 房间物联
+function assetMetricsList (params) { // 根据条件查询某个设备的历史数据
   return axios.post('/manage/assetMetrics/list', params)
 }
-function tempList () { // 设备监测数据
-  return axios.post('/manage/assetMetrics/tempList')
+function tempList (params) { // 所有设备监测数据
+  return axios.post('/manage/assetMetrics/tempList', params)
 }
 function areaList (params) { // 院区列表
   return axios.post('/manage/area/list', params)
@@ -256,9 +247,6 @@ export default {
   updateIotDevice,
   unPageiotDeviceList,
   iotDeviceList,
-  createAssetMetrics,
-  deleteAssetMetrics,
-  updateAssetMetrics,
   assetMetricsList,
   assetFindById,
   faultFindById,

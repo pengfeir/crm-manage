@@ -32,38 +32,58 @@
       <el-table v-loading="loading" :data="tableData" style="width: 100%" height="100%" border stripe>
           <el-table-column type="index" width="50" label="序号">
           </el-table-column>
-          <el-table-column prop="temperature" label="设备名称" width="100">
+          <el-table-column prop="assetName" align="center" label="设备名称" width="150">
           </el-table-column>
-          <el-table-column prop="temperature" label="设备型号" width="100">
+          <el-table-column prop="assetModel" align="center" label="设备型号" width="150">
           </el-table-column>
-          <el-table-column prop="temperature" label="设备SN序列号" width="120">
+          <el-table-column prop="assetSn" align="center" label="设备SN序列号" width="150">
           </el-table-column>
-          <el-table-column prop="assetStatus" label="设备状态" width="100">
-              <template slot-scope="scope">
-                  {{scope.row.assetStatus | filterAssetStatus}}
-              </template>
+          <el-table-column prop="assetNo" align="center" label="设备编号" width="150">
           </el-table-column>
-          <el-table-column prop="temperature" label="温度" width="50">
+          <el-table-column prop="macAddr" align="center" width="130" label="设备的MAC地址">
           </el-table-column>
-          <el-table-column prop="energy" label="电能计量" width="80">
+          <el-table-column prop="assetStatus" align="center" label="设备状态" width="100">
+            <template slot-scope="scope">
+              {{scope.row.assetStatus | filterAssetStatus}}
+            </template>
           </el-table-column>
-          <el-table-column prop="inputI" label="输入电流" width="80">
+          <el-table-column prop="temperature" align="center" label="温度" width="90">
+            <template slot-scope="scope">
+              {{scope.row.temperature}}<span style="color:#409EFF;">{{scope.row.temperature? ' °C': ''}}</span>
+            </template>
           </el-table-column>
-          <el-table-column prop="inputV" label="输入电压" width="80">
+          <el-table-column prop="energy" align="center" label="电能计量" width="80">
+            <template slot-scope="scope">
+              {{scope.row.energy}}<span style="color:#409EFF;">{{scope.row.energy? ' kW': ''}}</span>
+            </template>
           </el-table-column>
-          <el-table-column prop="macAddr" width="130" label="设备的MAC地址">
+          <el-table-column prop="inputI" align="center" label="输入电流" width="80">
+            <template slot-scope="scope">
+              {{scope.row.inputI}}<span style="color:#409EFF;">{{scope.row.inputI? ' A': ''}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="inputV" align="center" label="输入电压" width="80">
+            <template slot-scope="scope">
+              {{scope.row.inputV}}<span style="color:#409EFF;">{{scope.row.inputV? ' V': ''}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="powerFactor" align="center" label="功率因数" width="80">
+          </el-table-column>
+          <el-table-column prop="powerHz" align="center" label="电源频率" width="80">
+            <template slot-scope="scope">
+              {{scope.row.powerHz}}<span style="color:#409EFF;">{{scope.row.powerHz? ' Hz': ''}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="realPower" align="center" label="有功功率" width="100">
+            <template slot-scope="scope">
+              {{scope.row.realPower}}<span style="color:#409EFF;">{{scope.row.realPower? ' kW/H': ''}}</span>
+            </template>
           </el-table-column>
           <el-table-column prop="pos1" label="位置信息1" width="130">
           </el-table-column>
           <el-table-column prop="pos2" label="位置信息2" width="130">
           </el-table-column>
           <el-table-column prop="pos3" label="位置信息3" width="130">
-          </el-table-column>
-          <el-table-column prop="powerFactor" label="功率因数" width="80">
-          </el-table-column>
-          <el-table-column prop="powerHz" label="电源频率" width="80">
-          </el-table-column>
-          <el-table-column prop="realPower" label="有功功率" width="80">
           </el-table-column>
           <el-table-column prop="mtime" label="更新时间" width="180">
           </el-table-column>
@@ -85,11 +105,15 @@
       <el-table id="excelTable" :data="tableData" style="width: 100%" height="100%" border stripe>
           <el-table-column type="index" width="50" label="序号">
           </el-table-column>
-          <el-table-column prop="temperature" label="设备名称" width="100">
+          <el-table-column prop="assetName" label="设备名称" width="150">
           </el-table-column>
-          <el-table-column prop="temperature" label="设备型号" width="100">
+          <el-table-column prop="assetModel" label="设备型号" width="150">
           </el-table-column>
-          <el-table-column prop="temperature" label="设备SN序列号" width="120">
+          <el-table-column prop="assetSn" label="设备SN序列号" width="150">
+          </el-table-column>
+          <el-table-column prop="assetNo" label="设备编号" width="120">
+          </el-table-column>
+          <el-table-column prop="macAddr" width="130" label="设备的MAC地址">
           </el-table-column>
           <el-table-column prop="assetStatus" label="设备状态" width="100">
               <template slot-scope="scope">
@@ -104,19 +128,17 @@
           </el-table-column>
           <el-table-column prop="inputV" label="输入电压" width="80">
           </el-table-column>
-          <el-table-column prop="macAddr" width="130" label="设备的MAC地址">
+          <el-table-column prop="powerFactor" label="功率因数" width="80">
+          </el-table-column>
+          <el-table-column prop="powerHz" label="电源频率" width="80">
+          </el-table-column>
+          <el-table-column prop="realPower" label="有功功率" width="80">
           </el-table-column>
           <el-table-column prop="pos1" label="位置信息1" width="130">
           </el-table-column>
           <el-table-column prop="pos2" label="位置信息2" width="130">
           </el-table-column>
           <el-table-column prop="pos3" label="位置信息3" width="130">
-          </el-table-column>
-          <el-table-column prop="powerFactor" label="功率因数" width="80">
-          </el-table-column>
-          <el-table-column prop="powerHz" label="电源频率" width="80">
-          </el-table-column>
-          <el-table-column prop="realPower" label="有功功率" width="80">
           </el-table-column>
           <el-table-column prop="mtime" label="更新时间" width="180">
           </el-table-column>
@@ -186,16 +208,16 @@ export default {
   data() {
     var obj = this.createObjFromSchema(schema);
     obj.value = '';
-    obj.keys = 1;
+    obj.keys = 'sn';
     return {
       api,
       querySchema: schema,
       queryObj: obj,
       tableData: [],
       options: [
-        {id: 1, name: 'SN序列号'},
-        {id: 2, name: 'MAC地址'},
-        {id: 3, name: '资产编号'}
+        {id: 'sn', name: 'SN序列号'},
+        {id: 'macAddress', name: 'MAC地址'},
+        {id: 'no', name: '资产编号'}
       ],
       listApiName: "tempList"
     };
@@ -203,13 +225,13 @@ export default {
   methods: {
     exportExcel () {
       /* generate workbook object from table */
-         var wb = XLSX.utils.table_to_book(document.querySelector('#excelTable'))
-         /* get binary string as output */
-         var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
-         try {
-             FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '设备监测.xlsx')
-         } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
-         return wbout
+      var wb = XLSX.utils.table_to_book(document.querySelector('#excelTable'))
+      /* get binary string as output */
+      var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+      try {
+          FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '设备监测.xlsx')
+      } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
+      return wbout
     },
     onChange () {
       this.queryObj.value = ''
@@ -219,6 +241,19 @@ export default {
     },
     seeEcharts () {
       this.$router.push('/page/home')
+    },
+    list () {
+      let params = {
+        assetStatus: this.queryObj.assetStatus
+      }
+      if (this.queryObj.keys) {
+        params[this.queryObj.keys] = this.queryObj.value;
+      }
+      api.tempList(params).then(rs => {
+        if (rs.code === 200) {
+          this.tableData = rs.data;
+        }
+      })
     }
   },
   created () {
