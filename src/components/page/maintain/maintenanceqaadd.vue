@@ -9,13 +9,12 @@
       </template>
       <template slot="actionUserId">
         <el-select v-model="infoQueryObj.actionUserId" clearable placeholder="请选择">
-          <el-option
-            v-for="item in options"
-            :key="item.id"
-            :label="item.username"
-            :value="item.id">
+          <el-option v-for="item in options" :key="item.id" :label="item.username" :value="item.id">
           </el-option>
         </el-select>
+      </template>
+      <template slot="vender">
+        <el-autocomplete class="inline-input" v-model="infoQueryObj.vender" :fetch-suggestions="queryComp" placeholder="请输入内容" style="width: 100%"></el-autocomplete>
       </template>
       <template slot="default">
         <div></div>
@@ -70,7 +69,8 @@ let infoSchema = [
   },
   {
     name: "vender",
-    label: "服务提供方"
+    label: "服务提供方",
+    comp: "custom"
   },
   {
     name: "extra",
@@ -95,6 +95,7 @@ export default {
       filelistObj: {
         reportList: []
       },
+      venderOptions: JSON.parse(this.getStore("venderOptions")) || [],
       rules: {
         assetId: [
           {
@@ -109,12 +110,15 @@ export default {
             message: "必填项",
             trigger: ["blur", "change"]
           }
-        ],
-
+        ]
       }
     };
   },
   methods: {
+    async queryComp(query, cb) {
+      let a = JSON.parse(JSON.stringify(this.venderOptions));
+      cb(a);
+    },
     handleClose() {
       Object.keys(this.filelistObj).map(v => {
         this.filelistObj[v] = [];
@@ -162,7 +166,7 @@ export default {
           }
           let tips = this.detailId ? "更新" : "创建";
           let params = Object.assign({}, this.infoQueryObj);
-          params.kind = 'qa'
+          params.kind = "qa";
           params.reportUrlList =
             this.imgObj.reportImg.length > 0
               ? JSON.stringify(this.imgObj.reportImg)
@@ -170,7 +174,22 @@ export default {
           api[url](params).then(rs => {
             this.popShow = false;
             if (rs.code === 200) {
-              this.$router.go(-1)
+              let venderOptions = [
+                ...this.venderOptions,
+                {
+                  name: this.infoQueryObj.vender,
+                  value: this.infoQueryObj.vender
+                }
+              ];
+              let obj = {};
+            let newarr =   venderOptions.reduce((total, cur) => {
+                obj[cur.value]
+                  ? ""
+                  : (obj[cur.value] = true && total.push(cur));
+                  return total
+              }, []);
+              this.setStore("venderOptions", JSON.stringify(newarr));
+              this.$router.go(-1);
               this.$messageTips(this, "success", tips + "成功");
             } else {
               this.$messageTips(this, "error", tips + "失败");
@@ -192,20 +211,20 @@ export default {
         [];
     }
   },
-  created () {
+  created() {
     if (this.$route.query.id) {
-      this.detailId = this.$route.query.id
-      api.mainFindById({id: this.detailId}).then(rs => {
+      this.detailId = this.$route.query.id;
+      api.mainFindById({ id: this.detailId }).then(rs => {
         if (rs.code === 200) {
-          this.emitInfo(rs.data)
+          this.emitInfo(rs.data);
         }
-      })
+      });
     }
-    api.userList({name: '', id: ''}).then(rs => {
+    api.userList({ name: "", id: "" }).then(rs => {
       if (rs.code === 200 && rs.data.length > 0) {
-        this.options = rs.data
+        this.options = rs.data;
       }
-    })
+    });
   }
 };
 </script>

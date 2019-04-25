@@ -17,6 +17,9 @@
           </el-option>
         </el-select>
       </template>
+      <template slot="vender">
+        <el-autocomplete class="inline-input" v-model="infoQueryObj.vender" :fetch-suggestions="queryComp" placeholder="请输入内容" style="width: 100%"></el-autocomplete>
+      </template>
       <template slot="default">
         <div></div>
       </template>
@@ -70,7 +73,8 @@ let infoSchema = [
   },
   {
     name: "vender",
-    label: "服务提供方"
+    label: "服务提供方",
+    comp: "custom"
   },
   {
     name: "extra",
@@ -87,6 +91,7 @@ export default {
       infoQuerySchema: infoSchema,
       detailId: "",
       options: [],
+      venderOptions: JSON.parse(this.getStore("mainVenderOptions")) || [],
       // 保存图片地址
       imgObj: {
         reportImg: []
@@ -115,6 +120,10 @@ export default {
     };
   },
   methods: {
+    async queryComp(query, cb) {
+      let a = JSON.parse(JSON.stringify(this.venderOptions));
+      cb(a);
+    },
     handleClose() {
       Object.keys(this.filelistObj).map(v => {
         this.filelistObj[v] = [];
@@ -170,6 +179,21 @@ export default {
           api[url](params).then(rs => {
             this.popShow = false;
             if (rs.code === 200) {
+              let venderOptions = [
+                ...this.venderOptions,
+                {
+                  name: this.infoQueryObj.vender,
+                  value: this.infoQueryObj.vender
+                }
+              ];
+              let obj = {};
+            let newarr =   venderOptions.reduce((total, cur) => {
+                obj[cur.value]
+                  ? ""
+                  : (obj[cur.value] = true && total.push(cur));
+                  return total
+              }, []);
+              this.setStore("mainVenderOptions", JSON.stringify(newarr));
               this.$router.go(-1)
               this.$messageTips(this, "success", tips + "成功");
             } else {
