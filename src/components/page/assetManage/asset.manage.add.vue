@@ -37,6 +37,9 @@
               </el-option>
             </el-select>
           </template>
+          <template slot="aaaa">
+            <el-input v-model="aaaa"></el-input>
+          </template>
           <template slot="default">
             <div></div>
           </template>
@@ -249,6 +252,11 @@ let schema = [
   },
   {
     name: "contractUrlList",
+    label: "采购合同照片",
+    comp: "custom"
+  },
+  {
+    name: "aaaa",
     label: "采购合同照片",
     comp: "custom"
   }
