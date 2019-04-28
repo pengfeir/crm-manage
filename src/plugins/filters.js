@@ -2,7 +2,7 @@
  * @Author: renpengfei
  * @Date: 2019-03-25 14:56:51
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-04-19 17:13:04
+ * @Last Modified time: 2019-04-28 19:45:47
  */
 /**
  * 设备装机状态
@@ -125,4 +125,44 @@ export const filterSectionType = type => {
     default:
       return ''
   }
+}
+export const formatToFinacial = (money, n) => {
+  if (!money) {
+    money = 0
+  }
+  money = parseFloat(money)
+  let absicon = ''
+  if (parseFloat(money) !== Math.abs(money) && money !== Math.abs(money) && money !== 0 && money !== '0.00') {
+    absicon = '-'
+  }
+  if (n === 0) {
+    money = parseFloat((money + '').replace(/[^\d.]/g, '')) + ''
+  } else {
+    if (!n) {
+      n = 2
+    }
+    n = n > 0 && n <= 20 ? n : 2
+    let arr = String(money).split('.')
+    if (arr[1]) {
+      if (arr[1].substring(n) && arr[1].substring(n) === '5') {
+        money = money > 0 ? parseFloat(arr[0] + '.' + arr[1].substring(0, n)) + parseFloat(Math.pow(0.1, n).toFixed(n)) : parseFloat(arr[0] + '.' + arr[1].substring(0, n)) - parseFloat(Math.pow(0.1, n).toFixed(n))
+      } else {
+        money = money.toFixed(n)
+      }
+    } else {
+      money = money.toFixed(n)
+    }
+    money = parseFloat((money + '').replace(/[^\d.]/g, '')).toFixed(n) + ''
+  }
+  var l = money.split('.')[0].split('').reverse()
+  var r = money.split('.')[1] ? money.split('.')[1] : '00'
+  var t = ''
+  for (var i = 0; i < l.length; i++) {
+    t += l[i] + ((i + 1) % 3 === 0 && (i + 1) !== l.length ? ',' : '')
+  }
+  let returnResult = t.split('').reverse().join('') + '.' + r
+  if (returnResult === '0.00') {
+    absicon = ''
+  }
+  return absicon + t.split('').reverse().join('') + '.' + r
 }

@@ -179,22 +179,8 @@ export default {
           api[url](params).then(rs => {
             this.popShow = false;
             if (rs.code === 200) {
-              let venderOptions = [
-                ...this.venderOptions,
-                {
-                  name: this.infoQueryObj.vender,
-                  value: this.infoQueryObj.vender
-                }
-              ];
-              let obj = {};
-            let newarr =   venderOptions.reduce((total, cur) => {
-                obj[cur.value]
-                  ? ""
-                  : (obj[cur.value] = true && total.push(cur));
-                  return total
-              }, []);
-              this.setStore("mainVenderOptions", JSON.stringify(newarr));
-              this.$router.go(-1)
+              this.setStore();
+              this.$router.go(-1);
               this.$messageTips(this, "success", tips + "成功");
             } else {
               this.$messageTips(this, "error", tips + "失败");
@@ -202,6 +188,21 @@ export default {
           });
         }
       });
+    },
+    setStore () {
+      let venderOptions = [
+        ...this.venderOptions,
+        {
+          name: this.infoQueryObj.vender,
+          value: this.infoQueryObj.vender
+        }
+      ];
+      let obj = {};
+      let newarr = venderOptions.reduce((total, cur) => {
+        obj[cur.value] ? "" : (obj[cur.value] = true && total.push(cur));
+        return total
+      }, []);
+      this.setStore("mainVenderOptions", JSON.stringify(newarr));
     },
     emitInfo(row) {
       row.actionUserId = String(row.actionUserId);

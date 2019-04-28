@@ -20,7 +20,7 @@
           <div class="vice-content">
              <div class="module">
               <div>今日新增在线</div>
-              <div class="content">12</div>
+              <div class="content">{{assetNum.add}}</div>
               <div class="company"><span>台</span></div>
             </div>
           </div>
@@ -140,13 +140,19 @@
   </div>
 </template>
 <script>
-import echarts from 'echarts/lib/echarts'
+import echarts from 'echarts/lib/echarts';
+import api from "@/api/api";
+import moment from 'moment';
 require('echarts/lib/chart/line') 
 require('echarts/lib/chart/pie')
 require('echarts/lib/chart/tree')
 export default {
   data () {
     return {
+      assetNum: {
+        online: 0,
+        add: 0
+      },
       assetInfo: {
         x: [],
         y: [],
@@ -204,14 +210,26 @@ export default {
   },
   created () {
     this.$nextTick(_ => {
-      this.init()
+      this.initEchart()
       this.failureInit()
       this.assetPlaceInit()
       this.complaintInit()
       this.roomInit()
+      this.initAssetNum()
     }) 
   },
   methods: {
+    initAssetNum () {
+      // 获取今日新增设备数
+      let curDate = moment(new Date().getTime()).format('YYYY-MM-DD')
+      api.countByDate({beginDate: curDate, endDate: curDate}).then(rs => {
+        if (rs.code === 200) {
+          this.assetNum.add = rs.data;
+        } else {
+          this.assetNum.add = '--';
+        }
+      })
+    },
     randomData() {
       this.assetInfo.now = new Date(+this.assetInfo.now - this.assetInfo.oneDay);
       this.assetInfo.value = this.assetInfo.value + Math.random() * 2;
@@ -220,7 +238,7 @@ export default {
       this.assetInfo.x.unshift(this.assetInfo.now.getFullYear()+'-'+(this.assetInfo.now.getMonth()+1) +'-'+ this.assetInfo.now.getDate()),
       this.assetInfo.y.push(Math.round(this.assetInfo.value))
     },
-    init () {
+    initEchart () {
       for (var i = 0; i < 20; i++) {
         this.assetInfo.data.push(this.randomData());
       }

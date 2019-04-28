@@ -212,6 +212,7 @@ export default {
               ? JSON.stringify(this.imgObj.reportImg)
               : "";
           params.extra = JSON.stringify(this.tableData);
+          params.roomIds = [params.roomIds]
           api[url](params).then(rs => {
             this.popShow = false;
             if (rs.code === 200) {
@@ -227,6 +228,7 @@ export default {
     emitInfo(row) {
       this.detailId = row.id;
       Object.assign(this.queryObj, row);
+      this.queryObj.roomIds = this.queryObj.roomIds[0];
       this.filelistObj.reportList =
         (this.queryObj.urlList && JSON.parse(this.queryObj.urlList)) || [];
       this.imgObj.reportImg =

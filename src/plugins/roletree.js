@@ -82,6 +82,12 @@ var menuArr = [
         level: 2,
         childMenus: []
       }, {
+        menuName: '保修合同管理',
+        menuUrl: '/page/contractList',
+        auth: 'contract',
+        level: 2,
+        childMenus: []
+      }, {
         menuName: '不良事件/投诉',
         menuUrl: '/page/complaint',
         level: 2,

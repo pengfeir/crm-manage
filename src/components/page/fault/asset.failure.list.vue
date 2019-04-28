@@ -38,39 +38,29 @@
       </el-table-column>
       <el-table-column
         prop="dept"
-        label="发生科室"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="fixStep"
-        label="维修进度"
-      >
-        <template slot-scope="scope">
-          {{scope.row.fixStep | stepStatus}}
-        </template>
+        label="发生科室">
       </el-table-column>
       <el-table-column
         prop="kind"
-        label="故障类别"
-      >
+        label="故障类别">
       </el-table-column>
       <el-table-column
         prop="offerPrice"
-        label="维修报价"
-      >
+        label="维修报价">
+        <template slot-scope="scope">
+          {{scope.row.offerPrice | formatToFinacial}}
+        </template>
       </el-table-column>
       <el-table-column
         prop="faultUrlList"
         label="故障照片"
-        width="150"
-      >
+        width="150">
         <template slot-scope="scope">
           <fileshow
             :type="'img'"
             :tailor="true"
             :isNoShowBtn="true"
-            :fileurlList="scope.row.faultUrlList"
-          ></fileshow>
+            :fileurlList="scope.row.faultUrlList"></fileshow>
         </template>
       </el-table-column>
       <el-table-column
@@ -99,6 +89,22 @@
             :isNoShowBtn="true"
             :fileurlList="scope.row.receiptUrlList"
           ></fileshow>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="fixStep"
+        width="100"
+        align="center"
+        label="维修进度">
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.fixStep" class="table-select" @change="val => {fixStepChange(val, scope.row)}" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
         </template>
       </el-table-column>
       <el-table-column
@@ -181,6 +187,9 @@
       <el-table-column
         prop="offerPrice"
         label="维修报价">
+        <template slot-scope="scope">
+          {{scope.row.offerPrice | formatToFinacial}}
+        </template>
       </el-table-column>
       <el-table-column
         prop="faultUrlList"
@@ -293,6 +302,9 @@
             <div v-else-if="item.id == 'isDedicatedAppendant'">
               <label>{{item.label}}</label>: <span>{{item.value | getAppendant}}</span>
             </div>
+            <div v-else-if="item.id === 'offerPrice'">
+              <label>{{item.label}}</label>: <span>{{item.value | formatToFinacial}}</span>
+            </div>
             <div v-else>
               <label>{{item.label}}</label>: <span>{{item.value}}</span>
             </div>
@@ -395,11 +407,6 @@ let arr = [
     value: ""
   },
   {
-    id: "descr",
-    label: "故障描述",
-    value: ""
-  },
-  {
     id: "faultAt",
     label: "故障发生时间",
     value: ""
@@ -435,6 +442,11 @@ let arr = [
     value: ""
   },
   {
+    id: "descr",
+    label: "故障描述",
+    value: ""
+  },
+  {
     id: "contractUrlList",
     label: "维修合同照片",
     value: ""
@@ -461,19 +473,21 @@ export default {
       tableData: [],
       listApiName: "faultList",
       popShow: false,
-      arr
+      arr,
+      options
     };
   },
   methods: {
     exportExcel () {
-      /* generate workbook object from table */
-         var wb = XLSX.utils.table_to_book(document.querySelector('#excelTable'))
-         /* get binary string as output */
-         var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
-         try {
-             FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '设备维修.xlsx')
-         } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
-         return wbout
+      var wb = XLSX.utils.table_to_book(document.querySelector('#excelTable'))
+      var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+      try {
+          FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '设备维修.xlsx')
+      } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
+      return wbout
+    },
+    fixStepChange (val, row) {
+      console.log(val, row)
     },
     seeDetail(row) {
       arr.forEach(item => {
@@ -524,6 +538,17 @@ export default {
 .package-sale /deep/ .el-form-item:nth-child(5) .el-form-item__content {
   width: 195px;
 }
+.table-select /deep/ .el-input__icon {
+  line-height: 32px;
+  display: none !important;
+}
+.table-select /deep/ input {
+  height: 26px;
+  line-height: 26px;
+  padding:0 !important;
+  text-align: center;
+}
+
 </style>
 
 

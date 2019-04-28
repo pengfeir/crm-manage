@@ -204,6 +204,27 @@ function createDept (params) { // 新建科室
 function updateDept (params) { // 更新科室
   return axios.post('/manage/dept/update', params)
 }
+function countByDate (params) { // 获取某段时间新增设备个数
+  return axios.post('/manage/asset/countByDate', params)
+}
+function createContract (params) { // 创建合同
+  return axios.post('/manage/guaranteeContract/create', params)
+}
+function delContract (params) { // 删除合同
+  return axios.post('/manage/guaranteeContract/delete', params)
+}
+function findByAssetContract (params) { // 根据设备id查询合同信息
+  return axios.post('/manage/guaranteeContract/findByAssetId', params)
+}
+function findByIdContract (params) { // 根据id查询合同信息
+  return axios.post('/manage/guaranteeContract/findById', params)
+}
+function contractList (params) { // 合同列表
+  return axios.post('/manage/guaranteeContract/list', params)
+}
+function updateContract (params) { // 更新合同信息1
+  return axios.post('/manage/guaranteeContract/update', params)
+}
 export default {
   login,
   getUpToken,
@@ -272,5 +293,12 @@ export default {
   delDept,
   findByIdDept,
   createDept,
-  updateDept
+  updateDept,
+  countByDate,
+  createContract,
+  delContract,
+  findByAssetContract,
+  findByIdContract,
+  contractList,
+  updateContract
 }

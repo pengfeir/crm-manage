@@ -17,8 +17,14 @@
       <el-table-column prop="name" label="设备名称" width="150">
       </el-table-column>
       <el-table-column prop="purchasePrice" label="采购价格">
+        <template slot-scope="scope">
+          {{scope.row.purchasePrice | formatToFinacial}}
+        </template>
       </el-table-column>
       <el-table-column prop="depreciationCharge" label="折旧费">
+        <template slot-scope="scope">
+          {{scope.row.depreciationCharge | formatToFinacial}}
+        </template>
       </el-table-column>
       <el-table-column prop="responsiblePersonName" label="责任工程师">
       </el-table-column>
@@ -66,13 +72,22 @@
         </el-table-column>
         <el-table-column prop="name" label="设备名称">
         </el-table-column>
-        <el-table-column prop="no" label="采购价格">
+        <el-table-column prop="purchasePrice" label="采购价格">
+          <template slot-scope="scope">
+            {{scope.row.purchasePrice | formatToFinacial}}
+          </template>
         </el-table-column>
-        <el-table-column prop="no" label="折旧费">
+        <el-table-column prop="depreciationCharge" label="折旧费">
+          <template slot-scope="scope">
+            {{scope.row.depreciationCharge | formatToFinacial}}
+          </template>
         </el-table-column>
         <el-table-column prop="responsiblePersonName" label="责任工程师">
         </el-table-column>
-        <el-table-column prop="no" label="保修截止日期">
+        <el-table-column prop="matainExpiryDate" width="110" label="保修截止日期">
+          <template slot-scope="scope">
+            {{scope.row.matainExpiryDate&&scope.row.matainExpiryDate.split(' ')[0]}}
+          </template>
         </el-table-column>
         <el-table-column prop="no" label="设备编号">
         </el-table-column>
@@ -143,6 +158,9 @@
             </div>
             <div v-else-if="item.id == 'isDedicatedAppendant'">
               <label>{{item.label}}</label>: <span>{{item.value | getAppendant}}</span>
+            </div>
+            <div v-else-if="item.id == 'purchasePrice' || item.id == 'depreciationCharge'">
+              <label>{{item.label}}</label>: <span>{{item.value | formatToFinacial}}</span>
             </div>
             <div v-else>
               <label>{{item.label}}</label>: <span>{{item.value}}</span>
@@ -231,6 +249,11 @@ let arr = [
   {
     id: "purchasePrice",
     label: "采购价格",
+    value:''
+  },
+  {
+    id: "depreciationCharge",
+    label: "折旧费",
     value:''
   },
   {

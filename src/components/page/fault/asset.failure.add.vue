@@ -1,26 +1,37 @@
 <template>
   <div class="layout_inner">
     <ever-bread-crumb :showTitle="'设备故障'"></ever-bread-crumb>
-    <ever-form2 :schema="infoQuerySchema" v-model="infoQueryObj" ref="form" :rules="rules" class="package-sale" labelWidth="180px" label-position="right">
-      <template slot="faultUrlList">
-        <el-upload :action="uploadUrl" list-type="picture" :file-list="detailId?filelistObj.faultList:[]" :on-remove="handleFaultRemove" :on-success="handleFaultSuccess" :data="uploadData" :before-upload="beforeUploadGetKey">
-          <el-button size="small" type="primary">点击上传</el-button>
-        </el-upload>
-      </template>
-      <template slot="receiptUrlList">
-        <el-upload :action="uploadUrl" list-type="picture" :file-list="detailId?filelistObj.receiptList:[]" :on-remove="handleReceiptRemove" :on-success="handleReceiptSuccess" :data="uploadData" :before-upload="beforeUploadGetKey">
-          <el-button size="small" type="primary">点击上传</el-button>
-        </el-upload>
-      </template>
-      <template slot="contractUrlList">
-        <el-upload :action="uploadUrl" list-type="picture" :file-list="detailId?filelistObj.contractList:[]" :on-remove="handleContractRemove" :on-success="handleContractSuccess" :data="uploadData" :before-upload="beforeUploadGetKey">
-          <el-button size="small" type="primary">点击上传</el-button>
-        </el-upload>
-      </template>
-      <template slot="default">
-        <div></div>
-      </template>
-    </ever-form2>    
+    <fieldset>
+      <legend>上报信息</legend>
+      <ever-form2 :schema="infoQuerySchema2" v-model="infoQueryObj2" ref="form" :rules="rules" class="package-sale" labelWidth="120px" label-position="right">
+        <template slot="default">
+          <div></div>
+        </template>
+      </ever-form2>  
+    </fieldset>
+    <fieldset style="margin-top:50px;">
+      <legend>维修信息</legend>
+      <ever-form2 :schema="infoQuerySchema" v-model="infoQueryObj" ref="form" :rules="rules" class="package-sale" labelWidth="120px" label-position="right">
+        <template slot="faultUrlList">
+          <el-upload :action="uploadUrl" list-type="picture" :file-list="detailId?filelistObj.faultList:[]" :on-remove="handleFaultRemove" :on-success="handleFaultSuccess" :data="uploadData" :before-upload="beforeUploadGetKey">
+            <el-button size="small" type="primary">点击上传</el-button>
+          </el-upload>
+        </template>
+        <template slot="receiptUrlList">
+          <el-upload :action="uploadUrl" list-type="picture" :file-list="detailId?filelistObj.receiptList:[]" :on-remove="handleReceiptRemove" :on-success="handleReceiptSuccess" :data="uploadData" :before-upload="beforeUploadGetKey">
+            <el-button size="small" type="primary">点击上传</el-button>
+          </el-upload>
+        </template>
+        <template slot="contractUrlList">
+          <el-upload :action="uploadUrl" list-type="picture" :file-list="detailId?filelistObj.contractList:[]" :on-remove="handleContractRemove" :on-success="handleContractSuccess" :data="uploadData" :before-upload="beforeUploadGetKey">
+            <el-button size="small" type="primary">点击上传</el-button>
+          </el-upload>
+        </template>
+        <template slot="default">
+          <div></div>
+        </template>
+      </ever-form2>  
+    </fieldset> 
     <div class="log-btn-container">
       <el-button type="primary" @click="prev">保存</el-button>
       <el-button @click="handleClose">取消</el-button>
@@ -56,15 +67,11 @@ let options = [
     name: "取消"
   }
 ]
-let infoSchema = [
+let infoSchema2 = [
   {
     name: "assetId",
     label: "设备名称",
     comp: "assets-select"
-  },
-  {
-    name: "contact",
-    label: "联系方式"
   },
   {
     name: "dept",
@@ -83,6 +90,16 @@ let infoSchema = [
       valueFormat: "yyyy-MM-dd HH:mm:ss"
     }
   },
+  {
+    name: "reporter",
+    label: "上报人"
+  },
+  {
+    name: "contact",
+    label: "联系方式"
+  }
+]
+let infoSchema = [
   {
     name: "fixStep",
     label: "维修进度",
@@ -115,10 +132,6 @@ let infoSchema = [
     comp: "custom"
   },
   {
-    name: "reporter",
-    label: "故障上报人信息(姓名电话)"
-  },
-  {
     name: "vender",
     label: "服务提供方"
   },
@@ -131,10 +144,13 @@ export default {
   mixins: [token],
   data() {
     var infoObj = this.createObjFromSchema(infoSchema);
+    var infoObj2 = this.createObjFromSchema(infoSchema2);
     return {
       api,
       infoQueryObj: infoObj,
       infoQuerySchema: infoSchema,
+      infoQueryObj2: infoObj2,
+      infoQuerySchema2: infoSchema2,
       popShow: false,
       popTitle: "新建",
       detailId: "",
@@ -232,12 +248,16 @@ export default {
     prev(id) {
       this.$refs.form.$refs.form.validate(valid => {
         if (valid) {
+          let tips = this.detailId ? "更新" : "创建";
+          let params = Object.assign({}, this.infoQueryObj, this.infoQueryObj2);
           let url = "createFault";
           if (this.detailId) {
             url = "updateFault";
+          } else {
+            if (!params.fixStep) {
+              params.fixStep = 'reported';
+            }
           }
-          let tips = this.detailId ? "更新" : "创建";
-          let params = Object.assign({}, this.infoQueryObj);
           params.faultUrlList =
             this.imgObj.faultImg.length > 0
               ? JSON.stringify(this.imgObj.faultImg)
@@ -266,9 +286,14 @@ export default {
       this.$router.go(-1)
     },
     emitInfo(row) {
-      this.popTitle = "编辑设备故障";
       this.detailId = row.id;
       Object.assign(this.infoQueryObj, row);
+      for (let key in this.infoQueryObj) {
+        this.infoQueryObj[key] = row[key];
+      }
+      for (let key in this.infoQueryObj2) {
+        this.infoQueryObj2[key] = row[key];
+      }
       this.filelistObj.faultList =
         (this.infoQueryObj.faultUrlList &&
           JSON.parse(this.infoQueryObj.faultUrlList)) ||
@@ -295,8 +320,6 @@ export default {
         (this.infoQueryObj.contractUrlList &&
           JSON.parse(this.infoQueryObj.contractUrlList)) ||
         [];
-
-      this.popShow = true;
     },
     getInfo () {
       api.faultFindById({id: this.$route.query.id}).then(rs => {
@@ -319,6 +342,17 @@ export default {
   height: 400px;
   overflow: hidden;
   overflow-y: scroll;
+}
+fieldset {
+  border-color: #DCDFE6;
+  border-width: 1px;
+  margin-left: 30px;
+}
+.package-sale /deep/ .el-row {
+  margin-top: 20px;
+}
+.log-btn-container {
+  margin-top: 20px;
 }
 </style>
 
