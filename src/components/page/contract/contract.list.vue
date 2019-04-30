@@ -94,7 +94,7 @@
     <el-dialog :title="'保养详情'" :visible.sync="popShow" class="ui_dialog_02 detail-log carditem" width="80%" :append-to-body="true">
       <div>
         <el-row>
-          <el-col v-for="item in arr" :key="item.id" :span="item.id == 'enclosure' || item.id == 'tenderInfo'? 24 : 6">
+          <el-col v-for="item in arr" :key="item.id" :span="item.id == 'enclosure' || item.id == 'tenderInfo' || item.id == 'extra'? 24 : 6">
             <div v-if="item.id == 'enclosure'">
                <label>{{item.label}}</label>: <span><fileshow class="maxsize" :type="'img'" :fileurlList="item.value" :isNoShowBtn="false" :tailor="false"></fileshow></span>
             </div>
@@ -116,7 +116,7 @@
                     <label>投标方名称</label>: <span>{{item.value.name1}}</span>
                   </div>
                   <div class="module">
-                    <label>投标方报价</label>: <span>{{item.value.price1}}</span>
+                    <label>投标方报价</label>: <span>{{item.value.price1 | formatToFinacial}}</span>
                   </div>
                   <div class="module">
                     <label>标书附件</label>
@@ -133,7 +133,7 @@
                     <label>投标方名称</label>: <span>{{item.value.name2}}</span>
                   </div>
                   <div class="module">
-                    <label>投标方报价</label>: <span>{{item.value.price2}}</span>
+                    <label>投标方报价</label>: <span>{{item.value.price2 | formatToFinacial}}</span>
                   </div>
                   <div class="module">
                     <label>标书附件</label>
@@ -150,7 +150,7 @@
                     <label>投标方名称</label>: <span>{{item.value.name3}}</span>
                   </div>
                   <div class="module">
-                    <label>投标方报价</label>: <span>{{item.value.price3}}</span>
+                    <label>投标方报价</label>: <span>{{item.value.price3 | formatToFinacial}}</span>
                   </div>
                   <div class="module">
                     <label>标书附件</label>
@@ -222,7 +222,7 @@ let arr = [
   },
   {
     id: "type",
-    label: "保修类别",
+    label: "保修范围",
     value: ""
   },
   {
@@ -251,8 +251,13 @@ let arr = [
     value: ""
   },
   {
-    id: "extra",
+    id: "iphone",
     label: "联系方式",
+    value: ""
+  },
+  {
+    id: "extra",
+    label: "保修类别",
     value: ""
   },
   {
@@ -278,6 +283,7 @@ export default {
       tableData: [],
       options: [],
       popShow: false,
+      partArr: [],
       listApiName: "contractList"
     };
   },
@@ -300,11 +306,33 @@ export default {
           val.img3 = JSON.stringify(val.img3);
           item.value = val;
         } else if (item.id === 'type') {
-          let str = row[item.id].replace('1', '保修').replace('2', '保养');
+          let str = row[item.id].replace('1', '维修').replace('2', '保养');
           item.value = str;
+        } else if (item.id === 'extra') {
+          item.value = this.initContractType(row);
         }
       })
       this.popShow = true
+    },
+    initContractType (obj) {
+      let info = ''
+      let extra = JSON.parse(obj.extra);
+      if (extra.whole) {
+        info = '全保'
+      } else if (extra.part) {
+        if (extra.artificial) {
+          info = '人工保'
+        }
+        if (extra.partVal) {
+          info += (extra.artificial ? ',' : '')+ '零件保'
+          let partArr = [];
+          extra.partNameArr.forEach(item => {
+            partArr.push(item.name);
+          })
+          info += '('+ partArr.join(',') + ')'
+        }
+      }
+      return info
     },
     addAsset() {
       this.$router.push('/page/contractAdd')

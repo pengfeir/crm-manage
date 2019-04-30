@@ -1,6 +1,6 @@
 <template>
   <div class="layout_inner">
-    <ever-bread-crumb :showTitle="'设备保养'"></ever-bread-crumb>
+    <ever-bread-crumb :showTitle="'保修合同'"></ever-bread-crumb>
     <ever-form2 :schema="infoQuerySchema" v-model="infoQueryObj" ref="form" :rules="rules" class="package-sale" labelWidth="130px" label-position="right">
       <template slot="provider">
         <el-autocomplete class="inline-input" v-model="infoQueryObj.provider" :fetch-suggestions="queryComp" placeholder="请输入内容" style="width: 100%"></el-autocomplete>
@@ -12,9 +12,33 @@
       </template>
       <template slot="type">
         <el-checkbox-group v-model="infoQueryObj.type">
-          <el-checkbox :label="'1'">保修</el-checkbox>
+          <el-checkbox :label="'1'">维修</el-checkbox>
           <el-checkbox :label="'2'">保养</el-checkbox>
         </el-checkbox-group>
+      </template>
+      <template slot="extra">
+        <el-radio v-model="infoQueryObj.extra" :label="'1'">全保</el-radio>
+        <el-radio v-model="infoQueryObj.extra" :label="'2'">部分保</el-radio>
+      </template>
+      <template slot="extra1">
+        <div v-if="infoQueryObj.extra === '2'">
+          <el-checkbox-group v-model="infoQueryObj.extra1">
+            <el-checkbox :label="'1'">人工保</el-checkbox>
+            <el-checkbox :label="'2'">部分零件</el-checkbox>
+          </el-checkbox-group>
+          <div v-if="infoQueryObj.extra1.indexOf('2') > -1">
+            <div v-for="(item, index) in partArr" :key="index">
+              <label>零件名称:</label>
+              <div style="width: 180px;display: inline-block;margin-left: 10px;">
+                <el-input v-model="item.name"></el-input>
+              </div>
+              <div style="display: inline-block;margin-left: 10px;">
+                <el-button type="text" icon="el-icon-circle-plus-outline" @click="addPart"></el-button>
+                <el-button type="text" v-if="index !== 0" icon="el-icon-remove-outline" @click="delPart(index)" style="color:#fa5555;"></el-button>
+              </div>
+            </div>
+          </div>
+        </div>
       </template>
       <template slot="tenderInfo">
         <fieldset>
@@ -117,7 +141,7 @@ let infoSchema = [
   },
   {
     name: "type",
-    label: "保修类别",
+    label: "保修范围",
     comp: 'custom',
     span: 12
   },
@@ -157,9 +181,19 @@ let infoSchema = [
     span: 12
   },
   {
-    name: "extra",
+    name: "iphone",
     label: "联系方式",
     span: 12
+  },
+  {
+    name: "extra",
+    label: "保修类别",
+    comp: 'custom'
+  },
+  {
+    name: "extra1",
+    label: "",
+    comp: 'custom'
   },
   {
     name: "enclosure",
@@ -177,6 +211,8 @@ export default {
   data() {
     var infoObj = this.createObjFromSchema(infoSchema);
     infoObj.type = ['1','2'];
+    infoObj.extra = '1';
+    infoObj.extra1 = [];
     infoObj.tenderInfo = {
       name1: '',
       price1: '',
@@ -185,18 +221,21 @@ export default {
       name3: '',
       price3: '',
     };
+    let validatePass = (rule, value, callback) => {
+      if (this.infoQueryObj.extra === '2'&& this.infoQueryObj.extra1.length ===0) {
+        callback(new Error('请选择部分保保修内容'));
+      } else if (this.infoQueryObj.extra === '2' && this.infoQueryObj.extra1.indexOf('2')>1 && this.partArr.length === 0) {
+        callback(new Error('请输入零件名称'));
+      } else {
+        callback();
+      }
+    }
     return {
       api,
       infoQueryObj: infoObj,
       infoQuerySchema: infoSchema,
       options: [],
       detailId: "",
-      name1: '',
-      price1: '',
-      name2: '',
-      price2: '',
-      name3: '',
-      price3: '',
       venderOptions: JSON.parse(this.getStore("mainVenderOptions")) || [],
       // 保存图片地址
       imgObj: {
@@ -215,16 +254,28 @@ export default {
       },
       rules: {
         assetId: [
-          {
-            required: true,
-            message: "必填项",
-            trigger: ["blur", "change"]
-          }
+          {required: true, message: "必填项", trigger: 'blur'}
+        ],
+        extra: [
+          {required: true, message: "必填项", trigger: 'blur'}
+        ],
+        extra1: [
+          {validator: validatePass, trigger: 'blur'}
         ]
-      }
+      },
+      partArr: [
+        {name: ''}
+      ]
     }
   },
   methods: {
+    delPart (index) {
+      if (this.partArr.length === 1) return;
+      this.partArr.splice(index, 1);
+    },
+    addPart () {
+      this.partArr.push({name: ''});
+    },
     async queryComp(query, cb) {
       let a = JSON.parse(JSON.stringify(this.venderOptions));
       cb(a);
@@ -268,6 +319,7 @@ export default {
           params.type = params.type.join(',');
           params.subItemFee = Number(params.subItemFee);
           params.totalFee = Number(params.totalFee);
+          params.extra = this.initContractTypeData();
           api[url](params).then(rs => {
             this.popShow = false;
             if (rs.code === 200) {
@@ -280,6 +332,22 @@ export default {
           });
         }
       })
+    },
+    initContractTypeData () {
+      let obj = {};
+      if (this.infoQueryObj.extra === '1') { // 是全保
+        obj.whole = true;
+      } else if (this.infoQueryObj.extra === '2'){ // 部分保
+        obj.part = true;
+        if (this.infoQueryObj.extra1.indexOf('1') > -1) { // 人工保
+          obj.artificial = true;
+        } 
+        if(this.infoQueryObj.extra1.indexOf('2') > -1) { // 零件保
+          obj.partVal = true;
+          obj.partNameArr = this.partArr; // 零件集合
+        }
+      }
+      return JSON.stringify(obj);
     },
     initTenderInfo () {
       let obj = Object.assign({}, this.infoQueryObj.tenderInfo)
@@ -322,9 +390,26 @@ export default {
         price2: tenderInfo.price2,
         price3: tenderInfo.price3
       }
+      this.initContractType(obj);
       obj.type = obj.type.split(',');
-      console.log(obj.type)
       Object.assign(this.infoQueryObj, obj);
+    },
+    initContractType (obj) {
+      let extra = JSON.parse(obj.extra);
+      obj.extra1 = []
+      if (extra.whole) {
+        obj.extra = '1'
+      } else if (extra.part) {
+        obj.extra = '2';
+        console.log(this.infoQueryObj.extra)
+        if (extra.artificial) {
+          obj.extra1.push('1');
+        }
+        if (extra.partVal) {
+          obj.extra1.push('2');
+          this.partArr = extra.partNameArr
+        }
+      }
     }
   },
   created () {
@@ -391,5 +476,11 @@ legend {
 }
 .log-btn-container {
   padding-left:130px;
+}
+.el-radio /deep/ span {
+  color: #606266;
+}
+.el-checkbox /deep/ span {
+  color: #606266;
 }
 </style>
