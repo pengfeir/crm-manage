@@ -58,8 +58,8 @@
           </el-table>
         </div>
         <div class="pop-btn" style="margin-top:20px;">
-          <el-button @click="empty">重置</el-button>
           <el-button type="primary" @click="popShow=false">确认</el-button>
+          <el-button @click="empty">重置</el-button>
         </div>
       </el-dialog>
     </div>

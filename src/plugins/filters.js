@@ -2,7 +2,7 @@
  * @Author: renpengfei
  * @Date: 2019-03-25 14:56:51
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-04-28 19:45:47
+ * @Last Modified time: 2019-05-08 16:57:31
  */
 /**
  * 设备装机状态
@@ -62,6 +62,25 @@ export const stepStatus = fixStep => {
       return '未知'
   }
 }
+/**
+ * 保养进度
+ * @param {*} fixStep
+ */
+export const mainStatus = fixStep => {
+  switch (fixStep) {
+    case 'todo' :
+      return '待保养'
+    case 'doing' :
+      return '正在保养'
+    case 'done' :
+      return '完成'
+    case 'abort' :
+      return '取消'
+    default:
+      return '未知'
+  }
+}
+
 /**
  * 类别
  * @param {*} kind

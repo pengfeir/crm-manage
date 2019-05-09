@@ -7,6 +7,11 @@
           <el-button size="small" type="primary">点击上传</el-button>
         </el-upload>
       </template>
+      <template slot="extra">
+        <el-input v-model="infoQueryObj.extra">
+          <template slot="append">元</template>
+        </el-input>
+      </template>
       <template slot="actionUserId">
         <el-select v-model="infoQueryObj.actionUserId" clearable placeholder="请选择">
           <el-option
@@ -33,6 +38,24 @@
 <script>
 import api from "@/api/api";
 import token from "@/plugins/getUploadToken";
+let SelectOptions = [
+  {
+    id: "todo",
+    name: "待保养"
+  },
+  {
+    id: "doing",
+    name: "正在保养"
+  },
+  {
+    id: "done",
+    name: "完成"
+  },
+  {
+    id: "abort",
+    name: "取消"
+  }
+]
 let infoSchema = [
   {
     name: "assetId",
@@ -72,13 +95,22 @@ let infoSchema = [
     comp: "custom"
   },
   {
+    name: 'progress',
+    label: '保养进度',
+    comp: "el-select",
+    props: {
+      options: SelectOptions
+    }
+  },
+  {
     name: "vender",
     label: "服务提供方",
     comp: "custom"
   },
   {
     name: "extra",
-    label: "其他扩展信息"
+    label: "实际费用",
+    comp: "custom"
   }
 ];
 export default {
@@ -176,10 +208,14 @@ export default {
             this.imgObj.reportImg.length > 0
               ? JSON.stringify(this.imgObj.reportImg)
               : "";
+          if (!this.detailId && !params.progress) {
+            params.progress = 'todo';
+          }
           api[url](params).then(rs => {
+            console.log(rs, 111)
             this.popShow = false;
             if (rs.code === 200) {
-              this.setStore();
+              this.setStoreInfo();
               this.$router.go(-1);
               this.$messageTips(this, "success", tips + "成功");
             } else {
@@ -189,7 +225,7 @@ export default {
         }
       });
     },
-    setStore () {
+    setStoreInfo () {
       let venderOptions = [
         ...this.venderOptions,
         {
@@ -202,6 +238,7 @@ export default {
         obj[cur.value] ? "" : (obj[cur.value] = true && total.push(cur));
         return total
       }, []);
+      console.log(newarr, 2222)
       this.setStore("mainVenderOptions", JSON.stringify(newarr));
     },
     emitInfo(row) {

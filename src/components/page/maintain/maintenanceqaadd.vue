@@ -7,6 +7,11 @@
           <el-button size="small" type="primary">点击上传</el-button>
         </el-upload>
       </template>
+      <template slot="extra">
+        <el-input v-model="infoQueryObj.extra">
+          <template slot="append">元</template>
+        </el-input>
+      </template>
       <template slot="actionUserId">
         <el-select v-model="infoQueryObj.actionUserId" clearable placeholder="请选择">
           <el-option v-for="item in options" :key="item.id" :label="item.username" :value="item.id">
@@ -29,6 +34,24 @@
 <script>
 import api from "@/api/api";
 import token from "@/plugins/getUploadToken";
+let SelectOptions = [
+  {
+    id: "todo",
+    name: "待质控"
+  },
+  {
+    id: "doing",
+    name: "正在质控"
+  },
+  {
+    id: "done",
+    name: "完成"
+  },
+  {
+    id: "abort",
+    name: "取消"
+  }
+]
 let infoSchema = [
   {
     name: "assetId",
@@ -68,13 +91,21 @@ let infoSchema = [
     comp: "custom"
   },
   {
+    name: 'progress',
+    label: '质控进度',
+    comp: "el-select",
+    props: {
+      options: SelectOptions
+    }
+  },
+  {
     name: "vender",
     label: "服务提供方",
     comp: "custom"
   },
   {
     name: "extra",
-    label: "其他扩展信息"
+    label: "实际费用"
   }
 ];
 export default {
@@ -171,6 +202,9 @@ export default {
             this.imgObj.reportImg.length > 0
               ? JSON.stringify(this.imgObj.reportImg)
               : "";
+          if (!this.detailId && !params.progress) {
+            params.progress = 'todo';
+          }
           api[url](params).then(rs => {
             this.popShow = false;
             if (rs.code === 200) {

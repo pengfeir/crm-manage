@@ -32,6 +32,11 @@
       </el-table-column>
       <el-table-column prop="vender" label="服务提供方" width="150">
       </el-table-column>
+      <el-table-column prop="progress" label="保养进度">
+        <template slot-scope="scope">
+          {{scope.row.progress | mainStatus}}
+        </template>
+      </el-table-column>
       <el-table-column prop="planDate" label="保养计划时间" width="180">
       </el-table-column>
       <el-table-column prop="reportUrlList" label="保养报告" width="150">

@@ -17,6 +17,9 @@
     <fieldset style="margin-top:50px;">
       <legend>维修信息</legend>
       <ever-form2 :schema="infoQuerySchema" v-model="infoQueryObj" ref="form" :rules="rules" class="package-sale" labelWidth="120px" label-position="right">
+        <template slot="vender">
+          <el-autocomplete class="inline-input" v-model="infoQueryObj.vender" :fetch-suggestions="queryComp" placeholder="请输入内容" style="width: 100%"></el-autocomplete>
+        </template>
         <template slot="receiptUrlList">
           <el-upload :action="uploadUrl" list-type="picture" :file-list="detailId?filelistObj.receiptList:[]" :on-remove="handleReceiptRemove" :on-success="handleReceiptSuccess" :data="uploadData" :before-upload="beforeUploadGetKey">
             <el-button size="small" type="primary">点击上传</el-button>
@@ -27,13 +30,13 @@
             <el-button size="small" type="primary">点击上传</el-button>
           </el-upload>
         </template>
-        <template slot="bbbb">
-          <el-button v-if="infoQueryObj.bbbb === '1'" type="primary" size='small' plain>在保</el-button>
-          <el-button v-else-if="infoQueryObj.bbbb === '2'" type="danger" size='small' plain>出保</el-button>
+        <template slot="guaranteeType">
+          <el-button v-if="infoQueryObj.guaranteeType === '1'" type="primary" size='small' plain>在保</el-button>
+          <el-button v-else-if="infoQueryObj.guaranteeType === '2'" type="danger" size='small' plain>出保</el-button>
           <el-button v-else size='small'>未知</el-button>
         </template>
-        <template slot="cccc">
-          <div v-show="infoQueryObj.aaaa === '厂家'">
+        <template slot="repairType2">
+          <div v-show="infoQueryObj.repairType === '厂家'">
             <fieldset style="margin:0;">
               <legend>走保</legend>
               <div>
@@ -54,7 +57,9 @@
                 <div>
                   <label>保外金额：</label>
                   <div style="display:inline-block;">
-                    <el-input v-model="contractInfo.price"></el-input>
+                    <el-input v-model="contractInfo.price">
+                      <template slot="append">元</template>
+                    </el-input>
                   </div>
                 </div>
               </div>
@@ -70,32 +75,9 @@
               <div>
                 <label class="contract-label">厂家报价：</label>
                 <div class="contract-div">
-                  <el-input v-model="contractInfo.factoryPrice"></el-input>
-                </div>
-              </div>
-              <div>
-                <label class="contract-label-only">报价单：</label>
-                <div class="contract-div-only">
-                  <el-upload :action="uploadUrl" list-type="picture" :file-list="filelistObj.reportList4" :on-remove="(file, fileList) => {handleRemove(file, fileList, 4)}" :on-success="(response, file, fileList) => {handleSuccess(response, file, fileList, 4)}" :data="uploadData" :before-upload="beforeUploadGetKey">
-                    <el-button size="small" type="primary">点击上传</el-button>
-                  </el-upload>
-                </div>
-              </div>
-            </fieldset>
-          </div>
-          <div v-show="infoQueryObj.aaaa === '第三方'">
-            <fieldset style="margin:0;">
-              <legend>第三方</legend>
-              <div>
-                <label class="contract-label">第三方名称：</label>
-                <div class="contract-div">
-                  <el-input v-model="contractInfo.thirdName"></el-input>
-                </div>
-              </div>
-              <div>
-                <label class="contract-label">第三方报价：</label>
-                <div class="contract-div">
-                  <el-input v-model="contractInfo.thirdPrice"></el-input>
+                  <el-input v-model="contractInfo.factoryPrice">
+                    <template slot="append">元</template>
+                  </el-input>
                 </div>
               </div>
               <div>
@@ -108,7 +90,84 @@
               </div>
             </fieldset>
           </div>
-          <div v-show="infoQueryObj.aaaa === '医工科'">
+          <div v-show="infoQueryObj.repairType === '第三方服务'">
+            <fieldset style="margin:0;">
+              <legend>服务方(一)</legend>
+              <div>
+                <label class="contract-label">服务方名称：</label>
+                <div class="contract-div">
+                  <el-input v-model="contractInfo.thirdName"></el-input>
+                </div>
+              </div>
+              <div>
+                <label class="contract-label">服务方报价：</label>
+                <div class="contract-div">
+                  <el-input v-model="contractInfo.thirdPrice">
+                    <template slot="append">元</template>
+                  </el-input>
+                </div>
+              </div>
+              <div>
+                <label class="contract-label-only">报价单：</label>
+                <div class="contract-div-only">
+                  <el-upload :action="uploadUrl" list-type="picture" :file-list="filelistObj.reportList4" :on-remove="(file, fileList) => {handleRemove(file, fileList, 4)}" :on-success="(response, file, fileList) => {handleSuccess(response, file, fileList, 4)}" :data="uploadData" :before-upload="beforeUploadGetKey">
+                    <el-button size="small" type="primary">点击上传</el-button>
+                  </el-upload>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset style="margin:0;">
+              <legend>服务方(二)</legend>
+              <div>
+                <label class="contract-label">服务方名称：</label>
+                <div class="contract-div">
+                  <el-input v-model="contractInfo.thirdName2"></el-input>
+                </div>
+              </div>
+              <div>
+                <label class="contract-label">服务方报价：</label>
+                <div class="contract-div">
+                  <el-input v-model="contractInfo.thirdPrice2">
+                    <template slot="append">元</template>
+                  </el-input>
+                </div>
+              </div>
+              <div>
+                <label class="contract-label-only">报价单：</label>
+                <div class="contract-div-only">
+                  <el-upload :action="uploadUrl" list-type="picture" :file-list="filelistObj.reportList5" :on-remove="(file, fileList) => {handleRemove(file, fileList, 5)}" :on-success="(response, file, fileList) => {handleSuccess(response, file, fileList, 5)}" :data="uploadData" :before-upload="beforeUploadGetKey">
+                    <el-button size="small" type="primary">点击上传</el-button>
+                  </el-upload>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset style="margin:0;">
+              <legend>服务方(三)</legend>
+              <div>
+                <label class="contract-label">服务方名称：</label>
+                <div class="contract-div">
+                  <el-input v-model="contractInfo.thirdName3"></el-input>
+                </div>
+              </div>
+              <div>
+                <label class="contract-label">服务方报价：</label>
+                <div class="contract-div">
+                  <el-input v-model="contractInfo.thirdPrice3">
+                    <template slot="append">元</template>
+                  </el-input>
+                </div>
+              </div>
+              <div>
+                <label class="contract-label-only">报价单：</label>
+                <div class="contract-div-only">
+                  <el-upload :action="uploadUrl" list-type="picture" :file-list="filelistObj.reportList6" :on-remove="(file, fileList) => {handleRemove(file, fileList, 6)}" :on-success="(response, file, fileList) => {handleSuccess(response, file, fileList, 6)}" :data="uploadData" :before-upload="beforeUploadGetKey">
+                    <el-button size="small" type="primary">点击上传</el-button>
+                  </el-upload>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+          <div v-show="infoQueryObj.repairType === '医工科'">
             <fieldset style="margin:0;">
               <legend>内部成本</legend>
               <div>
@@ -120,7 +179,9 @@
               <div>
                 <label class="contract-label">材料费用：</label>
                 <div class="contract-div">
-                  <el-input v-model="contractInfo.price"></el-input>
+                  <el-input v-model="contractInfo.price">
+                    <template slot="append">元</template>
+                  </el-input>
                 </div>
               </div>
               <div>
@@ -143,7 +204,9 @@
               <div>
                 <label class="contract-label">服务方报价：</label>
                 <div class="contract-div">
-                  <el-input v-model="contractInfo.servicePrice"></el-input>
+                  <el-input v-model="contractInfo.servicePrice">
+                    <template slot="append">元</template>
+                  </el-input>
                 </div>
               </div>
               <div>
@@ -156,6 +219,11 @@
               </div>
             </fieldset>
           </div>
+        </template>
+        <template slot="offerPrice">
+          <el-input v-model="infoQueryObj.offerPrice">
+            <template slot="append">元</template>
+          </el-input>
         </template>
         <template slot="default">
           <div></div>
@@ -248,30 +316,36 @@ let infoSchema = [
     label: "故障类别"
   },
   {
-    name: "bbbb",
+    name: "guaranteeType",
     label: "保修状态",
     comp: "custom"
   },
   {
-    name: "aaaa",
+    name: "repairType",
     label: "维修方类别",
     comp: "radio",
     props: {
       options: [
         {id: '厂家', name: '厂家'},
-        {id: '第三方', name: '第三方'},
+        {id: '第三方服务', name: '第三方服务'},
         {id: '医工科', name: '医工科'}
       ]
     }
   },
   {
-    name: "cccc",
+    name: "repairType2",
     label: "",
     comp: "custom",
   },
   {
+    name: "vender",
+    label: "服务提供方",
+    comp: "custom"
+  },
+  {
     name: "offerPrice",
-    label: "实际花费"
+    label: "实际花费",
+    comp: "custom"
   },
   {
     name: "contractUrlList",
@@ -282,14 +356,6 @@ let infoSchema = [
     name: "receiptUrlList",
     label: "票据照片",
     comp: "custom"
-  },
-  {
-    name: "vender",
-    label: "服务提供方"
-  },
-  {
-    name: "extra",
-    label: "其他扩展信息"
   }
 ];
 export default {
@@ -306,6 +372,7 @@ export default {
       popShow: false,
       popTitle: "新建",
       detailId: "",
+      venderOptions: JSON.parse(this.getStore("mainVenderOptions")) || [],
       // 保存图片地址
       imgObj: {
         faultImg: [],
@@ -313,8 +380,10 @@ export default {
         contractImg: [],
         reportImg1: [], // 内部成本单据
         reportImg2: [], // 医工科 服务方报价单
-        reportImg3: [], // 第三方报价单
-        reportImg4: []  // 厂家报价单
+        reportImg3: [], // 厂家报价单
+        reportImg4: [], // 第三方1报价单
+        reportImg5: [], // 第三方2报价单
+        reportImg6: [] // 第三方3报价单
       },
       // 回显图片地址
       filelistObj: {
@@ -323,8 +392,10 @@ export default {
         contractList: [],
         reportList1: [], // 内部成本单据
         reportList2: [], // 医工科 服务方报价单
-        reportList3: [], // 第三方报价单
-        reportList4: []  // 厂家报价单
+        reportList3: [], // 厂家报价单
+        reportList4: [], // 第三方1报价单
+        reportList5: [], // 第三方2报价单
+        reportList6: [] // 第三方3报价单
       },
       rules: {
         assetId: [
@@ -342,17 +413,25 @@ export default {
         partValArr: [],
         partArr: [],
         time:'', // 工时
-        price: 0, //材料费用
+        price: '', //材料费用
         serviceName: '', // 医工科 服务方名称
         servicePrice: '', // 医工科 服务方报价
-        thirdName: '', // 第三方名称
-        thirdPrice: '',// 第三方报价
+        thirdName: '', // 第三方1名称
+        thirdPrice: '',// 第三方1报价
+        thirdName2: '', // 第三方2名称
+        thirdPrice2: '',// 第三方2报价
+        thirdName3: '', // 第三方3名称
+        thirdPrice3: '',// 第三方3报价
         factoryName: '', // 厂家名称
         factoryPrice: '' // 厂家报价
       }
     }
   },
   methods: {
+    async queryComp(query, cb) {
+      let a = JSON.parse(JSON.stringify(this.venderOptions));
+      cb(a);
+    },
     //删除数组里面删除的图片地址
     handleRemove(file, fileList, type) {
       let obj = this.imgObj['reportImg' + type];
@@ -435,14 +514,77 @@ export default {
       this.detailId = "";
       this.popTitle = "新建设备故障";
     },
+    initTypeInfo () {
+      let obj = {name: this.infoQueryObj.repairType};
+      if (this.infoQueryObj.repairType === '厂家') {
+        obj.type = this.contractInfo.type;
+        obj.part = this.contractInfo.part;
+        obj.partValArr = this.contractInfo.partValArr;
+        obj.price = this.contractInfo.price;
+        obj.factoryName = this.contractInfo.factoryName;
+        obj.factoryPrice = this.contractInfo.factoryPrice;
+        obj.imgArr = this.imgObj.reportImg3
+      } else if(this.infoQueryObj.repairType === '第三方服务') {
+        obj.thirdName = this.contractInfo.thirdName;
+        obj.thirdPrice = this.contractInfo.thirdPrice;
+        obj.imgArr = this.imgObj.reportImg4;
+        obj.thirdName2 = this.contractInfo.thirdName2;
+        obj.thirdPrice2 = this.contractInfo.thirdPrice2;
+        obj.imgArr2 = this.imgObj.reportImg5;
+        obj.thirdName3 = this.contractInfo.thirdName3;
+        obj.thirdPrice3 = this.contractInfo.thirdPrice3;
+        obj.imgArr3 = this.imgObj.reportImg6;
+      } else if(this.infoQueryObj.repairType === '医工科') {
+        obj.time = this.contractInfo.time;
+        obj.price = this.contractInfo.price;
+        obj.imgArr = this.imgObj.reportImg1;
+        obj.serviceName = this.contractInfo.serviceName;
+        obj.servicePrice = this.contractInfo.servicePrice;
+        obj.serviceImgArr = this.imgObj.reportImg2;
+      }
+      return JSON.stringify(obj)
+    },
+    echoTypeInfo (data) {
+      if (!data) return
+      let json = JSON.parse(data);
+      this.infoQueryObj.repairType = json.name;
+      console.log(typeof this.infoQueryObj.repairType)
+      delete json.name;
+      if (this.infoQueryObj.repairType === '厂家') {
+        if (json.imgArr.length.length > 0) {
+          this.imgObj.reportImg3 = JSON.parse(JSON.stringify(json.imgArr));
+          this.filelistObj.reportList3 = JSON.parse(JSON.stringify(json.imgArr));
+          delete json.imgArr
+        }
+      } else if(this.infoQueryObj.repairType === '第三方服务') {
+        this.imgObj.reportImg4 = JSON.parse(JSON.stringify(obj.imgArr));
+        this.filelistObj.reportList4 = JSON.parse(JSON.stringify(obj.imgArr));
+        this.imgObj.reportImg5 = JSON.parse(JSON.stringify(obj.imgArr2));
+        this.filelistObj.reportList5 = JSON.parse(JSON.stringify(obj.imgArr2));
+        this.imgObj.reportImg6 = JSON.parse(JSON.stringify(obj.imgArr3));
+        this.filelistObj.reportList6 = JSON.parse(JSON.stringify(obj.imgArr3));
+        delete obj.imgArr
+        delete obj.imgArr2
+        delete obj.imgArr3
+      } else if(this.infoQueryObj.repairType === '医工科') {
+        this.imgObj.reportImg1 = JSON.parse(JSON.stringify(obj.imgArr));
+        this.filelistObj.reportList1 = JSON.parse(JSON.stringify(obj.imgArr));
+        this.imgObj.reportImg2 = JSON.parse(JSON.stringify(obj.serviceImgArr));
+        this.filelistObj.reportList2 = JSON.parse(JSON.stringify(obj.serviceImgArr));
+        delete obj.serviceImgArr
+        delete obj.serviceImgArr
+      }
+      Object.assign(this.contractInfo, json);
+    },
     prev(id) {
       this.$refs.form.$refs.form.validate(valid => {
         if (valid) {
           let tips = this.detailId ? "更新" : "创建";
           let params = Object.assign({}, this.infoQueryObj, this.infoQueryObj2);
-          delete params.aaaa
-          delete params.bbbb
-          delete params.cccc
+          params.extra = this.initTypeInfo();
+          delete params.repairType
+          delete params.guaranteeType
+          delete params.repairType2
           let url = "createFault";
           if (this.detailId) {
             url = "updateFault";
@@ -467,7 +609,8 @@ export default {
             this.popShow = false;
             if (rs.code === 200) {
               this.$messageTips(this, "success", tips + "成功");
-              this.$router.go(-1)
+              this.setStoreInfo();
+              this.$router.go(-1);
             } else {
               this.$messageTips(this, "error", tips + "失败");
             }
@@ -475,12 +618,28 @@ export default {
         }
       });
     },
+    setStoreInfo () {
+      let venderOptions = [
+        ...this.venderOptions,
+        {
+          name: this.infoQueryObj.vender,
+          value: this.infoQueryObj.vender
+        }
+      ];
+      let obj = {};
+      let newarr = venderOptions.reduce((total, cur) => {
+        obj[cur.value] ? "" : (obj[cur.value] = true && total.push(cur));
+        return total
+      }, []);
+      this.setStore("mainVenderOptions", JSON.stringify(newarr));
+    },
     handleClose() {
       this.$router.go(-1)
     },
     emitInfo(row) {
       this.detailId = row.id;
       Object.assign(this.infoQueryObj, row);
+      this.echoTypeInfo(row.extra);
       for (let key in this.infoQueryObj) {
         this.infoQueryObj[key] = row[key];
       }
@@ -523,29 +682,30 @@ export default {
     },
     getContractInfo (assetId) {
       api.findByAssetContract({assetId: assetId, pageNum: 1, pageSize: 20}).then(rs => {
-        console.log(rs)
-        if (rs.data.extra) {
-          this.infoQueryObj.bbbb = '1'
+        this.contractInfo.partTypeArr = [];
+        if (rs.data) {
+          this.infoQueryObj.guaranteeType = '1';
+          let extra = (rs.data[0]['assetServiceContracts']).find(item => item.assetId === assetId);
+          extra = JSON.parse(extra.kind);
+          if (extra.whole) {
+            this.contractInfo.type = '1';
+          } else if (extra.part) {
+            this.contractInfo.type = '2';
+            if (extra.artificial) {
+              this.contractInfo.partTypeArr.push({name: '人工保', id: '1'});
+            }
+            if (extra.partVal) {
+              this.contractInfo.partTypeArr.push({name: '零件保', id: '2'});
+              this.contractInfo.partArr = extra.partNameArr;
+            }
+          }
         } else {
-          this.infoQueryObj.bbbb = '2'
-        }
-        let extra = JSON.parse(rs.data.extra);
-        if (extra.whole) {
-          this.contractInfo.type = '1';
-        } else if (extra.part) {
-          this.contractInfo.type = '2';
-          if (extra.artificial) {
-            this.contractInfo.partTypeArr.push({name: '人工保', id: '1'});
-          }
-          if (extra.partVal) {
-            this.contractInfo.partTypeArr.push({name: '零件保', id: '2'});
-            this.contractInfo.partArr = extra.partNameArr;
-          }
+          this.infoQueryObj.guaranteeType = '2';
         }
       })
     }
   },
-  mounted () {
+  created () {
     if (this.$route.query.id) {
       this.detailId = this.$route.query.id;
       this.getInfo();
@@ -598,6 +758,7 @@ legend {
 }
 .contract-div {
   display:inline-block;
+  width:180px;
 }
 .contract-label-only {
   width: 90px;

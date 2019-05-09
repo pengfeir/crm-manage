@@ -97,14 +97,7 @@
         align="center"
         label="维修进度">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.fixStep" class="table-select" @change="val => {fixStepChange(val, scope.row)}" placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-            </el-option>
-          </el-select>
+          {{scope.row.fixStep | stepStatus}}
         </template>
       </el-table-column>
       <el-table-column

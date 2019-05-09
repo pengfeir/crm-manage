@@ -64,6 +64,12 @@ var menuArr = [
         level: 2,
         childMenus: []
       }, {
+        menuName: '效益分析',
+        menuUrl: '/page/benefitanalysis',
+        auth: 'benefitanalysis',
+        level: 2,
+        childMenus: []
+      }, {
         menuName: '设备维修',
         menuUrl: '/page/assetfailure',
         auth: 'assetfailure',

@@ -37,6 +37,9 @@ const agencybuildingsList = r => require.ensure([], () => r(require('@/component
 const agencybuildingsAdd = r => require.ensure([], () => r(require('@/components/page/agencybuildings/agencybuildings.add.vue')), 'agencybuildingsAdd')
 const contractList = r => require.ensure([], () => r(require('@/components/page/contract/contract.list.vue')), 'contractList')
 const contractAdd = r => require.ensure([], () => r(require('@/components/page/contract/contract.add.vue')), 'contractAdd')
+
+const benefitAnalysis = r => require.ensure([], () => r(require('@/components/page/benefitanalysis/benefit.analysis.vue')), 'benefitAnalysis')
+
 const routerarr = [
   {
     path: '/',
@@ -271,6 +274,13 @@ const routerarr = [
         component: contractList,
         meta: {
           name: '保修合同管理'
+        }
+      },
+      {
+        path: 'benefitanalysis',
+        component: benefitAnalysis,
+        meta: {
+          name: '效益分析'
         }
       }
     ]

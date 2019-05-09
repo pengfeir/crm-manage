@@ -216,6 +216,9 @@ function delContract (params) { // 删除合同
 function findByAssetContract (params) { // 根据设备id查询合同信息
   return axios.post('/manage/guaranteeContract/findByAssetId', params)
 }
+function findByAssetsContract (params) { //  根据多个设备id查询合同信息
+  return axios.post('/manage/guaranteeContract/findByAssetIds', params)
+}
 function findByIdContract (params) { // 根据id查询合同信息
   return axios.post('/manage/guaranteeContract/findById', params)
 }
@@ -225,6 +228,17 @@ function contractList (params) { // 合同列表
 function updateContract (params) { // 更新合同信息1
   return axios.post('/manage/guaranteeContract/update', params)
 }
+function faultCount (params) { // 设备维修记录
+  return axios.post('/manage/fault/count', params)
+}
+function maintainQaCount (params) { // 设备质控/保养记录
+  return axios.post('/manage/maintainQa/count', params)
+}
+function findByMacAddr (params) { // 通过mac地址获取对应的物联网络信息（院区、楼、科室）
+  return axios.post('/manage/iotDevice/findByMacAddr', params)
+}
+
+
 export default {
   login,
   getUpToken,
@@ -298,7 +312,11 @@ export default {
   createContract,
   delContract,
   findByAssetContract,
+  findByAssetsContract,
   findByIdContract,
   contractList,
-  updateContract
+  updateContract,
+  faultCount,
+  maintainQaCount,
+  findByMacAddr
 }
