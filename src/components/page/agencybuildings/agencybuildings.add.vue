@@ -7,6 +7,12 @@
           <el-button size="small" type="primary">点击上传</el-button>
         </el-upload>
       </template>
+      <template slot="floorsOnGround">
+        <el-input v-model="infoQueryObj.floorsOnGround" @blur="inputChange"></el-input>
+      </template>
+      <template slot="floorsUnderground">
+        <el-input v-model="infoQueryObj.floorsUnderground" @blur="inputChange"></el-input>
+      </template>
       <template slot="hospitalArea">
         <el-select v-model="infoQueryObj.hospitalArea" clearable placeholder="请选择">
           <el-option
@@ -43,16 +49,12 @@ let infoSchema = [
   {
     name: "floorsOnGround",
     label: "地上层高",
-    props: {
-      type:'number'
-    }
+    comp: "custom"
   },
   {
     name: "floorsUnderground",
     label: "地下层高",
-    props: {
-      type:'number'
-    }
+    comp: "custom"
   },
   {
     name: "area",
@@ -88,17 +90,23 @@ export default {
       },
       rules: {
         name: [{required: true, message: "必填项", trigger: ["blur", "change"]}],
-        hospitalArea: [{required: true, message: "必填项", trigger: ["blur", "change"]}]
+        hospitalArea: [{required: true, message: "必填项", trigger: ["blur", "change"]}],
+        floorsOnGround: [{required: true, message: "必填项", trigger: ["blur", "change"]}],
+        floorsUnderground: [{required: true, message: "必填项", trigger: ["blur", "change"]}]
       },
       options: []
     };
   },
   methods: {
+    inputChange (e) {
+      let res = /^\d+$/
+      if(!(e.target.value && res.test(e.target.value))) {
+        e.target.value = ''
+        this.$messageTips(this, "error", '层高应为大于0的正整数');
+      }
+    },
     handleClose() {
-      Object.keys(this.filelistObj).map(v => {
-        this.filelistObj[v] = [];
-      });
-      this.popShow = false;
+      this.$router.go(-1)
     },
     //删除数组里面删除的图片地址
     handleReportRemove(file, fileList) {

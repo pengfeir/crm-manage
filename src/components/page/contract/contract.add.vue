@@ -450,7 +450,6 @@ export default {
         // {assetId: '',type: '1', type2: [],partArr: [{name: ''}], amount: ''}
         let obj = {assetId: item.assetId, amount: item.amount, type2: [], partArr: [{name: ''}]};
         let info = JSON.parse(item.kind);
-        console.log(info, typeof info.partVal)
         if (info.whole) {
           obj.type = '1'
         } else if (info.part) {

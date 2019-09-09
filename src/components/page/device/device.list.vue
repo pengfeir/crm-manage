@@ -14,7 +14,7 @@
     <el-table v-loading="loading" :data="tableData" style="width: 100%" border stripe max-height="650">
       <el-table-column type="index" width="50" label="序号">
       </el-table-column>
-      <el-table-column prop="macAddr" label="MAC地址" width="180">
+      <el-table-column prop="macAddr" label="MAC地址" width="250">
       </el-table-column>
       <el-table-column prop="model" label="设备型号">
       </el-table-column>
@@ -238,13 +238,10 @@ export default {
         ]
       },
       thresholdData: [
-        {name: '关机电流阈值', value1: '55',value2: '57', deviation: '1', company: 'A'},
-        {name: '待机电流阈值', value1: '20',value2: '23', deviation: '0.5', company: 'A'},
-        {name: '激活电流阈值', value1: '10',value2: '15', deviation: '2', company: 'A'},
-        {name: '报警电流阈值', value1: '80',value2: '90', deviation: '1', company: 'A'},
-        {name: '故障电流阈值', value1: '100',value2: '110', deviation: '1', company: 'A'},
-        {name: '电压下限报警', value1: '220',value2: '230', deviation: '1', company: 'V'},
-        {name: '电压上限报警', value1: '380',value2: '400', deviation: '2', company: 'V'}
+        {name: '关机电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
+        {name: '待机电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
+        {name: '激活电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
+        {name: '电压报警', value1: '',value2: '', deviation: '', company: 'V'}
       ]
     };
   },
@@ -264,7 +261,15 @@ export default {
         item.value = row[item.id] || "";
       });
       if (row.extra) {
-        this.thresholdData = JSON.parse(row.extra);
+        let tableData = JSON.parse(row.extra);
+        this.thresholdData.forEach(item => {
+          let val = tableData.find(lab => lab.name === item.name)
+          if (val) {
+            item.value1 = val.value1;
+            item.value2 = val.value2;
+            item.deviation = val.deviation;
+          }
+        })
       }
       this.popShow = true;
     },

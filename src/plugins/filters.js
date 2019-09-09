@@ -2,7 +2,7 @@
  * @Author: renpengfei
  * @Date: 2019-03-25 14:56:51
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-05-08 16:57:31
+ * @Last Modified time: 2019-09-09 18:08:56
  */
 /**
  * 设备装机状态
@@ -129,6 +129,8 @@ export const filterAssetStatus = assetStatus => {
       return '待机'
     case '40' :
       return '激活'
+    case '50' :
+      return '故障'
     default:
       return '未知'
   }

@@ -33,6 +33,8 @@
           {{scope.row.matainExpiryDate&&scope.row.matainExpiryDate.split(' ')[0]}}
         </template>
       </el-table-column>
+      <el-table-column prop="deptName" label="科室">
+      </el-table-column>
       <el-table-column prop="no" label="设备编号">
       </el-table-column>
       <el-table-column prop="acceptStatus" label="验收状态">
@@ -379,13 +381,13 @@ export default {
   methods: {
     exportExcel () {
       /* generate workbook object from table */
-         var wb = XLSX.utils.table_to_book(document.querySelector('#excelTable'))
-         /* get binary string as output */
-         var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
-         try {
-             FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '设备.xlsx')
-         } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
-         return wbout
+      var wb = XLSX.utils.table_to_book(document.querySelector('#excelTable'))
+      /* get binary string as output */
+      var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+      try {
+          FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '设备.xlsx')
+      } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
+      return wbout
     },
     seeDetail (row) {
       arr.forEach(item => {

@@ -212,7 +212,6 @@ export default {
             params.progress = 'todo';
           }
           api[url](params).then(rs => {
-            console.log(rs, 111)
             this.popShow = false;
             if (rs.code === 200) {
               this.setStoreInfo();
@@ -238,7 +237,6 @@ export default {
         obj[cur.value] ? "" : (obj[cur.value] = true && total.push(cur));
         return total
       }, []);
-      console.log(newarr, 2222)
       this.setStore("mainVenderOptions", JSON.stringify(newarr));
     },
     emitInfo(row) {

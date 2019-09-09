@@ -1,5 +1,5 @@
 <template>
-  <div ref="echarts" style="height:280px;width:100%;"></div>
+  <div ref="echarts" style="height:450px;width:100%;margin-top:20px;"></div>
 </template>
 <script>
 import echarts from 'echarts/lib/echarts'
@@ -37,46 +37,46 @@ export default {
     init () {
       this.chart = echarts.init(this.$refs.echarts)
       this.option = {
-          title: {
-              text: this.title
+        title: {
+          text: this.title
+        },
+        tooltip: {
+          trigger: 'axis',
+          formatter: function (params) {
+            return params[0]['axisValueLabel'] + '/' + params[0]['data'];
           },
-          tooltip: {
-              trigger: 'axis',
-              formatter: function (params) {
-                return params[0]['axisValueLabel'] + '/' + params[0]['data'];
-              },
-              axisPointer: {
-                  animation: false
-              }
+          axisPointer: {
+            animation: false
+          }
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: this.x
+        },
+        yAxis: {
+          name: '单位：'+ this.unit,
+          nameTextStyle: {
+            align: 'left'
           },
-          xAxis: {
-            type: 'category',
-            boundaryGap: false,
-            data: this.x
-          },
-          yAxis: {
-            name: '单位：'+ this.unit,
-            nameTextStyle: {
-              align: 'left'
-            },
-            type: 'value'
-          },
-          // visualMap: {
-          //   top: 10,
-          //   right: 10,
-          //   pieces: [{
-          //       gt: 0,
-          //       lte: 10,
-          //       color: '#999'
-          //   }],
-          //   outOfRange: {
-          //       color: '#cc0033'
-          //   }
-          // },
-          series: [{
-            data: this.y,
-            type: 'line'
-          }]
+          type: 'value'
+        },
+        // visualMap: {
+        //   top: 10,
+        //   right: 10,
+        //   pieces: [{
+        //       gt: 0,
+        //       lte: 10,
+        //       color: '#999'
+        //   }],
+        //   outOfRange: {
+        //       color: '#cc0033'
+        //   }
+        // },
+        series: [{
+          data: this.y,
+          type: 'line'
+        }]
       };
       this.chart.setOption(this.option)
     },
@@ -88,12 +88,14 @@ export default {
       this.x.push(this.eData.x)
       this.y.push(this.eData.y)
       if (this.chart && this.chart.setOption) {
-        this.chart.setOption(this.option);
+        this.chart.setOption(this.option, true);
       }
     }
   },
   mounted () {
-    this.init()
+    this.$nextTick(_ => {
+      this.init();
+    })
   },
   watch: {
     'eData.x': {
@@ -104,6 +106,19 @@ export default {
       },
       immediate: true
     },
+    'title': {
+      handler: function (val) {
+        if (val) {
+          this.x = []
+          this.y = []
+          window.setTimeout(_ =>{
+            this.init()
+            this.handleData()
+          },300)
+        }
+      },
+      immediate: true
+    }
   }
 
 }

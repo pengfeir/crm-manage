@@ -1,43 +1,7 @@
 <template>
-  <el-dialog :title="title"  :visible.sync="visibile" width="90%"  class="ui_dialog_02 spe carditem" :close-on-click-modal="false" :before-close="handleClose">
-    <div class="main-head">
-      <ever-form2
-        :schema="querySchema" 
-        v-model="queryObj"
-        @query="query"
-        ref="form"
-        class="package-sale"
-        :info="true"
-        :labelWidth="140"
-        label-position="right"
-        :nosubmit="true"
-        :inline="true">
-        <template slot="type">
-          <el-select v-model="queryObj.type">
-            <el-option
-              v-for="item in options"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-            </el-option>
-          </el-select>
-        </template>
-        <template slot="date">
-          <el-date-picker
-            v-model="queryObj.date"
-            type="datetimerange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期">
-          </el-date-picker>
-        </template>
-        <template slot="btn">
-          <el-button type="primary" @click="query">查询</el-button>
-        </template>
-      </ever-form2>
-    </div>
-    <div ref="historyEc" class="historyEc" style="height:280px;width:100%;"></div>
-    </el-dialog>
+  <div>
+    <div ref="historyEc" class="historyEc" style="height:450px;width:100%;"></div>
+  </div>   
 </template>
 <script>
 import echarts from 'echarts/lib/echarts';
@@ -45,40 +9,10 @@ import moment from 'moment';
 import api from "@/api/api";
 require('echarts/lib/chart/line');
 export default {
-  props:['dialogVisibile', 'type'],
+  props:['obj'],
   data () {
-    let schema = [
-      {
-        name: 'type',
-        label: '分类',
-        comp: 'custom'
-      },
-      {
-        name: 'date',
-        label: '时间范围',
-        comp: 'custom'
-      },
-      {
-        name: 'btn',
-        label: '',
-        comp: 'custom'
-      },
-      {
-        label: '',
-        name: 'rightbtn',
-        comp: 'custom'
-      }
-    ]
-    let obj = this.createObjFromSchema(schema)
-    obj.date = [
-      moment(new Date().getTime() - 86400000).format('YYYY-MM-DD HH:mm:ss'),
-      moment(new Date().getTime()).format('YYYY-MM-DD HH:mm:ss')
-    ]
     return {
-      visibile: false,
       title: '',
-      querySchema: schema,
-      queryObj: obj,
       oldDate: ['', ''],
       x: [],
       y: [],
@@ -88,14 +22,18 @@ export default {
       value: Math.random() * 1000,
       chart: null,
       options: [
-        {id: '1', name: '输入电流'},
-        {id: '2', name: '输入电压'},
-        {id: '3', name: '有功功率'},
-        {id: '4', name: '功率因数'},
-        {id: '5', name: '温度'},
-        {id: '6', name: '电源频率'},
-        {id: '7', name: '电能计量'}
-      ]
+        {id: 1, name: '输入电流', unit: 'A', objVal: 'inputIObj'},
+        {id: 2, name: '输入电压', unit: 'V', objVal: 'inputVObj'},
+        {id: 3, name: '有功功率', unit: 'kW/H', objVal: 'realPowerObj'},
+        {id: 4, name: '功率因数', unit: '--', objVal: 'powerFactorObj'},
+        {id: 5, name: '温度', unit: '°C', objVal: 'temperatureObj'},
+        {id: 6, name: '电源频率', unit: 'Hz', objVal: 'powerHzObj'},
+        {id: 7, name: '电能计量', unit: 'kW', objVal: 'energyObj'}
+      ],
+      queryObj: {
+        type: 1,
+        date: []
+      }
     }
   },
   computed: {
@@ -112,7 +50,11 @@ export default {
   },
   methods: {
     query () {
-      if (this.queryObj.date[0] === this.oldDate[0] && this.queryObj.date[1] === this.oldDate[1]) {
+      if (this.obj.dataType === 1) return
+      this.chart.showLoading({
+        text : '正在加载数据'
+      });
+      if (this.queryObj.date[0] === this.oldDate[0] && this.queryObj.date[1] === this.oldDate[1] && this.data.length > 0) {
         this.init();
       } else {
         this.getData();
@@ -140,25 +82,41 @@ export default {
     },
     getData () {
       let params = {
-        endDate: this.queryObj.date[1],
-        beginDate: this.queryObj.date[0],
-        macAddress: this.$route.query.id,
-        pageNum: 1,
-        pageSize: 14400,
+        endDate: moment(this.obj.date[1]).format('YYYY-MM-DD') + ' 23:59:59', 
+        beginDate: moment(this.obj.date[0]).format('YYYY-MM-DD') + ' 00:00:00',
+        macAddress: this.$route.query.id
       }
-      api.assetMetricsList(params).then(rs => {
-
+      api.findHistory(params).then(rs => {
+        this.data = rs.data
+        this.init()
       })
     },
+    initData () {
+      let xData = [];
+      let yData = [];
+      console.log(xData)
+      this.data.forEach(item => {
+        xData.push(item.ctime);
+        if (this.obj.type === 1) {
+          yData.push(item.inputI)
+        } else if (this.obj.type === 2) {
+          yData.push(item.inputV)
+        } else if (this.obj.type === 3) {
+          yData.push(item.realPower)
+        } else if (this.obj.type === 4) {
+          yData.push(item.powerFactor)
+        } else if (this.obj.type === 5) {
+          yData.push(item.temperature)
+        } else if (this.obj.type === 6) {
+          yData.push(item.powerHz)
+        } else if (this.obj.type === 7) {
+          yData.push(item.energy)
+        }
+      })
+      return [xData, yData]
+    },
     init () {
-      this.chart.showLoading({
-        text : '正在加载数据'
-      });
-      console.log(typeof this.type, this.options.find(item => item.id === this.type))
-      this.title = (this.options.find(item => item.id === this.type)||{name:''}).name+ '历史数据'
-      for (var i = 0; i < 1000; i++) {
-        this.data.push(this.randomData());
-      }
+      let data = this.initData()
       var option = {
         toolbox: {
           feature: {
@@ -185,7 +143,7 @@ export default {
           type: 'slider'
         }],
         xAxis: {
-          data: this.x,
+          data: data[0],
           silent: false,
           splitLine: {
             show: false
@@ -201,7 +159,7 @@ export default {
         },
         series: [{
           type: 'line',
-          data: this.y,
+          data: data[1],
           large: true
         }]
       };
@@ -210,20 +168,17 @@ export default {
     }
   },
   watch: {
-    'dialogVisibile': {
+    'obj.dataType': {
       handler: function (val) {
-        if (val) {
-          this.$nextTick(_ => {
+        if (val === 2) {
+          window.setTimeout(_ => {
             this.chart = echarts.init(this.$refs.historyEc);
-            this.queryObj.type = this.type;
+            this.queryObj.type = this.obj.type;
             this.getData();
-          }) 
-          this.visibile = true
+          }, 300)
         } else {
-          this.visibile = false
           this.clearInfo()
         }
-        
       },
       immediate: true
     },

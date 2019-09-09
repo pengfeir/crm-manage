@@ -25,6 +25,7 @@ const complaintAdd = r => require.ensure([], () => r(require('@/components/page/
 const assetRun = r => require.ensure([], () => r(require('@/components/page/assetrun/asset.run.list.vue')), 'assetRun')
 const assetRunEcharts = r => require.ensure([], () => r(require('@/components/page/assetrun/asset.echarts.vue')), 'assetecharts')
 const assetDetail = r => require.ensure([], () => r(require('@/components/page/assetrun/asset.detail.vue')), 'assetdetail')
+const assetDetail2 = r => require.ensure([], () => r(require('@/components/page/assetrun/asset.detail2.vue')), 'assetdetail')
 const device = r => require.ensure([], () => r(require('@/components/page/device/device.list.vue')), 'device')
 const deviceAdd = r => require.ensure([], () => r(require('@/components/page/device/device.add.vue')), 'deviceAdd')
 const houseAdd = r => require.ensure([], () => r(require('@/components/page/house/house.add.vue')), 'houseAdd')
@@ -39,6 +40,8 @@ const contractList = r => require.ensure([], () => r(require('@/components/page/
 const contractAdd = r => require.ensure([], () => r(require('@/components/page/contract/contract.add.vue')), 'contractAdd')
 
 const benefitAnalysis = r => require.ensure([], () => r(require('@/components/page/benefitanalysis/benefit.analysis.vue')), 'benefitAnalysis')
+const efficiencyAnalysis = r => require.ensure([], () => r(require('@/components/page/efficiencyanalysis/efficiency.analysis.vue')), 'efficiencyAnalysis')
+const exportData = r => require.ensure([], () => r(require('@/components/page/efficiencyanalysis/export.data.vue')), 'exportData')
 
 const routerarr = [
   {
@@ -139,6 +142,13 @@ const routerarr = [
       {
         path: 'assetdetail',
         component: assetDetail,
+        meta: {
+          name: '设备监测'
+        }
+      },
+      {
+        path: 'assetdetail2',
+        component: assetDetail2,
         meta: {
           name: '设备监测'
         }
@@ -281,6 +291,20 @@ const routerarr = [
         component: benefitAnalysis,
         meta: {
           name: '效益分析'
+        }
+      },
+      {
+        path: 'efficiencyanalysis',
+        component: efficiencyAnalysis,
+        meta: {
+          name: '效率分析'
+        }
+      },
+      {
+        path: 'exportdata',
+        component: exportData,
+        meta: {
+          name: '导出数据'
         }
       }
     ]

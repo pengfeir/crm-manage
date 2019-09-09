@@ -440,7 +440,6 @@ export default {
     // 保存上传的图片地址
     handleSuccess(response, file, fileList, type) {
       let obj = this.imgObj['reportImg' + type];
-      console.log(obj, 1111)
       obj.push({
         name: file.name,
         url: `${this.imgBaseUrl}/${file.response.key}`,
@@ -548,7 +547,6 @@ export default {
       if (!data) return
       let json = JSON.parse(data);
       this.infoQueryObj.repairType = json.name;
-      console.log(typeof this.infoQueryObj.repairType)
       delete json.name;
       if (this.infoQueryObj.repairType === '厂家') {
         if (json.imgArr.length.length > 0) {
@@ -639,13 +637,13 @@ export default {
     emitInfo(row) {
       this.detailId = row.id;
       Object.assign(this.infoQueryObj, row);
-      this.echoTypeInfo(row.extra);
       for (let key in this.infoQueryObj) {
         this.infoQueryObj[key] = row[key];
       }
       for (let key in this.infoQueryObj2) {
         this.infoQueryObj2[key] = row[key];
       }
+      this.echoTypeInfo(row.extra);
       this.filelistObj.faultList =
         (this.infoQueryObj.faultUrlList &&
           JSON.parse(this.infoQueryObj.faultUrlList)) ||

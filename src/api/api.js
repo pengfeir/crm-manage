@@ -237,8 +237,33 @@ function maintainQaCount (params) { // 设备质控/保养记录
 function findByMacAddr (params) { // 通过mac地址获取对应的物联网络信息（院区、楼、科室）
   return axios.post('/manage/iotDevice/findByMacAddr', params)
 }
-
-
+function findAnomalous (params) { // 获取设备异常信息列表
+  return axios.post('/manage/assetMetrics/findAnomalous', params)
+}
+function powerStatistics (params) { // 设备开关机时间
+  return axios.post('/manage/assetMetrics/powerStatistics', params)
+}
+function notDone () { // 获取维修、保养、质量控制，投诉未完成的设备数
+  return axios.post('/manage/count/notDone')
+}
+function findByDept (params) { // 各科室下的设备明细
+  return axios.post('/manage/asset/findByDept', params)
+}
+function powerTimeStatistics (params) {
+  return axios.post('/manage/assetMetrics/powerTimeStatistics', params)
+}
+function publicCreate (params) { // 推送数据
+  return axios.post('/manage/assetMetrics/publicCreate', params)
+}
+function findGroupByDept () { // 各科室设备总量
+  return axios.post('/manage/asset/findGroupByDept', {})
+}
+function countDeptFault () { // 各科室设备故障率
+  return axios.post('/manage/fault/countDeptFault', {})
+}
+function findHistory (params) { // 根据mac地址获取历史数据
+  return axios.post('/manage/assetMetrics/findHistory', params)
+}
 export default {
   login,
   getUpToken,
@@ -318,5 +343,14 @@ export default {
   updateContract,
   faultCount,
   maintainQaCount,
-  findByMacAddr
+  findByMacAddr,
+  findAnomalous,
+  powerStatistics,
+  publicCreate,
+  notDone,
+  findByDept,
+  powerTimeStatistics,
+  findGroupByDept,
+  countDeptFault,
+  findHistory
 }

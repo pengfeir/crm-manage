@@ -440,7 +440,6 @@ export default {
           }
         })
       }
-      console.log(arr, 1111)
       this.excelTableData = arr
     },
     seeDetail (row) {

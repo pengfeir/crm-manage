@@ -147,10 +147,20 @@ export default {
 </script>
 <style lang="less" scoped>
 .menu-container {
+  background-color: #303133;
   width: 68px;
   float: left;
   height: 100%;
   box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+  & /deep/ .el-menu {
+    background-color: #303133;
+    .el-menu-item {
+      color: #eee;
+    }
+    .el-menu-item:hover{
+      color:#303133;
+    }
+  }
 }
 .iconfont {
   font-size: 20px;

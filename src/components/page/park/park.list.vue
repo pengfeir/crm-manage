@@ -54,7 +54,7 @@ import api from "@/api/api";
 let schema = [
   {
     name: "name",
-    label: "园区名称"
+    label: "院区名称"
   },
   {
     name: "btn",

@@ -70,6 +70,12 @@ var menuArr = [
         level: 2,
         childMenus: []
       }, {
+        menuName: '效率分析',
+        menuUrl: '/page/efficiencyanalysis',
+        auth: 'efficiencyanalysis',
+        level: 2,
+        childMenus: []
+      }, {
         menuName: '设备维修',
         menuUrl: '/page/assetfailure',
         auth: 'assetfailure',

@@ -39,6 +39,11 @@
       </el-table-column>
       <el-table-column prop="planDate" label="保养计划时间" width="180">
       </el-table-column>
+      <el-table-column prop="extra" label="实际费用" width="120">
+        <template slot-scope="scope">
+          {{scope.row.extra | formatToFinacial}}
+        </template>
+      </el-table-column>
       <el-table-column prop="reportUrlList" label="保养报告" width="150">
         <template slot-scope="scope">
           <fileshow :type="'img'" :tailor="true" :isNoShowBtn="true" :fileurlList="scope.row.reportUrlList"></fileshow>

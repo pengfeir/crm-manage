@@ -107,7 +107,6 @@ export default {
             this.imgObj.reportImg.length > 0
               ? JSON.stringify(this.imgObj.reportImg)
               : "";
-          console.log(params)
           api[url](params).then(rs => {
             this.popShow = false;
             if (rs.code === 200) {

@@ -37,18 +37,18 @@
             </el-table-column>
             <el-table-column prop="value1" align="center" label="设定值">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.value1" @blur="thresholdCheck(scope.row)" type="number"></el-input>
+                <el-input v-model="scope.row.value1" @blur="thresholdCheck(scope.row)"></el-input>
               </template>
             </el-table-column>
             <el-table-column prop="value2" align="center" label="设定值2(预留)">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.value2" @blur="thresholdCheck(scope.row)" type="number"></el-input>
+                <el-input v-model="scope.row.value2" @blur="thresholdCheck(scope.row)"></el-input>
               </template>
             </el-table-column>
             <el-table-column prop="deviation" align="center" label="允许误差">
               <template slot-scope="scope">
                 <div style="display:flex">
-                  <div><el-input v-model="scope.row.deviation" type="number"></el-input></div>
+                  <div><el-input v-model="scope.row.deviation"></el-input></div>
                   <div style="line-height: 1;position: relative;top: 12px;margin-left: 10px;">%</div>
                 </div>
               </template>
@@ -153,18 +153,27 @@ export default {
         {name: '关机电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
         {name: '待机电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
         {name: '激活电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
-        {name: '报警电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
-        {name: '故障电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
-        {name: '电压下限报警', value1: '',value2: '', deviation: '', company: 'V'},
-        {name: '电压上限报警', value1: '',value2: '', deviation: '', company: 'V'}
+        {name: '电压报警', value1: '',value2: '', deviation: '', company: 'V'}
       ]
     };
   },
   methods: {
     thresholdCheck (row) {
+      let regPos = /^\d+(\.\d+)?$/; //非负浮点数
+      let regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/;
+      if (!regPos.test(row.value1) && !regNeg.test(row.value1)) {
+        this.$messageTips(this, 'error', '请输入有效数字')
+        row.value1 = ''
+        return
+      }
+      if (!regPos.test(row.value2) && !regNeg.test(row.value2)) {
+        this.$messageTips(this, 'error', '请输入有效数字')
+        row.value2 = ''
+        return
+      }
       if (row.value1 && row.value2) {
         if (Number(row.value1) < Number(row.value2)) {
-          let title =`${row.name}的设定值应大于设定值2`
+          let title =`${row.name}的设定值应大于设定值`
           this.$messageTips(this, 'error', title)
         }
       }
@@ -197,10 +206,24 @@ export default {
       this.uploadData.key = this.generateUUID();
       this.uploadData.token = this.uploadToken;
     },
-
+    checkThreshold () {
+      let emptyVal = false
+      this.tableData.forEach(item => {
+        for(let key in item) {
+          if (!item[key] && item[key] !== 0) {
+            emptyVal = true
+          }
+        }
+      })
+      return emptyVal
+    },
     prev(id) {
       this.$refs.form.$refs.form.validate(valid => {
         if (valid) {
+          if (this.checkThreshold()) {
+            this.$messageTips(this, "error", "请完善阈值信息");
+            return 
+          }
           let url = "createIotDevice";
           if (this.detailId) {
             url = "updateIotDevice";
@@ -234,7 +257,15 @@ export default {
       this.imgObj.reportImg =
         (this.queryObj.urlList && JSON.parse(this.queryObj.urlList)) || [];
       if (row.extra) {
-        this.tableData = JSON.parse(row.extra);
+        let tableData = JSON.parse(row.extra);
+        this.tableData.forEach(item => {
+          let val = tableData.find(lab => lab.name === item.name)
+          if (val) {
+            item.value1 = val.value1;
+            item.value2 = val.value2;
+            item.deviation = val.deviation;
+          }
+        })
       }
     },
     clearInfo() {
@@ -267,7 +298,7 @@ export default {
         let data = [];
         rs.data.list.forEach(item => {
           let obj = {};
-          obj.name = `${item.building} > ${item.roomNo}`
+          obj.name = `${item.buildingName} > ${item.roomNo}`
           obj.id = item.id
           data.push(obj);
         })

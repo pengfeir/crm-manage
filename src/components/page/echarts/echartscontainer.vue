@@ -132,7 +132,6 @@ export default {
       if (curTime !== this.time) {
         this.time = curTime
       }
-      console.log(this.time)
       return this.time + ' ' + time
     },
     objs () {

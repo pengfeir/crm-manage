@@ -2,13 +2,13 @@
  * @Author: renpengfei
  * @Date: 2019-03-16 18:31:01
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-03-30 15:29:57
+ * @Last Modified time: 2019-09-04 18:03:56
  */
 import axios from 'axios'
 import router from '../router'
 import { Notification } from 'element-ui'
 const service = axios.create({
-  timeout: 6000 // 超时时间,
+  timeout: 60000 // 超时时间,
 })
 // Add a request interceptor
 service
@@ -42,7 +42,7 @@ service
           })
           return
         }
-        if (response.data.code !== 200) {
+        if (response.data.code !== 200 && response.data.code !== 502) {
           Notification.error(response.data.message || '操作失败')
         } else {
           return response.data

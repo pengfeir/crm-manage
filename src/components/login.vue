@@ -3,8 +3,7 @@
     <transition name="form-fade" mode="in-out">
       <section class="form_contianer">
         <div class="manage_tip">
-          <p class="title">库塔物联云平台</p>
-          <p class="vice-title">CUTA-IoT Platform</p>
+          <img src="../assets/logo.home.png" alt="logo" style="width:100%;">
         </div>
         <el-form :model="loginForm" :rules="rules" ref="loginForm">
           <el-form-item prop="username">
@@ -84,7 +83,7 @@ export default {
   padding: 25px;
   border-radius: 5px;
   text-align: center;
-  background-color: #fff;
+  // background-color: #fff;
   .submit_btn {
     width: 100%;
     font-size: 16px;
