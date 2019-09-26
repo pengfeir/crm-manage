@@ -87,14 +87,13 @@ export default {
         macAddress: this.$route.query.id
       }
       api.findHistory(params).then(rs => {
-        this.data = rs.data
-        this.init()
+        this.data = rs.data.reverse();
+        this.init();
       })
     },
     initData () {
       let xData = [];
       let yData = [];
-      console.log(xData)
       this.data.forEach(item => {
         xData.push(item.ctime);
         if (this.obj.type === 1) {

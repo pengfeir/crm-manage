@@ -18,6 +18,14 @@
       </el-table-column>
       <el-table-column prop="model" label="设备型号">
       </el-table-column>
+      <el-table-column prop="assetName" label="设备名称">
+      </el-table-column>
+      <el-table-column prop="sn" label="设备序列号">
+      </el-table-column>
+      <el-table-column prop="buildingName" label="建筑">
+      </el-table-column>
+      <el-table-column prop="roomNo" label="房间号">
+      </el-table-column>
       <el-table-column prop="kind" label="物联设备类别" width="180">
         <template slot-scope="scope">
           {{scope.row.kind | deviceStatus}}
@@ -57,6 +65,14 @@
       <el-table-column prop="macAddr" label="MAC地址" width="180">
       </el-table-column>
       <el-table-column prop="model" label="设备型号">
+      </el-table-column>
+      <el-table-column prop="assetName" label="设备名称">
+      </el-table-column>
+      <el-table-column prop="sn" label="设备序列号">
+      </el-table-column>
+      <el-table-column prop="buildingName" label="建筑">
+      </el-table-column>
+      <el-table-column prop="roomNo" label="房间号">
       </el-table-column>
       <el-table-column prop="kind" label="物联设备类别" width="180">
         <template slot-scope="scope">
@@ -190,6 +206,26 @@ let arr = [
     value: ""
   },
   {
+    id: "assetName",
+    label: "设备名称",
+    value: ""
+  },
+  {
+    id: "sn",
+    label: "设备序列号",
+    value: ""
+  },
+  {
+    id: "buildingName",
+    label: "建筑",
+    value: ""
+  },
+  {
+    id: "roomNo",
+    label: "房间号",
+    value: ""
+  },
+  {
     id: "kind",
     label: "物联设备类别",
     value: ""
@@ -241,7 +277,7 @@ export default {
         {name: '关机电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
         {name: '待机电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
         {name: '激活电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
-        {name: '电压报警', value1: '',value2: '', deviation: '', company: 'V'}
+        {name: '正常电压', value1: '',value2: '', deviation: '', company: 'V'}
       ]
     };
   },

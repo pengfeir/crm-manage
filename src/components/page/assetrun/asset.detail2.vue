@@ -5,7 +5,7 @@
       <span>返回</span>
     </div>
     <el-row>
-      <el-col :span="12" style="height:241px;">
+      <el-col :span="10" style="height:241px;">
         <div class="demo-css">
           <!-- 设备名称  设备编号-->
           <div><h3>{{info.assetName || '--'}} {{info.assetNo || '--'}}</h3></div> 
@@ -25,7 +25,7 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="14">
         <div class="demo-css">
           <el-row style="margin-bottom:30px;">
             <el-col :span="6">
@@ -58,9 +58,10 @@
               <div class="type-container">
                 <div>运行状态</div>
                 <div v-if="infoQueryObj.networkStatus === '在线'">
-                  <el-button v-if="infoQueryObj.assetType === 1" type="primary" plain>激活</el-button>
-                  <el-button v-else-if="infoQueryObj.guaranteeType === 2 || infoQueryObj.assetType == 3" type="primary">{{`${infoQueryObj.assetType == 2? '关机': '待机'}`}}</el-button>
-                  <el-button v-else type="danger">{{`${infoQueryObj.assetType == 4? '报警': '故障'}`}}</el-button>
+                  <el-button v-if="infoQueryObj.assetType == 40 || infoQueryObj.assetType == 20" type="primary" plain>激活</el-button>
+                  <el-button v-else-if="infoQueryObj.assetType == 30 || infoQueryObj.assetType == 10" type="primary">{{`${infoQueryObj.assetType == 10? '关机': '待机'}`}}</el-button>
+                  <el-button v-else-if="infoQueryObj.assetType == 50" type="danger">故障</el-button>
+                  <el-button v-else plain>未知</el-button>
                 </div>
                 <div v-if="infoQueryObj.networkStatus === '离线'">
                   <el-button plain>未知</el-button>
@@ -69,21 +70,29 @@
             </el-col>
           </el-row>
           <el-row class="asset-run-info">
-            <el-col :span="6" style="">
+            <el-col :span="4" style="">
               <div class="max-size green">{{timeInfo.yearTime | initTime}}</div>
               <div class="min-size">本年开机时间</div>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="4">
               <div class="max-size green">{{timeInfo.allTime | initTime}}</div>
               <div class="min-size">累计开机时间</div>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="4">
               <div class="max-size green">{{timeInfo.monthTime | initTime}}</div>
               <div class="min-size">本月开机时间</div>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="4">
               <div class="max-size green">{{timeInfo.dayTime | initTime}}</div>
               <div class="min-size">今日开机时间</div>
+            </el-col>
+            <el-col :span="4">
+              <div class="max-size green">{{timeInfo.frequency}} 次</div>
+              <div class="min-size">今日开机次数</div>
+            </el-col>
+            <el-col :span="4">
+              <div class="max-size green">{{timeInfo.averageTime}} H</div>
+              <div class="min-size">平均开机间隔时间</div>
             </el-col>
           </el-row>
         </div>
@@ -137,7 +146,8 @@
           </el-row>
           <div>
             <div>
-              <echarts-module v-show="queryObj.dataType===1" :title="echartsInfo.title" :eData='echartsInfo.data' :unit="echartsInfo.unit"></echarts-module>
+              <echarts-module v-show="queryObj.dataType===1 && infoQueryObj.networkStatus === '在线'" :title="echartsInfo.title" :eData='echartsInfo.data' :unit="echartsInfo.unit"></echarts-module>
+              <div v-show="queryObj.dataType===1 && infoQueryObj.networkStatus === '离线'" style="text-align:center;padding-top:50px;font-size:25px;">暂无数据</div>
               <echarts-history ref="child1" v-show="queryObj.dataType===2" :obj="queryObj"></echarts-history>
             </div>
             <!-- <div v-if="activeName===2">2</div>
@@ -166,6 +176,13 @@
         </div>
       </el-col>
     </el-row>
+    <el-row>
+        <el-col :span="24">
+          <div class="demo-css">
+            <echarts-asset-time @getAverageTime="getAverageTime"></echarts-asset-time>
+          </div>   
+        </el-col>
+      </el-row>
     <el-row>
       <el-col :span="24">
         <div class="demo-css">
@@ -226,6 +243,7 @@
 import api from "@/api/api"
 import echartsModule from '../echarts/echartsmodule'
 import echartsHistory from '../echarts/echartshistory'
+import echartsAssetTime from '../echarts/echartassettime'
 import moment from 'moment';
 let schema = [
   {
@@ -252,7 +270,8 @@ let schema = [
 export default {
   components: {
     echartsModule,
-    echartsHistory
+    echartsHistory,
+    echartsAssetTime
   },
   data () {
     var obj = this.createObjFromSchema(schema);
@@ -326,11 +345,19 @@ export default {
         yearTime: 0,
         allTime: 0,
         monthTime: 0,
-        dayTime: 0
-      }
+        dayTime: 0,
+        frequency: 0,
+        averageTime: 0
+      },
+      dateValue:[],
+      assetTimeChart: null
     }
   },
   methods: {
+    getAverageTime (val) {
+      console.log(val)
+      this.timeInfo.averageTime = val;
+    },
     go () {
       this.$router.go(-1)
     },
@@ -352,7 +379,6 @@ export default {
       api.powerTimeStatistics(yearParams).then(rs => {
         if (rs.data[0]['powerTimes'] && rs.data[0]['powerTimes'].length > 0) {
           this.timeInfo.yearTime = this.timeInfo.allTime = rs.data[0]['powerTimes'][0]['powerOffTime'];
-
         }
       })
       let monthParams = {
@@ -366,7 +392,6 @@ export default {
       api.powerTimeStatistics(monthParams).then(rs => {
         if (rs.data[0]['powerTimes'] && rs.data[0]['powerTimes'].length > 0) {
           this.timeInfo.monthTime = rs.data[0]['powerTimes'][0]['powerOffTime'];
-
         }
       })
       let dayParams = {
@@ -380,8 +405,16 @@ export default {
       api.powerTimeStatistics(dayParams).then(rs => {
         if (rs.data[0]['powerTimes'] && rs.data[0]['powerTimes'].length > 0) {
           this.timeInfo.dayTime = rs.data[0]['powerTimes'][0]['powerOffTime'];
-
         }
+      })
+      let frequencyParams = {
+        beginDate: moment(new Date()).format('YYYY-MM-DD') + ' 00:00:00',
+        endDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+        macAddress: this.id
+      }
+      api.findByParam(frequencyParams).then(rs => {
+        console.log(rs)
+        this.timeInfo.frequency = rs.data.length > 0 ? rs.data[0]['count']: 0;
       })
     },
     getHistoryData () {
@@ -472,10 +505,8 @@ export default {
       api.findByMacAddr({macAddr: this.$route.query.id}).then(rs => {
         if (rs.code === 200) {
           let table = JSON.parse(rs.data.extra)
-          this.ranage.A.max = table[2]['value1'];
-          this.ranage.A.min = table[2]['value2'];
-          this.ranage.V.max = table[6]['value2'];
-          this.ranage.V.min = table[5]['value1'];
+          this.ranage.V.max = table[3]['value1'];
+          this.ranage.V.min = table[3]['value2'];
           this.assetTypeTable = table
           this.info.deptName = rs.data.deptName
           this.info.seat = `${rs.data.areaName} / ${rs.data.buildingName}`
@@ -492,20 +523,7 @@ export default {
       })
     },
     initAssetType (data) {
-      if (this.assetTypeTable.length > 0) {
-        // 激活 关机 待机 报警 故障
-        if (data.inputI >= this.assetTypeTable[0]['value2'] && data.inputI < this.assetTypeTable[0]['value1']) {
-          this.infoQueryObj.assetType = 2
-        } else if (data.inputI >= this.assetTypeTable[1]['value2'] && data.inputI < this.assetTypeTable[1]['value1']) {
-          this.infoQueryObj.assetType = 3
-        } else if (data.inputI >= this.assetTypeTable[2]['value2'] && data.inputI < this.assetTypeTable[2]['value1']) {
-          this.infoQueryObj.assetType = 1
-        } else if (data.inputI >= this.assetTypeTable[3]['value2'] && data.inputI < this.assetTypeTable[3]['value1']) {
-          this.infoQueryObj.assetType = 4
-        } else if (data.inputI >= this.assetTypeTable[4]['value2'] && data.inputI < this.assetTypeTable[4]['value1']) {
-          this.infoQueryObj.assetType = 5
-        }
-      }
+      this.infoQueryObj.assetType = data.assetStatus
       let time = new Date().getTime();
       let curTime = new Date(data.ctime).getTime()
       if (curTime + 2*60*1000 < time) {
@@ -525,6 +543,9 @@ export default {
       api.findAnomalous(params).then(rs => {
         this.tableData = rs.data.list
       })
+    },
+    checkAsset () {
+
     }
   },
   mounted () {
@@ -533,9 +554,9 @@ export default {
   filters: {
     initTime (value) {
       if (value > 86400000) {
-        return (value /(24*60)).toFixed(2) +' T'
+        return (value /(86400000)).toFixed(2) +' T'
       } else {
-        return (value /(60)).toFixed(2) +' H'
+        return (value /(60*60*1000)).toFixed(2) +' H'
       }
     }
   },
@@ -630,6 +651,9 @@ export default {
         color: #67C23A;
       }
     }
+  }
+  .asset-run-info .el-col:last-child {
+    border: none !important;
   }
   .data-module {
     margin-bottom: 15px;

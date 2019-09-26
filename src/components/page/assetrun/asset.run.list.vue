@@ -397,7 +397,7 @@ export default {
             } else {
               item.networkStatus = '在线'
             }
-            if (item.networkStatus = '离线') {
+            if (item.networkStatus === '离线') {
               offTable.push(item);
             } else {
               if (item.assetStatus === '50') {
@@ -407,7 +407,8 @@ export default {
               }
             }
           })
-          this.tableData = [...faultTable, ...offTable, ...table];
+          let tableData = [...faultTable, ...offTable, ...table];
+          this.tableData = tableData;
         }
       })
     }

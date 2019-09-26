@@ -74,7 +74,7 @@
               <el-table v-loading="loading" :data="tableData" style="width: 100%" border stripe max-height="470">
                 <el-table-column type="index" width="50" align="center" label="序号">
                 </el-table-column>
-                <el-table-column prop="assetName" align="center" label="设备名称">
+                <el-table-column prop="assetName" width="160" align="center" label="设备名称">
                   <template slot-scope="scope">
                     <a href="#mao" @click="seeAsssetDetail(scope.row)">{{scope.row.assetName}}</a>
                   </template>
@@ -86,19 +86,24 @@
                     {{scope.row.utilize + ' %'}}
                   </template>
                 </el-table-column>
+                <el-table-column prop="powerOffTime" width="100" align="center" label="开机次数">
+                  <template slot-scope="scope">
+                    {{scope.row.count}}
+                  </template>
+                </el-table-column>
                 <el-table-column prop="powerOffTime" width="100" align="center" label="开机时间">
                   <template slot-scope="scope">
                     {{scope.row.powerOffTime | initTime}}
                   </template>
                 </el-table-column>
-                <el-table-column prop="powerOnTime" width="100" align="center" label="待机时间">
-                  <template slot-scope="scope">
-                    {{scope.row.powerOnTime | initTime}}
-                  </template>
-                </el-table-column>
-                <el-table-column prop="standbyTime" width="100" align="center" label="关机时间">
+                <el-table-column prop="standbyTime" width="100" align="center" label="待机时间">
                   <template slot-scope="scope">
                     {{scope.row.standbyTime | initTime}}
+                  </template>
+                </el-table-column>
+                <el-table-column prop="powerOnTime" width="100" align="center" label="关机时间">
+                  <template slot-scope="scope">
+                    {{scope.row.powerOnTime | initTime}}
                   </template>
                 </el-table-column>
               </el-table>
@@ -187,6 +192,7 @@ export default {
       assetUnusualChart: null,
       assetRankingChart: null,
       assetDetailsChart: null,
+      assetTimeChart: null,
       totalCount: 0,
       deptArr: [],
       assetName: '',
@@ -227,22 +233,23 @@ export default {
         failureRate: 0, //故障率
         totalActivationTime: 0, // 总激活时间
         averageActivationTime: 0 // 平均激活时间
-      }
+      },
+      dataAsset: {},
+      timeData: {}
     };
   },
   created() {
     this.getDept()
     this.$nextTick(_ => {
-      this.initAssetUnusual()
       this.initAssetDetails()
     })
   },
   filters: {
     initTime (value) {
       if (value > 86400000) {
-        return (value /(24*60)).toFixed(2) +'T'
+        return (value /(86400000)).toFixed(2) +'T'
       } else {
-        return (value /(60)).toFixed(2) +'H'
+        return (value /(60*60*1000)).toFixed(2) +'H'
       }
     }
   },
@@ -265,11 +272,11 @@ export default {
       }
       api.deptList({pageNum: 1, pageSize: 500}).then(rs => {
         this.deptArr = rs.data.list || [];
-        this.queryObj.dept = rs.data.list[1]['id']
+        this.queryObj.dept = rs.data.list[0]['id']
         this.query()
       })
     },
-    getDeptAssetList (data) {
+    async getDeptAssetList (data) {
       let params = {
         pageNum: 0,
         pageSize: 100,
@@ -279,22 +286,64 @@ export default {
         endDate: data.endDate, //结束时间
         deptId: data.deptId
       }
-      api.powerTimeStatistics(params).then(rs => {
-        this.initTableData(rs.data)
-        this.totalCount = this.tableData.length;
-        this.initAssetEcharts(rs.data)
+      let frequencyParams = {
+        beginDate: data.beginDate, //开始时间
+        endDate: data.endDate, //结束时间
+        deptId: data.deptId
+      }
+      let quencyTable = await api.findByParam(frequencyParams);
+      let assetTable = await api.powerTimeStatistics(params);
+      this.initQuencyTable(quencyTable.data);
+      this.initTableData(assetTable.data);
+      this.totalCount = this.tableData.length;
+      this.initAssetEcharts(assetTable.data);
+    },
+    initQuencyTable (data) {
+      let timeData = {} // 根据时间来整合每天的开机次数
+      let assetData ={} // 根据设备来整合当前设备的开机次数
+      data.forEach(item => {
+        let date = item.date;
+        let assetId = item.assetId;
+        if (timeData[date] || timeData[date] == 0) {
+          timeData[date] += Number(item.count);
+        } else {
+          timeData[date] = Number(item.count) || 0;
+        }
+        if (assetData[assetId] || assetData[assetId] == 0) {
+          assetData[assetId] += Number(item.count);
+        } else {
+          assetData[assetId] = Number(item.count) || 0;
+        }
       })
+      this.dataAsset = assetData;
+      this.timeData = timeData;
     },
     initTableData (data) {
-      let tableData = data[0]['powerTimes']
+      let tableData = JSON.parse(JSON.stringify(data[0]['powerTimes']))
       let powerOffTime = 0
+      let obj = {}
+      data.forEach(item => {
+        if (item.powerTimes && item.powerTimes.length > 0) {
+          item.powerTimes.forEach(lab => {
+            let info = tableData.find(e => e.assetId === lab.assetId);
+            if (info) {
+              info.powerOffTime += lab.powerOffTime
+              info.powerOnTime += lab.powerOnTime
+              info.standbyTime += lab.standbyTime
+            } else {
+              tableData.push(JSON.parse(JSON.stringify(lab)))
+            }
+          })
+        }
+      })
       tableData.forEach(item => {
         if (item.standbyTime === 0 && item.powerOffTime === 0) {
           item.utilize = 0
         } else {
           item.utilize = (item.powerOffTime * 100 / (item.powerOnTime + item.standbyTime + item.powerOffTime)).toFixed(2)
         }
-        powerOffTime += item.powerOffTime
+        powerOffTime += item.powerOffTime;
+        item.count = this.dataAsset[item.assetId]
       })
       this.assetInfo.totalActivationTime = powerOffTime
       this.assetInfo.averageActivationTime = (powerOffTime/tableData.length) === 0 ? 0: (powerOffTime/tableData.length).toFixed(2)
@@ -342,9 +391,6 @@ export default {
         ]
       };
       this.assetChart.setOption(option, true);
-    },
-    initAssetUnusual () {
-      
     },
     initAssetRanking () {
       let arr = JSON.parse(JSON.stringify(this.tableData))

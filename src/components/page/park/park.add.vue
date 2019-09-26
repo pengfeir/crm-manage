@@ -102,7 +102,6 @@ export default {
           }
           let tips = this.detailId ? "更新" : "创建";
           let params = Object.assign({}, this.infoQueryObj);
-          console.log(this.imgObj.reportImg, 1112233)
           params.designPicture =
             this.imgObj.reportImg.length > 0
               ? JSON.stringify(this.imgObj.reportImg)

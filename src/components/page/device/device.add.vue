@@ -9,7 +9,7 @@
             </el-upload>
           </template>
           <template slot="roomIds">
-            <el-select v-model="queryObj.roomIds" filterable placeholder="请选择">
+            <el-select v-model="queryObj.roomIds" filterable clearable placeholder="请选择" :disabled="roomDisabled">
               <el-option
                 v-for="item in options"
                 :key="item.id"
@@ -37,12 +37,12 @@
             </el-table-column>
             <el-table-column prop="value1" align="center" label="设定值">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.value1" @blur="thresholdCheck(scope.row)"></el-input>
+                <el-input v-model="scope.row.value1" @blur="thresholdCheck1(scope.row)"></el-input>
               </template>
             </el-table-column>
             <el-table-column prop="value2" align="center" label="设定值2(预留)">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.value2" @blur="thresholdCheck(scope.row)"></el-input>
+                <el-input v-model="scope.row.value2" @blur="thresholdCheck2(scope.row)"></el-input>
               </template>
             </el-table-column>
             <el-table-column prop="deviation" align="center" label="允许误差">
@@ -149,16 +149,17 @@ export default {
       },
       options: [],
       popShow: false,
+      roomDisabled: false,
       tableData: [
         {name: '关机电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
         {name: '待机电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
         {name: '激活电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
-        {name: '电压报警', value1: '',value2: '', deviation: '', company: 'V'}
+        {name: '正常电压', value1: '',value2: '', deviation: '', company: 'V'}
       ]
     };
   },
   methods: {
-    thresholdCheck (row) {
+    thresholdCheck1 (row) {
       let regPos = /^\d+(\.\d+)?$/; //非负浮点数
       let regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/;
       if (!regPos.test(row.value1) && !regNeg.test(row.value1)) {
@@ -166,6 +167,16 @@ export default {
         row.value1 = ''
         return
       }
+      if (row.value1 && row.value2) {
+        if (Number(row.value1) < Number(row.value2)) {
+          let title =`${row.name}的设定值应大于设定值`
+          this.$messageTips(this, 'error', title)
+        }
+      }
+    },
+    thresholdCheck2 (row) {
+      let regPos = /^\d+(\.\d+)?$/; //非负浮点数
+      let regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/;
       if (!regPos.test(row.value2) && !regNeg.test(row.value2)) {
         this.$messageTips(this, 'error', '请输入有效数字')
         row.value2 = ''
@@ -207,6 +218,7 @@ export default {
       this.uploadData.token = this.uploadToken;
     },
     checkThreshold () {
+      if (this.queryObj.kind === 'gw') return false
       let emptyVal = false
       this.tableData.forEach(item => {
         for(let key in item) {
@@ -235,7 +247,7 @@ export default {
               ? JSON.stringify(this.imgObj.reportImg)
               : "";
           params.extra = JSON.stringify(this.tableData);
-          params.roomIds = [params.roomIds]
+          params.roomIds = params.roomIds?[params.roomIds]:[]
           api[url](params).then(rs => {
             this.popShow = false;
             if (rs.code === 200) {
@@ -251,7 +263,7 @@ export default {
     emitInfo(row) {
       this.detailId = row.id;
       Object.assign(this.queryObj, row);
-      this.queryObj.roomIds = this.queryObj.roomIds[0];
+      this.queryObj.roomIds = this.queryObj.roomIds[0] || '';
       this.filelistObj.reportList =
         (this.queryObj.urlList && JSON.parse(this.queryObj.urlList)) || [];
       this.imgObj.reportImg =
@@ -307,6 +319,17 @@ export default {
     })
   },
   watch: {
+    'queryObj.kind': {
+      handler(value) {
+        if (value === 'gw') {
+          this.roomDisabled = false
+        } else {
+          this.roomDisabled = true
+          this.queryObj.roomIds = ''
+        }
+      },
+      immediate: true
+    }
   }
 };
 </script>

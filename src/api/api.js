@@ -264,6 +264,12 @@ function countDeptFault () { // 各科室设备故障率
 function findHistory (params) { // 根据mac地址获取历史数据
   return axios.post('/manage/assetMetrics/findHistory', params)
 }
+function findByParam (params) { // 设备开机次数
+  return axios.post('/manage/powerOn/findByParam', params)
+}
+function findAll (params) {
+  return axios.post('/manage/powerOn/findAll', params)
+}
 export default {
   login,
   getUpToken,
@@ -352,5 +358,7 @@ export default {
   powerTimeStatistics,
   findGroupByDept,
   countDeptFault,
-  findHistory
+  findHistory,
+  findByParam,
+  findAll
 }

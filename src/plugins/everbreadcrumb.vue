@@ -18,7 +18,6 @@ export default {
     $route: {
       handler (value) {
         this.id = this.$route.query.id || this.$route.params.id
-        console.log(this.id, 'head')
         this.init()
       },
       immediate: true

@@ -3,7 +3,6 @@
   <div>
     <el-row style="background-color:#fff;padding-top:10px;">
       <el-col :span="3">
-        <!-- <el-button @click="getAssetTime">aaaa</el-button> -->
         <div class="echart-content">
           <div class="vice-title">概览</div>
           <div class="vice-content">
@@ -20,8 +19,8 @@
          <div class="vice-title no-border"></div>
           <div class="vice-content">
              <div class="module">
-              <div>今日新增</div>
-              <div class="content">{{assetNum.todayAdd}}</div>
+              <div>当前在线</div>
+              <div class="content">{{assetNum.dqzx}}</div>
               <div class="company"><span>台</span></div>
             </div>
           </div>
@@ -32,8 +31,20 @@
          <div class="vice-title no-border"></div>
           <div class="vice-content">
              <div class="module">
-              <div>昨日活跃</div>
-              <div class="content">{{assetNum.allNum}}</div>
+              <div>当前活跃</div>
+              <div class="content">{{assetNum.dqhy}}</div>
+              <div class="company"><span>台</span></div>
+            </div>
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="3">
+        <div class="echart-content">
+         <div class="vice-title no-border"></div>
+          <div class="vice-content">
+             <div class="module">
+              <div>当前开待机</div>
+              <div class="content">{{assetNum.kdj}}</div>
               <div class="company"><span>台</span></div>
             </div>
           </div>
@@ -44,20 +55,8 @@
          <div class="vice-title no-border"></div>
           <div class="vice-content">
             <div class="module">
-              <div>累计在线</div>
-              <div class="content">{{assetNum.allNum}}</div>
-              <div class="company"><span>台</span></div>
-            </div>
-          </div>
-        </div>
-      </el-col>
-      <el-col :span="3">
-        <div class="echart-content">
-         <div class="vice-title no-border"></div>
-          <div class="vice-content">
-            <div class="module">
-              <div>设备维修</div>
-              <div class="content">{{assetNum.faultCount}}</div>
+              <div>当前故障</div>
+              <div class="content">{{assetNum.gz}}</div>
               <div class="company"><span>台</span></div>
             </div>
           </div>
@@ -105,23 +104,23 @@
         <span class="title title-sty">设备趋势</span>
         <div style="margin: 10px 0 0 30px; ">
           <ever-form2 :schema="querySchema" v-model="queryObj" @query="query" ref="form" class="package-sale" :info="true" :labelWidth="140" label-position="right" :nosubmit="true" :inline="true">
-          <template slot="time">
-            <el-date-picker
-              v-model="queryObj.time"
-              type="daterange"
-              value-format = "yyyy-MM-dd"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期">
-            </el-date-picker>
-          </template>
-          <template slot="btn">
-            <el-button type="primary" @click="query" style="padding: 8px 10px;">查询</el-button>
-          </template>
-        </ever-form2>
+            <template slot="time">
+              <el-date-picker
+                v-model="queryObj.time"
+                type="daterange"
+                value-format = "yyyy-MM-dd"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期">
+              </el-date-picker>
+            </template>
+            <template slot="btn">
+              <el-button type="primary" @click="query" style="padding: 8px 10px;">查询</el-button>
+            </template>
+          </ever-form2>
         </div>
         
-        <div ref="historyEc" class="historyEc" style="height:280px;width:100%;"></div>
+        <div ref="historyEc" class="historyEc" style="height:350px;width:100%;"></div>
       </el-col>
     </el-row>
     <el-row style="background-color:#fff;padding-top:10px;">
@@ -200,6 +199,7 @@ let schema = [
         {id: "1", name: "设备总量"},
         {id: "2", name: "故障数量"},
         {id: "3", name: "开机数量"},
+        {id: "4", name: "激活数量"}
       ],
       clearable: false
     }
@@ -227,11 +227,12 @@ export default {
       querySchema: schema,
       queryObj: obj,
       assetNum: {
-        online: 0,
-        todayAdd: 0, // 今日新增
-        allNum: 0, // 在线
+        dqzx: 0, // 当前在线
+        dqhy: 0, // 当前活跃
+        allNum: 0, // 总量
+        kdj: 0, // 当前开待机
         complaintCount: 0, // 投诉设备
-        faultCount: 0, // 维修设备
+        gz: 0, // 故障设备
         maintainCount: 0, // 保养设备
         qaCount: 0 //质控设备
       },
@@ -286,14 +287,15 @@ export default {
       deptLen: 0,
       deptCallbackLen: 0,
       turnOnArr: {},
+      standbyTimeArr: {},
       failureType: ['reported', 'todo', 'doing', 'unknown'], // 维修中的状态值
       spendDeptArr: [],
-      spendDeptArrData: []
+      spendDeptArrData: [],
+      assetTime: null
     }
   },
   created () {
     this.$nextTick(_ => {
-      this.initEchart() // 设备趋势
       this.failureInit() //设备报修
       this.assetPlaceInit() // 科室设备数量
       this.complaintInit() // 设备投诉
@@ -301,18 +303,50 @@ export default {
       this.abnormalInit() // 科室设备故障率
       this.spendDeptList() // 科室设备开机率
       this.query()
+      this.assetTime = window.setInterval(_ => {
+        this.initAssetNum()
+      }, 30000)
     })
+    let params = {
+      "ctime": "2019-09-26 03:38:33",
+      "assetStatus": "20",
+      "energy": 0,
+      "extra": "aaa",
+      "inputI": 0,
+      "inputV": 0,
+      "macAddr": "00124B0015FE5EA4",
+      "mtime": "2019-09-26 03:38:33",
+      "orgId": 0,
+      "orgName": "234",
+      "pos1": 0,
+      "pos2": 0,
+      "pos3": 0,
+      "powerFactor": 0,
+      "powerHz": 0,
+      "realPower": 0,
+      "routerNo1": 0,
+      "routerNo2": 0,
+      "routerNo3": 0,
+      "status": 0,
+      "temperature": 0
+    }
+    api.publicCreate(params)
   },
   methods: {
     query () {
+      this.assetInfo.chart = echarts.init(this.$refs.historyEc);
+      this.assetInfo.chart.showLoading();
       let data = this.getAll(this.queryObj.time[0].split(' ')[0], this.queryObj.time[1].split(' ')[0])
       if (this.queryObj.type === '1') {
         this.getAssetList(data) // 总量
       } else if (this.queryObj.type === '2') {
-        this.getFaultRage(data) // 故障率
+        this.getFaultRage(data) // 故障数
+      } else if (this.queryObj.type === '3') {
+        this.turnOnArr = data;
+        this.getTurnOnRate() //开机数
       } else {
-        this.turnOnArr = data
-        this.getTurnOnRate() //开机率
+        this.standbyTimeArr = data;
+        this.getTurnOnRate() // 激活数
       }
     },
     getAll(begin, end){			// 开始日期和结束日期
@@ -407,17 +441,30 @@ export default {
       data.forEach(item => {
         let time = item.beginDate.split(' ')[0]
         item.powerTimes.forEach(lab => {
-          if (lab.powerOffTime > 0 || lab.standbyTime > 0) {
-            this.turnOnArr[time] += 1
+          if (this.queryObj.type === '3') {
+            if (lab.powerOffTime > 0) {
+              this.turnOnArr[time] += 1;
+            }
+          } else {
+            if (lab.standbyTime > 0) {
+              this.standbyTimeArr[time] +=1;
+            }
           }
         })
       })
       if (this.deptCallbackLen === this.deptLen) {
         let data1 = []
         let data2 = []
-        for(let key in this.turnOnArr) {
-          data1.push(key)
-          data2.push(this.turnOnArr[key])
+        if (this.queryObj.type === '3') {
+          for(let key in this.turnOnArr) {
+            data1.push(key)
+            data2.push(this.turnOnArr[key])      
+          }
+        } else {
+          for(let key in this.standbyTimeArr) {
+            data1.push(key)
+            data2.push(this.standbyTimeArr[key])      
+          }
         }
         this.initEchart(data1, data2);
       }
@@ -467,23 +514,9 @@ export default {
           return 0; 
           break; 
       } 
-    } ,
-    getAssetTime (id) {
-      let params = {
-        "pageNum":0,
-        "pageSize":100,
-        "timeDivide":false, //是否间隔
-        "interval": 1, //间隔天数
-        "beginDate":"2019-07-03 00:00:00", //开始时间
-        "endDate":"2019-07-05 00:00:00", //结束时间
-        "macAddress": 'fang-yun-zhe' //设备id
-      }
-      api.powerTimeStatistics(params).then(rs => {
-
-      })
     },
     initAssetNum () {
-      // 获取在线设备
+      // 获取设备总量
       api.assetList({pageNum: 1, pageSize: 20}).then(rs => {
         if (rs.code === 200) {
           this.assetNum.allNum = rs.data.totalCount;
@@ -491,13 +524,38 @@ export default {
           this.assetNum.allNum = '--';
         }
       })
-      // 获取今日新增设备数
-      let curDate = moment(new Date().getTime()).format('YYYY-MM-DD')
-      api.countByDate({beginDate: curDate, endDate: curDate}).then(rs => {
+      api.tempList({}).then(rs => {
         if (rs.code === 200) {
-          this.assetNum.todayAdd = rs.data;
-        } else {
-          this.assetNum.todayAdd = '--';
+          let time = new Date().getTime();
+          let dqhy = 0;
+          let kdj = 0;
+          let gz = 0;
+          let qt = 0;
+          rs.data.forEach(item => {
+            let curTime = new Date(item.ctime).getTime()
+            if (curTime + 2*60*1000 < time) {
+              item.networkStatus = '离线'
+            } else {
+              item.networkStatus = '在线'
+            }
+
+            // 当前在线： 就是在线设备。 当前活跃： 处于激活状态的设备。 当前开待机： 处于开机和待机的设备。当前故障：处于故障状态的设备
+            if (item.networkStatus === '在线') {
+              if (item.assetStatus === '40') {
+                dqhy ++
+              } else if (item.assetStatus === '20' || item.assetStatus === '30') {
+                kdj ++
+              } else if (item.assetStatus === '50') {
+                gz ++
+              } else {
+                qt ++
+              }
+            }
+          })
+          this.assetNum.dqzx = dqhy + kdj + gz + qt;
+          this.assetNum.dqhy = dqhy;
+          this.assetNum.gz = gz;
+          this.assetNum.kdj = kdj;
         }
       })
       api.notDone().then(rs => {
@@ -515,7 +573,7 @@ export default {
       this.assetInfo.y.push(Math.round(this.assetInfo.value))
     },
     initEchart (data1, data2) {
-      this.assetInfo.chart = echarts.init(this.$refs.historyEc);
+      this.assetInfo.chart.hideLoading();
       var option = {
         tooltip: {
           trigger: 'axis',
@@ -527,9 +585,14 @@ export default {
           left: '30',
           top: '15',
           right: '30',
-          bottom: '30',
+          bottom: '50',
           containLabel: true
         },
+        dataZoom: [{
+          type: 'inside'
+        }, {
+          type: 'slider'
+        }],
         xAxis: {
           data: data1,
           silent: false,
@@ -542,12 +605,13 @@ export default {
         },
         yAxis: {
           splitArea: {
-            show: false
+            show: false,
           }
         },
         series: [{
-          type: 'line',
+          type: 'bar',
           data: data2,
+          barMaxWidth: 30,
           large: true
         }]
       }
@@ -734,7 +798,7 @@ export default {
           axisPointer: {
             type: 'shadow'
           },
-          formatter: "{b} <br> 设备数: {c}"
+          formatter: "{b} <br> 开机时间: {c} H"
         },
         grid: {
           left: '3%',
@@ -976,7 +1040,7 @@ export default {
       this.spendDeptArrData.forEach(item => {
         data1.push(item.deptName);
         data2.push(item.allTurnOnRate)
-        data3.push(item.time)
+        data3.push((item.time/(60*60*1000)).toFixed(2))
       })
       if (this.spendDeptArrData.length < 10) {
         for(let i = 0; i < 10 - this.spendDeptArrData.length; i++) {
@@ -1059,8 +1123,11 @@ export default {
       this.spendInfo.chart.setOption(option, true);
     }
   },
+  beforeDestroy () {
+    window.clearInterval(this.assetTime);
+    this.assetTime = null;
+  },
   watch: {
-
   }
 }
 </script>
@@ -1111,7 +1178,13 @@ export default {
     }
     .vice-content {
       border-right: 1px solid #eee;
+      &:last-child{
+        border:none !important;
+      }
     }
+  }
+  .echart-content .vice-content:last-child{
+    border:none !important;
   }
   .package-sale /deep/ .el-date-editor {
     height: 32px;
@@ -1124,4 +1197,3 @@ export default {
     }
   }
 </style>
-
