@@ -65,25 +65,25 @@
   </div>
 </template>
 <script>
-import api from "@/api/api";
-import FileSaver from 'file-saver';
-import moment from 'moment';
-import XLSX from 'xlsx';
+import api from '@/api/api'
+import FileSaver from 'file-saver'
+import moment from 'moment'
+import XLSX from 'xlsx'
 let schema = [
   {
-    label: "设备分类",
-    name: "type",
-    comp: "custom"
+    label: '设备分类',
+    name: 'type',
+    comp: 'custom'
   },
   {
     label: '时间',
     name: 'time',
     comp: 'custom'
   }
-];
+]
 export default {
-  data() {
-    let obj = this.createObjFromSchema(schema);
+  data () {
+    let obj = this.createObjFromSchema(schema)
     obj.type = 1
     obj.time = [
       moment(new Date().getTime() - 86400000 * 30).format('YYYY-MM-DD HH:mm:ss'),
@@ -95,35 +95,35 @@ export default {
       queryObj: obj,
       loading: false,
       options: [
-        {id: 1, name: '按科室'},
-        {id: 2, name: '按设备类别'}
+        { id: 1, name: '按科室' },
+        { id: 2, name: '按设备类别' }
       ],
       deptArr: [], // 科室列表
       tableData: [],
       pickerOptions2: {
         shortcuts: [{
           text: '最近一周',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-            picker.$emit('pick', [start, end]);
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', [start, end])
           }
         }, {
           text: '最近一个月',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-            picker.$emit('pick', [start, end]);
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            picker.$emit('pick', [start, end])
           }
         }, {
           text: '最近三个月',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-            picker.$emit('pick', [start, end]);
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+            picker.$emit('pick', [start, end])
           }
         }]
       },
@@ -131,10 +131,10 @@ export default {
       deptAssetArr: [],
       areaNameInfo: {},
       assetList: {}
-    };
+    }
   },
   created () {
-    api.assetList({pageNum: 1, pageSize: 2000}).then(rs => {
+    api.assetList({ pageNum: 1, pageSize: 2000 }).then(rs => {
       let obj = {}
       rs.data.list.forEach(item => {
         obj[item.id] = item
@@ -148,9 +148,9 @@ export default {
       var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
       try {
         FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '设备.xlsx')
-      } catch (e) { 
+      } catch (e) {
         if (typeof console !== 'undefined') {
-          console.log(e, wbout) 
+          console.log(e, wbout)
         }
       }
       return wbout
@@ -159,8 +159,8 @@ export default {
       this.loading = true
       this.deptAssetArr = []
       this.tableData = []
-      api.deptList({pageNum: 1, pageSize: 500}).then(rs => {
-        this.deptArr = rs.data.list || [];
+      api.deptList({ pageNum: 1, pageSize: 500 }).then(rs => {
+        this.deptArr = rs.data.list || []
         this.getAssetData()
       })
     },
@@ -176,16 +176,16 @@ export default {
         time: 0,
         averageTime: 0,
         list: []
-      } 
+      }
       this.deptAssetArr.push(deptInfo)
       this.initTableData()
     },
-    initAssetTime (data ,deptId, areaName) {
+    initAssetTime (data, deptId, areaName) {
       let obj = {}
       let len = 0
       let allTime = 0
       data.forEach(item => {
-        len ++
+        len++
         item.powerTimes.forEach(lab => {
           allTime += (Number(lab.powerOffTime) + Number(lab.standbyTime))
           if (obj[lab.assetId]) {
@@ -195,23 +195,23 @@ export default {
             }
           } else {
             if (lab.powerOffTime > 0 || lab.standbyTime > 0) {
-              obj[lab.assetId] = {turnOnRate: 1, time: (Number(lab.powerOffTime) + Number(lab.standbyTime)), assetName: lab.assetName, vender: this.assetList[lab.assetId]['vender'], areaName: areaName, num:1, kind: this.assetList[lab.assetId]['kind']}
+              obj[lab.assetId] = { turnOnRate: 1, time: (Number(lab.powerOffTime) + Number(lab.standbyTime)), assetName: lab.assetName, vender: this.assetList[lab.assetId]['vender'], areaName: areaName, num: 1, kind: this.assetList[lab.assetId]['kind'] }
             } else {
-              obj[lab.assetId] = {turnOnRate: 0, time: 0, assetName: lab.assetName, vender: this.assetList[lab.assetId]['vender'], areaName: areaName,num:1, kind: this.assetList[lab.assetId]['kind']}
+              obj[lab.assetId] = { turnOnRate: 0, time: 0, assetName: lab.assetName, vender: this.assetList[lab.assetId]['vender'], areaName: areaName, num: 1, kind: this.assetList[lab.assetId]['kind'] }
               // turnOnRate 当天激活就+1，最后激活率就是激活次数/总天数 ，time激活时间，averageTime平均激活时间，assetName设备名称，vender厂家名称，areaname院区 ，num个数, kind设备类别
             }
           }
         })
       })
       for (let key in obj) {
-        obj[key]['averageTime'] = (obj[key]['time']/len === 0)? 0: (obj[key]['time']/len).toFixed(2)
-        obj[key]['turnOnRate'] = (obj[key]['turnOnRate']/len === 0)? 0: (obj[key]['turnOnRate']/len).toFixed(2)
+        obj[key]['averageTime'] = (obj[key]['time'] / len === 0) ? 0 : (obj[key]['time'] / len).toFixed(2)
+        obj[key]['turnOnRate'] = (obj[key]['turnOnRate'] / len === 0) ? 0 : (obj[key]['turnOnRate'] / len).toFixed(2)
       }
       let deptInfo = {
         deptName: this.deptArr.find(item => item.id === deptId)['name'],
         num: Object.keys(obj).length,
         time: allTime,
-        averageTime: (allTime/len) === 0? 0: (allTime/len).toFixed(2),
+        averageTime: (allTime / len) === 0 ? 0 : (allTime / len).toFixed(2),
         list: Object.values(obj)
       }
       this.deptAssetArr.push(deptInfo)
@@ -221,10 +221,10 @@ export default {
       let params = {
         pageNum: 0,
         pageSize: 1000,
-        timeDivide: true, //是否间隔
-        interval: 1, //间隔天数
-        beginDate: moment(this.queryObj.time[0]).format('YYYY-MM-DD') + ' 00:00:00', //开始时间
-        endDate: moment(this.queryObj.time[1]).format('YYYY-MM-DD')+ ' 23:59:59', //结束时间
+        timeDivide: true, // 是否间隔
+        interval: 1, // 间隔天数
+        beginDate: moment(this.queryObj.time[0]).format('YYYY-MM-DD') + ' 00:00:00', // 开始时间
+        endDate: moment(this.queryObj.time[1]).format('YYYY-MM-DD') + ' 23:59:59', // 结束时间
         deptId: deptId
       }
       await api.powerTimeStatistics(params).then(rs => {
@@ -236,18 +236,18 @@ export default {
       })
     },
     async getAssetMacId (deptId, data) {
-      let mac = await api.findById({id: data[0]['powerTimes'][0]['iotDeviceId']}) // 根据mac对应id获取mac地址
-      let areaName = await api.findByMacAddr({macAddr: mac.data.macAddr}) // 根据mac地址获取对应的物联院区信息
-      this.areaNameInfo[deptId] = areaName.data.areaName     
+      let mac = await api.findById({ id: data[0]['powerTimes'][0]['iotDeviceId'] }) // 根据mac对应id获取mac地址
+      let areaName = await api.findByMacAddr({ macAddr: mac.data.macAddr }) // 根据mac地址获取对应的物联院区信息
+      this.areaNameInfo[deptId] = areaName.data.areaName
       this.initAssetTime(data, deptId, areaName.data.areaName)
     },
-    tableRowClassName({row, rowIndex}) {
+    tableRowClassName ({ row, rowIndex }) {
       if (row.vender === '汇总') {
-        return 'warning-row';
+        return 'warning-row'
       } else if (row.vender === '厂家名称') {
-        return  'title-row'
+        return 'title-row'
       }
-      return '';
+      return ''
     },
     go () {
       this.$router.go(-1)
@@ -276,23 +276,23 @@ export default {
       this.deptAssetArr.forEach(item => {
         tableData.push(title)
         if (item.list.length === 0) {
-          tableData.push({deptName: item.deptName, num: 0})
+          tableData.push({ deptName: item.deptName, num: 0 })
         }
         item.list.forEach(lab => {
-          lab.deptName = item.deptName;
+          lab.deptName = item.deptName
           lab.timeSlot = timeSlot
           tableData.push(lab)
-          if(obj[lab.kind]){
+          if (obj[lab.kind]) {
             obj[lab.kind].push(lab)
           } else {
             obj[lab.kind] = [lab]
           }
         })
-        tableData.push(Object.assign({}, item, {vender: '汇总', type: this.queryObj.type ===1?'按科室': '按设备类别', deptName: ''}))
+        tableData.push(Object.assign({}, item, { vender: '汇总', type: this.queryObj.type === 1 ? '按科室' : '按设备类别', deptName: '' }))
       })
       let tableData1 = []
       let len = this.datedifference(moment(this.queryObj.time[0]).format('YYYY-MM-DD'), moment(this.queryObj.time[1]).format('YYYY-MM-DD'))
-      for(let key in obj) {
+      for (let key in obj) {
         tableData1.push(title)
         let info = {
           num: 0,
@@ -300,30 +300,30 @@ export default {
           averageTime: 0
         }
         obj[key].forEach(item => {
-          info.num ++;
-          info.time += item.time;
+          info.num++
+          info.time += item.time
           tableData1.push(item)
         })
-        info.averageTime = (info.time/len) === 0? 0: (info.time/len).toFixed(2)
-        tableData1.push(Object.assign({}, info, {vender: '汇总', type: this.queryObj.type ===1?'按科室': '按设备类别', kind: key}))
+        info.averageTime = (info.time / len) === 0 ? 0 : (info.time / len).toFixed(2)
+        tableData1.push(Object.assign({}, info, { vender: '汇总', type: this.queryObj.type === 1 ? '按科室' : '按设备类别', kind: key }))
       }
-      if (this.queryObj.type ===1) {
+      if (this.queryObj.type === 1) {
         this.tableData = tableData
       } else {
         this.tableData = tableData1
       }
     },
-    datedifference (sDate1, sDate2) {    //sDate1和sDate2是2006-12-18格式  
-      let dateSpan,tempDate,iDays;
-      sDate1 = Date.parse(sDate1);
-      sDate2 = Date.parse(sDate2);
-      dateSpan = sDate2 - sDate1;
-      dateSpan = Math.abs(dateSpan);
-      iDays = Math.floor(dateSpan / (24 * 3600 * 1000));
+    datedifference (sDate1, sDate2) { // sDate1和sDate2是2006-12-18格式
+      let dateSpan, iDays
+      sDate1 = Date.parse(sDate1)
+      sDate2 = Date.parse(sDate2)
+      dateSpan = sDate2 - sDate1
+      dateSpan = Math.abs(dateSpan)
+      iDays = Math.floor(dateSpan / (24 * 3600 * 1000))
       return iDays + 1
     }
   }
-};
+}
 </script>
 <style lang="less" scoped>
   .scroll {

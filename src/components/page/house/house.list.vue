@@ -150,98 +150,98 @@
   </div>
 </template>
 <script>
-import list from "@/plugins/list";
-import token from "@/plugins/getUploadToken";
-import api from "@/api/api";
-import FileSaver from 'file-saver';
-import XLSX from 'xlsx';
+import list from '@/plugins/list'
+import token from '@/plugins/getUploadToken'
+import api from '@/api/api'
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 let schema = [
   {
-    name: "area",
-    label: "院区",
-    comp: "custom"
+    name: 'area',
+    label: '院区',
+    comp: 'custom'
   },
   {
-    name: "building",
-    label: "楼名",
-    comp: "custom"
+    name: 'building',
+    label: '楼名',
+    comp: 'custom'
   },
   {
-    label: "楼层",
-    name: "floorNo",
-    comp: "custom"
+    label: '楼层',
+    name: 'floorNo',
+    comp: 'custom'
   },
   {
-    label: "房间号",
-    name: "roomNo"
+    label: '房间号',
+    name: 'roomNo'
   },
   {
-    label: "科室",
-    name: "dept",
-    comp: "custom"
+    label: '科室',
+    name: 'dept',
+    comp: 'custom'
   },
   {
-    name: "btn",
-    label: "",
-    comp: "custom"
+    name: 'btn',
+    label: '',
+    comp: 'custom'
   },
   {
-    label: "",
-    name: "rightbtn",
-    comp: "custom"
+    label: '',
+    name: 'rightbtn',
+    comp: 'custom'
   }
-];
+]
 let arr = [
   {
-    id: "areaName",
-    label: "院区",
-    value: ""
+    id: 'areaName',
+    label: '院区',
+    value: ''
   },
   {
-    id: "buildingName",
-    label: "楼名",
-    value: ""
+    id: 'buildingName',
+    label: '楼名',
+    value: ''
   },
   {
-    id: "deptName",
-    label: "所属科室",
-    value: ""
+    id: 'deptName',
+    label: '所属科室',
+    value: ''
   },
   {
-    id: "floorNo",
-    label: "楼层",
-    value: ""
+    id: 'floorNo',
+    label: '楼层',
+    value: ''
   },
   {
-    id: "roomNo",
-    label: "房间号",
-    value: ""
+    id: 'roomNo',
+    label: '房间号',
+    value: ''
   },
   {
-    id: "ctime",
-    label: "创建时间",
-    value: ""
+    id: 'ctime',
+    label: '创建时间',
+    value: ''
   },
   {
-    id: "mtime",
-    label: "更新时间",
-    value: ""
+    id: 'mtime',
+    label: '更新时间',
+    value: ''
   },
   {
-    id: "extra",
-    label: "其他扩展信息",
-    value: ""
+    id: 'extra',
+    label: '其他扩展信息',
+    value: ''
   },
   {
-    id: "urlList",
-    label: "房间资料",
-    value: ""
+    id: 'urlList',
+    label: '房间资料',
+    value: ''
   }
-];
+]
 export default {
   mixins: [list, token],
-  data() {
-    var obj = this.createObjFromSchema(schema);
+  data () {
+    var obj = this.createObjFromSchema(schema)
     return {
       api,
       querySchema: schema,
@@ -249,49 +249,49 @@ export default {
       tableData: [],
       popShow: false,
       arr,
-      listApiName: "roomList",
+      listApiName: 'roomList',
       options: {
-        areaArr: [], //院区
+        areaArr: [], // 院区
         buildingArr: [], // 建筑
         floorNoArr: [], // 楼层
         deptArr: [] // 科室
       },
       floorNoDefault: [
-        {id: '6',name: '6 层'},
-        {id: '5',name: '5 层'},
-        {id: '4',name: '4 层'},
-        {id: '3',name: '3 层'},
-        {id: '2',name: '2 层'},
-        {id: '1',name: '1 层'},
-        {id: '-1',name: 'B1 层'},
-        {id: '-2',name: 'B2 层'}
+        { id: '6', name: '6 层' },
+        { id: '5', name: '5 层' },
+        { id: '4', name: '4 层' },
+        { id: '3', name: '3 层' },
+        { id: '2', name: '2 层' },
+        { id: '1', name: '1 层' },
+        { id: '-1', name: 'B1 层' },
+        { id: '-2', name: 'B2 层' }
       ],
       allBuildingArr: {},
       buildingArrt: []
-    };
+    }
   },
   methods: {
-    areaChange(val) {
+    areaChange (val) {
       if (!val) {
-        this.options.buildingArr = this.buildingArrt;
+        this.options.buildingArr = this.buildingArrt
         return
       }
-      this.options.buildingArr = this.allBuildingArr[val];
-      this.queryObj.building = this.allBuildingArr[val][0]['id'];
+      this.options.buildingArr = this.allBuildingArr[val]
+      this.queryObj.building = this.allBuildingArr[val][0]['id']
       this.options.floorNoArr = this.initFloorNoArr(this.allBuildingArr[val][0]['floorsOnGround'], this.allBuildingArr[val][0]['floorsUnderground'])
     },
-    initFloorNoArr(on, under) {
-      let arr = [];
-      for(let i = on; i > 0; i --) {
-        let obj = {id: i, name: i + ' 层'}
-        arr.push(obj);
+    initFloorNoArr (on, under) {
+      let arr = []
+      for (let i = on; i > 0; i--) {
+        let obj = { id: i, name: i + ' 层' }
+        arr.push(obj)
       }
-      for (let i = 1; i < under + 1; i ++) {
-        let obj = {id: '-' + i, name: 'B'+ i + ' 层'};
-        arr.push(obj);
+      for (let i = 1; i < under + 1; i++) {
+        let obj = { id: '-' + i, name: 'B' + i + ' 层' }
+        arr.push(obj)
       }
       if (arr.length === 0) {
-        arr = this.floorNoDefault;
+        arr = this.floorNoDefault
       }
       return arr
     },
@@ -301,50 +301,50 @@ export default {
       /* get binary string as output */
       var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
       try {
-          FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '物联网络配置.xlsx')
+        FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '物联网络配置.xlsx')
       } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
       return wbout
     },
-    seeDetail(row) {
+    seeDetail (row) {
       arr.forEach(item => {
-        item.value = row[item.id] || "";
-      });
-      this.popShow = true;
+        item.value = row[item.id] || ''
+      })
+      this.popShow = true
     },
-    addAsset() {
-      this.$router.push("/page/houseAdd");
+    addAsset () {
+      this.$router.push('/page/houseAdd')
     },
-    emitInfo(row) {
-      this.$router.push("/page/houseAdd?id=" + row.id);
+    emitInfo (row) {
+      this.$router.push('/page/houseAdd?id=' + row.id)
     },
-    delInfo(row) {
-      this.$confirm("确定要删除该房间记录?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+    delInfo (row) {
+      this.$confirm('确定要删除该房间记录?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       }).then(async () => {
-          try {
-            let data = await api.deleteRoom({ id: row.id });
-            if (data && data.code === 200) {
-              this.$message({
-                type: "success",
-                message: "删除成功!"
-              });
-              this.query();
-            }
-          } catch (err) {
-            console.log(err);
+        try {
+          let data = await api.deleteRoom({ id: row.id })
+          if (data && data.code === 200) {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            this.query()
           }
-        })
-        .then(() => {});
+        } catch (err) {
+          console.log(err)
+        }
+      })
+        .then(() => {})
     },
     async initOptions () {
-      let area = api.areaList({pageNum: 1, pageSize: 200});
-      let building = api.buildingList({pageNum: 1, pageSize: 1000});
-      let dept = api.deptList({pageNum: 1, pageSize: 100});
-      let areaArr = await area;
-      let buildingArr = await building;
-      let deptArr = await dept;
+      let area = api.areaList({ pageNum: 1, pageSize: 200 })
+      let building = api.buildingList({ pageNum: 1, pageSize: 1000 })
+      let dept = api.deptList({ pageNum: 1, pageSize: 100 })
+      let areaArr = await area
+      let buildingArr = await building
+      let deptArr = await dept
       this.options.areaArr = areaArr.data.list || [];
       (buildingArr.data.list || []).forEach(item => {
         if (this.allBuildingArr[item.hospitalArea]) {
@@ -353,20 +353,20 @@ export default {
           this.allBuildingArr[item.hospitalArea] = []
           this.allBuildingArr[item.hospitalArea].push(item)
         }
-        let curArea = this.options.areaArr.find(lab => lab.id === item.hospitalArea) || {name: ''};
-        item.hospitalAreaName = curArea.name;
+        let curArea = this.options.areaArr.find(lab => lab.id === item.hospitalArea) || { name: '' }
+        item.hospitalAreaName = curArea.name
         item.composeName = item.name + ' < ' + item.hospitalAreaName
-      });
-      this.options.buildingArr = buildingArr.data.list || [];
-      this.buildingArrt = buildingArr.data.list || [];
-      this.options.deptArr = deptArr.data.list || [];
-      this.options.floorNoArr = this.floorNoDefault;
+      })
+      this.options.buildingArr = buildingArr.data.list || []
+      this.buildingArrt = buildingArr.data.list || []
+      this.options.deptArr = deptArr.data.list || []
+      this.options.floorNoArr = this.floorNoDefault
     }
   },
-  created() {
-    this.initOptions();
+  created () {
+    this.initOptions()
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .scroll {
@@ -378,5 +378,3 @@ export default {
   width: 150px;
 }
 </style>
-
-

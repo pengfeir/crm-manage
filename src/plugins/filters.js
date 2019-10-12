@@ -2,7 +2,7 @@
  * @Author: renpengfei
  * @Date: 2019-03-25 14:56:51
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-09-09 18:08:56
+ * @Last Modified time: 2019-10-10 15:33:48
  */
 /**
  * 设备装机状态
@@ -120,7 +120,7 @@ export const deviceStatus = kind => {
  * @param {*} assetStatus
  */
 export const filterAssetStatus = assetStatus => {
-  switch (assetStatus) {
+  switch (String(assetStatus)) {
     case '10' :
       return '关机'
     case '20' :

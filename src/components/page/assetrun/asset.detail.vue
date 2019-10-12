@@ -144,26 +144,26 @@
   </div>
 </template>
 <script>
-import list from "@/plugins/list";
-import api from "@/api/api";
-import FileSaver from 'file-saver';
-import XLSX from 'xlsx';
+import list from '@/plugins/list'
+import api from '@/api/api'
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 export default {
   mixins: [list],
-  data() {
+  data () {
     return {
       api,
       tableData: [],
-      listApiName: "assetMetricsList",
+      listApiName: 'assetMetricsList',
       interval: null
-    };
+    }
   },
   methods: {
     exportExcel () {
       var wb = XLSX.utils.table_to_book(document.querySelector('#excelTable'))
       var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
       try {
-          FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '设备监测.xlsx')
+        FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '设备监测.xlsx')
       } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
       return wbout
     },
@@ -175,12 +175,12 @@ export default {
       }
       api.assetMetricsList(params).then(rs => {
         if (rs.code === 200) {
-          this.tableData = rs.data.list;
+          this.tableData = rs.data.list
         }
       })
     },
     go () {
-      this.$router.go(-1);
+      this.$router.go(-1)
     },
     onChange () {
       this.queryObj.value = ''
@@ -194,13 +194,13 @@ export default {
   },
   created () {
     this.$nextTick(_ => {
-      let height = document.documentElement.clientHeight;
-      document.querySelector('.table-contant').style.height = height - 320 + 'px';
+      let height = document.documentElement.clientHeight
+      document.querySelector('.table-contant').style.height = height - 320 + 'px'
     })
     window.onresize = () => {
       if (document.querySelector('.table-contant')) {
-        let height = document.documentElement.clientHeight;
-        document.querySelector('.table-contant').style.height = height - 320 + 'px';
+        let height = document.documentElement.clientHeight
+        document.querySelector('.table-contant').style.height = height - 320 + 'px'
       }
     }
     this.interval = setInterval(_ => {
@@ -213,7 +213,7 @@ export default {
   },
   watch: {
   }
-};
+}
 </script>
 <style lang="less" scoped>
   .head-style {

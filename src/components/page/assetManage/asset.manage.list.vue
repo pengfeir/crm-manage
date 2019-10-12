@@ -177,206 +177,206 @@
   </div>
 </template>
 <script>
-import api from "@/api/api";
-import list from "@/plugins/list";
-import FileSaver from 'file-saver';
-import XLSX from 'xlsx';
+import api from '@/api/api'
+import list from '@/plugins/list'
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 let schema = [
   {
-    label: "设备编号",
-    name: "no"
+    label: '设备编号',
+    name: 'no'
   },
   {
-    name: "dept",
-    label: "临床科室"
+    name: 'dept',
+    label: '临床科室'
   },
   {
-    name: "kind",
-    label: "设备类别"
+    name: 'kind',
+    label: '设备类别'
   },
   {
-    label: "设备型号",
-    name: "model"
+    label: '设备型号',
+    name: 'model'
   },
   {
-    label: "SN序列号",
-    name: "sn"
+    label: 'SN序列号',
+    name: 'sn'
   },
   {
-    label: "厂家",
-    name: "vender"
+    label: '厂家',
+    name: 'vender'
   },
   {
-    name: "btn",
-    label: "",
-    comp: "custom"
+    name: 'btn',
+    label: '',
+    comp: 'custom'
   },
   {
-    label: "",
-    name: "rightbtn",
-    comp: "custom"
+    label: '',
+    name: 'rightbtn',
+    comp: 'custom'
   }
-];
+]
 let arr = [
   {
-    id: "name",
-    label: "设备名称",
-    value:''
+    id: 'name',
+    label: '设备名称',
+    value: ''
   },
   {
-    id: "iotDeviceIds",
-    label: "物联设备",
-    value:''
+    id: 'iotDeviceIds',
+    label: '物联设备',
+    value: ''
   },
   {
-    id: "no",
-    label: "设备编号",
-    value:''
+    id: 'no',
+    label: '设备编号',
+    value: ''
   },
   {
-    id: "acceptStatus",
-    label: "验收状态",
-    value:''
+    id: 'acceptStatus',
+    label: '验收状态',
+    value: ''
   },
   {
-    id: "brand",
-    label: "品牌",
-    value:''
+    id: 'brand',
+    label: '品牌',
+    value: ''
   },
   {
-    id: "spec",
-    label: "规格型号",
-    value:''
+    id: 'spec',
+    label: '规格型号',
+    value: ''
   },
   {
-    id: "purchasePrice",
-    label: "采购价格",
-    value:''
+    id: 'purchasePrice',
+    label: '采购价格',
+    value: ''
   },
   {
-    id: "depreciationCharge",
-    label: "折旧费",
-    value:''
+    id: 'depreciationCharge',
+    label: '折旧费',
+    value: ''
   },
   {
-    id: "responsiblePersonName",
-    label: "责任工程师",
-    value:''
+    id: 'responsiblePersonName',
+    label: '责任工程师',
+    value: ''
   },
   {
-    id: "matainExpiryDate",
-    label: "保修截止日期",
-    value:''
+    id: 'matainExpiryDate',
+    label: '保修截止日期',
+    value: ''
   },
   {
-    id: "kind",
-    label: "设备类别",
-    value:''
+    id: 'kind',
+    label: '设备类别',
+    value: ''
   },
   {
-    id: "model",
-    label: "设备型号",
-    value:''
+    id: 'model',
+    label: '设备型号',
+    value: ''
   },
   {
-    id: "setupStep",
-    label: "设备装机状态",
-    value:''
+    id: 'setupStep',
+    label: '设备装机状态',
+    value: ''
   },
   {
-    id: "alternativeAppendant",
-    label: "耗材替代品",
-    value:''
+    id: 'alternativeAppendant',
+    label: '耗材替代品',
+    value: ''
   },
   {
-    id: "appendant",
-    label: "配套耗材",
-    value:''
+    id: 'appendant',
+    label: '配套耗材',
+    value: ''
   },
   {
-    id: "contact",
-    label: "联系方式",
-    value:''
+    id: 'contact',
+    label: '联系方式',
+    value: ''
   },
   {
-    id: "dept",
-    label: "临床科室",
-    value:''
+    id: 'dept',
+    label: '临床科室',
+    value: ''
   },
   {
-    id: "isDedicatedAppendant",
-    label: "配套耗材是否专机专用",
-    value:''
+    id: 'isDedicatedAppendant',
+    label: '配套耗材是否专机专用',
+    value: ''
   },
   {
-    id: "prodDate",
-    label: "生产日期",
-    value:''
+    id: 'prodDate',
+    label: '生产日期',
+    value: ''
   },
   {
-    id: "setupStartAt",
-    label: "装机开始时间",
-    value:''
+    id: 'setupStartAt',
+    label: '装机开始时间',
+    value: ''
   },
   {
-    id: "setupEndAt",
-    label: "装机结束时间",
-    value:''
+    id: 'setupEndAt',
+    label: '装机结束时间',
+    value: ''
   },
   {
-    id: "sn",
-    label: "SN序列号",
-    value:''
+    id: 'sn',
+    label: 'SN序列号',
+    value: ''
   },
   {
-    id: "vender",
-    label: "厂家",
-    value:''
+    id: 'vender',
+    label: '厂家',
+    value: ''
   },
   {
-    id: "extra",
-    label: "其他扩展信息",
-    value:''
+    id: 'extra',
+    label: '其他扩展信息',
+    value: ''
   },
   {
-    id: "ctime",
-    label: "创建时间",
-    value:''
+    id: 'ctime',
+    label: '创建时间',
+    value: ''
   },
   {
-    id: "mtime",
-    label: "更新时间",
-    value:''
+    id: 'mtime',
+    label: '更新时间',
+    value: ''
   },
   {
-    id: "manualUrlList",
-    label: "用户手册照片",
-    value:''
+    id: 'manualUrlList',
+    label: '用户手册照片',
+    value: ''
   },
   {
-    id: "receiptUrlList",
-    label: "票据照片",
-    value:''
+    id: 'receiptUrlList',
+    label: '票据照片',
+    value: ''
   },
   {
-    id: "contractUrlList",
-    label: "采购合同照片",
-    value:''
+    id: 'contractUrlList',
+    label: '采购合同照片',
+    value: ''
   }
 ]
 export default {
   mixins: [list],
-  data() {
-    var obj = this.createObjFromSchema(schema);
+  data () {
+    var obj = this.createObjFromSchema(schema)
     return {
       api,
       querySchema: schema,
       queryObj: obj,
       arr,
       tableData: [],
-      listApiName: "assetList",
+      listApiName: 'assetList',
       popShow: false
-    };
+    }
   },
   methods: {
     exportExcel () {
@@ -385,7 +385,7 @@ export default {
       /* get binary string as output */
       var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
       try {
-          FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '设备.xlsx')
+        FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '设备.xlsx')
       } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
       return wbout
     },
@@ -395,36 +395,36 @@ export default {
       })
       this.popShow = true
     },
-    addAsset() {
+    addAsset () {
       this.$router.push('/page/assetmanageadd')
     },
-    emitInfo(row) {
+    emitInfo (row) {
       this.$router.push('/page/assetmanageadd?id=' + row.id)
     },
-    async delInfo(row) {
-      this.$confirm("确定要删除该设备信息?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+    async delInfo (row) {
+      this.$confirm('确定要删除该设备信息?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(async () => {
           try {
-            let data = await api.deleteAsset({ id: row.id });
+            let data = await api.deleteAsset({ id: row.id })
             if (data && data.code === 200) {
               this.$message({
-                type: "success",
-                message: "删除成功!"
-              });
-              this.query();
+                type: 'success',
+                message: '删除成功!'
+              })
+              this.query()
             }
           } catch (err) {
-            console.log(err);
+            console.log(err)
           }
         })
-        .then(() => {});
+        .then(() => {})
     }
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .scroll {
@@ -436,5 +436,3 @@ export default {
   width: 80px;
 }
 </style>
-
-

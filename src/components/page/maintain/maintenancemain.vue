@@ -117,93 +117,93 @@
   </div>
 </template>
 <script>
-import list from "@/plugins/list";
-import api from "@/api/api";
-import token from "@/plugins/getUploadToken";
-import FileSaver from 'file-saver';
-import XLSX from 'xlsx';
+import list from '@/plugins/list'
+import api from '@/api/api'
+import token from '@/plugins/getUploadToken'
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 let schema = [
   {
-    name: "assetId",
-    label: "设备名称",
-    comp: "assets-select"
+    name: 'assetId',
+    label: '设备名称',
+    comp: 'assets-select'
   },
   {
-    name: "actionUserId",
-    label: "实际保养人",
-    comp: "custom"
+    name: 'actionUserId',
+    label: '实际保养人',
+    comp: 'custom'
   },
   {
-    label: "服务提供方",
-    name: "vender"
+    label: '服务提供方',
+    name: 'vender'
   },
   {
-    name: "btn",
-    label: "",
-    comp: "custom"
+    name: 'btn',
+    label: '',
+    comp: 'custom'
   },
   {
-    label: "",
-    name: "rightbtn",
-    comp: "custom"
+    label: '',
+    name: 'rightbtn',
+    comp: 'custom'
   }
-];
+]
 let arr = [
   {
-    id: "assetName",
-    label: "设备名称",
+    id: 'assetName',
+    label: '设备名称',
     value: ''
   },
   {
-    id: "actionUserId",
-    label: "实际保养人",
+    id: 'actionUserId',
+    label: '实际保养人',
     value: ''
   },
   {
-    id: "vender",
-    label: "服务提供方",
+    id: 'vender',
+    label: '服务提供方',
     value: ''
   },
   {
-    id: "actionDate",
-    label: "保养实际发生时间",
+    id: 'actionDate',
+    label: '保养实际发生时间',
     value: ''
   },
   {
-    id: "planDate",
-    label: "保养计划时间",
+    id: 'planDate',
+    label: '保养计划时间',
     value: ''
   },
   {
-    id: "mtime",
-    label: "更新时间",
+    id: 'mtime',
+    label: '更新时间',
     value: ''
   },
   {
-    id: "ctime",
-    label: "创建时间",
+    id: 'ctime',
+    label: '创建时间',
     value: ''
   },
   {
-    id: "contact",
-    label: "联系方式",
+    id: 'contact',
+    label: '联系方式',
     value: ''
   },
   {
-    id: "extra",
-    label: "其他扩展信息",
+    id: 'extra',
+    label: '其他扩展信息',
     value: ''
   },
   {
-    id: "reportUrlList",
-    label: "保养报告",
+    id: 'reportUrlList',
+    label: '保养报告',
     value: ''
   }
 ]
 export default {
   mixins: [list, token],
-  data() {
-    var obj = this.createObjFromSchema(schema);
+  data () {
+    var obj = this.createObjFromSchema(schema)
     obj.kind = 'maintain'
     return {
       api,
@@ -213,15 +213,15 @@ export default {
       tableData: [],
       options: [],
       popShow: false,
-      listApiName: "mainList"
-    };
+      listApiName: 'mainList'
+    }
   },
   methods: {
     exportExcel () {
       var wb = XLSX.utils.table_to_book(document.querySelector('#excelTable'))
       var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
       try {
-          FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '设备保养.xlsx')
+        FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '设备保养.xlsx')
       } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
       return wbout
     },
@@ -231,43 +231,43 @@ export default {
       })
       this.popShow = true
     },
-    addAsset() {
+    addAsset () {
       this.$router.push('/page/maintenanceMainadd')
     },
-    emitInfo(row) {
+    emitInfo (row) {
       this.$router.push('/page/maintenanceMainadd?id=' + row.id)
     },
-    delInfo(row) {
-      this.$confirm("确定要删除该保养记录?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+    delInfo (row) {
+      this.$confirm('确定要删除该保养记录?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(async () => {
           try {
-            let data = await api.deleteMain({ id: row.id });
+            let data = await api.deleteMain({ id: row.id })
             if (data && data.code === 200) {
               this.$message({
-                type: "success",
-                message: "删除成功!"
-              });
-              this.query();
+                type: 'success',
+                message: '删除成功!'
+              })
+              this.query()
             }
           } catch (err) {
-            console.log(err);
+            console.log(err)
           }
         })
-        .then(() => {});
+        .then(() => {})
     }
   },
   created () {
-    api.userList({id:'', name: ''}).then(rs => {
+    api.userList({ id: '', name: '' }).then(rs => {
       if (rs.code === 200 && rs.data.length > 0) {
         this.options = rs.data
       }
     })
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .scroll {

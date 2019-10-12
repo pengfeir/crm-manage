@@ -38,39 +38,39 @@
 	</div>
 </template>
 <script>
-import api from "@/api/api.js";
+import api from '@/api/api.js'
 let schema = [
   {
-    name: "username",
-    label: "用户名",
-    comp: "custom"
+    name: 'username',
+    label: '用户名',
+    comp: 'custom'
   },
   {
-    name: "oldPassword",
-    label: "旧密码",
-    comp: "custom"
+    name: 'oldPassword',
+    label: '旧密码',
+    comp: 'custom'
   },
   {
-    name: "newPassword",
-    label: "新密码",
-    comp: "custom"
+    name: 'newPassword',
+    label: '新密码',
+    comp: 'custom'
   },
   {
-    name: "checkPassword",
-    label: "确认密码",
-    comp: "custom"
+    name: 'checkPassword',
+    label: '确认密码',
+    comp: 'custom'
   },
   {
-    name: "btn",
-    label: "",
-    comp: "custom"
+    name: 'btn',
+    label: '',
+    comp: 'custom'
   },
   {
-    label: "",
-    name: "rightbtn",
-    comp: "custom"
+    label: '',
+    name: 'rightbtn',
+    comp: 'custom'
   }
-];
+]
 export default {
   props: {
     currentUser: {
@@ -78,37 +78,37 @@ export default {
       default: () => {}
     }
   },
-  data() {
-    let obj = this.createObjFromSchema(schema);
+  data () {
+    let obj = this.createObjFromSchema(schema)
     let validatePass = (rule, value, callback) => {
       if (this.queryObj.newPassword !== this.queryObj.checkPassword) {
-        callback(new Error("密码不一致"));
+        callback(new Error('密码不一致'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     let rules = {
-      username: [{ required: true, message: "必填项", trigger: "blur" }],
-      oldPassword: [{ required: true, message: "必填项", trigger: "blur" }],
-      newPassword: [{ required: true, message: "必填项", trigger: "blur" }],
-      checkPassword: [{ validator: validatePass, trigger: "blur" }]
-    };
+      username: [{ required: true, message: '必填项', trigger: 'blur' }],
+      oldPassword: [{ required: true, message: '必填项', trigger: 'blur' }],
+      newPassword: [{ required: true, message: '必填项', trigger: 'blur' }],
+      checkPassword: [{ validator: validatePass, trigger: 'blur' }]
+    }
     return {
       querySchema: schema,
       queryObj: obj,
-      baseImgPath: "",
+      baseImgPath: '',
       popShow: false,
       rules,
       restaurants: [],
       menuArr: [],
-      state1: ""
-    };
+      state1: ''
+    }
   },
   watch: {
     currentUser: {
-      handler: function(val, oldval) {
+      handler: function (val, oldval) {
         if (val.menuArr.length > 0) {
-          this.restaurants = this.loadAll();
+          this.restaurants = this.loadAll()
         }
       },
       deep: true
@@ -116,73 +116,73 @@ export default {
   },
   methods: {
     goHome () {
-      this.$router.push('/page/home');
+      this.$router.push('/page/home')
     },
-    querySearch(queryString, cb) {
-      var restaurants = this.restaurants;
+    querySearch (queryString, cb) {
+      var restaurants = this.restaurants
       var results = queryString
         ? restaurants.filter(this.createFilter(queryString))
-        : restaurants;
+        : restaurants
       // 调用 callback 返回建议列表的数据
-      cb(results);
+      cb(results)
     },
-    createFilter(queryString) {
+    createFilter (queryString) {
       return restaurant => {
         return (
           restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) ===
           0
-        );
-      };
+        )
+      }
     },
-    flat(arr) {
+    flat (arr) {
       let flatarr = arr.reduce((total, cur) => {
         return total.concat(
           Array.isArray(cur.childMenus) && cur.childMenus.length > 0
             ? this.flat(cur.childMenus)
             : cur
-        );
-      }, []);
+        )
+      }, [])
       flatarr.map(v => {
-        v.value = v.menuName;
-      });
-      return flatarr;
+        v.value = v.menuName
+      })
+      return flatarr
     },
-    loadAll() {
-      return this.flat(this.currentUser.menuArr);
+    loadAll () {
+      return this.flat(this.currentUser.menuArr)
     },
-    handleSelect(item) {
-      this.$router.push(item.menuUrl);
-      this.state1 = "";
+    handleSelect (item) {
+      this.$router.push(item.menuUrl)
+      this.state1 = ''
     },
-    emitCollapse() {
-      this.$emit("collapse");
+    emitCollapse () {
+      this.$emit('collapse')
     },
-    async handleCommand(command) {
-      if (command == "emitPassword") {
-        this.queryObj.username = this.currentUser.username;
-        this.popShow = true;
-      } else if (command == "signout") {
-        window.localStorage.clear();
-        this.$router.push("/page/login");
+    async handleCommand (command) {
+      if (command === 'emitPassword') {
+        this.queryObj.username = this.currentUser.username
+        this.popShow = true
+      } else if (command === 'signout') {
+        window.localStorage.clear()
+        this.$router.push('/page/login')
       }
     },
-    prev() {
+    prev () {
       this.$refs.form.$refs.form.validate(valid => {
         if (valid) {
-          let params = Object.assign({}, this.queryObj);
-          delete params.checkPassword;
+          let params = Object.assign({}, this.queryObj)
+          delete params.checkPassword
           api.updatePassword(params).then(rs => {
             if (rs.code === 200) {
-              this.$messageTips(this, "success", "修改成功");
-              window.localStorage.clear();
-              this.$router.push("/page/login");
+              this.$messageTips(this, 'success', '修改成功')
+              window.localStorage.clear()
+              this.$router.push('/page/login')
             }
-          });
+          })
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

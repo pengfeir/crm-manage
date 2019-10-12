@@ -25,9 +25,8 @@
     </div>
 </template>
 <script>
-import list from "@/plugins/list";
-import roleTree from "@/plugins/roletree";
-import api from "@/api/api.js";
+import roleTree from '@/plugins/roletree'
+import api from '@/api/api.js'
 export default {
   props: {
     status: {
@@ -39,19 +38,19 @@ export default {
       default: false
     }
   },
-  data() {
+  data () {
     return {
       menuArr: [],
       roles: [],
-      icon: ""
-    };
+      icon: ''
+    }
   },
   watch: {
     status: {
-      handler: function(val, oldval) {
-        console.log(val);
+      handler: function (val, oldval) {
+        console.log(val)
         if (val.isGetMenu) {
-          this.getMenuTree();
+          this.getMenuTree()
         }
       },
       immediate: true,
@@ -59,36 +58,36 @@ export default {
     }
   },
   computed: {
-    defaultActive: function() {
-      return this.$route.path;
+    defaultActive: function () {
+      return this.$route.path
     }
   },
-  created() {
-    this.getMenuTree();
+  created () {
+    this.getMenuTree()
   },
   methods: {
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
+    handleOpen (key, keyPath) {
+      console.log(key, keyPath)
     },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
+    handleClose (key, keyPath) {
+      console.log(key, keyPath)
     },
     // 获取设置的菜单
-    getSetTree(arr, id) {
+    getSetTree (arr, id) {
       let newArr = arr.reduce((total, cur) => {
         if (this.getFilterRoles().includes(cur.auth)) {
-          let childMenus = [];
+          let childMenus = []
           //   机构设置只有管理员才可以看到，普通用户不能看到角色，账号，机构
-          if ((this.icon == 2 && cur.auth != "orgset") || this.icon == 1) {
+          if ((this.icon == 2 && cur.auth != 'orgset') || this.icon == 1) {
             cur.childMenus.map(v => {
-              //非超级管理员屏蔽机构
+              // 非超级管理员屏蔽机构
               if (
                 this.getFilterRoles().includes(v.auth) &&
-                v.auth !== "agencylist"
+                v.auth !== 'agencylist'
               ) {
-                childMenus.push(v);
+                childMenus.push(v)
               }
-            });
+            })
             total.push({
               menuName: cur.menuName,
               menuUrl: cur.menuUrl,
@@ -96,54 +95,54 @@ export default {
               icon: cur.icon,
               level: cur.level,
               childMenus: childMenus
-            });
+            })
           }
         }
-        return total;
-      }, []);
-      return newArr;
+        return total
+      }, [])
+      return newArr
     },
     // 处理设置的菜单
-    getFilterRoles() {
+    getFilterRoles () {
       if (this.roles <= 0) {
-        return [];
+        return []
       }
       let filterArr = this.roles.reduce((total, cur) => {
-        total = total.concat(cur.description.split(","));
-        return total;
-      }, []);
+        total = total.concat(cur.description.split(','))
+        return total
+      }, [])
       //   找出只勾选子节点的父节点
-      let fatherArr = [];
+      let fatherArr = []
       roleTree.map(v => {
         v.childMenus.map(z => {
           filterArr.map(k => {
             if (z.auth === k) {
-              fatherArr.push(v.auth);
+              fatherArr.push(v.auth)
             }
-          });
-        });
-      });
-      return [...new Set(filterArr.concat(fatherArr))];
+          })
+        })
+      })
+      return [...new Set(filterArr.concat(fatherArr))]
     },
-    async getMenuTree() {
+    async getMenuTree () {
       try {
-        let rolesRs = await api.userInfo();
-        localStorage.setItem("currentUser", JSON.stringify(rolesRs.data));
-        localStorage.setItem("icon", rolesRs.data.icon);
+        let rolesRs = await api.userInfo()
+        localStorage.setItem('currentUser', JSON.stringify(rolesRs.data))
+        localStorage.setItem('icon', rolesRs.data.icon)
         // 超级管理员加载全部菜单
         if (!Number(rolesRs.data.orgId)) {
-          this.menuArr = roleTree;
+          this.menuArr = roleTree
         } else {
-          this.roles = rolesRs.data.roles;
-          this.icon = rolesRs.data.icon;
-          this.menuArr = this.getSetTree(roleTree, rolesRs.data.orgId);
+          this.roles = rolesRs.data.roles
+          this.icon = rolesRs.data.icon
+          this.menuArr = this.getSetTree(roleTree, rolesRs.data.orgId)
         }
-        rolesRs.data.menuArr = this.menuArr;
-        this.$emit("getinfo", rolesRs.data);
+        rolesRs.data.menuArr = this.menuArr
+        this.$emit('getinfo', rolesRs.data)
       } catch (err) {}
     }
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .menu-container {
@@ -170,5 +169,3 @@ export default {
   padding-left: 65px !important;
 }
 </style>
-
-

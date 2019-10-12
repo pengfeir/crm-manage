@@ -36,94 +36,94 @@
   </div>
 </template>
 <script>
-import api from "@/api/api";
-import token from "@/plugins/getUploadToken";
+import api from '@/api/api'
+import token from '@/plugins/getUploadToken'
 let SelectOptions = [
   {
-    id: "todo",
-    name: "待保养"
+    id: 'todo',
+    name: '待保养'
   },
   {
-    id: "doing",
-    name: "正在保养"
+    id: 'doing',
+    name: '正在保养'
   },
   {
-    id: "done",
-    name: "完成"
+    id: 'done',
+    name: '完成'
   },
   {
-    id: "abort",
-    name: "取消"
+    id: 'abort',
+    name: '取消'
   }
 ]
 let infoSchema = [
   {
-    name: "assetId",
-    label: "设备名称",
-    comp: "assets-select"
+    name: 'assetId',
+    label: '设备名称',
+    comp: 'assets-select'
   },
   {
-    name: "actionUserId",
-    label: "实际保养人",
-    comp: "custom"
+    name: 'actionUserId',
+    label: '实际保养人',
+    comp: 'custom'
   },
   {
-    name: "actionDate",
-    label: "保养实际发生时间",
-    comp: "el-date-picker",
+    name: 'actionDate',
+    label: '保养实际发生时间',
+    comp: 'el-date-picker',
     props: {
-      type: "datetime",
-      valueFormat: "yyyy-MM-dd HH:mm:ss"
+      type: 'datetime',
+      valueFormat: 'yyyy-MM-dd HH:mm:ss'
     }
   },
   {
-    name: "contact",
-    label: "联系方式"
+    name: 'contact',
+    label: '联系方式'
   },
   {
-    name: "planDate",
-    label: "保养计划时间",
-    comp: "el-date-picker",
+    name: 'planDate',
+    label: '保养计划时间',
+    comp: 'el-date-picker',
     props: {
-      type: "datetime",
-      valueFormat: "yyyy-MM-dd HH:mm:ss"
+      type: 'datetime',
+      valueFormat: 'yyyy-MM-dd HH:mm:ss'
     }
   },
   {
-    name: "reportUrlList",
-    label: "保养报告",
-    comp: "custom"
+    name: 'reportUrlList',
+    label: '保养报告',
+    comp: 'custom'
   },
   {
     name: 'progress',
     label: '保养进度',
-    comp: "el-select",
+    comp: 'el-select',
     props: {
       options: SelectOptions
     }
   },
   {
-    name: "vender",
-    label: "服务提供方",
-    comp: "custom"
+    name: 'vender',
+    label: '服务提供方',
+    comp: 'custom'
   },
   {
-    name: "extra",
-    label: "实际费用",
-    comp: "custom"
+    name: 'extra',
+    label: '实际费用',
+    comp: 'custom'
   }
-];
+]
 export default {
   mixins: [token],
-  data() {
-    var infoObj = this.createObjFromSchema(infoSchema);
+  data () {
+    var infoObj = this.createObjFromSchema(infoSchema)
     return {
       api,
       infoQueryObj: infoObj,
       infoQuerySchema: infoSchema,
-      detailId: "",
+      detailId: '',
       options: [],
-      venderOptions: JSON.parse(this.getStore("mainVenderOptions")) || [],
+      venderOptions: JSON.parse(this.getStore('mainVenderOptions')) || [],
       // 保存图片地址
       imgObj: {
         reportImg: []
@@ -136,93 +136,93 @@ export default {
         assetId: [
           {
             required: true,
-            message: "必填项",
-            trigger: ["blur", "change"]
+            message: '必填项',
+            trigger: ['blur', 'change']
           }
         ],
         actionUserId: [
           {
             required: true,
-            message: "必填项",
-            trigger: ["blur", "change"]
+            message: '必填项',
+            trigger: ['blur', 'change']
           }
-        ],
+        ]
 
       }
-    };
+    }
   },
   methods: {
-    async queryComp(query, cb) {
-      let a = JSON.parse(JSON.stringify(this.venderOptions));
-      cb(a);
+    async queryComp (query, cb) {
+      let a = JSON.parse(JSON.stringify(this.venderOptions))
+      cb(a)
     },
-    handleClose() {
+    handleClose () {
       Object.keys(this.filelistObj).map(v => {
-        this.filelistObj[v] = [];
-      });
-      this.popShow = false;
+        this.filelistObj[v] = []
+      })
+      this.popShow = false
     },
-    //删除数组里面删除的图片地址
-    handleReportRemove(file, fileList) {
-      this.imgObj.reportImg = this.sliceArr(this.imgObj.reportImg, file, "key");
+    // 删除数组里面删除的图片地址
+    handleReportRemove (file, fileList) {
+      this.imgObj.reportImg = this.sliceArr(this.imgObj.reportImg, file, 'key')
     },
     // 保存上传的图片地址
-    handleReportContractSuccess(response, file, fileList) {
+    handleReportContractSuccess (response, file, fileList) {
       this.imgObj.reportImg.push({
         name: file.name,
         url: `${this.imgBaseUrl}/${file.response.key}`,
         type: this.getFileType(file.raw.name),
         key: file.response.key
-      });
+      })
     },
-    beforeUploadGetKey(file) {
-      //每个文件上传之前 给它一个 名字
-      this.uploadData.key = this.generateUUID();
-      this.uploadData.token = this.uploadToken;
+    beforeUploadGetKey (file) {
+      // 每个文件上传之前 给它一个 名字
+      this.uploadData.key = this.generateUUID()
+      this.uploadData.token = this.uploadToken
     },
-    addAsset() {
+    addAsset () {
       Object.keys(this.infoQueryObj).map(key => {
-        this.infoQueryObj[key] = "";
-      });
+        this.infoQueryObj[key] = ''
+      })
       Object.keys(this.imgObj).map(key => {
-        this.imgObj[key] = [];
-      });
+        this.imgObj[key] = []
+      })
       Object.keys(this.filelistObj).map(key => {
-        this.filelistObj[key] = [];
-      });
-      this.popShow = true;
-      this.detailId = "";
-      this.popTitle = "新建保养";
+        this.filelistObj[key] = []
+      })
+      this.popShow = true
+      this.detailId = ''
+      this.popTitle = '新建保养'
     },
-    prev(id) {
+    prev (id) {
       this.$refs.form.$refs.form.validate(valid => {
         if (valid) {
-          let url = "createMain";
+          let url = 'createMain'
           if (this.detailId) {
-            url = "updateMain";
+            url = 'updateMain'
           }
-          let tips = this.detailId ? "更新" : "创建";
-          let params = Object.assign({}, this.infoQueryObj);
+          let tips = this.detailId ? '更新' : '创建'
+          let params = Object.assign({}, this.infoQueryObj)
           params.kind = 'maintain'
           params.reportUrlList =
             this.imgObj.reportImg.length > 0
               ? JSON.stringify(this.imgObj.reportImg)
-              : "";
+              : ''
           if (!this.detailId && !params.progress) {
-            params.progress = 'todo';
+            params.progress = 'todo'
           }
           api[url](params).then(rs => {
-            this.popShow = false;
+            this.popShow = false
             if (rs.code === 200) {
-              this.setStoreInfo();
-              this.$router.go(-1);
-              this.$messageTips(this, "success", tips + "成功");
+              this.setStoreInfo()
+              this.$router.go(-1)
+              this.$messageTips(this, 'success', tips + '成功')
             } else {
-              this.$messageTips(this, "error", tips + "失败");
+              this.$messageTips(this, 'error', tips + '失败')
             }
-          });
+          })
         }
-      });
+      })
     },
     setStoreInfo () {
       let venderOptions = [
@@ -231,43 +231,43 @@ export default {
           name: this.infoQueryObj.vender,
           value: this.infoQueryObj.vender
         }
-      ];
-      let obj = {};
+      ]
+      let obj = {}
       let newarr = venderOptions.reduce((total, cur) => {
-        obj[cur.value] ? "" : (obj[cur.value] = true && total.push(cur));
+        !obj[cur.value] && (obj[cur.value] = true && total.push(cur))
         return total
-      }, []);
-      this.setStore("mainVenderOptions", JSON.stringify(newarr));
+      }, [])
+      this.setStore('mainVenderOptions', JSON.stringify(newarr))
     },
-    emitInfo(row) {
-      row.actionUserId = String(row.actionUserId);
-      Object.assign(this.infoQueryObj, row);
+    emitInfo (row) {
+      row.actionUserId = String(row.actionUserId)
+      Object.assign(this.infoQueryObj, row)
       this.filelistObj.reportList =
         (this.infoQueryObj.reportUrlList &&
           JSON.parse(this.infoQueryObj.reportUrlList)) ||
-        [];
+        []
       this.imgObj.reportImg =
         (this.infoQueryObj.reportUrlList &&
           JSON.parse(this.infoQueryObj.reportUrlList)) ||
-        [];
+        []
     }
   },
   created () {
     if (this.$route.query.id) {
       this.detailId = this.$route.query.id
-      api.mainFindById({id: this.detailId}).then(rs => {
+      api.mainFindById({ id: this.detailId }).then(rs => {
         if (rs.code === 200) {
           this.emitInfo(rs.data)
         }
       })
     }
-    api.userList({name: '', id: ''}).then(rs => {
+    api.userList({ name: '', id: '' }).then(rs => {
       if (rs.code === 200 && rs.data.length > 0) {
         this.options = rs.data
       }
     })
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .scroll {

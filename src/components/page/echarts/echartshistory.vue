@@ -1,15 +1,15 @@
 <template>
   <div>
     <div ref="historyEc" class="historyEc" style="height:450px;width:100%;"></div>
-  </div>   
+  </div>
 </template>
 <script>
-import echarts from 'echarts/lib/echarts';
-import moment from 'moment';
-import api from "@/api/api";
-require('echarts/lib/chart/line');
+import echarts from 'echarts/lib/echarts'
+import moment from 'moment'
+import api from '@/api/api'
+require('echarts/lib/chart/line')
 export default {
-  props:['obj'],
+  props: ['obj'],
   data () {
     return {
       title: '',
@@ -22,13 +22,13 @@ export default {
       value: Math.random() * 1000,
       chart: null,
       options: [
-        {id: 1, name: '输入电流', unit: 'A', objVal: 'inputIObj'},
-        {id: 2, name: '输入电压', unit: 'V', objVal: 'inputVObj'},
-        {id: 3, name: '有功功率', unit: 'kW/H', objVal: 'realPowerObj'},
-        {id: 4, name: '功率因数', unit: '--', objVal: 'powerFactorObj'},
-        {id: 5, name: '温度', unit: '°C', objVal: 'temperatureObj'},
-        {id: 6, name: '电源频率', unit: 'Hz', objVal: 'powerHzObj'},
-        {id: 7, name: '电能计量', unit: 'kW', objVal: 'energyObj'}
+        { id: 1, name: '输入电流', unit: 'A', objVal: 'inputIObj' },
+        { id: 2, name: '输入电压', unit: 'V', objVal: 'inputVObj' },
+        { id: 3, name: '有功功率', unit: 'kW/H', objVal: 'realPowerObj' },
+        { id: 4, name: '功率因数', unit: '--', objVal: 'powerFactorObj' },
+        { id: 5, name: '温度', unit: '°C', objVal: 'temperatureObj' },
+        { id: 6, name: '电源频率', unit: 'Hz', objVal: 'powerHzObj' },
+        { id: 7, name: '电能计量', unit: 'kW', objVal: 'energyObj' }
       ],
       queryObj: {
         type: 1,
@@ -52,50 +52,50 @@ export default {
     query () {
       if (this.obj.dataType === 1) return
       this.chart.showLoading({
-        text : '正在加载数据'
-      });
+        text: '正在加载数据'
+      })
       if (this.queryObj.date[0] === this.oldDate[0] && this.queryObj.date[1] === this.oldDate[1] && this.data.length > 0) {
-        this.init();
+        this.init()
       } else {
-        this.getData();
+        this.getData()
       }
     },
     clearInfo () {
-      this.queryObj.type = '';
+      this.queryObj.type = ''
       this.queryObj.date = [
         moment(new Date().getTime() - 86400000).format('YYYY-MM-DD HH:mm:ss'),
         moment(new Date().getTime()).format('YYYY-MM-DD HH:mm:ss')
-      ];
-      this.x = [];
-      this.y = [];
+      ]
+      this.x = []
+      this.y = []
     },
-    randomData() {
-        this.now = new Date(+this.now + this.oneDay);
-        this.value = this.value + Math.random() * 21 - 10;
-        let minutes = (this.now.getMinutes() < 10 ? '0' : '') + this.now.getMinutes()
-        let seconds = (this.now.getSeconds() < 10 ? '0' : '') + this.now.getSeconds()
-        this.x.push(this.now.getFullYear()+'-'+(this.now.getMonth()+1) +'-'+ this.now.getDate()+' '+this.now.getHours() + ':' + minutes + ':' + seconds),
-        this.y.push(Math.round(this.value));
+    randomData () {
+      this.now = new Date(+this.now + this.oneDay)
+      this.value = this.value + Math.random() * 21 - 10
+      let minutes = (this.now.getMinutes() < 10 ? '0' : '') + this.now.getMinutes()
+      let seconds = (this.now.getSeconds() < 10 ? '0' : '') + this.now.getSeconds()
+      this.x.push(this.now.getFullYear() + '-' + (this.now.getMonth() + 1) + '-' + this.now.getDate() + ' ' + this.now.getHours() + ':' + minutes + ':' + seconds)
+      this.y.push(Math.round(this.value))
     },
     handleClose () {
-      this.$emit('cancel');
+      this.$emit('cancel')
     },
     getData () {
       let params = {
-        endDate: moment(this.obj.date[1]).format('YYYY-MM-DD') + ' 23:59:59', 
+        endDate: moment(this.obj.date[1]).format('YYYY-MM-DD') + ' 23:59:59',
         beginDate: moment(this.obj.date[0]).format('YYYY-MM-DD') + ' 00:00:00',
         macAddress: this.$route.query.id
       }
       api.findHistory(params).then(rs => {
-        this.data = rs.data.reverse();
-        this.init();
+        this.data = rs.data.reverse()
+        this.init()
       })
     },
     initData () {
-      let xData = [];
-      let yData = [];
+      let xData = []
+      let yData = []
       this.data.forEach(item => {
-        xData.push(item.ctime);
+        xData.push(item.ctime)
         if (this.obj.type === 1) {
           yData.push(item.inputI)
         } else if (this.obj.type === 2) {
@@ -130,7 +130,7 @@ export default {
         tooltip: {
           trigger: 'axis',
           axisPointer: {
-              type: 'shadow'
+            type: 'shadow'
           }
         },
         grid: {
@@ -161,9 +161,9 @@ export default {
           data: data[1],
           large: true
         }]
-      };
-      this.chart.setOption(option, true);
-      this.chart.hideLoading();
+      }
+      this.chart.setOption(option, true)
+      this.chart.hideLoading()
     }
   },
   watch: {
@@ -171,16 +171,16 @@ export default {
       handler: function (val) {
         if (val === 2) {
           window.setTimeout(_ => {
-            this.chart = echarts.init(this.$refs.historyEc);
-            this.queryObj.type = this.obj.type;
-            this.getData();
+            this.chart = echarts.init(this.$refs.historyEc)
+            this.queryObj.type = this.obj.type
+            this.getData()
           }, 300)
         } else {
           this.clearInfo()
         }
       },
       immediate: true
-    },
+    }
   }
 }
 </script>
@@ -192,7 +192,5 @@ export default {
     .el-range__icon,.el-range-separator {
       line-height: 25px;
     }
-  } 
+  }
 </style>
-
-

@@ -6,7 +6,7 @@
 <script>
 import echartsContainer from '@/components/page/echarts/echartscontainer'
 export default {
-  components:{
+  components: {
     echartsContainer
   },
   data () {
@@ -18,7 +18,7 @@ export default {
   methods: {
   },
   mounted () {
-    this.id = this.$route.query.id;
+    this.id = this.$route.query.id
   }
 }
 </script>

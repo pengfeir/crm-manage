@@ -17,38 +17,38 @@
   </div>
 </template>
 <script>
-import api from "@/api/api";
-import roleTree from "@/plugins/roletree";
+import api from '@/api/api'
+import roleTree from '@/plugins/roletree'
 let infoSchema = [
   {
-    name: "name",
-    label: "角色名称"
+    name: 'name',
+    label: '角色名称'
   },
   {
-    name: "description",
-    label: "权限",
-    comp: "custom"
+    name: 'description',
+    label: '权限',
+    comp: 'custom'
   },
   {
-    name: "btn",
-    label: "",
-    comp: "custom"
+    name: 'btn',
+    label: '',
+    comp: 'custom'
   }
-];
+]
 export default {
-  data() {
-    let infoObj = this.createObjFromSchema(infoSchema);
+  data () {
+    let infoObj = this.createObjFromSchema(infoSchema)
     let validatePass = (rule, value, callback) => {
       if (this.$refs.tree.getCheckedKeys().length === 0) {
-        callback(new Error("权限不能为空"));
+        callback(new Error('权限不能为空'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     let rules = {
-      name: [{ required: true, message: "必填项", trigger: "blur" }],
-      description: [{ validator: validatePass, trigger: "blur" }]
-    };
+      name: [{ required: true, message: '必填项', trigger: 'blur' }],
+      description: [{ validator: validatePass, trigger: 'blur' }]
+    }
     return {
       api,
       rules,
@@ -56,79 +56,79 @@ export default {
       queryInfoObj: infoObj,
       treeData: [],
       detailId: ''
-    };
+    }
   },
-  created() {
+  created () {
     if (this.$route.query.id) {
       this.detailId = this.$route.query.id
       this.getInfo()
     }
-    this.treeData = this.initTreeData(roleTree);
-    this.detailId = this.$route.query.id;
+    this.treeData = this.initTreeData(roleTree)
+    this.detailId = this.$route.query.id
   },
   methods: {
     getInfo () {
-      api.roleFindById({id: this.detailId}).then(rs => {
+      api.roleFindById({ id: this.detailId }).then(rs => {
         if (rs.code === 200) {
           this.queryInfoObj.name = rs.data.name
           this.$refs.tree.setCheckedKeys(rs.data.description.split(','))
         }
       })
     },
-    addAgency() {
-      this.dialogInfo.popTitle = "新建角色";
-      this.dialogInfo.popShow = true;
+    addAgency () {
+      this.dialogInfo.popTitle = '新建角色'
+      this.dialogInfo.popShow = true
     },
-    initTreeData(data) {
-      let arr = [];
+    initTreeData (data) {
+      let arr = []
       data.forEach(item => {
-        let obj = { label: item.menuName, id: item.auth };
+        let obj = { label: item.menuName, id: item.auth }
         if (item.childMenus && item.childMenus.length > 0) {
-          obj.children = this.initTreeData(item.childMenus);
+          obj.children = this.initTreeData(item.childMenus)
         }
-        arr.push(obj);
-      });
-      return arr;
+        arr.push(obj)
+      })
+      return arr
     },
-    handleCheckChange(val) {},
-    prev() {
+    handleCheckChange (val) {},
+    prev () {
       this.$refs.form.$refs.form.validate(valid => {
         if (valid) {
-          let roleArr = this.$refs.tree.getCheckedKeys();
-          let url = "roleCreate";
+          let roleArr = this.$refs.tree.getCheckedKeys()
+          let url = 'roleCreate'
           if (roleArr.length === 0) {
-            this.$messageTips(this, "error", "请选择权限");
-            return;
+            this.$messageTips(this, 'error', '请选择权限')
+            return
           }
           let params = {
             name: this.queryInfoObj.name,
-            description: roleArr.join(",")
-          };
+            description: roleArr.join(',')
+          }
           if (this.detailId) {
-            params.id = this.detailId;
-            url = "roleUpdate";
+            params.id = this.detailId
+            url = 'roleUpdate'
           }
           api[url](params).then(rs => {
             if (rs.code === 200) {
-              this.$messageTips(this, "success", "保存成功");
-              this.$emit("getstatus", {
+              this.$messageTips(this, 'success', '保存成功')
+              this.$emit('getstatus', {
                 data: new Date().getTime(),
                 isGetMenu: true
-              });
+              })
               this.$router.go(-1)
             } else {
-              this.$messageTips(this, "error", "保存失败");
+              this.$messageTips(this, 'error', '保存失败')
             }
-          });
+          })
         }
-      });
+      })
     },
-    cancel() {
+    cancel () {
       this.$router.go(-1)
     }
   },
   watch: {}
-};
+}
 </script>
 <style lang='less' scoped>
 .ui_dialog_02 /deep/ .el-col .el-form-item > label::before {
@@ -140,6 +140,3 @@ export default {
   background-color: #f8fafe;
 }
 </style>
-
-
-

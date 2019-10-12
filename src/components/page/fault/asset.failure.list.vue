@@ -311,213 +311,213 @@
   </div>
 </template>
 <script>
-import list from "@/plugins/list";
-import token from "@/plugins/getUploadToken";
-import api from "@/api/api";
-import FileSaver from 'file-saver';
-import XLSX from 'xlsx';
+import list from '@/plugins/list'
+import token from '@/plugins/getUploadToken'
+import api from '@/api/api'
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 let options = [
   {
-    id: "unknown",
-    name: "未知"
+    id: 'unknown',
+    name: '未知'
   },
   {
-    id: "reported",
-    name: "已上报"
+    id: 'reported',
+    name: '已上报'
   },
   {
-    id: "todo",
-    name: "待维修"
+    id: 'todo',
+    name: '待维修'
   },
   {
-    id: "doing",
-    name: "正在维修"
+    id: 'doing',
+    name: '正在维修'
   },
   {
-    id: "done",
-    name: "完成"
+    id: 'done',
+    name: '完成'
   },
   {
-    id: "abort",
-    name: "取消"
+    id: 'abort',
+    name: '取消'
   }
-];
+]
 let schema = [
   {
-    name: "assetId",
-    label: "设备名称",
-    comp: "assets-select"
+    name: 'assetId',
+    label: '设备名称',
+    comp: 'assets-select'
   },
   {
-    name: "dept",
-    label: "故障科室"
+    name: 'dept',
+    label: '故障科室'
   },
   {
-    name: "kind",
-    label: "故障类别"
+    name: 'kind',
+    label: '故障类别'
   },
   {
-    name: "fixStep",
-    label: "维修进度",
-    comp: "el-select",
+    name: 'fixStep',
+    label: '维修进度',
+    comp: 'el-select',
     props: {
       options: options
     }
   },
   {
-    label: "上报人信息",
-    name: "reporter"
+    label: '上报人信息',
+    name: 'reporter'
   },
   {
-    label: "服务提供方",
-    name: "vender"
+    label: '服务提供方',
+    name: 'vender'
   },
   {
-    name: "btn",
-    label: "",
-    comp: "custom"
+    name: 'btn',
+    label: '',
+    comp: 'custom'
   },
   {
-    label: "",
-    name: "rightbtn",
-    comp: "custom"
+    label: '',
+    name: 'rightbtn',
+    comp: 'custom'
   }
-];
+]
 let arr = [
   {
-    id: "assetName",
-    label: "设备名称",
-    value: ""
+    id: 'assetName',
+    label: '设备名称',
+    value: ''
   },
   {
-    id: "contact",
-    label: "联系方式",
-    value: ""
+    id: 'contact',
+    label: '联系方式',
+    value: ''
   },
   {
-    id: "dept",
-    label: "故障发生的科室",
-    value: ""
+    id: 'dept',
+    label: '故障发生的科室',
+    value: ''
   },
   {
-    id: "faultAt",
-    label: "故障发生时间",
-    value: ""
+    id: 'faultAt',
+    label: '故障发生时间',
+    value: ''
   },
   {
-    id: "fixStep",
-    label: "维修进度",
-    value: ""
+    id: 'fixStep',
+    label: '维修进度',
+    value: ''
   },
   {
-    id: "kind",
-    label: "故障类别",
-    value: ""
+    id: 'kind',
+    label: '故障类别',
+    value: ''
   },
   {
-    id: "offerPrice",
-    label: "维修报价",
-    value: ""
+    id: 'offerPrice',
+    label: '维修报价',
+    value: ''
   },
   {
-    id: "reporter",
-    label: "故障上报人信息(姓名电话)",
-    value: ""
+    id: 'reporter',
+    label: '故障上报人信息(姓名电话)',
+    value: ''
   },
   {
-    id: "vender",
-    label: "服务提供方",
-    value: ""
+    id: 'vender',
+    label: '服务提供方',
+    value: ''
   },
   {
-    id: "extra",
-    label: "其他扩展信息",
-    value: ""
+    id: 'extra',
+    label: '其他扩展信息',
+    value: ''
   },
   {
-    id: "descr",
-    label: "故障描述",
-    value: ""
+    id: 'descr',
+    label: '故障描述',
+    value: ''
   },
   {
-    id: "contractUrlList",
-    label: "维修合同照片",
-    value: ""
+    id: 'contractUrlList',
+    label: '维修合同照片',
+    value: ''
   },
   {
-    id: "faultUrlList",
-    label: "故障照片",
-    value: ""
+    id: 'faultUrlList',
+    label: '故障照片',
+    value: ''
   },
   {
-    id: "receiptUrlList",
-    label: "票据照片",
-    value: ""
+    id: 'receiptUrlList',
+    label: '票据照片',
+    value: ''
   }
-];
+]
 export default {
   mixins: [list, token],
-  data() {
-    var obj = this.createObjFromSchema(schema);
+  data () {
+    var obj = this.createObjFromSchema(schema)
     return {
       api,
       querySchema: schema,
       queryObj: obj,
       tableData: [],
-      listApiName: "faultList",
+      listApiName: 'faultList',
       popShow: false,
       arr,
       options
-    };
+    }
   },
   methods: {
     exportExcel () {
       var wb = XLSX.utils.table_to_book(document.querySelector('#excelTable'))
       var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
       try {
-          FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '设备维修.xlsx')
+        FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '设备维修.xlsx')
       } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
       return wbout
     },
     fixStepChange (val, row) {
       console.log(val, row)
     },
-    seeDetail(row) {
+    seeDetail (row) {
       arr.forEach(item => {
-        item.value = row[item.id] || "";
-      });
-      this.popShow = true;
+        item.value = row[item.id] || ''
+      })
+      this.popShow = true
     },
-    addAsset() {
-      this.$router.push("/page/assetfailuradd");
+    addAsset () {
+      this.$router.push('/page/assetfailuradd')
     },
-    emitInfo(row) {
-      this.$router.push("/page/assetfailuradd?id=" + row.id);
+    emitInfo (row) {
+      this.$router.push('/page/assetfailuradd?id=' + row.id)
     },
-    delInfo(row) {
-      this.$confirm("确定要删除该设备故障记录?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+    delInfo (row) {
+      this.$confirm('确定要删除该设备故障记录?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(async () => {
           try {
-            let data = await api.deleteFault({ id: row.id });
+            let data = await api.deleteFault({ id: row.id })
             if (data && data.code === 200) {
               this.$message({
-                type: "success",
-                message: "删除成功!"
-              });
-              this.query();
+                type: 'success',
+                message: '删除成功!'
+              })
+              this.query()
             }
           } catch (err) {
-            console.log(err);
+            console.log(err)
           }
         })
-        .then(() => {});
+        .then(() => {})
     }
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .scroll {
@@ -543,5 +543,3 @@ export default {
 }
 
 </style>
-
-

@@ -24,39 +24,39 @@
     </el-row>
     <div v-show="visibile" ref="assetTime" class="asset" style="height:400px;width:100%;"></div>
     <div v-show="!visibile" class="noData">暂无数据</div>
-  </div>   
+  </div>
 </template>
 <script>
-import echarts from 'echarts/lib/echarts';
-import moment from 'moment';
-import api from "@/api/api";
-require('echarts/lib/chart/line');
+import echarts from 'echarts/lib/echarts'
+import moment from 'moment'
+import api from '@/api/api'
+require('echarts/lib/chart/line')
 let schema = [
   {
-    label: "",
-    name: "type",
-    comp: "custom"
+    label: '',
+    name: 'type',
+    comp: 'custom'
   },
   {
-    name: "dataType",
-    label: "",
-    comp: "custom"
+    name: 'dataType',
+    label: '',
+    comp: 'custom'
   },
   {
-    name: "date",
-    label: "",
-    comp: "custom"
+    name: 'date',
+    label: '',
+    comp: 'custom'
   },
   {
-    name: "btn",
-    label: "",
-    comp: "custom"
+    name: 'btn',
+    label: '',
+    comp: 'custom'
   }
-];
+]
 export default {
   props: {},
   data () {
-    let obj = this.createObjFromSchema(schema);
+    let obj = this.createObjFromSchema(schema)
     return {
       querySchema: schema,
       queryObj: obj,
@@ -88,10 +88,10 @@ export default {
   },
   methods: {
     checkAsset () {
-      this.seeAsssetTime();
+      this.seeAsssetTime()
     },
     async query () {
-      this.getAssetTimeData();
+      this.getAssetTimeData()
     },
     getAssetTimeData () {
       let params = {
@@ -102,7 +102,7 @@ export default {
       api.findAll(params).then(rs => {
         if (rs.code === 200 && rs.data.length > 0) {
           this.visibile = true
-          let data = rs.data.sort((a,b) => {
+          let data = rs.data.sort((a, b) => {
             a.ctimeDate = new Date(a.ctime).getTime()
             b.ctimeDate = new Date(b.ctime).getTime()
             return a.ctimeDate - b.ctimeDate
@@ -114,24 +114,24 @@ export default {
       })
     },
     initData (data) {
-      let data1 = [];
-      let data2 = [];
-      let sumTime = 0;
-      for(let i = 0;i < data.length; i++) {
-        if (data[i+1]) {
-          let beginTitle = data[i]['ctime'].replace(/(^\d{4}(-))|((:)\d{2}$)/g, '');
-          let endTitle = data[i+1]['ctime'].replace(/(^\d{4}(-))|((:)\d{2}$)/g, '');
-          let title = endTitle;
-          let time = ((data[i+1]['ctimeDate'] - data[i]['ctimeDate'])/3600000).toFixed(2);
+      let data1 = []
+      let data2 = []
+      let sumTime = 0
+      for (let i = 0; i < data.length; i++) {
+        if (data[i + 1]) {
+          // let beginTitle = data[i]['ctime'].replace(/(^\d{4}(-))|((:)\d{2}$)/g, '')
+          let endTitle = data[i + 1]['ctime'].replace(/(^\d{4}(-))|((:)\d{2}$)/g, '')
+          let title = endTitle
+          let time = ((data[i + 1]['ctimeDate'] - data[i]['ctimeDate']) / 3600000).toFixed(2)
           if (time) {
-            sumTime += (data[i+1]['ctimeDate'] - data[i]['ctimeDate'])
+            sumTime += (data[i + 1]['ctimeDate'] - data[i]['ctimeDate'])
             data1.push(title)
             data2.push(time)
           }
         }
       }
-      let averageValue = (sumTime/(3600000*data1.length)).toFixed(2);
-      let averageValue1 = (sumTime/(3600000*data1.length)).toFixed(4);
+      let averageValue = (sumTime / (3600000 * data1.length)).toFixed(2)
+      let averageValue1 = (sumTime / (3600000 * data1.length)).toFixed(4)
       if (averageValue !== '0.00') {
         this.averageValue = averageValue
       } else if (averageValue1 !== '0.0000') {
@@ -139,25 +139,19 @@ export default {
       } else {
         this.averageValue = 0
       }
-      this.$emit('getAverageTime', this.averageValue);
-      this.seeAsssetTime(data1, data2);
+      this.$emit('getAverageTime', this.averageValue)
+      this.seeAsssetTime(data1, data2)
     },
     seeAsssetTime (data1, data2) {
-      this.assetTimeChart = echarts.init(this.$refs.assetTime);
-      this.assetTimeChart.hideLoading();
+      this.assetTimeChart = echarts.init(this.$refs.assetTime)
+      this.assetTimeChart.hideLoading()
       var option = {
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-              type: 'shadow'
-          }
-        },
         tooltip: {
           trigger: 'axis',
           axisPointer: {
             type: 'shadow'
           },
-          formatter: "{b} <br> 开机时间间隔: {c}小时"
+          formatter: '{b} <br> 开机时间间隔: {c}小时'
         },
         grid: {
           left: '30',
@@ -176,12 +170,12 @@ export default {
           pieces: [
             {
               gt: 0,
-              lte: 1,          //这儿设置基线上下颜色区分 基线下面为绿色
+              lte: 1, // 这儿设置基线上下颜色区分 基线下面为绿色
               color: '#03d6d6'
-          }, {   
-              gt: 1,          //这儿设置基线上下颜色区分 基线上面为红色
+            }, {
+              gt: 1, // 这儿设置基线上下颜色区分 基线上面为红色
               color: '#03d6d6'
-          }]
+            }]
         },
         xAxis: {
           data: data1,
@@ -197,7 +191,7 @@ export default {
         yAxis: {
           name: '时间(小时)',
           splitArea: {
-            show: false,
+            show: false
           }
         },
         series: [{
@@ -208,11 +202,11 @@ export default {
           markLine: {
             default: true,
             itemStyle: {
-              normal: { 
+              normal: {
                 lineStyle: {
                   type: 'solid'
-                }, 
-                label: { 
+                },
+                label: {
                   show: true,
                   position: 'middle',
                   formatter: '{b}：{c} H'
@@ -235,11 +229,11 @@ export default {
                 }
               }
             ]
-          },
+          }
         }]
       }
       this.assetTimeChart.setOption(option, true)
-    },
+    }
   },
   watch: {
   }
@@ -277,5 +271,3 @@ export default {
     font-size: 22px;
   }
 </style>
-
-

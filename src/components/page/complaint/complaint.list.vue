@@ -86,103 +86,103 @@
   </div>
 </template>
 <script>
-import list from "@/plugins/list";
-import token from "@/plugins/getUploadToken";
-import api from "@/api/api";
-import FileSaver from 'file-saver';
-import XLSX from 'xlsx';
+import list from '@/plugins/list'
+import token from '@/plugins/getUploadToken'
+import api from '@/api/api'
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 let schema = [
   {
-    name: "assetId",
-    label: "设备名称",
-    comp: "assets-select"
+    name: 'assetId',
+    label: '设备名称',
+    comp: 'assets-select'
   },
   {
-    label: "严重类别",
-    name: "level",
-    comp: "el-select",
+    label: '严重类别',
+    name: 'level',
+    comp: 'el-select',
     props: {
       options: [
         {
-          id: "10",
-          name: "非常严重"
+          id: '10',
+          name: '非常严重'
         },
         {
-          id: "20",
-          name: "严重"
+          id: '20',
+          name: '严重'
         },
         {
-          id: "30",
-          name: "一般"
+          id: '30',
+          name: '一般'
         },
         {
-          id: "40",
-          name: "较轻"
+          id: '40',
+          name: '较轻'
         },
         {
-          id: "50",
-          name: "很轻"
+          id: '50',
+          name: '很轻'
         }
       ]
     }
   },
   {
-    name: "btn",
-    label: "",
-    comp: "custom"
+    name: 'btn',
+    label: '',
+    comp: 'custom'
   },
   {
-    label: "",
-    name: "rightbtn",
-    comp: "custom"
+    label: '',
+    name: 'rightbtn',
+    comp: 'custom'
   }
-];
+]
 let arr = [
-   {
-    id: "assetName",
-    label: "设备名称",
+  {
+    id: 'assetName',
+    label: '设备名称',
     value: ''
   },
   {
-    id: "dept",
-    label: "事件发生的科室",
+    id: 'dept',
+    label: '事件发生的科室',
     value: ''
   },
   {
-    id: "descr",
-    label: "事件描述",
+    id: 'descr',
+    label: '事件描述',
     value: ''
   },
   {
-    id: "levelName",
-    label: "严重类别",
+    id: 'levelName',
+    label: '严重类别',
     value: ''
   },
   {
-    id: "extra",
-    label: "其他扩展信息",
+    id: 'extra',
+    label: '其他扩展信息',
     value: ''
   },
   {
-    id: "mtime",
-    label: "更新时间",
+    id: 'mtime',
+    label: '更新时间',
     value: ''
   },
   {
-    id: "ctime",
-    label: "创建时间",
+    id: 'ctime',
+    label: '创建时间',
     value: ''
   },
   {
-    id: "urlList",
-    label: "投诉资料",
+    id: 'urlList',
+    label: '投诉资料',
     value: ''
   }
 ]
 export default {
   mixins: [list, token],
-  data() {
-    var obj = this.createObjFromSchema(schema);
+  data () {
+    var obj = this.createObjFromSchema(schema)
     return {
       api,
       arr,
@@ -190,55 +190,55 @@ export default {
       querySchema: schema,
       queryObj: obj,
       tableData: [],
-      listApiName: "complaintList"
-    };
+      listApiName: 'complaintList'
+    }
   },
   methods: {
     exportExcel () {
       /* generate workbook object from table */
-         var wb = XLSX.utils.table_to_book(document.querySelector('#excelTable'))
-         /* get binary string as output */
-         var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
-         try {
-             FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '不良事件/投诉.xlsx')
-         } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
-         return wbout
+      var wb = XLSX.utils.table_to_book(document.querySelector('#excelTable'))
+      /* get binary string as output */
+      var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+      try {
+        FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '不良事件/投诉.xlsx')
+      } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
+      return wbout
     },
-    seeDetail(row) {
+    seeDetail (row) {
       arr.forEach(item => {
         item.value = row[item.id] || ''
       })
       this.popShow = true
     },
-    addAsset() {
+    addAsset () {
       this.$router.push('/page/complaintadd')
     },
-    emitInfo(row) {
+    emitInfo (row) {
       this.$router.push('/page/complaintadd?id=' + row.id)
     },
-    delInfo(row) {
-      this.$confirm("确定要删除该投诉记录?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+    delInfo (row) {
+      this.$confirm('确定要删除该投诉记录?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       }).then(async () => {
-          try {
-            let data = await api.deleteComplaint({ id: row.id });
-            if (data && data.code === 200) {
-              this.$message({
-                type: "success",
-                message: "删除成功!"
-              });
-              this.query();
-            }
-          } catch (err) {
-            console.log(err);
+        try {
+          let data = await api.deleteComplaint({ id: row.id })
+          if (data && data.code === 200) {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            this.query()
           }
-        })
-        .then(() => {});
+        } catch (err) {
+          console.log(err)
+        }
+      })
+        .then(() => {})
     }
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .scroll {
@@ -247,5 +247,3 @@ export default {
   overflow-y: scroll;
 }
 </style>
-
-

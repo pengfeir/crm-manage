@@ -2,7 +2,7 @@
   <div class="layout_inner">
     <div class="main-head">
       <ever-form2
-        :schema="querySchema" 
+        :schema="querySchema"
         v-model="queryObj"
         @query="query"
         class="package-sale"
@@ -62,67 +62,66 @@
   </div>
 </template>
 <script>
-import list from "@/plugins/list";
-import api from "@/api/api";
+import list from '@/plugins/list'
+import api from '@/api/api'
 let schema = [
   {
-    name: "orgName",
-    label: "名称"
+    name: 'orgName',
+    label: '名称'
   },
   {
-    name: "btn",
-    label: "",
-    comp: "custom"
+    name: 'btn',
+    label: '',
+    comp: 'custom'
   },
   {
-    label: "",
-    name: "rightbtn",
-    comp: "custom"
+    label: '',
+    name: 'rightbtn',
+    comp: 'custom'
   }
-];
+]
 export default {
   mixins: [list],
   data () {
-    let obj = this.createObjFromSchema(schema);
+    let obj = this.createObjFromSchema(schema)
     return {
       api,
       querySchema: schema,
       queryObj: obj,
-      listApiName: "agencyList",
-      tableData: [],
-    };
+      listApiName: 'agencyList',
+      tableData: []
+    }
   },
   methods: {
-    addAgency() {
+    addAgency () {
       this.$router.push('/page/agencyadd')
     },
-    emitInfo(row) {
+    emitInfo (row) {
       this.$router.push('/page/agencyadd?id=' + row.id)
     },
-    delInfo(row) {
-      this.$confirm("确定要删除该机构?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }) .then(async () => {
-          try {
-            let data = await api.agencyDel({ id: row.id });
-            if (data && data.code === 200) {
-              this.$message({
-                type: "success",
-                message: "删除成功!"
-              });
-              this.query();
-            }
-          } catch (err) {
-            console.log(err);
+    delInfo (row) {
+      this.$confirm('确定要删除该机构?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        try {
+          let data = await api.agencyDel({ id: row.id })
+          if (data && data.code === 200) {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            this.query()
           }
-        })
-        .then(() => {});
+        } catch (err) {
+          console.log(err)
+        }
+      })
+        .then(() => {})
     }
   },
   watch: {
   }
-};
+}
 </script>
-

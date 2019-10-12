@@ -34,7 +34,7 @@
       <el-row>
         <el-col :span="12" style="padding-left:0;">
           <div class="demo-css">
-            <div><h3>设备总保有量</h3></div> 
+            <div><h3>设备总保有量</h3></div>
             <div style="color:#409EFF;font-size:50px;text-align:center;height:190px;line-height:150px;">{{totalCount}} 台</div>
             <div style="border-top:2px solid #eee;">
               <el-row>
@@ -107,12 +107,12 @@
                   </template>
                 </el-table-column>
               </el-table>
-            </div> 
+            </div>
           </div>
         </el-col>
         <el-col :span="8" style="padding-right:0;">
           <div class="demo-css" style="height:600px;">
-            <div><h3>设备满负荷率</h3></div> 
+            <div><h3>设备满负荷率</h3></div>
             <div ref="assetRanking" class="asset" style="height:500px;width:100%;"></div>
           </div>
         </el-col>
@@ -140,23 +140,23 @@
               </el-col>
             </el-row>
             <div ref="assetDetails" class="asset" style="height:400px;width:100%;"></div>
-          </div>   
+          </div>
         </el-col>
       </el-row>
     </div>
   </div>
 </template>
 <script>
-import api from "@/api/api";
-import echarts from 'echarts/lib/echarts';
-import moment from 'moment';
-require('echarts/lib/chart/line');
-require('echarts/lib/chart/bar');
+import api from '@/api/api'
+import echarts from 'echarts/lib/echarts'
+import moment from 'moment'
+require('echarts/lib/chart/line')
+require('echarts/lib/chart/bar')
 let schema = [
   {
-    label: "科室",
-    name: "dept",
-    comp: "custom"
+    label: '科室',
+    name: 'dept',
+    comp: 'custom'
   },
   {
     label: '时间',
@@ -169,14 +169,14 @@ let schema = [
     comp: 'custom'
   },
   {
-    label: "",
-    name: "btn1",
-    comp: "custom"
+    label: '',
+    name: 'btn1',
+    comp: 'custom'
   }
-];
+]
 export default {
-  data() {
-    let obj = this.createObjFromSchema(schema);
+  data () {
+    let obj = this.createObjFromSchema(schema)
     obj.time = [
       moment(new Date().getTime() - 86400000 * 7).format('YYYY-MM-DD HH:mm:ss'),
       moment(new Date().getTime()).format('YYYY-MM-DD HH:mm:ss')
@@ -185,7 +185,7 @@ export default {
       api,
       querySchema: schema,
       queryObj: obj,
-      listApiName: "deptList",
+      listApiName: 'deptList',
       tableData: [],
       loading: false,
       assetChart: null,
@@ -203,42 +203,42 @@ export default {
       pickerOptions2: {
         shortcuts: [{
           text: '最近一周',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-            picker.$emit('pick', [start, end]);
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', [start, end])
           }
         }, {
           text: '最近一个月',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-            picker.$emit('pick', [start, end]);
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            picker.$emit('pick', [start, end])
           }
         }, {
           text: '最近三个月',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-            picker.$emit('pick', [start, end]);
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+            picker.$emit('pick', [start, end])
           }
         }]
       },
       checkAssetId: '',
       assetInfo: {
         turnOnRate: 0, // 开机率
-        failureRate: 0, //故障率
+        failureRate: 0, // 故障率
         totalActivationTime: 0, // 总激活时间
         averageActivationTime: 0 // 平均激活时间
       },
       dataAsset: {},
       timeData: {}
-    };
+    }
   },
-  created() {
+  created () {
     this.getDept()
     this.$nextTick(_ => {
       this.initAssetDetails()
@@ -247,9 +247,9 @@ export default {
   filters: {
     initTime (value) {
       if (value > 86400000) {
-        return (value /(86400000)).toFixed(2) +'T'
+        return (value / (86400000)).toFixed(2) + 'T'
       } else {
-        return (value /(60*60*1000)).toFixed(2) +'H'
+        return (value / (60 * 60 * 1000)).toFixed(2) + 'H'
       }
     }
   },
@@ -266,12 +266,8 @@ export default {
       this.$router.push('/page/exportdata')
     },
     getDept () {
-      let params = {
-        pageNum: 1,
-        pageSize: 100
-      }
-      api.deptList({pageNum: 1, pageSize: 500}).then(rs => {
-        this.deptArr = rs.data.list || [];
+      api.deptList({ pageNum: 1, pageSize: 500 }).then(rs => {
+        this.deptArr = rs.data.list || []
         this.queryObj.dept = rs.data.list[0]['id']
         this.query()
       })
@@ -280,52 +276,51 @@ export default {
       let params = {
         pageNum: 0,
         pageSize: 100,
-        timeDivide: true, //是否间隔
-        interval: 1, //间隔天数
-        beginDate: data.beginDate, //开始时间
-        endDate: data.endDate, //结束时间
+        timeDivide: true, // 是否间隔
+        interval: 1, // 间隔天数
+        beginDate: data.beginDate, // 开始时间
+        endDate: data.endDate, // 结束时间
         deptId: data.deptId
       }
       let frequencyParams = {
-        beginDate: data.beginDate, //开始时间
-        endDate: data.endDate, //结束时间
+        beginDate: data.beginDate, // 开始时间
+        endDate: data.endDate, // 结束时间
         deptId: data.deptId
       }
-      let quencyTable = await api.findByParam(frequencyParams);
-      let assetTable = await api.powerTimeStatistics(params);
-      this.initQuencyTable(quencyTable.data);
-      this.initTableData(assetTable.data);
-      this.totalCount = this.tableData.length;
-      this.initAssetEcharts(assetTable.data);
+      let quencyTable = await api.findByParam(frequencyParams)
+      let assetTable = await api.powerTimeStatistics(params)
+      this.initQuencyTable(quencyTable.data)
+      this.initTableData(assetTable.data)
+      this.totalCount = this.tableData.length
+      this.initAssetEcharts(assetTable.data)
     },
     initQuencyTable (data) {
       let timeData = {} // 根据时间来整合每天的开机次数
-      let assetData ={} // 根据设备来整合当前设备的开机次数
+      let assetData = {} // 根据设备来整合当前设备的开机次数
       data.forEach(item => {
-        let date = item.date;
-        let assetId = item.assetId;
-        if (timeData[date] || timeData[date] == 0) {
-          timeData[date] += Number(item.count);
+        let date = item.date
+        let assetId = item.assetId
+        if (timeData[date] || timeData[date] === 0) {
+          timeData[date] += Number(item.count)
         } else {
-          timeData[date] = Number(item.count) || 0;
+          timeData[date] = Number(item.count) || 0
         }
-        if (assetData[assetId] || assetData[assetId] == 0) {
-          assetData[assetId] += Number(item.count);
+        if (assetData[assetId] || assetData[assetId] === 0) {
+          assetData[assetId] += Number(item.count)
         } else {
-          assetData[assetId] = Number(item.count) || 0;
+          assetData[assetId] = Number(item.count) || 0
         }
       })
-      this.dataAsset = assetData;
-      this.timeData = timeData;
+      this.dataAsset = assetData
+      this.timeData = timeData
     },
     initTableData (data) {
       let tableData = JSON.parse(JSON.stringify(data[0]['powerTimes']))
       let powerOffTime = 0
-      let obj = {}
       data.forEach(item => {
         if (item.powerTimes && item.powerTimes.length > 0) {
           item.powerTimes.forEach(lab => {
-            let info = tableData.find(e => e.assetId === lab.assetId);
+            let info = tableData.find(e => e.assetId === lab.assetId)
             if (info) {
               info.powerOffTime += lab.powerOffTime
               info.powerOnTime += lab.powerOnTime
@@ -342,18 +337,18 @@ export default {
         } else {
           item.utilize = (item.powerOffTime * 100 / (item.powerOnTime + item.standbyTime + item.powerOffTime)).toFixed(2)
         }
-        powerOffTime += item.powerOffTime;
+        powerOffTime += item.powerOffTime
         item.count = this.dataAsset[item.assetId]
       })
       this.assetInfo.totalActivationTime = powerOffTime
-      this.assetInfo.averageActivationTime = (powerOffTime/tableData.length) === 0 ? 0: (powerOffTime/tableData.length).toFixed(2)
+      this.assetInfo.averageActivationTime = (powerOffTime / tableData.length) === 0 ? 0 : (powerOffTime / tableData.length).toFixed(2)
       this.tableData = tableData
       this.initAssetRanking()
     },
     initAssetEcharts (json) {
-      this.assetChart = echarts.init(this.$refs.asset);
+      this.assetChart = echarts.init(this.$refs.asset)
       let data = []
-      let obj ={}
+      let obj = {}
       this.tableData.map(item => {
         if (obj[item.assetName]) {
           obj[item.assetName] = obj[item.assetName] + 1
@@ -361,22 +356,22 @@ export default {
           obj[item.assetName] = 1
         }
       })
-      for (let key  in obj) {
-        data.push({name: key, value: obj[key]})
+      for (let key in obj) {
+        data.push({ name: key, value: obj[key] })
       }
       let option = {
         title: {
           text: '设备概览',
           left: 'left'
         },
-        tooltip : {
+        tooltip: {
           trigger: 'item',
-          formatter: "{b}<br/>{c} ({d}%)"
+          formatter: '{b}<br/>{c} ({d}%)'
         },
-        series : [
+        series: [
           {
             type: 'pie',
-            radius : '65%',
+            radius: '65%',
             center: ['50%', '50%'],
             selectedMode: 'single',
             data: data,
@@ -389,12 +384,12 @@ export default {
             }
           }
         ]
-      };
-      this.assetChart.setOption(option, true);
+      }
+      this.assetChart.setOption(option, true)
     },
     initAssetRanking () {
       let arr = JSON.parse(JSON.stringify(this.tableData))
-      arr.sort((a,b)=> {
+      arr.sort((a, b) => {
         return a.utilize - b.utilize
       })
       let data = []
@@ -404,15 +399,15 @@ export default {
         data1.push(item.utilize)
       })
       if (arr.length < 10) {
-        for(let i = 0; i<10 - arr.length; i++) {
-          data.unshift('--');
+        for (let i = 0; i < 10 - arr.length; i++) {
+          data.unshift('--')
           data1.unshift(0)
         }
       }
       this.assetRankingEchart(data, data1)
     },
     assetRankingEchart (data, data1) {
-      this.assetRankingChart = echarts.init(this.$refs.assetRanking);
+      this.assetRankingChart = echarts.init(this.$refs.assetRanking)
       let option = {
         color: ['#3398DB'],
         tooltip: {
@@ -420,7 +415,7 @@ export default {
           axisPointer: {
             type: 'shadow'
           },
-          formatter: "{b} <br> 负荷率: {c}%"
+          formatter: '{b} <br> 负荷率: {c}%'
         },
         grid: {
           left: '0%',
@@ -437,7 +432,7 @@ export default {
           axisLabel: {
             formatter: '{value}%',
             textStyle: {
-                //color: '#fff',  
+              // color: '#fff',
               fontWeight: '80'
             }
           }
@@ -455,7 +450,7 @@ export default {
               fontWeight: '50'
             },
             formatter: function (name) {
-              return (name.length > 4 ? (name.slice(0,4)+"...") : name ); 
+              return (name.length > 4 ? (name.slice(0, 4) + '...') : name)
             }
           }
         },
@@ -465,28 +460,28 @@ export default {
             normal: {
               show: true,
               // formatter: '{c}',
-              formatter: function(v) {
-                var val = v.data;
+              formatter: function (v) {
+                var val = v.data
                 if (val == 0) {
-                  return '';
+                  return ''
                 }
-                return val;
+                return val
               },
               color: '#fff'
             }
           },
           data: data1
         }]
-      };
-      this.assetRankingChart.setOption(option, true);
+      }
+      this.assetRankingChart.setOption(option, true)
     },
     initAssetDetails (times, data1, data2, data3) {
       // data1 开机时间  data2待机时间  data3关机时间
-      this.assetDetailsChart = echarts.init(this.$refs.assetDetails);
+      this.assetDetailsChart = echarts.init(this.$refs.assetDetails)
       let option = {
         tooltip: {
           trigger: 'axis',
-          axisPointer: {type: 'cross'}
+          axisPointer: { type: 'cross' }
         },
         grid: {
           left: '0%',
@@ -495,7 +490,7 @@ export default {
           containLabel: true
         },
         legend: {
-          data:['开机时间','待机时间','关机时间']
+          data: ['开机时间', '待机时间', '关机时间']
         },
         xAxis: [
           {
@@ -516,23 +511,23 @@ export default {
         ],
         series: [
           {
-            name:'开机时间',
-            type:'bar',
+            name: '开机时间',
+            type: 'bar',
             data: data1
           },
           {
-            name:'待机时间',
-            type:'bar',
+            name: '待机时间',
+            type: 'bar',
             data: data2
           },
           {
-            name:'关机时间',
-            type:'bar',
+            name: '关机时间',
+            type: 'bar',
             data: data3
           }
         ]
-      };
-      this.assetDetailsChart.setOption(option, true);
+      }
+      this.assetDetailsChart.setOption(option, true)
     },
     seeAsssetDetail (row) {
       console.log(row)
@@ -548,17 +543,17 @@ export default {
       let params = {
         pageNum: 0,
         pageSize: 1000,
-        timeDivide: false, //是否间隔
-        interval: 1, //间隔天数
-        beginDate: moment(this.dateValue[0]).format('YYYY-MM-DD') + ' 00:00:00', //开始时间
-        endDate: moment(this.dateValue[1]).format('YYYY-MM-DD')+ ' 23:59:59', //结束时间
+        timeDivide: false, // 是否间隔
+        interval: 1, // 间隔天数
+        beginDate: moment(this.dateValue[0]).format('YYYY-MM-DD') + ' 00:00:00', // 开始时间
+        endDate: moment(this.dateValue[1]).format('YYYY-MM-DD') + ' 23:59:59', // 结束时间
         assetId: id
       }
       api.powerTimeStatistics(params).then(rs => {
-        this.initAssetTime(rs.data)
+        this.initAssetTime1(rs.data)
       })
     },
-    initAssetTime (data) {
+    initAssetTime1 (data) {
       let times = []
       let data1 = [] // 开机时间
       let data2 = [] // 待机时间
@@ -579,10 +574,10 @@ export default {
       let params = {
         pageNum: 0,
         pageSize: 1000,
-        timeDivide: true, //是否间隔
-        interval: 1, //间隔天数
-        beginDate: moment('2019-06-01').format('YYYY-MM-DD') + ' 00:00:00', //开始时间
-        endDate: moment(new Date()).format('YYYY-MM-DD')+ ' 23:59:59', //结束时间
+        timeDivide: true, // 是否间隔
+        interval: 1, // 间隔天数
+        beginDate: moment('2019-06-01').format('YYYY-MM-DD') + ' 00:00:00', // 开始时间
+        endDate: moment(new Date()).format('YYYY-MM-DD') + ' 23:59:59', // 结束时间
         deptId: deptId
       }
       api.powerTimeStatistics(params).then(rs => {
@@ -595,22 +590,22 @@ export default {
     },
     initAssetTime (deptId, data) {
       let obj = {}
-      let len = 0
-      let allTime = 0
+      // let len = 0
+      // let allTime = 0
       let allTurnOnRate = 0
       data.forEach(item => {
-        len ++
+        // len++
         item.powerTimes.forEach(lab => {
-          allTime += (Number(lab.powerOffTime) + Number(lab.standbyTime))
+          // allTime += (Number(lab.powerOffTime) + Number(lab.standbyTime))
           if (obj[lab.assetId]) {
             if (lab.powerOffTime > 0 || lab.standbyTime > 0) {
               obj[lab.assetId]['turnOnRate'] += 1
             }
           } else {
             if (lab.powerOffTime > 0 || lab.standbyTime > 0) {
-              obj[lab.assetId] = {turnOnRate: 1}
+              obj[lab.assetId] = { turnOnRate: 1 }
             } else {
-              obj[lab.assetId] = {turnOnRate: 0}
+              obj[lab.assetId] = { turnOnRate: 0 }
               // turnOnRate 当天激活就+1，最后激活率就是激活次数/总天数 ，time激活时间
             }
           }
@@ -619,11 +614,11 @@ export default {
       for (let key in obj) {
         allTurnOnRate += obj[key]['turnOnRate']
       }
-      this.assetInfo.turnOnRate = allTurnOnRate/(data[0]['powerTimes'].length) === 0? 0: (allTurnOnRate/(data[0]['powerTimes'].length)).toFixed(2)
+      this.assetInfo.turnOnRate = allTurnOnRate / (data[0]['powerTimes'].length) === 0 ? 0 : (allTurnOnRate / (data[0]['powerTimes'].length)).toFixed(2)
     }
   },
   watch: {}
-};
+}
 </script>
 <style lang='less' scoped>
   .el-col {

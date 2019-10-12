@@ -2,7 +2,7 @@
   <div class="layout_inner">
     <ever-bread-crumb :showTitle="'机构'"></ever-bread-crumb>
     <ever-form2
-      :schema="infoQuerySchema" 
+      :schema="infoQuerySchema"
       v-model="infoQueryObj"
       ref="form"
       :rules="rules"
@@ -20,31 +20,31 @@
   </div>
 </template>
 <script>
-import api from "@/api/api";
+import api from '@/api/api'
 let infoSchema = [
   {
-    name: "orgName",
-    label: "机构名称"
+    name: 'orgName',
+    label: '机构名称'
   },
   {
-    name: "contacts",
-    label: "联系人"
+    name: 'contacts',
+    label: '联系人'
   },
   {
-    name: "contactNumber",
-    label: "联系电话"
+    name: 'contactNumber',
+    label: '联系电话'
   },
   {
-    name: "address",
-    label: "地址"
+    name: 'address',
+    label: '地址'
   }
-];
+]
 export default {
   data () {
     let infoObj = this.createObjFromSchema(infoSchema)
     let rules = {
       'orgName': [
-          { required: true, message: '必填项', trigger: 'blur' }
+        { required: true, message: '必填项', trigger: 'blur' }
       ]
     }
     return {
@@ -53,7 +53,7 @@ export default {
       infoQueryObj: infoObj,
       infoQuerySchema: infoSchema,
       detailId: ''
-    };
+    }
   },
   created () {
     if (this.$route.query.id) {
@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     getInfo () {
-      api.agencyFindById({id: this.detailId}).then(rs => {
+      api.agencyFindById({ id: this.detailId }).then(rs => {
         if (rs.code === 200) {
           this.infoQueryObj = Object.assign(this.infoQueryObj, rs.data)
         }
@@ -73,7 +73,7 @@ export default {
       this.$refs.form.$refs.form.validate(valid => {
         if (valid) {
           let url = 'agencyCreate'
-          let tips = '新建'  
+          let tips = '新建'
           let params = Object.assign({}, this.infoQueryObj)
           if (this.detailId) {
             url = 'agencyUpdate'
@@ -90,19 +90,18 @@ export default {
             }
           })
         }
-      });
+      })
     },
-    emitInfo(row) {
-      this.popTitle = "编辑机构";
-      this.infoQueryObj.orgName = row.orgName;
-      this.infoQueryObj.contacts = row.contacts;
-      this.infoQueryObj.contactNumber = row.contactNumber;
-      this.infoQueryObj.address = row.address;
-      this.ageencyID = row.id;
-      this.popShow = true;
+    emitInfo (row) {
+      this.popTitle = '编辑机构'
+      this.infoQueryObj.orgName = row.orgName
+      this.infoQueryObj.contacts = row.contacts
+      this.infoQueryObj.contactNumber = row.contactNumber
+      this.infoQueryObj.address = row.address
+      this.ageencyID = row.id
+      this.popShow = true
     }
   },
   watch: {}
-};
+}
 </script>
-

@@ -59,166 +59,166 @@
   </div>
 </template>
 <script>
-import api from "@/api/api";
-import token from "@/plugins/getUploadToken";
+import api from '@/api/api'
+import token from '@/plugins/getUploadToken'
 let schema = [
   {
-    name: "no",
-    label: "设备编号",
+    name: 'no',
+    label: '设备编号',
     span: 12
   },
   {
-    name: "name",
-    label: "设备名称",
+    name: 'name',
+    label: '设备名称',
     span: 12
   },
   {
-    name: "kind",
-    label: "设备类别",
+    name: 'kind',
+    label: '设备类别',
     span: 12
   },
   {
-    name: "iotDeviceIds",
-    label: "物联设备",
-    comp: "custom",
+    name: 'iotDeviceIds',
+    label: '物联设备',
+    comp: 'custom',
     span: 12
   },
   {
-    label: "品牌",
-    name: "brand",
+    label: '品牌',
+    name: 'brand',
     span: 12
   },
   {
-    name: "model",
-    label: "设备型号",
+    name: 'model',
+    label: '设备型号',
     span: 12
   },
   {
-    label: "规格型号",
-    name: "spec",
+    label: '规格型号',
+    name: 'spec',
     span: 12
   },
   {
-    name: "sn",
-    label: "SN序列号",
+    name: 'sn',
+    label: 'SN序列号',
     span: 12
   },
   {
-    label: "责任工程师",
-    name: "responsiblePerson",
-    comp: "custom",
+    label: '责任工程师',
+    name: 'responsiblePerson',
+    comp: 'custom',
     span: 12
   },
   {
-    name: "vender",
-    label: "厂家",
+    name: 'vender',
+    label: '厂家',
     span: 12
   },
   {
-    label: "采购价格",
-    name: "purchasePrice",
-    comp: "custom",
+    label: '采购价格',
+    name: 'purchasePrice',
+    comp: 'custom',
     span: 12
   },
   {
-    label: "折旧费",
-    name: "depreciationCharge",
-    comp: "custom",
+    label: '折旧费',
+    name: 'depreciationCharge',
+    comp: 'custom',
     span: 12
   },
   {
-    label: "保修截止日期",
-    name: "matainExpiryDate",
-    comp: "el-date-picker",
+    label: '保修截止日期',
+    name: 'matainExpiryDate',
+    comp: 'el-date-picker',
     props: {
-      type: "date",
-      valueFormat: "yyyy-MM-dd HH:mm:ss"
+      type: 'date',
+      valueFormat: 'yyyy-MM-dd HH:mm:ss'
     },
     span: 12
   },
   {
-    name: "prodDate",
-    label: "生产日期",
-    comp: "el-date-picker",
+    name: 'prodDate',
+    label: '生产日期',
+    comp: 'el-date-picker',
     props: {
-      type: "date",
-      valueFormat: "yyyy-MM-dd HH:mm:ss"
+      type: 'date',
+      valueFormat: 'yyyy-MM-dd HH:mm:ss'
     },
     span: 12
   },
   {
-    name: "setupStartAt",
-    label: "装机开始时间",
-    comp: "el-date-picker",
+    name: 'setupStartAt',
+    label: '装机开始时间',
+    comp: 'el-date-picker',
     props: {
-      type: "datetime",
-      valueFormat: "yyyy-MM-dd HH:mm:ss"
+      type: 'datetime',
+      valueFormat: 'yyyy-MM-dd HH:mm:ss'
     },
     span: 12
   },
   {
-    name: "setupEndAt",
-    label: "装机结束时间",
-    comp: "el-date-picker",
+    name: 'setupEndAt',
+    label: '装机结束时间',
+    comp: 'el-date-picker',
     props: {
-      type: "datetime",
-      valueFormat: "yyyy-MM-dd HH:mm:ss"
+      type: 'datetime',
+      valueFormat: 'yyyy-MM-dd HH:mm:ss'
     },
     span: 12
   },
   {
-    name: "acceptStatus",
-    label: "验收状态",
-    comp: "custom",
+    name: 'acceptStatus',
+    label: '验收状态',
+    comp: 'custom',
     span: 12
   },
   {
-    name: "setupStep",
-    label: "设备装机状态",
-    comp: "el-select",
+    name: 'setupStep',
+    label: '设备装机状态',
+    comp: 'el-select',
     span: 12,
     props: {
       options: [
         {
-          id: "unknown",
-          name: "未知"
+          id: 'unknown',
+          name: '未知'
         },
         {
-          id: "delivered",
-          name: "已出库"
+          id: 'delivered',
+          name: '已出库'
         },
         {
-          id: "to_setup",
-          name: "待安装"
+          id: 'to_setup',
+          name: '待安装'
         },
         {
-          id: "setup",
-          name: "已安装"
+          id: 'setup',
+          name: '已安装'
         },
         {
-          id: "training",
-          name: "已培训"
+          id: 'training',
+          name: '已培训'
         },
         {
-          id: "accepted",
-          name: "已验收"
+          id: 'accepted',
+          name: '已验收'
         }
       ]
     }
   },
   {
-    name: "alternativeAppendant",
-    label: "耗材替代品",
+    name: 'alternativeAppendant',
+    label: '耗材替代品',
     span: 12
   },
   {
-    name: "appendant",
-    label: "配套耗材",
+    name: 'appendant',
+    label: '配套耗材',
     span: 12
   },
   {
-    name: "contact",
-    label: "联系方式",
+    name: 'contact',
+    label: '联系方式',
     span: 12
   },
   // {
@@ -232,47 +232,47 @@ let schema = [
   //   span: 12
   // },
   {
-    name: "isDedicatedAppendant",
-    label: "配套耗材是否专机专用",
-    comp: "el-select",
+    name: 'isDedicatedAppendant',
+    label: '配套耗材是否专机专用',
+    comp: 'el-select',
     props: {
       options: [
         {
-          id: "0",
-          name: "否"
+          id: '0',
+          name: '否'
         },
         {
-          id: "1",
-          name: "是"
+          id: '1',
+          name: '是'
         }
       ]
     },
     span: 12
   },
   {
-    name: "manualUrlList",
-    label: "用户手册照片",
-    comp: "custom"
+    name: 'manualUrlList',
+    label: '用户手册照片',
+    comp: 'custom'
   },
   {
-    name: "receiptUrlList",
-    label: "票据照片",
-    comp: "custom"
+    name: 'receiptUrlList',
+    label: '票据照片',
+    comp: 'custom'
   },
   {
-    name: "contractUrlList",
-    label: "采购合同照片",
-    comp: "custom"
+    name: 'contractUrlList',
+    label: '采购合同照片',
+    comp: 'custom'
   }
-];
+]
 export default {
   mixins: [token],
   data () {
-    var obj = this.createObjFromSchema(schema);
+    var obj = this.createObjFromSchema(schema)
     return {
       querySchema: schema,
       queryObj: obj,
-      detailId: "",
+      detailId: '',
       iotDeviceIdsOptions: [],
       // 保存图片地址
       imgObj: {
@@ -289,195 +289,198 @@ export default {
       options: [],
       rules: {
         no: [
-          {required: true, message: "必填项", trigger: "blur"}
+          { required: true, message: '必填项', trigger: 'blur' }
         ],
         kind: [
-          {required: true, message: "必填项", trigger: "blur"}
+          { required: true, message: '必填项', trigger: 'blur' }
         ],
         name: [
-          {required: true, message: "必填项", trigger: "blur"}
+          { required: true, message: '必填项', trigger: 'blur' }
         ],
         iotDeviceIds: [
-          {required: true, message: "必填项", trigger: "blur"}
+          { required: true, message: '必填项', trigger: 'blur' }
+        ],
+        sn: [
+          { required: true, message: '必填项', trigger: 'blur' }
         ]
       }
     }
   },
   methods: {
-    async getDeviceIdsOptions() {
+    async getDeviceIdsOptions () {
       try {
-        let data = await api.unPageiotDeviceList();
+        let data = await api.unPageiotDeviceList()
 
-        this.iotDeviceIdsOptions = data.data;
+        this.iotDeviceIdsOptions = data.data
       } catch (err) {}
     },
-    handleClose() {
-      this.$router.go(-1);
+    handleClose () {
+      this.$router.go(-1)
     },
-    //删除数组里面删除的图片地址
-    handleManualRemove(file, fileList) {
-      this.imgObj.manualImg = this.sliceArr(this.imgObj.manualImg, file, "key");
+    // 删除数组里面删除的图片地址
+    handleManualRemove (file, fileList) {
+      this.imgObj.manualImg = this.sliceArr(this.imgObj.manualImg, file, 'key')
     },
     // 保存上传的图片地址
-    handleManualSuccess(response, file, fileList) {
+    handleManualSuccess (response, file, fileList) {
       this.imgObj.manualImg.push({
         name: file.name,
         url: `${this.imgBaseUrl}/${file.response.key}`,
         key: file.response.key,
         type: this.getFileType(file.raw.name)
-      });
+      })
     },
 
-    //删除数组里面删除的图片地址
-    handleReceiptRemove(file, fileList) {
+    // 删除数组里面删除的图片地址
+    handleReceiptRemove (file, fileList) {
       this.imgObj.receiptImg = this.sliceArr(
         this.imgObj.receiptImg,
         file,
-        "key"
-      );
+        'key'
+      )
     },
     // 保存上传的图片地址
-    handleReceiptSuccess(response, file, fileList) {
+    handleReceiptSuccess (response, file, fileList) {
       this.imgObj.receiptImg.push({
         name: file.name,
         url: `${this.imgBaseUrl}/${file.response.key}`,
         type: this.getFileType(file.raw.name),
         key: file.response.key
-      });
+      })
     },
-    //删除数组里面删除的图片地址
-    handleContractRemove(file, fileList) {
+    // 删除数组里面删除的图片地址
+    handleContractRemove (file, fileList) {
       this.imgObj.contractImg = this.sliceArr(
         this.imgObj.contractImg,
         file,
-        "key"
-      );
+        'key'
+      )
     },
     // 保存上传的图片地址
-    handleContractSuccess(response, file, fileList) {
+    handleContractSuccess (response, file, fileList) {
       this.imgObj.contractImg.push({
         name: file.name,
         url: `${this.imgBaseUrl}/${file.response.key}`,
         type: this.getFileType(file.raw.name),
         key: file.response.key
-      });
+      })
     },
-    beforeUploadGetKey(file) {
-      //每个文件上传之前 给它一个 名字
-      this.uploadData.key = this.generateUUID();
-      this.uploadData.token = this.uploadToken;
+    beforeUploadGetKey (file) {
+      // 每个文件上传之前 给它一个 名字
+      this.uploadData.key = this.generateUUID()
+      this.uploadData.token = this.uploadToken
     },
-    async queryComp(query, cb) {
+    async queryComp (query, cb) {
       this.remarkoptions = [
         {
-          name: "未验收",
-          value: "未验收"
+          name: '未验收',
+          value: '未验收'
         },
         {
-          name: "已验收",
-          value: "已验收"
+          name: '已验收',
+          value: '已验收'
         }
-      ];
-      cb(this.remarkoptions);
+      ]
+      cb(this.remarkoptions)
     },
-    prev(id) {
+    prev (id) {
       this.$refs.form.$refs.form.validate(valid => {
         if (valid) {
-          let url = "createAsset";
+          let url = 'createAsset'
           if (this.detailId) {
-            url = "updateAsset";
+            url = 'updateAsset'
           }
-          let tips = this.detailId ? "更新" : "创建";
-          let params = Object.assign({}, this.queryObj);
+          let tips = this.detailId ? '更新' : '创建'
+          let params = Object.assign({}, this.queryObj)
           params.manualUrlList =
             this.imgObj.manualImg.length > 0
               ? JSON.stringify(this.imgObj.manualImg)
-              : "";
+              : ''
           params.receiptUrlList =
             this.imgObj.receiptImg.length > 0
               ? JSON.stringify(this.imgObj.receiptImg)
-              : "";
+              : ''
           params.contractUrlList =
             this.imgObj.contractImg.length > 0
               ? JSON.stringify(this.imgObj.contractImg)
-              : "";
-          
+              : ''
+
           api[url](params).then(rs => {
-            this.popShow = false;
+            this.popShow = false
             if (rs.code === 200) {
-              this.$messageTips(this, "success", tips + "成功");
+              this.$messageTips(this, 'success', tips + '成功')
               this.$router.go(-1)
             } else {
-              this.$messageTips(this, "error", tips + "失败");
+              this.$messageTips(this, 'error', tips + '失败')
             }
-          });
+          })
         }
-      });
+      })
     },
-    emitInfo(row) {
-      this.detailId = row.id;
-      Object.assign(this.queryObj, row);
+    emitInfo (row) {
+      this.detailId = row.id
+      Object.assign(this.queryObj, row)
       if (
         this.queryObj.iotDeviceIds &&
         this.queryObj.iotDeviceIds.length > 0
       ) {
       } else {
-        this.queryObj.iotDeviceIds = [];
+        this.queryObj.iotDeviceIds = []
       }
       this.filelistObj.manualList =
         (this.queryObj.manualUrlList &&
           JSON.parse(this.queryObj.manualUrlList)) ||
-        [];
+        []
       this.imgObj.manualImg =
         (this.queryObj.manualUrlList &&
           JSON.parse(this.queryObj.manualUrlList)) ||
-        [];
+        []
 
       this.filelistObj.receiptList =
         (this.queryObj.receiptUrlList &&
           JSON.parse(this.queryObj.receiptUrlList)) ||
-        [];
+        []
       this.imgObj.receiptImg =
         (this.queryObj.receiptUrlList &&
           JSON.parse(this.queryObj.receiptUrlList)) ||
-        [];
+        []
 
       this.filelistObj.contractList =
         (this.queryObj.contractUrlList &&
           JSON.parse(this.queryObj.contractUrlList)) ||
-        [];
+        []
       this.imgObj.contractImg =
         (this.queryObj.contractUrlList &&
           JSON.parse(this.queryObj.contractUrlList)) ||
-        [];
+        []
     },
-    clearInfo() {
+    clearInfo () {
       Object.keys(this.queryObj).map(key => {
-        if (key === "iotDeviceIds") {
-          this.queryObj[key] = [];
+        if (key === 'iotDeviceIds') {
+          this.queryObj[key] = []
         } else {
-          this.queryObj[key] = "";
+          this.queryObj[key] = ''
         }
-      });
+      })
       Object.keys(this.imgObj).map(key => {
-        this.imgObj[key] = [];
-      });
+        this.imgObj[key] = []
+      })
       Object.keys(this.filelistObj).map(key => {
-        this.filelistObj[key] = [];
-      });
-    },
+        this.filelistObj[key] = []
+      })
+    }
   },
-  created (){
-    this.getDeviceIdsOptions();
+  created () {
+    this.getDeviceIdsOptions()
     if (this.$route.query.id) {
       this.detailId = this.$route.query.id
-      api.assetFindById({id: this.detailId}).then(rs => {
+      api.assetFindById({ id: this.detailId }).then(rs => {
         if (rs.code === 200) {
           this.emitInfo(rs.data)
         }
       })
     }
-    api.userList({name: '', id: ''}).then(rs => {
+    api.userList({ name: '', id: '' }).then(rs => {
       if (rs.code === 200 && rs.data.length > 0) {
         this.options = rs.data
       }
@@ -485,9 +488,9 @@ export default {
   },
   watch: {
     $route: {
-      handler(value) {
+      handler (value) {
         if (!value) {
-          this.clearInfo();
+          this.clearInfo()
         }
       },
       immediate: true
@@ -496,7 +499,5 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-  
+
 </style>
-
-

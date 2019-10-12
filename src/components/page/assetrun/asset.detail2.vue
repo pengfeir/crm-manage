@@ -8,7 +8,7 @@
       <el-col :span="10" style="height:241px;">
         <div class="demo-css">
           <!-- 设备名称  设备编号-->
-          <div><h3>{{info.assetName || '--'}} {{info.assetNo || '--'}}</h3></div> 
+          <div><h3>{{info.assetName || '--'}} {{info.assetNo || '--'}}</h3></div>
           <!-- 设备型号 -->
           <div><span style="color:#409EFF;">{{info.assetModel || '--'}}</span></div>
           <div style="text-align:center;position: absolute;width: calc( 100% - 40px);bottom: 30px">
@@ -140,7 +140,7 @@
                     <el-button @click="query">查看</el-button>
                   </template>
                 </ever-form2>
-                
+
               </div>
             </el-col>
           </el-row>
@@ -180,7 +180,7 @@
         <el-col :span="24">
           <div class="demo-css">
             <echarts-asset-time @getAverageTime="getAverageTime"></echarts-asset-time>
-          </div>   
+          </div>
         </el-col>
       </el-row>
     <el-row>
@@ -240,33 +240,33 @@
   </div>
 </template>
 <script>
-import api from "@/api/api"
+import api from '@/api/api'
 import echartsModule from '../echarts/echartsmodule'
 import echartsHistory from '../echarts/echartshistory'
 import echartsAssetTime from '../echarts/echartassettime'
-import moment from 'moment';
+import moment from 'moment'
 let schema = [
   {
-    label: "",
-    name: "type",
-    comp: "custom"
+    label: '',
+    name: 'type',
+    comp: 'custom'
   },
   {
-    name: "dataType",
-    label: "",
-    comp: "custom"
+    name: 'dataType',
+    label: '',
+    comp: 'custom'
   },
   {
-    name: "date",
-    label: "",
-    comp: "custom"
+    name: 'date',
+    label: '',
+    comp: 'custom'
   },
   {
-    name: "btn",
-    label: "",
-    comp: "custom"
+    name: 'btn',
+    label: '',
+    comp: 'custom'
   }
-];
+]
 export default {
   components: {
     echartsModule,
@@ -274,9 +274,9 @@ export default {
     echartsAssetTime
   },
   data () {
-    var obj = this.createObjFromSchema(schema);
-    obj.type = 1;
-    obj.dataType = 1;
+    var obj = this.createObjFromSchema(schema)
+    obj.type = 1
+    obj.dataType = 1
     obj.date = [
       moment(new Date().getTime() - 86400000).format('YYYY-MM-DD HH:mm:ss'),
       moment(new Date().getTime()).format('YYYY-MM-DD HH:mm:ss')
@@ -291,27 +291,27 @@ export default {
       activeName: 1,
       value4: [],
       options: [
-        {id: 1, name: '输入电流', unit: 'A', objVal: 'inputIObj'},
-        {id: 2, name: '输入电压', unit: 'V', objVal: 'inputVObj'},
-        {id: 3, name: '有功功率', unit: 'W', objVal: 'realPowerObj'},
-        {id: 4, name: '功率因数', unit: '--', objVal: 'powerFactorObj'},
-        {id: 5, name: '温度', unit: '°C', objVal: 'temperatureObj'},
-        {id: 6, name: '电源频率', unit: 'Hz', objVal: 'powerHzObj'},
-        {id: 7, name: '电能计量', unit: 'kWh', objVal: 'energyObj'}
+        { id: 1, name: '输入电流', unit: 'A', objVal: 'inputIObj' },
+        { id: 2, name: '输入电压', unit: 'V', objVal: 'inputVObj' },
+        { id: 3, name: '有功功率', unit: 'W', objVal: 'realPowerObj' },
+        { id: 4, name: '功率因数', unit: '--', objVal: 'powerFactorObj' },
+        { id: 5, name: '温度', unit: '°C', objVal: 'temperatureObj' },
+        { id: 6, name: '电源频率', unit: 'Hz', objVal: 'powerHzObj' },
+        { id: 7, name: '电能计量', unit: 'kWh', objVal: 'energyObj' }
       ],
       typeOptions: [
-        {id: 1, name: '实时数据'},
-        {id: 2, name: '历史数据'}
+        { id: 1, name: '实时数据' },
+        { id: 2, name: '历史数据' }
       ],
       time: '2019-03-27 ',
-      inputIObj: {x:'00:00:00',y:'0'}, // 输入电流
-      inputVObj: {x:'00:00:00',y:'0'}, // 输入电压
-      realPowerObj: {x:'00:00:00',y:'0'}, // 有功功率
-      powerFactorObj: {x:'00:00:00',y:'0'}, // 功率因数
-      temperatureObj: {x:'00:00:00',y:'0'}, // 温度
-      powerHzObj: {x:'00:00:00',y:'0'}, // 电源频率
-      energyObj: {x:'00:00:00',y:'0'}, // 电能计量
-      
+      inputIObj: { x: '00:00:00', y: '0' }, // 输入电流
+      inputVObj: { x: '00:00:00', y: '0' }, // 输入电压
+      realPowerObj: { x: '00:00:00', y: '0' }, // 有功功率
+      powerFactorObj: { x: '00:00:00', y: '0' }, // 功率因数
+      temperatureObj: { x: '00:00:00', y: '0' }, // 温度
+      powerHzObj: { x: '00:00:00', y: '0' }, // 电源频率
+      energyObj: { x: '00:00:00', y: '0' }, // 电能计量
+
       intervalTime: null,
       info: {},
       echartsInfo: {
@@ -349,14 +349,14 @@ export default {
         frequency: 0,
         averageTime: 0
       },
-      dateValue:[],
+      dateValue: [],
       assetTimeChart: null
     }
   },
   methods: {
     getAverageTime (val) {
       console.log(val)
-      this.timeInfo.averageTime = val;
+      this.timeInfo.averageTime = val
     },
     go () {
       this.$router.go(-1)
@@ -378,11 +378,11 @@ export default {
       }
       api.powerTimeStatistics(yearParams).then(rs => {
         if (rs.data[0]['powerTimes'] && rs.data[0]['powerTimes'].length > 0) {
-          this.timeInfo.yearTime = this.timeInfo.allTime = rs.data[0]['powerTimes'][0]['powerOffTime'];
+          this.timeInfo.yearTime = this.timeInfo.allTime = rs.data[0]['powerTimes'][0]['powerOffTime']
         }
       })
       let monthParams = {
-        beginDate: new Date().getFullYear() +'-'+(new Date().getMonth()+1)+ '-01 00:00:00',
+        beginDate: new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-01 00:00:00',
         endDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
         assetId: id,
         timeDivide: false,
@@ -391,7 +391,7 @@ export default {
       }
       api.powerTimeStatistics(monthParams).then(rs => {
         if (rs.data[0]['powerTimes'] && rs.data[0]['powerTimes'].length > 0) {
-          this.timeInfo.monthTime = rs.data[0]['powerTimes'][0]['powerOffTime'];
+          this.timeInfo.monthTime = rs.data[0]['powerTimes'][0]['powerOffTime']
         }
       })
       let dayParams = {
@@ -404,7 +404,7 @@ export default {
       }
       api.powerTimeStatistics(dayParams).then(rs => {
         if (rs.data[0]['powerTimes'] && rs.data[0]['powerTimes'].length > 0) {
-          this.timeInfo.dayTime = rs.data[0]['powerTimes'][0]['powerOffTime'];
+          this.timeInfo.dayTime = rs.data[0]['powerTimes'][0]['powerOffTime']
         }
       })
       let frequencyParams = {
@@ -414,7 +414,7 @@ export default {
       }
       api.findByParam(frequencyParams).then(rs => {
         console.log(rs)
-        this.timeInfo.frequency = rs.data.length > 0 ? rs.data[0]['count']: 0;
+        this.timeInfo.frequency = rs.data.length > 0 ? rs.data[0]['count'] : 0
       })
     },
     getHistoryData () {
@@ -423,20 +423,20 @@ export default {
         beginDate: this.queryObj.date[0],
         macAddress: this.$route.query.id,
         pageNum: 1,
-        pageSize: 14400,
+        pageSize: 14400
       }
       api.assetMetricsList(params).then(rs => {
 
       })
     },
     typeChange (val) {
-      let lab = this.options[val-1]
+      let lab = this.options[val - 1]
       this.echartsInfo.title = lab.name
       this.echartsInfo.unit = lab.unit
       this.echartsInfo.data = this[lab.objVal]
     },
     getTime () {
-      let date = new Date ()
+      let date = new Date()
       let time = ''
       let minutes = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes()
       let seconds = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds()
@@ -451,13 +451,13 @@ export default {
     },
     objs () {
       // beginDate endDate
-      let endDate = this.getTime()
-      api.tempList({macAddress: this.id}).then(rs => {
-        this.assetId = rs.data[rs.data.length-1]['assetId']
-        Object.assign(rs.data[rs.data.length-1], {seat: this.info.seat, deptName: this.info.deptName})
-        this.info = rs.data[rs.data.length-1]
-        this.initData(rs.data[rs.data.length-1])
-        this.initAssetType(rs.data[rs.data.length-1])
+      // let endDate = this.getTime()
+      api.tempList({ macAddress: this.id }).then(rs => {
+        this.assetId = rs.data[rs.data.length - 1]['assetId']
+        Object.assign(rs.data[rs.data.length - 1], { seat: this.info.seat, deptName: this.info.deptName })
+        this.info = rs.data[rs.data.length - 1]
+        this.initData(rs.data[rs.data.length - 1])
+        this.initAssetType(rs.data[rs.data.length - 1])
       })
     },
     initData (data) {
@@ -497,36 +497,36 @@ export default {
       }
       api.assetMetricsList(params).then(rs => {
         if (rs.code === 200) {
-          this.assetData = rs.data.list[0];
+          this.assetData = rs.data.list[0]
         }
       })
     },
     getRange () {
-      api.findByMacAddr({macAddr: this.$route.query.id}).then(rs => {
+      api.findByMacAddr({ macAddr: this.$route.query.id }).then(rs => {
         if (rs.code === 200) {
           let table = JSON.parse(rs.data.extra)
-          this.ranage.V.max = table[3]['value1'];
-          this.ranage.V.min = table[3]['value2'];
+          this.ranage.V.max = table[3]['value1']
+          this.ranage.V.min = table[3]['value2']
           this.assetTypeTable = table
           this.info.deptName = rs.data.deptName
-          this.info.seat = `${rs.data.areaName} / ${rs.data.buildingName}`
+          this.info.seat = `${rs.data.areaName || '--'} / ${rs.data.buildingName || '--'}`
         }
       })
     },
     getContractInfo (assetId) {
-      api.findByAssetContract({assetId: assetId, pageNum: 1, pageSize: 20}).then(rs => {
+      api.findByAssetContract({ assetId: assetId, pageNum: 1, pageSize: 20 }).then(rs => {
         if (rs.data && rs.data.length > 0) {
-          this.infoQueryObj.guaranteeType = '1';
+          this.infoQueryObj.guaranteeType = '1'
         } else {
-          this.infoQueryObj.guaranteeType = '2';
+          this.infoQueryObj.guaranteeType = '2'
         }
       })
     },
     initAssetType (data) {
       this.infoQueryObj.assetType = data.assetStatus
-      let time = new Date().getTime();
+      let time = new Date().getTime()
       let curTime = new Date(data.ctime).getTime()
-      if (curTime + 2*60*1000 < time) {
+      if (curTime + 2 * 60 * 1000 < time) {
         this.infoQueryObj.networkStatus = '离线'
       } else {
         this.infoQueryObj.networkStatus = '在线'
@@ -549,51 +549,51 @@ export default {
     }
   },
   mounted () {
-    
+
   },
   filters: {
     initTime (value) {
       if (value > 86400000) {
-        return (value /(86400000)).toFixed(2) +' T'
+        return (value / (86400000)).toFixed(2) + ' T'
       } else {
-        return (value /(60*60*1000)).toFixed(2) +' H'
+        return (value / (60 * 60 * 1000)).toFixed(2) + ' H'
       }
     }
   },
   beforeDestroy () {
-    this.clear();
+    this.clear()
   },
   created () {
     this.queryObj.type = 1
-    this.echartsInfo.data = this.inputIObj;
-    this.objs();
-    this.getAnomalous();
-    this.getRange();
+    this.echartsInfo.data = this.inputIObj
+    this.objs()
+    this.getAnomalous()
+    this.getRange()
     this.intervalTime = setInterval(_ => {
-      this.objs();
+      this.objs()
     }, 5000)
   },
   watch: {
     'queryObj.dataType': {
-      handler: function(val, oldval) {
+      handler: function (val, oldval) {
         if (val === 1) {
-          this.objs();
+          this.objs()
           this.intervalTime = setInterval(_ => {
-            this.objs();
+            this.objs()
           }, 5000)
           this.typeChange(this.queryObj.type)
         } else {
-          this.clear();
+          this.clear()
         }
       },
       deep: true
     },
     'assetId': {
-      handler: function(val, oldval) {
+      handler: function (val, oldval) {
         if (val) {
           this.getAssetTime(val)
           this.getContractInfo(val)
-        }   
+        }
       },
       deep: true
     }
@@ -720,4 +720,3 @@ export default {
     margin-left: 5px;
   }
 </style>
-

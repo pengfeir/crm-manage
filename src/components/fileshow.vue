@@ -35,14 +35,14 @@
         <div class="img-left-btn" @click="imgGo(-1)">
           <div>
             <i class="el-icon-arrow-left"></i>
-          </div> 
-        </div>      
+          </div>
+        </div>
         <img width="100%" :src="dialogImageUrl" alt="">
         <div class="img-left-btn right-btn"  @click="imgGo(1)">
           <div>
             <i class="el-icon-arrow-right"></i>
-          </div> 
-        </div>   
+          </div>
+        </div>
       </div>
     </el-dialog>
   </div>
@@ -57,7 +57,7 @@ export default {
     },
     fileurlList: {
       type: String,
-      default: ""
+      default: ''
     },
     isNoShowBtn: {
       type: Boolean,
@@ -68,13 +68,13 @@ export default {
       defatule: true
     }
   },
-  data() {
+  data () {
     return {
       dialogTableVisible: false,
       imgdialogVisible: false,
-      dialogImageUrl: "",
+      dialogImageUrl: '',
       urlData: []
-    };
+    }
   },
   mounted () {
     let arr = this.fileurlList && this.fileurlList.indexOf('[') > -1 ? JSON.parse(this.fileurlList) : []
@@ -84,42 +84,42 @@ export default {
       this.urlData = arr
     }
   },
-  created() {
+  created () {
   },
   methods: {
     imgGo (val) {
       let arr = this.fileurlList ? JSON.parse(this.fileurlList) : []
-      for(let i = 0; i < arr.length; i++) {
+      for (let i = 0; i < arr.length; i++) {
         if (arr[i]['url'] === this.dialogImageUrl) {
           if (val === -1) {
             if (i !== 0) {
-              this.dialogImageUrl = arr[i-1]['url']
+              this.dialogImageUrl = arr[i - 1]['url']
             } else {
-              this.dialogImageUrl = arr[arr.length-1]['url']
+              this.dialogImageUrl = arr[arr.length - 1]['url']
             }
           } else {
-            if (i === arr.length-1) {
+            if (i === arr.length - 1) {
               this.dialogImageUrl = arr[0]['url']
             } else {
-              this.dialogImageUrl = arr[i+1]['url']
+              this.dialogImageUrl = arr[i + 1]['url']
             }
           }
           return
         }
       }
     },
-    showimg(item) {
-      window.open(`${item.url}?attname=${item.name}`);
+    showimg (item) {
+      window.open(`${item.url}?attname=${item.name}`)
     },
-    more() {
-      this.dialogTableVisible = true;
+    more () {
+      this.dialogTableVisible = true
     },
-    showPicture(url) {
-      this.imgdialogVisible = true;
-      this.dialogImageUrl = url;
+    showPicture (url) {
+      this.imgdialogVisible = true
+      this.dialogImageUrl = url
     }
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .sl img {
@@ -234,7 +234,7 @@ export default {
 }
 .img-left-btn {
   cursor: pointer;
-  position: absolute; 
+  position: absolute;
   height:100%;
   width: 50px;
   opacity: 0;
@@ -258,4 +258,3 @@ export default {
   opacity: 1;
 }
 </style>
-

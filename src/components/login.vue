@@ -7,9 +7,7 @@
         </div>
         <el-form :model="loginForm" :rules="rules" ref="loginForm">
           <el-form-item prop="username">
-            <el-input v-model="loginForm.username" placeholder="用户名">
-              <span>dsfsf</span>
-            </el-input>
+            <el-input v-model="loginForm.username" placeholder="用户名"></el-input>
           </el-form-item>
           <el-form-item prop="password">
             <el-input type="password" placeholder="密码" v-model="loginForm.password"></el-input>
@@ -23,21 +21,21 @@
   </div>
 </template>
 <script>
-import api from "@/api/api.js";
+import api from '@/api/api.js'
 export default {
-  data() {
+  data () {
     return {
       loginForm: {
-        username: "",
-        password: ""
+        username: '',
+        password: ''
       },
       rules: {
         username: [
-          { required: true, message: "请输入用户名", trigger: "blur" }
+          { required: true, message: '请输入用户名', trigger: 'blur' }
         ],
-        password: [{ required: true, message: "请输入密码", trigger: "blur" }]
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
       }
-    };
+    }
   },
   methods: {
     async login () {
@@ -51,16 +49,16 @@ export default {
     },
     clearStore () {
       window.localStorage.clear()
-    },
+    }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>
 @import "../style/mixin";
 .login_page {
   background: url('../assets/login_bg.jpg') no-repeat center;
-  background-size:100% 100%; 
+  background-size:100% 100%;
 }
 .manage_tip {
   position: absolute;

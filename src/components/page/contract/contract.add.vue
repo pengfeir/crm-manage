@@ -48,7 +48,7 @@
             <el-row>
               <el-col :span="24">
                 <label class="asset-label">设备分项金额</label>
-                <div style="margin-left: 100px;position: absolute;top: 0; width:calc(100% - 100px);"> 
+                <div style="margin-left: 100px;position: absolute;top: 0; width:calc(100% - 100px);">
                   <el-input v-model="item.amount">
                     <template slot="append">元</template>
                   </el-input>
@@ -58,11 +58,11 @@
             <el-row>
               <el-col :span="24">
                 <label class="asset-label">保修类别</label>
-                <div style="margin-left: 100px;position: absolute;top: 0;"> 
+                <div style="margin-left: 100px;position: absolute;top: 0;">
                   <el-radio v-model="item.type" :label="'1'">全保</el-radio>
                   <el-radio v-model="item.type" :label="'2'">部分保</el-radio>
                 </div>
-                <div style="margin-left: 100px;" v-if="item.type === '2'"> 
+                <div style="margin-left: 100px;" v-if="item.type === '2'">
                   <el-checkbox-group v-model="item.type2">
                     <el-checkbox :label="'1'">人工保</el-checkbox>
                     <el-checkbox :label="'2'">部分零件</el-checkbox>
@@ -175,102 +175,102 @@
   </div>
 </template>
 <script>
-import api from "@/api/api";
-import token from "@/plugins/getUploadToken";
-import moment from 'moment';
+import api from '@/api/api'
+import token from '@/plugins/getUploadToken'
+import moment from 'moment'
 let infoSchema = [
   {
-    name: "no",
-    label: "保修合同编号",
+    name: 'no',
+    label: '保修合同编号',
     span: 12
   },
   {
-    name: "provider",
-    label: "保修提供方",
+    name: 'provider',
+    label: '保修提供方',
     comp: 'custom',
     span: 12
   },
   {
-    name: "totalFee",
-    label: "保修总金额",
+    name: 'totalFee',
+    label: '保修总金额',
     comp: 'custom',
     span: 12
   },
   {
-    name: "guaranteeCycle",
-    label: "保修周期",
+    name: 'guaranteeCycle',
+    label: '保修周期',
     comp: 'custom',
     span: 12
   },
   {
-    name: "beginDate",
-    label: "保修开始时间",
-    comp: "el-date-picker",
+    name: 'beginDate',
+    label: '保修开始时间',
+    comp: 'el-date-picker',
     props: {
-      type: "date",
-      valueFormat: "yyyy-MM-dd HH:mm:ss"
+      type: 'date',
+      valueFormat: 'yyyy-MM-dd HH:mm:ss'
     },
     span: 12
   },
   {
-    name: "endDate",
-    label: "保修终止时间",
-    comp: "el-date-picker",
+    name: 'endDate',
+    label: '保修终止时间',
+    comp: 'el-date-picker',
     props: {
-      type: "date",
-      valueFormat: "yyyy-MM-dd HH:mm:ss"
+      type: 'date',
+      valueFormat: 'yyyy-MM-dd HH:mm:ss'
     },
     span: 12
   },
   {
-    name: "iphone",
-    label: "联系方式",
+    name: 'iphone',
+    label: '联系方式',
     span: 12
   },
   {
-    name: "type",
-    label: "保修范围",
+    name: 'type',
+    label: '保修范围',
     comp: 'custom',
     span: 12
   },
   {
-    name: "assetIds",
-    label: "关联设备",
-    comp: "custom",
+    name: 'assetIds',
+    label: '关联设备',
+    comp: 'custom',
     span: 12
   },
   {
-    name: "enclosure",
-    label: "保修合同附件",
+    name: 'enclosure',
+    label: '保修合同附件',
     comp: 'custom'
   },
   {
-    name: "tenderInfo",
-    label: "投标方",
+    name: 'tenderInfo',
+    label: '投标方',
     comp: 'custom'
   }
-];
+]
 export default {
   mixins: [token],
-  data() {
-    let infoObj = this.createObjFromSchema(infoSchema);
-    infoObj.type = ['1','2'];
+  data () {
+    let infoObj = this.createObjFromSchema(infoSchema)
+    infoObj.type = ['1', '2']
     infoObj.tenderInfo = {
       name1: '',
       price1: '',
       name2: '',
       price2: '',
       name3: '',
-      price3: '',
-    };
+      price3: ''
+    }
     return {
       api,
       infoQueryObj: infoObj,
       infoQuerySchema: infoSchema,
       options: [],
       assetOptions: [],
-      detailId: "",
-      venderOptions: JSON.parse(this.getStore("mainVenderOptions")) || [],
+      detailId: '',
+      venderOptions: JSON.parse(this.getStore('mainVenderOptions')) || [],
       // 保存图片地址
       imgObj: {
         reportImg1: [],
@@ -288,109 +288,109 @@ export default {
       },
       rules: {
         no: [
-          {required: true, message: "必填项", trigger: 'blur'}
+          { required: true, message: '必填项', trigger: 'blur' }
         ],
         provider: [
-          {required: true, message: "必填项", trigger: 'blur'}
+          { required: true, message: '必填项', trigger: 'blur' }
         ]
       },
       partArr: [
-        {name: ''}
+        { name: '' }
       ],
       assetArr: [
-        {assetId: '',type: '1', type2: [],partArr: [{name: ''}], amount: ''}
+        { assetId: '', type: '1', type2: [], partArr: [{ name: '' }], amount: '' }
       ]
     }
   },
   methods: {
     addAsset () {
-      this.assetArr.push({assetId: '',type: '1', type2: [],partArr: [{name: ''}], amount: ''});
+      this.assetArr.push({ assetId: '', type: '1', type2: [], partArr: [{ name: '' }], amount: '' })
     },
     delAsset (index) {
-      if (this.assetArr.length === 1) return;
-      this.assetArr.splice(index, 1);
+      if (this.assetArr.length === 1) return
+      this.assetArr.splice(index, 1)
     },
     delPart (index, $index) {
-      if (this.assetArr[index]['partArr'].length === 1) return;
-      this.assetArr[index]['partArr'].splice(index, 1);
+      if (this.assetArr[index]['partArr'].length === 1) return
+      this.assetArr[index]['partArr'].splice(index, 1)
     },
     addPart (index) {
-      this.assetArr[index]['partArr'].push({name: ''});
+      this.assetArr[index]['partArr'].push({ name: '' })
     },
-    async queryComp(query, cb) {
-      let a = JSON.parse(JSON.stringify(this.venderOptions));
-      cb(a);
+    async queryComp (query, cb) {
+      let a = JSON.parse(JSON.stringify(this.venderOptions))
+      cb(a)
     },
-    handleClose() {
+    handleClose () {
       Object.keys(this.filelistObj).map(v => {
-        this.filelistObj[v] = [];
-      });
+        this.filelistObj[v] = []
+      })
     },
-    //删除数组里面删除的图片地址
-    handleReportRemove(file, fileList, index) {
-      let obj = 'reportImg' + index;
-      this.imgObj[obj] = this.sliceArr(this.imgObj[obj], file, "key");
+    // 删除数组里面删除的图片地址
+    handleReportRemove (file, fileList, index) {
+      let obj = 'reportImg' + index
+      this.imgObj[obj] = this.sliceArr(this.imgObj[obj], file, 'key')
     },
     // 保存上传的图片地址
-    handleReportContractSuccess(response, file, fileList, index) {
-      let obj = 'reportImg' + index;
+    handleReportContractSuccess (response, file, fileList, index) {
+      let obj = 'reportImg' + index
       this.imgObj[obj].push({
         name: file.name,
         url: `${this.imgBaseUrl}/${file.response.key}`,
         type: this.getFileType(file.raw.name),
         key: file.response.key
-      });
+      })
     },
-    beforeUploadGetKey(file) {
-      //每个文件上传之前 给它一个 名字
-      this.uploadData.key = this.generateUUID();
-      this.uploadData.token = this.uploadToken;
+    beforeUploadGetKey (file) {
+      // 每个文件上传之前 给它一个 名字
+      this.uploadData.key = this.generateUUID()
+      this.uploadData.token = this.uploadToken
     },
-    prev(id) {
+    prev (id) {
       this.$refs.form.$refs.form.validate(valid => {
         if (valid) {
-          let url = "createContract";
+          let url = 'createContract'
           if (this.detailId) {
-            url = "updateContract";
+            url = 'updateContract'
           };
-          let tips = this.detailId ? "更新" : "创建";
-          let params = Object.assign({}, this.infoQueryObj);
-          params.enclosure = JSON.stringify(this.imgObj.reportImg1);
-          params.tenderInfo = this.initTenderInfo();
-          params.type = params.type.join(',');
-          params.subItemFee = Number(params.subItemFee);
-          params.totalFee = Number(params.totalFee);
-          params.assetServiceContracts = this.initAssetService();
+          let tips = this.detailId ? '更新' : '创建'
+          let params = Object.assign({}, this.infoQueryObj)
+          params.enclosure = JSON.stringify(this.imgObj.reportImg1)
+          params.tenderInfo = this.initTenderInfo()
+          params.type = params.type.join(',')
+          params.subItemFee = Number(params.subItemFee)
+          params.totalFee = Number(params.totalFee)
+          params.assetServiceContracts = this.initAssetService()
           api[url](params).then(rs => {
-            this.popShow = false;
+            this.popShow = false
             if (rs.code === 200) {
-              this.setSto();
+              this.setSto()
               this.$router.go(-1)
-              this.$messageTips(this, "success", tips + "成功");
+              this.$messageTips(this, 'success', tips + '成功')
             } else {
-              this.$messageTips(this, "error", tips + "失败");
+              this.$messageTips(this, 'error', tips + '失败')
             }
-          });
+          })
         }
       })
     },
     initAssetService () {
-      let arr = [];
+      let arr = []
       this.assetArr.forEach(item => {
         let obj = {}
         let infoObj = {}
-        infoObj.assetId = item.assetId;
-        infoObj.amount = item.amount;     
+        infoObj.assetId = item.assetId
+        infoObj.amount = item.amount
         if (item.type === '1') { // 是全保
-          obj.whole = true;
-        } else if (item.type === '2'){ // 部分保
-          obj.part = true;
+          obj.whole = true
+        } else if (item.type === '2') { // 部分保
+          obj.part = true
           if (item.type2.indexOf('1') > -1) { // 人工保
-            obj.artificial = true;
+            obj.artificial = true
           }
-          if(item.type2.indexOf('2') > -1) { // 零件保
-            obj.partVal = true;
-            obj.partNameArr = item.partArr; // 零件集合
+          if (item.type2.indexOf('2') > -1) { // 零件保
+            obj.partVal = true
+            obj.partNameArr = item.partArr // 零件集合
           }
         }
         infoObj.kind = JSON.stringify(obj)
@@ -400,9 +400,9 @@ export default {
     },
     initTenderInfo () {
       let obj = Object.assign({}, this.infoQueryObj.tenderInfo)
-      obj.img1 = this.imgObj.reportImg2;
-      obj.img2 = this.imgObj.reportImg3;
-      obj.img3 = this.imgObj.reportImg4;
+      obj.img1 = this.imgObj.reportImg2
+      obj.img2 = this.imgObj.reportImg3
+      obj.img3 = this.imgObj.reportImg4
       return JSON.stringify(obj)
     },
     setSto () {
@@ -412,25 +412,25 @@ export default {
           name: this.infoQueryObj.provider,
           value: this.infoQueryObj.provider
         }
-      ];
-      let obj = {};
+      ]
+      let obj = {}
       let newarr = venderOptions.reduce((total, cur) => {
-        obj[cur.value] ? "" : (obj[cur.value] = true && total.push(cur));
+        obj[cur.value] ? '' : (obj[cur.value] = true && total.push(cur))
         return total
-      }, []);
-      this.setStore("mainVenderOptions", JSON.stringify(newarr));
+      }, [])
+      this.setStore('mainVenderOptions', JSON.stringify(newarr))
     },
-    emitInfo(row) {
-      let obj = Object.assign({}, row);
-      let tenderInfo = JSON.parse(obj.tenderInfo);
-      this.filelistObj.reportList1 = (obj.enclosure && JSON.parse(obj.enclosure)) || [];
-      this.imgObj.reportImg1 = (obj.enclosure && JSON.parse(obj.enclosure)) || [];
-      this.filelistObj.reportList2 = tenderInfo.img1 || [];
-      this.imgObj.reportImg2 = tenderInfo.img1 || [];
-      this.filelistObj.reportList3 = tenderInfo.img2 || [];
-      this.imgObj.reportImg3 = tenderInfo.img2 || [];
-      this.filelistObj.reportList4 = tenderInfo.img3 || [];
-      this.imgObj.reportImg4 = tenderInfo.img3 || [];
+    emitInfo (row) {
+      let obj = Object.assign({}, row)
+      let tenderInfo = JSON.parse(obj.tenderInfo)
+      this.filelistObj.reportList1 = (obj.enclosure && JSON.parse(obj.enclosure)) || []
+      this.imgObj.reportImg1 = (obj.enclosure && JSON.parse(obj.enclosure)) || []
+      this.filelistObj.reportList2 = tenderInfo.img1 || []
+      this.imgObj.reportImg2 = tenderInfo.img1 || []
+      this.filelistObj.reportList3 = tenderInfo.img2 || []
+      this.imgObj.reportImg3 = tenderInfo.img2 || []
+      this.filelistObj.reportList4 = tenderInfo.img3 || []
+      this.imgObj.reportImg4 = tenderInfo.img3 || []
       obj.tenderInfo = {
         name1: tenderInfo.name1,
         name2: tenderInfo.name2,
@@ -439,70 +439,70 @@ export default {
         price2: tenderInfo.price2,
         price3: tenderInfo.price3
       }
-      this.initContractType(obj);
-      obj.type = obj.type.split(',');
-      Object.assign(this.infoQueryObj, obj);
+      this.initContractType(obj)
+      obj.type = obj.type.split(',')
+      Object.assign(this.infoQueryObj, obj)
     },
     initContractType (obj) {
-      let assetArr = obj.assetServiceContracts;
+      let assetArr = obj.assetServiceContracts
       let arr = []
       assetArr.forEach(item => {
         // {assetId: '',type: '1', type2: [],partArr: [{name: ''}], amount: ''}
-        let obj = {assetId: item.assetId, amount: item.amount, type2: [], partArr: [{name: ''}]};
-        let info = JSON.parse(item.kind);
+        let obj = { assetId: item.assetId, amount: item.amount, type2: [], partArr: [{ name: '' }] }
+        let info = JSON.parse(item.kind)
         if (info.whole) {
           obj.type = '1'
         } else if (info.part) {
-          obj.type = '2';
+          obj.type = '2'
           if (info.artificial) {
-            obj.type2.push('1');
+            obj.type2.push('1')
           }
           if (info.partVal) {
-            obj.type2.push('2');
-            obj.partArr = info.partNameArr;
+            obj.type2.push('2')
+            obj.partArr = info.partNameArr
           }
         }
         arr.push(obj)
       })
-      this.assetArr = arr;
+      this.assetArr = arr
     }
   },
   created () {
     if (this.$route.query.id) {
       this.detailId = this.$route.query.id
-      api.findByIdContract({id: this.detailId}).then(rs => {
+      api.findByIdContract({ id: this.detailId }).then(rs => {
         if (rs.code === 200) {
           this.emitInfo(rs.data)
         }
       })
     } else {
-      this.infoQueryObj.beginDate = moment(new Date().getTime()).format('YYYY-MM-DD HH:mm:ss');
+      this.infoQueryObj.beginDate = moment(new Date().getTime()).format('YYYY-MM-DD HH:mm:ss')
     }
-    api.userList({name: '', id: ''}).then(rs => {
+    api.userList({ name: '', id: '' }).then(rs => {
       if (rs.code === 200 && rs.data.length > 0) {
         this.options = rs.data
       }
-    });
-    api.assetList({pageNum: 1, pageSize: 5000}).then(rs => {
+    })
+    api.assetList({ pageNum: 1, pageSize: 5000 }).then(rs => {
       if (rs.code === 200) {
         rs.data.list.forEach(item => {
           item.composeName = `${item.name}（${item.model || '-'} ${item.sn || '-'} ${item.vender || '-'} ${item.ctime.split(' ')[0] || '-'} ）`
         })
-        this.assetOptions = rs.data.list;
+        this.assetOptions = rs.data.list
       }
     })
   },
   watch: {
     'infoQueryObj.guaranteeCycle': {
-      handler(value) {
+      handler (value) {
         if (value) {
-          this.infoQueryObj.endDate = moment().add(value,'month').format('YYYY-MM-DD HH:mm:ss')
+          this.infoQueryObj.endDate = moment().add(value, 'month').format('YYYY-MM-DD HH:mm:ss')
         }
       },
       immediate: true
     }
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .scroll {
@@ -537,7 +537,7 @@ legend {
     display: inline-block;
     width: calc(100% - 130px);
   }
-  
+
 }
 .bidder .module:last-child {
   .title {

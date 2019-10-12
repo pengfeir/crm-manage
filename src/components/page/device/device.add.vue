@@ -9,7 +9,8 @@
             </el-upload>
           </template>
           <template slot="roomIds">
-            <el-select v-model="queryObj.roomIds" filterable clearable placeholder="请选择" :disabled="roomDisabled">
+            <!-- :disabled="roomDisabled" -->
+            <el-select v-model="queryObj.roomIds" filterable clearable placeholder="请选择">
               <el-option
                 v-for="item in options"
                 :key="item.id"
@@ -65,70 +66,70 @@
     </div>
 </template>
 <script>
-import api from "@/api/api";
-import token from "@/plugins/getUploadToken";
+import api from '@/api/api'
+import token from '@/plugins/getUploadToken'
 let schema = [
   {
-    name: "macAddr",
-    label: "MAC地址"
+    name: 'macAddr',
+    label: 'MAC地址'
   },
   {
-    name: "model",
-    label: "设备型号"
+    name: 'model',
+    label: '设备型号'
   },
   {
-    name: "kind",
-    label: "物联设备类别",
-    comp: "el-select",
+    name: 'kind',
+    label: '物联设备类别',
+    comp: 'el-select',
     props: {
       options: [
         {
-          id: "co",
-          name: "协调器"
+          id: 'co',
+          name: '协调器'
         },
         {
-          id: "gw",
-          name: "网关"
+          id: 'gw',
+          name: '网关'
         },
         {
-          id: "sensor",
-          name: "监测终端"
+          id: 'sensor',
+          name: '监测终端'
         },
         {
-          id: "qr",
-          name: "二维码"
+          id: 'qr',
+          name: '二维码'
         },
         {
-          id: "4g",
-          name: "4G模块"
+          id: '4g',
+          name: '4G模块'
         }
       ]
     }
   },
   {
-    name: "roomIds",
-    label: "物联网络",
-    comp: "custom"
+    name: 'roomIds',
+    label: '物联网络',
+    comp: 'custom'
   },
   {
-    name: "extra",
-    label: "阈值",
-    comp: "custom"
+    name: 'extra',
+    label: '阈值',
+    comp: 'custom'
   },
   {
-    name: "urlList",
-    label: "设备资料",
-    comp: "custom"
+    name: 'urlList',
+    label: '设备资料',
+    comp: 'custom'
   }
-];
+]
 export default {
   mixins: [token],
-  data() {
-    var obj = this.createObjFromSchema(schema);
+  data () {
+    var obj = this.createObjFromSchema(schema)
     return {
       querySchema: schema,
       queryObj: obj,
-      detailId: "",
+      detailId: '',
       iotDeviceIdsOptions: [],
       // 保存图片地址
       imgObj: {
@@ -142,8 +143,8 @@ export default {
         macAddr: [
           {
             required: true,
-            message: "必填项",
-            trigger: ["blur"]
+            message: '必填项',
+            trigger: ['blur']
           }
         ]
       },
@@ -151,17 +152,17 @@ export default {
       popShow: false,
       roomDisabled: false,
       tableData: [
-        {name: '关机电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
-        {name: '待机电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
-        {name: '激活电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
-        {name: '正常电压', value1: '',value2: '', deviation: '', company: 'V'}
+        { name: '关机电流阈值', value1: '', value2: '', deviation: '', company: 'A' },
+        { name: '待机电流阈值', value1: '', value2: '', deviation: '', company: 'A' },
+        { name: '激活电流阈值', value1: '', value2: '', deviation: '', company: 'A' },
+        { name: '正常电压', value1: '', value2: '', deviation: '', company: 'V' }
       ]
-    };
+    }
   },
   methods: {
     thresholdCheck1 (row) {
-      let regPos = /^\d+(\.\d+)?$/; //非负浮点数
-      let regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/;
+      let regPos = /^\d+(\.\d+)?$/ // 非负浮点数
+      let regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/
       if (!regPos.test(row.value1) && !regNeg.test(row.value1)) {
         this.$messageTips(this, 'error', '请输入有效数字')
         row.value1 = ''
@@ -169,14 +170,14 @@ export default {
       }
       if (row.value1 && row.value2) {
         if (Number(row.value1) < Number(row.value2)) {
-          let title =`${row.name}的设定值应大于设定值`
+          let title = `${row.name}的设定值应大于设定值2`
           this.$messageTips(this, 'error', title)
         }
       }
     },
     thresholdCheck2 (row) {
-      let regPos = /^\d+(\.\d+)?$/; //非负浮点数
-      let regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/;
+      let regPos = /^\d+(\.\d+)?$/ // 非负浮点数
+      let regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/
       if (!regPos.test(row.value2) && !regNeg.test(row.value2)) {
         this.$messageTips(this, 'error', '请输入有效数字')
         row.value2 = ''
@@ -184,7 +185,7 @@ export default {
       }
       if (row.value1 && row.value2) {
         if (Number(row.value1) < Number(row.value2)) {
-          let title =`${row.name}的设定值应大于设定值`
+          let title = `${row.name}的设定值应大于设定值2`
           this.$messageTips(this, 'error', title)
         }
       }
@@ -196,32 +197,32 @@ export default {
         item.deviation = ''
       })
     },
-    handleClose() {
-      this.$router.go(-1);
+    handleClose () {
+      this.$router.go(-1)
     },
-    //删除数组里面删除的图片地址
-    handleReportRemove(file, fileList) {
-      this.imgObj.reportImg = this.sliceArr(this.imgObj.reportImg, file, "key");
+    // 删除数组里面删除的图片地址
+    handleReportRemove (file, fileList) {
+      this.imgObj.reportImg = this.sliceArr(this.imgObj.reportImg, file, 'key')
     },
     // 保存上传的图片地址
-    handleReportContractSuccess(response, file, fileList) {
+    handleReportContractSuccess (response, file, fileList) {
       this.imgObj.reportImg.push({
         name: file.name,
         url: `${this.imgBaseUrl}/${file.response.key}`,
         type: this.getFileType(file.raw.name),
         key: file.response.key
-      });
+      })
     },
-    beforeUploadGetKey(file) {
-      //每个文件上传之前 给它一个 名字
-      this.uploadData.key = this.generateUUID();
-      this.uploadData.token = this.uploadToken;
+    beforeUploadGetKey (file) {
+      // 每个文件上传之前 给它一个 名字
+      this.uploadData.key = this.generateUUID()
+      this.uploadData.token = this.uploadToken
     },
     checkThreshold () {
       if (this.queryObj.kind === 'gw') return false
       let emptyVal = false
       this.tableData.forEach(item => {
-        for(let key in item) {
+        for (let key in item) {
           if (!item[key] && item[key] !== 0) {
             emptyVal = true
           }
@@ -229,109 +230,110 @@ export default {
       })
       return emptyVal
     },
-    prev(id) {
+    prev (id) {
       this.$refs.form.$refs.form.validate(valid => {
         if (valid) {
           if (this.checkThreshold()) {
-            this.$messageTips(this, "error", "请完善阈值信息");
-            return 
+            this.$messageTips(this, 'error', '请完善阈值信息')
+            return
           }
-          let url = "createIotDevice";
+          let url = 'createIotDevice'
           if (this.detailId) {
-            url = "updateIotDevice";
+            url = 'updateIotDevice'
           }
-          let tips = this.detailId ? "更新" : "创建";
-          let params = Object.assign({}, this.queryObj);
+          let tips = this.detailId ? '更新' : '创建'
+          let params = Object.assign({}, this.queryObj)
           params.urlList =
             this.imgObj.reportImg.length > 0
               ? JSON.stringify(this.imgObj.reportImg)
-              : "";
-          params.extra = JSON.stringify(this.tableData);
-          params.roomIds = params.roomIds?[params.roomIds]:[]
+              : ''
+          params.extra = JSON.stringify(this.tableData)
+          params.roomIds = params.roomIds ? [params.roomIds] : []
           api[url](params).then(rs => {
-            this.popShow = false;
+            this.popShow = false
             if (rs.code === 200) {
-              this.$messageTips(this, "success", tips + "成功");
-              this.$router.go(-1);
+              this.$messageTips(this, 'success', tips + '成功')
+              this.$router.go(-1)
             } else {
-              this.$messageTips(this, "error", tips + "失败");
+              this.$messageTips(this, 'error', tips + '失败')
             }
-          });
+          })
         }
-      });
+      })
     },
-    emitInfo(row) {
-      this.detailId = row.id;
-      Object.assign(this.queryObj, row);
-      this.queryObj.roomIds = this.queryObj.roomIds[0] || '';
+    emitInfo (row) {
+      this.detailId = row.id
+      Object.assign(this.queryObj, row)
+      this.queryObj.roomIds = this.queryObj.roomIds[0] || ''
+      console.log(this.queryObj.roomIds)
       this.filelistObj.reportList =
-        (this.queryObj.urlList && JSON.parse(this.queryObj.urlList)) || [];
+        (this.queryObj.urlList && JSON.parse(this.queryObj.urlList)) || []
       this.imgObj.reportImg =
-        (this.queryObj.urlList && JSON.parse(this.queryObj.urlList)) || [];
+        (this.queryObj.urlList && JSON.parse(this.queryObj.urlList)) || []
       if (row.extra) {
-        let tableData = JSON.parse(row.extra);
+        let tableData = JSON.parse(row.extra)
         this.tableData.forEach(item => {
           let val = tableData.find(lab => lab.name === item.name)
           if (val) {
-            item.value1 = val.value1;
-            item.value2 = val.value2;
-            item.deviation = val.deviation;
+            item.value1 = val.value1
+            item.value2 = val.value2
+            item.deviation = val.deviation
           }
         })
       }
     },
-    clearInfo() {
+    clearInfo () {
       Object.keys(this.queryObj).map(key => {
-        if (key === "iotDeviceIds") {
-          this.queryObj[key] = [];
+        if (key === 'iotDeviceIds') {
+          this.queryObj[key] = []
         } else {
-          this.queryObj[key] = "";
+          this.queryObj[key] = ''
         }
-      });
+      })
       Object.keys(this.imgObj).map(key => {
-        this.imgObj[key] = [];
-      });
+        this.imgObj[key] = []
+      })
       Object.keys(this.filelistObj).map(key => {
-        this.filelistObj[key] = [];
-      });
+        this.filelistObj[key] = []
+      })
     }
   },
-  created() {
+  created () {
     if (this.$route.query.id) {
-      this.detailId = this.$route.query.id;
+      this.detailId = this.$route.query.id
       api.findById({ id: this.detailId }).then(rs => {
         if (rs.code === 200) {
-          this.emitInfo(rs.data);
+          this.emitInfo(rs.data)
         }
-      });
+      })
     }
-    api.roomList({pageNum: 1,pageSize: 1000}).then(rs => {
+    api.roomList({ pageNum: 1, pageSize: 1000 }).then(rs => {
       if (rs.code === 200) {
-        let data = [];
+        let data = []
         rs.data.list.forEach(item => {
-          let obj = {};
+          let obj = {}
           obj.name = `${item.buildingName} > ${item.roomNo}`
           obj.id = item.id
-          data.push(obj);
+          data.push(obj)
         })
         this.options = data
       }
     })
   },
   watch: {
-    'queryObj.kind': {
-      handler(value) {
-        if (value === 'gw') {
-          this.roomDisabled = false
-        } else {
-          this.roomDisabled = true
-          this.queryObj.roomIds = ''
-        }
-      },
-      immediate: true
-    }
+    // 'queryObj.kind': {
+    //   handler (value) {
+    //     if (value === 'gw') {
+    //       this.roomDisabled = false
+    //     } else {
+    //       this.roomDisabled = true
+    //       this.queryObj.roomIds = ''
+    //     }
+    //   },
+    //   immediate: true
+    // }
   }
-};
+}
 </script>
 <style lang="less" scoped>
   .pop-btn {
@@ -348,4 +350,3 @@ export default {
     }
   }
 </style>
-

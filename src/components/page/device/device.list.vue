@@ -20,7 +20,7 @@
       </el-table-column>
       <el-table-column prop="assetName" label="设备名称">
       </el-table-column>
-      <el-table-column prop="sn" label="设备序列号">
+      <el-table-column prop="assetSn" label="设备序列号">
       </el-table-column>
       <el-table-column prop="buildingName" label="建筑">
       </el-table-column>
@@ -68,7 +68,7 @@
       </el-table-column>
       <el-table-column prop="assetName" label="设备名称">
       </el-table-column>
-      <el-table-column prop="sn" label="设备序列号">
+      <el-table-column prop="assetSn" label="设备序列号">
       </el-table-column>
       <el-table-column prop="buildingName" label="建筑">
       </el-table-column>
@@ -144,201 +144,201 @@
   </div>
 </template>
 <script>
-import list from "@/plugins/list";
-import api from "@/api/api";
-import token from "@/plugins/getUploadToken";
-import FileSaver from 'file-saver';
-import XLSX from 'xlsx';
+import list from '@/plugins/list'
+import api from '@/api/api'
+import token from '@/plugins/getUploadToken'
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 let schema = [
   {
-    name: "kind",
-    label: "物联设备类别",
-    comp: "el-select",
+    name: 'kind',
+    label: '物联设备类别',
+    comp: 'el-select',
     props: {
       options: [
         {
-          id: "co",
-          name: "协调器"
+          id: 'co',
+          name: '协调器'
         },
         {
-          id: "gw",
-          name: "网关"
+          id: 'gw',
+          name: '网关'
         },
         {
-          id: "sensor",
-          name: "监测终端"
+          id: 'sensor',
+          name: '监测终端'
         },
         {
-          id: "qr",
-          name: "二维码"
+          id: 'qr',
+          name: '二维码'
         },
         {
-          id: "4g",
-          name: "4G模块"
+          id: '4g',
+          name: '4G模块'
         }
       ]
     }
   },
   {
-    name: "model",
-    label: "设备型号"
+    name: 'model',
+    label: '设备型号'
   },
   {
-    name: "btn",
-    label: "",
-    comp: "custom"
+    name: 'btn',
+    label: '',
+    comp: 'custom'
   },
   {
-    label: "",
-    name: "rightbtn",
-    comp: "custom"
+    label: '',
+    name: 'rightbtn',
+    comp: 'custom'
   }
-];
+]
 let arr = [
   {
-    id: "macAddr",
-    label: "MAC地址",
-    value: ""
+    id: 'macAddr',
+    label: 'MAC地址',
+    value: ''
   },
   {
-    id: "model",
-    label: "设备型号",
-    value: ""
+    id: 'model',
+    label: '设备型号',
+    value: ''
   },
   {
-    id: "assetName",
-    label: "设备名称",
-    value: ""
+    id: 'assetName',
+    label: '设备名称',
+    value: ''
   },
   {
-    id: "sn",
-    label: "设备序列号",
-    value: ""
+    id: 'assetSn',
+    label: '设备序列号',
+    value: ''
   },
   {
-    id: "buildingName",
-    label: "建筑",
-    value: ""
+    id: 'buildingName',
+    label: '建筑',
+    value: ''
   },
   {
-    id: "roomNo",
-    label: "房间号",
-    value: ""
+    id: 'roomNo',
+    label: '房间号',
+    value: ''
   },
   {
-    id: "kind",
-    label: "物联设备类别",
-    value: ""
+    id: 'kind',
+    label: '物联设备类别',
+    value: ''
   },
 
   {
-    id: "ctime",
-    label: "创建时间",
-    value: ""
+    id: 'ctime',
+    label: '创建时间',
+    value: ''
   },
   {
-    id: "mtime",
-    label: "更新时间",
-    value: ""
+    id: 'mtime',
+    label: '更新时间',
+    value: ''
   },
   {
-    id: "urlList",
-    label: "设备资料",
-    value: ""
+    id: 'urlList',
+    label: '设备资料',
+    value: ''
   },
   {
-    id: "extra",
-    label: "阈值",
-    value: ""
+    id: 'extra',
+    label: '阈值',
+    value: ''
   }
-];
+]
 export default {
   mixins: [list, token],
-  data() {
-    var obj = this.createObjFromSchema(schema);
+  data () {
+    var obj = this.createObjFromSchema(schema)
     return {
       api,
       querySchema: schema,
       queryObj: obj,
       tableData: [],
-      listApiName: "iotDeviceList",
+      listApiName: 'iotDeviceList',
       arr,
       popShow: false,
       rules: {
         macAddr: [
           {
             required: true,
-            message: "必填项",
-            trigger: ["blur"]
+            message: '必填项',
+            trigger: ['blur']
           }
         ]
       },
       thresholdData: [
-        {name: '关机电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
-        {name: '待机电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
-        {name: '激活电流阈值', value1: '',value2: '', deviation: '', company: 'A'},
-        {name: '正常电压', value1: '',value2: '', deviation: '', company: 'V'}
+        { name: '关机电流阈值', value1: '', value2: '', deviation: '', company: 'A' },
+        { name: '待机电流阈值', value1: '', value2: '', deviation: '', company: 'A' },
+        { name: '激活电流阈值', value1: '', value2: '', deviation: '', company: 'A' },
+        { name: '正常电压', value1: '', value2: '', deviation: '', company: 'V' }
       ]
-    };
+    }
   },
   methods: {
     exportExcel () {
       /* generate workbook object from table */
-        var wb = XLSX.utils.table_to_book(document.querySelector('#excelTable'))
-        /* get binary string as output */
-        var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
-        try {
-            FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '物联设备管理.xlsx')
-        } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
-        return wbout
+      var wb = XLSX.utils.table_to_book(document.querySelector('#excelTable'))
+      /* get binary string as output */
+      var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+      try {
+        FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '物联设备管理.xlsx')
+      } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
+      return wbout
     },
-    seeDetail(row) {
+    seeDetail (row) {
       arr.forEach(item => {
-        item.value = row[item.id] || "";
-      });
+        item.value = row[item.id] || ''
+      })
       if (row.extra) {
-        let tableData = JSON.parse(row.extra);
+        let tableData = JSON.parse(row.extra)
         this.thresholdData.forEach(item => {
           let val = tableData.find(lab => lab.name === item.name)
           if (val) {
-            item.value1 = val.value1;
-            item.value2 = val.value2;
-            item.deviation = val.deviation;
+            item.value1 = val.value1
+            item.value2 = val.value2
+            item.deviation = val.deviation
           }
         })
       }
-      this.popShow = true;
+      this.popShow = true
     },
-    addAsset() {
-      this.$router.push("/page/deviceadd");
+    addAsset () {
+      this.$router.push('/page/deviceadd')
     },
-    emitInfo(row) {
-      this.$router.push("/page/deviceadd?id=" + row.id);
+    emitInfo (row) {
+      this.$router.push('/page/deviceadd?id=' + row.id)
     },
-    delInfo(row) {
-      this.$confirm("确定要删除该物联设备记录?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+    delInfo (row) {
+      this.$confirm('确定要删除该物联设备记录?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(async () => {
           try {
-            let data = await api.deleteIotDevice({ id: row.id });
+            let data = await api.deleteIotDevice({ id: row.id })
             if (data && data.code === 200) {
               this.$message({
-                type: "success",
-                message: "删除成功!"
-              });
-              this.query();
+                type: 'success',
+                message: '删除成功!'
+              })
+              this.query()
             }
           } catch (err) {
-            console.log(err);
+            console.log(err)
           }
         })
-        .then(() => {});
+        .then(() => {})
     }
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .scroll {
@@ -347,5 +347,3 @@ export default {
   overflow-y: scroll;
 }
 </style>
-
-

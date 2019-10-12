@@ -6,12 +6,12 @@
 </template>
 <script>
 export default {
-  props:['showTitle', 'isAddEdit'],
+  props: ['showTitle', 'isAddEdit'],
   data () {
     return {
-      title :'',
+      title: '',
       isShow: false,
-      id :this.$route.query.id || this.$route.params.id
+      id: this.$route.query.id || this.$route.params.id
     }
   },
   watch: {
@@ -23,8 +23,8 @@ export default {
       immediate: true
     }
   },
-  created() {
-    
+  created () {
+
   },
   methods: {
     init () {
@@ -55,4 +55,3 @@ export default {
     margin-right: 5px;
   }
 </style>
-

@@ -160,7 +160,7 @@
             <div v-if="scope.row.kind.indexOf('partNameArr') > -1">
               <span v-for="(item,index) in JSON.parse(scope.row.kind).partNameArr" :key="index">
                 {{item.name}}
-              </span>    
+              </span>
             </div>
           </template>
         </el-table-column>
@@ -219,14 +219,14 @@
                     <div v-if="scope.row.kind.indexOf('partNameArr') > -1">
                       <span v-for="(item,index) in JSON.parse(scope.row.kind).partNameArr" :key="index">
                         {{item.name}}
-                      </span>    
+                      </span>
                     </div>
                   </template>
                 </el-table-column>
               </el-table>
             </div>
             <div v-else-if="item.id == 'tenderInfo'">
-              <label>{{item.label}}</label>: 
+              <label>{{item.label}}</label>:
               <fieldset>
                 <legend>投标方一</legend>
                 <div class="bidder">
@@ -292,97 +292,97 @@
   </div>
 </template>
 <script>
-import list from "@/plugins/list";
-import api from "@/api/api";
-import token from "@/plugins/getUploadToken";
-import FileSaver from 'file-saver';
-import XLSX from 'xlsx';
+import list from '@/plugins/list'
+import api from '@/api/api'
+import token from '@/plugins/getUploadToken'
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 let schema = [
   {
-    name: "assetId",
-    label: "设备名称",
-    comp: "assets-select"
+    name: 'assetId',
+    label: '设备名称',
+    comp: 'assets-select'
   },
   {
-    label: "保修提供方",
-    name: "provider"
+    label: '保修提供方',
+    name: 'provider'
   },
   {
-    label: "合同编号",
-    name: "no"
+    label: '合同编号',
+    name: 'no'
   },
   {
-    name: "btn",
-    label: "",
-    comp: "custom"
+    name: 'btn',
+    label: '',
+    comp: 'custom'
   },
   {
-    label: "",
-    name: "rightbtn",
-    comp: "custom"
+    label: '',
+    name: 'rightbtn',
+    comp: 'custom'
   }
-];
+]
 let arr = [
   {
-    id: "no",
-    label: "保修合同编号",
-    value: ""
+    id: 'no',
+    label: '保修合同编号',
+    value: ''
   },
   {
-    id: "provider",
-    label: "保修提供方",
-    value: ""
+    id: 'provider',
+    label: '保修提供方',
+    value: ''
   },
   {
-    id: "type",
-    label: "保修范围",
-    value: ""
+    id: 'type',
+    label: '保修范围',
+    value: ''
   },
   {
-    id: "totalFee",
-    label: "保修总金额",
-    value: ""
+    id: 'totalFee',
+    label: '保修总金额',
+    value: ''
   },
   {
-    id: "beginDate",
-    label: "保修开始时间",
-    value: ""
+    id: 'beginDate',
+    label: '保修开始时间',
+    value: ''
   },
   {
-    id: "endDate",
-    label: "保修终止时间",
-    value: ""
+    id: 'endDate',
+    label: '保修终止时间',
+    value: ''
   },
   {
-    id: "guaranteeCycle",
-    label: "保修周期",
-    value: ""
+    id: 'guaranteeCycle',
+    label: '保修周期',
+    value: ''
   },
   {
-    id: "iphone",
-    label: "联系方式",
-    value: ""
+    id: 'iphone',
+    label: '联系方式',
+    value: ''
   },
   {
-    id: "assets",
-    label: "关联设备",
-    value: ""
+    id: 'assets',
+    label: '关联设备',
+    value: ''
   },
   {
-    id: "enclosure",
-    label: "保修合同附件",
-    value: ""
+    id: 'enclosure',
+    label: '保修合同附件',
+    value: ''
   },
   {
-    id: "tenderInfo",
-    label: "投标方",
-    value: ""
+    id: 'tenderInfo',
+    label: '投标方',
+    value: ''
   }
 ]
 export default {
   mixins: [list, token],
-  data() {
-    var obj = this.createObjFromSchema(schema);
+  data () {
+    var obj = this.createObjFromSchema(schema)
     return {
       api,
       arr,
@@ -394,31 +394,31 @@ export default {
       popShow: false,
       partArr: [],
       assetTable: [],
-      listApiName: "contractList"
-    };
+      listApiName: 'contractList'
+    }
   },
   methods: {
     exportExcel () {
       var wb = XLSX.utils.table_to_book(document.querySelector('#excelTable'))
       var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
       try {
-          FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '保修合同.xlsx')
+        FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '保修合同.xlsx')
       } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
       return wbout
     },
     list () {
-      this.loading = true;
-      var params = Object.assign({pageNum: this.offset, pageSize: this.pagesize}, this.queryObj)
+      this.loading = true
+      var params = Object.assign({ pageNum: this.offset, pageSize: this.pagesize }, this.queryObj)
       for (let key in params) {
         if (params[key] === '' || key === 'requestSwitch') {
           delete params[key]
         }
-      } 
+      }
       this.api[this.listApiName](params).then(result => {
         this.loading = false
         if (result) {
-          this.tableData = result.data.list;
-          this.totalCount = result.data.totalCount ? result.data.totalCount : 0;
+          this.tableData = result.data.list
+          this.totalCount = result.data.totalCount ? result.data.totalCount : 0
           this.initExeclData(result.data.list)
         } else {
           this.emptyData = true
@@ -429,13 +429,13 @@ export default {
       })
     },
     initExeclData (data) {
-      let arr = [];
+      let arr = []
       if (data.length > 0) {
         data.forEach(item => {
           if (item.assetServiceContracts && item.assetServiceContracts.length > 0) {
             item.assetServiceContracts.forEach(lab => {
-              let obj = Object.assign({}, item, lab);
-              arr.push(obj);
+              let obj = Object.assign({}, item, lab)
+              arr.push(obj)
             })
           }
         })
@@ -446,24 +446,24 @@ export default {
       arr.forEach(item => {
         item.value = row[item.id] || ''
         if (item.id === 'tenderInfo') {
-          let val = JSON.parse(row[item.id]);
-          val.img1 = JSON.stringify(val.img1);
-          val.img2 = JSON.stringify(val.img2);
-          val.img3 = JSON.stringify(val.img3);
-          item.value = val;
+          let val = JSON.parse(row[item.id])
+          val.img1 = JSON.stringify(val.img1)
+          val.img2 = JSON.stringify(val.img2)
+          val.img3 = JSON.stringify(val.img3)
+          item.value = val
         } else if (item.id === 'type') {
-          let str = row[item.id].replace('1', '维修').replace('2', '保养');
-          item.value = str;
+          let str = row[item.id].replace('1', '维修').replace('2', '保养')
+          item.value = str
         } else if (item.id === 'extra') {
-          item.value = this.initContractType(row);
+          item.value = this.initContractType(row)
         }
       })
-      this.assetTable = row.assetServiceContracts;
-      this.popShow = true;
+      this.assetTable = row.assetServiceContracts
+      this.popShow = true
     },
     initContractType (obj) {
       let info = ''
-      let extra = JSON.parse(obj.extra);
+      let extra = JSON.parse(obj.extra)
       if (extra.whole) {
         info = '全保'
       } else if (extra.part) {
@@ -471,63 +471,63 @@ export default {
           info = '人工保'
         }
         if (extra.partVal) {
-          info += (extra.artificial ? ',' : '')+ '零件保'
-          let partArr = [];
+          info += (extra.artificial ? ',' : '') + '零件保'
+          let partArr = []
           extra.partNameArr.forEach(item => {
-            partArr.push(item.name);
+            partArr.push(item.name)
           })
-          info += '('+ partArr.join(',') + ')'
+          info += '(' + partArr.join(',') + ')'
         }
       }
       return info
     },
-    addAsset() {
+    addAsset () {
       this.$router.push('/page/contractAdd')
     },
-    emitInfo(row) {
+    emitInfo (row) {
       this.$router.push('/page/contractAdd?id=' + row.id)
     },
-    delInfo(row) {
-      this.$confirm("确定要删除该保修合同?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+    delInfo (row) {
+      this.$confirm('确定要删除该保修合同?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(async () => {
           try {
-            let data = await api.delContract({ id: row.id });
+            let data = await api.delContract({ id: row.id })
             if (data && data.code === 200) {
               this.$message({
-                type: "success",
-                message: "删除成功!"
-              });
-              this.query();
+                type: 'success',
+                message: '删除成功!'
+              })
+              this.query()
             }
           } catch (err) {
-            console.log(err);
+            console.log(err)
           }
         })
-        .then(() => {});
+        .then(() => {})
     }
   },
   created () {
-    api.userList({id:'', name: ''}).then(rs => {
+    api.userList({ id: '', name: '' }).then(rs => {
       if (rs.code === 200 && rs.data.length > 0) {
         this.options = rs.data
       }
     })
     this.$nextTick(_ => {
-      let height = document.documentElement.clientHeight;
-      document.querySelector('.table-contant').style.height = height - 300 + 'px';
+      let height = document.documentElement.clientHeight
+      document.querySelector('.table-contant').style.height = height - 300 + 'px'
     })
     window.onresize = () => {
       if (document.querySelector('.table-contant')) {
-        let height = document.documentElement.clientHeight;
-        document.querySelector('.table-contant').style.height = height - 300 + 'px';
+        let height = document.documentElement.clientHeight
+        document.querySelector('.table-contant').style.height = height - 300 + 'px'
       }
     }
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .scroll {

@@ -3,7 +3,7 @@
 </template>
 <script>
 import echarts from 'echarts/lib/echarts'
-require('echarts/lib/chart/line') 
+require('echarts/lib/chart/line')
 export default {
   props: {
     title: {
@@ -12,8 +12,8 @@ export default {
     },
     eData: {
       type: Object,
-      default() {
-        return {x: 0, y: 0}
+      default () {
+        return { x: 0, y: 0 }
       }
     },
     time: {
@@ -43,7 +43,7 @@ export default {
         tooltip: {
           trigger: 'axis',
           formatter: function (params) {
-            return params[0]['axisValueLabel'] + '/' + params[0]['data'];
+            return params[0]['axisValueLabel'] + '/' + params[0]['data']
           },
           axisPointer: {
             animation: false
@@ -55,7 +55,7 @@ export default {
           data: this.x
         },
         yAxis: {
-          name: '单位：'+ this.unit,
+          name: '单位：' + this.unit,
           nameTextStyle: {
             align: 'left'
           },
@@ -77,7 +77,7 @@ export default {
           data: this.y,
           type: 'line'
         }]
-      };
+      }
       this.chart.setOption(this.option)
     },
     handleData (val) {
@@ -88,13 +88,13 @@ export default {
       this.x.push(this.eData.x)
       this.y.push(this.eData.y)
       if (this.chart && this.chart.setOption) {
-        this.chart.setOption(this.option, true);
+        this.chart.setOption(this.option, true)
       }
     }
   },
   mounted () {
     this.$nextTick(_ => {
-      this.init();
+      this.init()
     })
   },
   watch: {
@@ -111,10 +111,10 @@ export default {
         if (val) {
           this.x = []
           this.y = []
-          window.setTimeout(_ =>{
+          window.setTimeout(_ => {
             this.init()
             this.handleData()
-          },300)
+          }, 300)
         }
       },
       immediate: true

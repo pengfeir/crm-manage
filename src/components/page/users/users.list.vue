@@ -42,24 +42,24 @@
   </div>
 </template>
 <script>
-import list from "@/plugins/list";
-import api from "@/api/api";
+import list from '@/plugins/list'
+import api from '@/api/api'
 let schema = [
   {
-    name: "name",
-    label: "用户名"
+    name: 'name',
+    label: '用户名'
   },
   {
-    name: "btn",
-    label: "",
-    comp: "custom"
+    name: 'btn',
+    label: '',
+    comp: 'custom'
   },
   {
-    label: "",
-    name: "rightbtn",
-    comp: "custom"
+    label: '',
+    name: 'rightbtn',
+    comp: 'custom'
   }
-];
+]
 export default {
   mixins: [list],
   props: {
@@ -68,69 +68,67 @@ export default {
       default: () => {}
     }
   },
-  data() {
-    let obj = this.createObjFromSchema(schema);
+  data () {
+    let obj = this.createObjFromSchema(schema)
     return {
       api,
       querySchema: schema,
       queryObj: obj,
-      listApiName: "userList",
+      listApiName: 'userList',
       tableData: []
-    };
+    }
   },
-  created() {},
+  created () {},
   methods: {
-    addUsers() {
-      this.$router.push('/page/useradd');
+    addUsers () {
+      this.$router.push('/page/useradd')
     },
-    list() {
-      api[this.listApiName]({ name: this.queryObj.name || "", id: "" }).then(
+    list () {
+      api[this.listApiName]({ name: this.queryObj.name || '', id: '' }).then(
         rs => {
           if (rs.code === 200) {
-            this.tableData = rs.data;
+            this.tableData = rs.data
           }
         }
-      );
+      )
     },
-    emitInfo(row) {
-      this.$router.push('/page/useradd?id=' + row.id);
+    emitInfo (row) {
+      this.$router.push('/page/useradd?id=' + row.id)
     },
-    delInfo(row) {
-      this.$confirm("确定要删除该账号?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+    delInfo (row) {
+      this.$confirm('确定要删除该账号?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       }).then(async () => {
         try {
-          let data = await api.userDel({ id: row.id });
+          let data = await api.userDel({ id: row.id })
           if (data && data.code === 200) {
             this.$message({
-              type: "success",
-              message: "删除成功!"
-            });
-            this.query();
+              type: 'success',
+              message: '删除成功!'
+            })
+            this.query()
           }
         } catch (err) {
-          console.log(err);
+          console.log(err)
         }
-      }).then(() => {});
+      }).then(() => {})
     },
-    init() {
+    init () {
       if (Number(this.currentUser.orgId) === 0) {
-        this.dialogInfo.superAdmin = true;
+        this.dialogInfo.superAdmin = true
       } else {
-        this.queryInfoObj.orgId = this.currentUser.orgId;
-        this.dialogInfo.superAdmin = false;
+        this.queryInfoObj.orgId = this.currentUser.orgId
+        this.dialogInfo.superAdmin = false
       }
     },
-    getInfo() {
+    getInfo () {
       api.userList({ id: this.id }).then(rs => {
-        this.queryInfoObj = rs.data[0];
-      });
+        this.queryInfoObj = rs.data[0]
+      })
     }
   },
   watch: {}
-};
+}
 </script>
-
-

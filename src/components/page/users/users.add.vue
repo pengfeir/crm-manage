@@ -2,7 +2,7 @@
   <div class="layout_inner">
     <ever-bread-crumb :showTitle="'账号'"></ever-bread-crumb>
     <ever-form2
-      :schema="querySchema" 
+      :schema="querySchema"
       v-model="queryObj"
       ref="form"
       class="package-sale"
@@ -46,7 +46,6 @@
 </template>
 <script>
 import api from '@/api/api'
-import roleTree from '@/plugins/roletree'
 export default {
   props: {
     currentUser: {
@@ -57,85 +56,85 @@ export default {
   data () {
     let schema = [
       {
-        name: "username",
-        label: "账号"
+        name: 'username',
+        label: '账号'
       },
       {
-        name: "password",
-        label: "密码",
-        comp: "custom"
+        name: 'password',
+        label: '密码',
+        comp: 'custom'
       },
       {
-        name: "checkpassword",
-        label: "确认密码",
-        comp: "custom"
+        name: 'checkpassword',
+        label: '确认密码',
+        comp: 'custom'
       },
       {
-        name: "orgId",
-        label: "机构",
-        comp: "custom"
+        name: 'orgId',
+        label: '机构',
+        comp: 'custom'
       },
       {
-        name: "roleIds",
-        label: "菜单",
-        comp: "custom"
+        name: 'roleIds',
+        label: '菜单',
+        comp: 'custom'
       },
       {
-        name: "icon",
-        label: "角色",
-        comp: "custom"
+        name: 'icon',
+        label: '角色',
+        comp: 'custom'
       },
       {
-        name: "nickName",
-        label: "用户名"
+        name: 'nickName',
+        label: '用户名'
       },
       {
-        name: "email",
-        label: "邮箱"
+        name: 'email',
+        label: '邮箱'
       },
       {
-        name: "note",
-        label: "备注"
+        name: 'note',
+        label: '备注'
       }
-    ];
+    ]
     let validatePass = (rule, value, callback) => {
       if (this.detailId) {
         if (
           this.queryObj.password &&
           this.queryObj.password !== this.queryObj.checkpassword
         ) {
-          callback(new Error("密码不一致"));
+          callback(new Error('密码不一致'))
         } else {
-          callback();
+          callback()
         }
       } else {
         if (this.queryObj.password !== this.queryObj.checkpassword) {
-          callback(new Error("密码不一致"));
+          callback(new Error('密码不一致'))
         } else {
-          callback();
+          callback()
         }
       }
-    };
+    }
     let validatePasss = (rule, value, callback) => {
       if (this.detailId) {
-        callback();
+        callback()
       } else {
         if (!this.queryObj.password) {
-          callback(new Error("密码不能为空"));
+          callback(new Error('密码不能为空'))
         } else {
-          callback();
+          callback()
         }
       }
-    };
+    }
     let rules = {
-      username: [{ required: true, message: "必填项", trigger: "blur" }],
-      password: [{ validator: validatePasss, trigger: "blur" }],
-      checkpassword: [{ validator: validatePass, trigger: "blur" }],
-      orgId: [{ required: true, message: "必填项", trigger: "blur" }],
-      roleIds: [{ required: true, message: "必填项", trigger: "blur" }],
-      nickName: [{ required: true, message: "必填项", trigger: "blur" }],
-      icon: [{ required: true, message: "必填项", trigger: ["blur,change"] }]
-    };
+      username: [{ required: true, message: '必填项', trigger: 'blur' }],
+      password: [{ validator: validatePasss, trigger: 'blur' }],
+      checkpassword: [{ validator: validatePass, trigger: 'blur' }],
+      orgId: [{ required: true, message: '必填项', trigger: 'blur' }],
+      roleIds: [{ required: true, message: '必填项', trigger: 'blur' }],
+      nickName: [{ required: true, message: '必填项', trigger: 'blur' }],
+      icon: [{ required: true, message: '必填项', trigger: ['blur,change'] }]
+    }
     var obj = this.createObjFromSchema(schema)
     obj.roleIds = []
     obj.orgId = this.getStore('orgId')
@@ -160,60 +159,60 @@ export default {
       this.getRoles()
       this.getOrgs()
       if (Number(this.currentUser.orgId) === 0) {
-        this.superAdmin = true;
+        this.superAdmin = true
       } else {
-        this.obj.orgId = this.currentUser.orgId;
-        this.superAdmin = false;
+        this.obj.orgId = this.currentUser.orgId
+        this.superAdmin = false
       }
       if (this.detailId) {
         this.getInfo()
       }
     },
     getInfo () {
-      api.userList({id: this.detailId}).then(rs => {
+      api.userList({ id: this.detailId }).then(rs => {
         this.queryObj = rs.data[0]
       })
     },
     getRoles () {
-      api.roleList({name:'', id: ''}).then(rs => {
+      api.roleList({ name: '', id: '' }).then(rs => {
         this.options = rs.data || []
       })
     },
     getOrgs () {
-      api.agencyList({pageNum: 0, pageSize: 100}).then(rs => {
+      api.agencyList({ pageNum: 0, pageSize: 100 }).then(rs => {
         this.orgs = rs.data.list || []
       })
     },
     handleCheckChange (val) {
       console.log(val)
     },
-    prev() {
+    prev () {
       this.$refs.form.$refs.form.validate(valid => {
         if (valid) {
-          let url = "userCreate";
-          let title = "保存成功";
-          let params = Object.assign({}, this.queryObj);
-          delete params.checkpassword;
+          let url = 'userCreate'
+          let title = '保存成功'
+          let params = Object.assign({}, this.queryObj)
+          delete params.checkpassword
           if (this.detailId) {
-            url = "userUpdate";
-            params.id = this.detailId;
-            title = "修改成功";
+            url = 'userUpdate'
+            params.id = this.detailId
+            title = '修改成功'
             if (!params.password) {
-              delete params.password;
+              delete params.password
             }
           }
           api[url](params).then(rs => {
             if (rs.code === 200) {
-              this.$messageTips(this, "success", title);
-              this.$emit("getstatus", {
+              this.$messageTips(this, 'success', title)
+              this.$emit('getstatus', {
                 data: new Date().getTime(),
                 isGetMenu: true
-              });
-              this.$router.go(-1);
+              })
+              this.$router.go(-1)
             }
-          });
+          })
         }
-      });
+      })
     },
     cancel () {
       this.$router.go(-1)
@@ -221,25 +220,25 @@ export default {
   },
   watch: {
     currentUser: {
-      handler(value) {
+      handler (value) {
         if (value.icon == 0) {
           this.iconoptions = [
             {
-              id: "1",
-              name: "管理员"
+              id: '1',
+              name: '管理员'
             },
             {
-              id: "2",
-              name: "用户"
+              id: '2',
+              name: '用户'
             }
-          ];
+          ]
         } else {
           this.iconoptions = [
             {
-              id: "2",
-              name: "用户"
+              id: '2',
+              name: '用户'
             }
-          ];
+          ]
         }
       },
       immediate: true
@@ -247,4 +246,3 @@ export default {
   }
 }
 </script>
-

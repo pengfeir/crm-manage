@@ -72,12 +72,12 @@
   </div>
 </template>
 <script>
-import api from "@/api/api"
+import api from '@/api/api'
 import echartsModule from './echartsmodule'
 import echartsHistory from './echartshistory'
-import { setInterval, clearInterval } from 'timers';
+import { clearInterval } from 'timers'
 export default {
-  props:['id', 'types'],
+  props: ['id', 'types'],
   components: {
     echartsModule,
     echartsHistory
@@ -85,13 +85,13 @@ export default {
   data () {
     return {
       time: '2019-03-27 ',
-      inputIObj: {x:'00:00:00',y:'0'}, // 输入电流
-      inputVObj: {x:'00:00:00',y:'0'}, // 输入电压
-      realPowerObj: {x:'00:00:00',y:'0'}, // 有功功率
-      powerFactorObj: {x:'00:00:00',y:'0'}, // 功率因数
-      temperatureObj: {x:'00:00:00',y:'0'}, // 温度
-      powerHzObj: {x:'00:00:00',y:'0'}, // 电源频率
-      energyObj: {x:'00:00:00',y:'0'}, // 电能计量
+      inputIObj: { x: '00:00:00', y: '0' }, // 输入电流
+      inputVObj: { x: '00:00:00', y: '0' }, // 输入电压
+      realPowerObj: { x: '00:00:00', y: '0' }, // 有功功率
+      powerFactorObj: { x: '00:00:00', y: '0' }, // 功率因数
+      temperatureObj: { x: '00:00:00', y: '0' }, // 温度
+      powerHzObj: { x: '00:00:00', y: '0' }, // 电源频率
+      energyObj: { x: '00:00:00', y: '0' }, // 电能计量
       logInfo: {
         visibile: false,
         type: ''
@@ -118,10 +118,10 @@ export default {
       let minutes = (time.getMinutes() < 10 ? '0' : '') + time.getMinutes()
       let seconds = (time.getSeconds() < 10 ? '0' : '') + time.getSeconds()
       obj.x = time.getHours() + ':' + minutes + ':' + seconds
-      obj.y = parseInt(Math.random()*100 + 100)
+      obj.y = parseInt(Math.random() * 100 + 100)
     },
     getTime () {
-      let date = new Date ()
+      let date = new Date()
       let time = ''
       let minutes = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes()
       let seconds = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds()
@@ -137,9 +137,9 @@ export default {
     objs () {
       // beginDate endDate
       let endDate = this.getTime()
-      api.tempList({macAddress: this.id}).then(rs => {
-        this.info = rs.data[rs.data.length-1]
-        this.initData(rs.data[rs.data.length-1])
+      api.tempList({ macAddress: this.id }).then(rs => {
+        this.info = rs.data[rs.data.length - 1]
+        this.initData(rs.data[rs.data.length - 1])
       })
       // this.initData(this.inputIObj)
       // this.initData(this.inputVObj)
@@ -216,7 +216,7 @@ export default {
 //         powerFactor: 234888, //功率因数
 //         powerHz: 234888, //电源频率 Hz
 //         realPower: 234888, // 有功功率 KW/H
-//         status: 0, 
+//         status: 0,
 //         temperature: 234888 // 温度 `C
 //       }
 
@@ -261,4 +261,3 @@ export default {
     color: blue !important;
   }
 </style>
-

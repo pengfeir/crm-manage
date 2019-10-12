@@ -15,7 +15,7 @@
                 </el-select>
               </el-col>
               <el-col :span="12">
-                <el-input v-model="queryObj.value"></el-input>  
+                <el-input v-model="queryObj.value"></el-input>
               </el-col>
             </el-row>
         </template>
@@ -44,13 +44,18 @@
           </el-table-column>
           <el-table-column prop="networkStatus" align="center" label="网络状态" width="100">
             <template slot-scope="scope">
-              {{scope.row.networkStatus}}
+              <div :class="{zx: scope.row.networkStatus === '在线',lx: scope.row.networkStatus === '离线'}">
+                {{scope.row.networkStatus}}
+              </div>
             </template>
           </el-table-column>
           <el-table-column prop="assetStatus" align="center" label="运行状态" width="100">
             <template slot-scope="scope">
-              <div :class="{red: scope.row.assetStatus == '50'}">
+              <div v-if="scope.row.networkStatus === '在线'" :class="{red: scope.row.assetStatus == '50'}">
                 {{scope.row.assetStatus | filterAssetStatus}}
+              </div>
+              <div v-else>
+                --
               </div>
             </template>
           </el-table-column>
@@ -131,7 +136,7 @@
                 <div v-else>
                   {{scope.row.routerNo3}}
                 </div>
-              </div>             
+              </div>
             </template>
           </el-table-column>
           <el-table-column prop="pos1" label="定位信号1" width="130">
@@ -146,7 +151,7 @@
           </el-table-column>
           <el-table-column prop="extra" label="其他扩展信息" width="150">
           </el-table-column>
-          <!-- 
+          <!--
           <el-table-column prop="userId" label="创建者ID" width="180">
           </el-table-column> -->
           <el-table-column prop="name" align="center" label="操作" fixed="right" width="100">
@@ -239,7 +244,7 @@
               <div v-else>
                 {{scope.row.routerNo3}}
               </div>
-            </div>             
+            </div>
           </template>
         </el-table-column>
         <el-table-column prop="pos1" label="定位信号1" width="130">
@@ -265,69 +270,69 @@
   </div>
 </template>
 <script>
-import list from "@/plugins/list";
-import api from "@/api/api";
-import FileSaver from 'file-saver';
-import XLSX from 'xlsx';
+import list from '@/plugins/list'
+import api from '@/api/api'
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 let schema = [
   {
-    name: "assetStatus",
-    label: "设备状态",
-    comp: "el-select",
+    name: 'assetStatus',
+    label: '设备状态',
+    comp: 'el-select',
     props: {
       options: [
         {
-          id: "10",
-          name: "关机"
+          id: '10',
+          name: '关机'
         },
         {
-          id: "20",
-          name: "开机"
+          id: '20',
+          name: '开机'
         },
         {
-          id: "30",
-          name: "待机"
+          id: '30',
+          name: '待机'
         },
         {
-          id: "40",
-          name: "激活"
+          id: '40',
+          name: '激活'
         }
       ]
     }
   },
   {
-    name: "keys",
-    label: "",
+    name: 'keys',
+    label: '',
     comp: 'custom'
   },
   {
-    name: "btn",
-    label: "",
-    comp: "custom"
+    name: 'btn',
+    label: '',
+    comp: 'custom'
   },
   {
-    label: "",
-    name: "rightbtn",
-    comp: "custom"
+    label: '',
+    name: 'rightbtn',
+    comp: 'custom'
   }
-];
+]
 export default {
   mixins: [list],
-  data() {
-    var obj = this.createObjFromSchema(schema);
-    obj.value = '';
-    obj.keys = 'sn';
+  data () {
+    var obj = this.createObjFromSchema(schema)
+    obj.value = ''
+    obj.keys = 'sn'
     return {
       api,
       querySchema: schema,
       queryObj: obj,
       tableData: [],
       options: [
-        {id: 'sn', name: 'SN序列号'},
-        {id: 'macAddress', name: 'MAC地址'},
-        {id: 'no', name: '资产编号'}
+        { id: 'sn', name: 'SN序列号' },
+        { id: 'macAddress', name: 'MAC地址' },
+        { id: 'no', name: '资产编号' }
       ],
-      listApiName: "tempList",
+      listApiName: 'tempList',
       queryTime: null,
       automaticTime: null,
       banAutomatic: true
@@ -338,7 +343,7 @@ export default {
       var wb = XLSX.utils.table_to_book(document.querySelector('#excelTable'))
       var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
       try {
-          FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '设备监测.xlsx')
+        FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '设备监测.xlsx')
       } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
       return wbout
     },
@@ -349,15 +354,15 @@ export default {
       this.banAutomatic = false
       this.list()
       this.queryTime = window.setTimeout(_ => {
-        this.banAutomatic = true;
+        this.banAutomatic = true
         window.clearTimeout(this.queryTime)
-        this.queryTime = null;
-      }, 60000);
+        this.queryTime = null
+      }, 60000)
     },
     automaticQuery () {
       this.automaticTime = window.setInterval(_ => {
         if (this.banAutomatic) {
-          this.list();
+          this.list()
         }
       }, 60000)
     },
@@ -372,17 +377,17 @@ export default {
         assetStatus: this.queryObj.assetStatus
       }
       if (this.queryObj.keys) {
-        params[this.queryObj.keys] = this.queryObj.value;
+        params[this.queryObj.keys] = this.queryObj.value
       }
       api.tempList(params).then(rs => {
         if (rs.code === 200) {
-          let time = new Date().getTime();
-          let offTable = [];
-          let faultTable = [];
-          let table = [];
+          let time = new Date().getTime()
+          let offTable = []
+          let faultTable = []
+          let table = []
           rs.data.forEach(item => {
             let curTime = new Date(item.ctime).getTime()
-            if (curTime + 2*60*1000 < time) {
+            if (curTime + 2 * 60 * 1000 < time) {
               item.networkStatus = '离线'
               item.temperature = '--'
               item.energy = '--'
@@ -398,30 +403,30 @@ export default {
               item.networkStatus = '在线'
             }
             if (item.networkStatus === '离线') {
-              offTable.push(item);
+              offTable.push(item)
             } else {
               if (item.assetStatus === '50') {
-                faultTable.push(item);
+                faultTable.push(item)
               } else {
-                table.push(item);
+                table.push(item)
               }
             }
           })
-          let tableData = [...faultTable, ...offTable, ...table];
-          this.tableData = tableData;
+          let tableData = [...faultTable, ...offTable, ...table]
+          this.tableData = tableData
         }
       })
     }
   },
   created () {
     this.$nextTick(_ => {
-      let height = document.documentElement.clientHeight;
-      document.querySelector('.table-contant').style.height = height - 220 + 'px';
+      let height = document.documentElement.clientHeight
+      document.querySelector('.table-contant').style.height = height - 220 + 'px'
     })
     window.onresize = () => {
       if (document.querySelector('.table-contant')) {
-        let height = document.documentElement.clientHeight;
-        document.querySelector('.table-contant').style.height = height - 220 + 'px';
+        let height = document.documentElement.clientHeight
+        document.querySelector('.table-contant').style.height = height - 220 + 'px'
       }
     }
     this.automaticQuery()
@@ -432,12 +437,16 @@ export default {
   },
   watch: {
   }
-};
+}
 </script>
 <style lang="less" scoped>
   .red {
     color: red;
   }
+  .table-contant /deep/ .zx {
+    color:#409EFF;
+  }
+  .lx {
+    color: #F56C6C;
+  }
 </style>
-
-

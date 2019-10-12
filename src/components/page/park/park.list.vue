@@ -49,70 +49,70 @@
   </div>
 </template>
 <script>
-import list from "@/plugins/list";
-import api from "@/api/api";
+import list from '@/plugins/list'
+import api from '@/api/api'
 let schema = [
   {
-    name: "name",
-    label: "院区名称"
+    name: 'name',
+    label: '院区名称'
   },
   {
-    name: "btn",
-    label: "",
-    comp: "custom"
+    name: 'btn',
+    label: '',
+    comp: 'custom'
   },
   {
-    label: "",
-    name: "rightbtn",
-    comp: "custom"
+    label: '',
+    name: 'rightbtn',
+    comp: 'custom'
   }
-];
+]
 export default {
   mixins: [list],
-  data() {
-    let obj = this.createObjFromSchema(schema);
+  data () {
+    let obj = this.createObjFromSchema(schema)
     return {
       api,
       querySchema: schema,
       queryObj: obj,
-      listApiName: "areaList",
+      listApiName: 'areaList',
       tableData: []
-    };
+    }
   },
-  created() {
+  created () {
   },
   methods: {
-    addAgency() {
+    addAgency () {
       this.$router.push('/page/parkAdd')
     },
-    emitInfo(row) {
+    emitInfo (row) {
       this.$router.push('/page/parkAdd?id=' + row.id)
     },
-    delInfo(row) {
-      this.$confirm("确定要删除该院区?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+    delInfo (row) {
+      this.$confirm('确定要删除该院区?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(async () => {
           try {
-            let data = await api.delArea({ id: row.id });
+            let data = await api.delArea({ id: row.id })
             if (data && data.code === 200) {
               this.$message({
-                type: "success",
-                message: "删除成功!"
-              });
-              this.query();
+                type: 'success',
+                message: '删除成功!'
+              })
+              this.query()
             }
           } catch (err) {
-            console.log(err);
+            console.log(err)
           }
         })
-        .then(() => {});
+        .then(() => {})
     }
   },
   watch: {}
-};
+}
 </script>
 <style lang='less' scoped>
 .ui_dialog_02 /deep/ .el-col .el-form-item > label::before {

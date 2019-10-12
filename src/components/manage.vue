@@ -12,8 +12,8 @@
   </div>
 </template>
 <script>
-import leftMenu from "@/components/menu.vue";
-import headTop from "@/components/headtop.vue";
+import leftMenu from '@/components/menu.vue'
+import headTop from '@/components/headtop.vue'
 export default {
   components: {
     leftMenu,
@@ -24,52 +24,51 @@ export default {
     //   return this.$route.path.replace("/", "");
     // }
   },
-  data() {
+  data () {
     return {
       collapseVal: true,
-      nickName: "",
+      nickName: '',
       currentUser: {
-        icon: "",
+        icon: '',
         id: 0,
-        nickName: "",
+        nickName: '',
         orgId: 0,
         roles: [],
-        username: ""
+        username: ''
       },
       status: {
         isGetMenu: false,
-        data: ""
+        data: ''
       }
-    };
+    }
   },
   methods: {
-    getinfo(data) {
-      this.nickName = data.nickName;
-      Object.assign(this.currentUser, data);
+    getinfo (data) {
+      this.nickName = data.nickName
+      Object.assign(this.currentUser, data)
     },
-    getstatus(data) {
-      Object.assign(this.status, data);
+    getstatus (data) {
+      Object.assign(this.status, data)
     },
     collapse (val) {
-      this.collapseVal = !this.collapseVal;
+      this.collapseVal = !this.collapseVal
       if (this.collapseVal) {
-        document.querySelector('.right-content').style.marginLeft = '68px';
-        document.querySelector('.menu-container').style.width = '68px';
+        document.querySelector('.right-content').style.marginLeft = '68px'
+        document.querySelector('.menu-container').style.width = '68px'
         document.querySelectorAll('.el-menu span').forEach(e => {
-          e.style.display = 'none';
-        });
+          e.style.display = 'none'
+        })
         document.querySelectorAll('.el-menu-item').forEach(e => {
-          e.style.display = 'none';
+          e.style.display = 'none'
         })
       } else {
-        document.querySelector('.right-content').style.marginLeft = '200px';
-        document.querySelector('.menu-container').style.width = '200px';
+        document.querySelector('.right-content').style.marginLeft = '200px'
+        document.querySelector('.menu-container').style.width = '200px'
       }
     }
   }
-};
+}
 </script>
-
 
 <style lang="less" scoped>
 @import "../style/mixin";

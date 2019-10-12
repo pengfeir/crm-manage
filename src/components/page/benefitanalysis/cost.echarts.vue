@@ -6,7 +6,7 @@
 </template>
 <script>
 import echarts from 'echarts/lib/echarts'
-require('echarts/lib/chart/pie') 
+require('echarts/lib/chart/pie')
 export default {
   props: {
     eData: {
@@ -23,13 +23,12 @@ export default {
   },
   methods: {
     initIncomeEcharts () { // 收入图表
-      let self = this;
-      this.incomeEcharts = echarts.init(this.$refs.incomeEcharts);
+      this.incomeEcharts = echarts.init(this.$refs.incomeEcharts)
       let option = {
         title: {
           text: '设备支出'
         },
-        tooltip : {
+        tooltip: {
           trigger: 'axis',
           axisPointer: {
             type: 'shadow',
@@ -39,18 +38,18 @@ export default {
           }
         },
         toolbox: {
-          show : true,
-          feature : {
-            mark : {show: true},
-            dataView : {show: true, readOnly: false},
-            magicType: {show: true, type: ['line', 'bar']},
-            restore : {show: true},
-            saveAsImage : {show: true}
+          show: true,
+          feature: {
+            mark: { show: true },
+            dataView: { show: true, readOnly: false },
+            magicType: { show: true, type: ['line', 'bar'] },
+            restore: { show: true },
+            saveAsImage: { show: true }
           }
         },
-        calculable : true,
+        calculable: true,
         legend: {
-          data:['设备维修费', '设备保养费用', '设备质控费用', '设备折旧费用', '设备保修费', '合计'],
+          data: ['设备维修费', '设备保养费用', '设备质控费用', '设备折旧费用', '设备保修费', '合计'],
           itemGap: 6
         },
         grid: {
@@ -61,17 +60,17 @@ export default {
         },
         xAxis: [
           {
-            type : 'category',
-            data : this.eData.assetName
+            type: 'category',
+            data: this.eData.assetName
           }
         ],
         yAxis: [
           {
-            type : 'value',
-            name : '单位（元）'
+            type: 'value',
+            name: '单位（元）'
           }
         ],
-        series : [
+        series: [
           {
             name: '设备维修费',
             type: 'bar',
@@ -103,15 +102,15 @@ export default {
             data: this.eData.allPrice
           }
         ]
-      };
-      this.incomeEcharts.setOption(option);
+      }
+      this.incomeEcharts.setOption(option)
     }
   },
   watch: {
     'eData': {
-      handler(val) {
+      handler (val) {
         if (JSON.stringify(val) !== '{}') {
-          this.initIncomeEcharts();
+          this.initIncomeEcharts()
         }
       },
       immediate: true
@@ -119,4 +118,3 @@ export default {
   }
 }
 </script>
-

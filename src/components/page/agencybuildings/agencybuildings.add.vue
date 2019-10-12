@@ -34,51 +34,51 @@
   </div>
 </template>
 <script>
-import api from "@/api/api";
-import token from "@/plugins/getUploadToken";
+import api from '@/api/api'
+import token from '@/plugins/getUploadToken'
 let infoSchema = [
   {
-    name: "name",
-    label: "建筑名称"
+    name: 'name',
+    label: '建筑名称'
   },
   {
-    name: "hospitalArea",
-    label: "院区",
-    comp: "custom"
+    name: 'hospitalArea',
+    label: '院区',
+    comp: 'custom'
   },
   {
-    name: "floorsOnGround",
-    label: "地上层高",
-    comp: "custom"
+    name: 'floorsOnGround',
+    label: '地上层高',
+    comp: 'custom'
   },
   {
-    name: "floorsUnderground",
-    label: "地下层高",
-    comp: "custom"
+    name: 'floorsUnderground',
+    label: '地下层高',
+    comp: 'custom'
   },
   {
-    name: "area",
-    label: "使用面积(平米)"
+    name: 'area',
+    label: '使用面积(平米)'
   },
   {
-    name: "reportUrlList",
-    label: "建筑图",
-    comp: "custom"
+    name: 'reportUrlList',
+    label: '建筑图',
+    comp: 'custom'
   },
   {
-    name: "extra",
-    label: "备注"
+    name: 'extra',
+    label: '备注'
   }
-];
+]
 export default {
   mixins: [token],
-  data() {
-    var infoObj = this.createObjFromSchema(infoSchema);
+  data () {
+    var infoObj = this.createObjFromSchema(infoSchema)
     return {
       api,
       infoQueryObj: infoObj,
       infoQuerySchema: infoSchema,
-      detailId: "",
+      detailId: '',
       options: [],
       // 保存图片地址
       imgObj: {
@@ -89,111 +89,110 @@ export default {
         reportList: []
       },
       rules: {
-        name: [{required: true, message: "必填项", trigger: ["blur", "change"]}],
-        hospitalArea: [{required: true, message: "必填项", trigger: ["blur", "change"]}],
-        floorsOnGround: [{required: true, message: "必填项", trigger: ["blur", "change"]}],
-        floorsUnderground: [{required: true, message: "必填项", trigger: ["blur", "change"]}]
-      },
-      options: []
-    };
+        name: [{ required: true, message: '必填项', trigger: ['blur', 'change'] }],
+        hospitalArea: [{ required: true, message: '必填项', trigger: ['blur', 'change'] }],
+        floorsOnGround: [{ required: true, message: '必填项', trigger: ['blur', 'change'] }],
+        floorsUnderground: [{ required: true, message: '必填项', trigger: ['blur', 'change'] }]
+      }
+    }
   },
   methods: {
     inputChange (e) {
       let res = /^\d+$/
-      if(!(e.target.value && res.test(e.target.value))) {
+      if (!(e.target.value && res.test(e.target.value))) {
         e.target.value = ''
-        this.$messageTips(this, "error", '层高应为大于0的正整数');
+        this.$messageTips(this, 'error', '层高应为大于0的正整数')
       }
     },
-    handleClose() {
+    handleClose () {
       this.$router.go(-1)
     },
-    //删除数组里面删除的图片地址
-    handleReportRemove(file, fileList) {
-      this.imgObj.reportImg = this.sliceArr(this.imgObj.reportImg, file, "key");
+    // 删除数组里面删除的图片地址
+    handleReportRemove (file, fileList) {
+      this.imgObj.reportImg = this.sliceArr(this.imgObj.reportImg, file, 'key')
     },
     // 保存上传的图片地址
-    handleReportContractSuccess(response, file, fileList) {
+    handleReportContractSuccess (response, file, fileList) {
       this.imgObj.reportImg.push({
         name: file.name,
         url: `${this.imgBaseUrl}/${file.response.key}`,
         type: this.getFileType(file.raw.name),
         key: file.response.key
-      });
+      })
     },
-    beforeUploadGetKey(file) {
-      //每个文件上传之前 给它一个 名字
-      this.uploadData.key = this.generateUUID();
-      this.uploadData.token = this.uploadToken;
+    beforeUploadGetKey (file) {
+      // 每个文件上传之前 给它一个 名字
+      this.uploadData.key = this.generateUUID()
+      this.uploadData.token = this.uploadToken
     },
-    addAsset() {
+    addAsset () {
       Object.keys(this.infoQueryObj).map(key => {
-        this.infoQueryObj[key] = "";
-      });
+        this.infoQueryObj[key] = ''
+      })
       Object.keys(this.imgObj).map(key => {
-        this.imgObj[key] = [];
-      });
+        this.imgObj[key] = []
+      })
       Object.keys(this.filelistObj).map(key => {
-        this.filelistObj[key] = [];
-      });
-      this.popShow = true;
-      this.detailId = "";
-      this.popTitle = "新建质控";
+        this.filelistObj[key] = []
+      })
+      this.popShow = true
+      this.detailId = ''
+      this.popTitle = '新建质控'
     },
-    prev(id) {
+    prev (id) {
       this.$refs.form.$refs.form.validate(valid => {
         if (valid) {
-          let url = "createBuilding";
+          let url = 'createBuilding'
           if (this.detailId) {
-            url = "updateBuilding";
+            url = 'updateBuilding'
           }
-          let tips = this.detailId ? "更新" : "创建";
-          let params = Object.assign({}, this.infoQueryObj);
+          let tips = this.detailId ? '更新' : '创建'
+          let params = Object.assign({}, this.infoQueryObj)
           params.buildingPicture =
             this.imgObj.reportImg.length > 0
               ? JSON.stringify(this.imgObj.reportImg)
-              : "";
+              : ''
           api[url](params).then(rs => {
-            this.popShow = false;
+            this.popShow = false
             if (rs.code === 200) {
               this.$router.go(-1)
-              this.$messageTips(this, "success", tips + "成功");
+              this.$messageTips(this, 'success', tips + '成功')
             } else {
-              this.$messageTips(this, "error", tips + "失败");
+              this.$messageTips(this, 'error', tips + '失败')
             }
-          });
+          })
         }
-      });
+      })
     },
-    emitInfo(row) {
-      row.actionUserId = String(row.actionUserId);
-      Object.assign(this.infoQueryObj, row);
+    emitInfo (row) {
+      row.actionUserId = String(row.actionUserId)
+      Object.assign(this.infoQueryObj, row)
       this.filelistObj.reportList =
         (this.infoQueryObj.reportUrlList &&
           JSON.parse(this.infoQueryObj.reportUrlList)) ||
-        [];
+        []
       this.imgObj.reportImg =
         (this.infoQueryObj.reportUrlList &&
           JSON.parse(this.infoQueryObj.reportUrlList)) ||
-        [];
+        []
     }
   },
   created () {
     if (this.$route.query.id) {
       this.detailId = this.$route.query.id
-      api.findByIdBuilding({id: this.detailId}).then(rs => {
+      api.findByIdBuilding({ id: this.detailId }).then(rs => {
         if (rs.code === 200) {
           this.emitInfo(rs.data)
         }
       })
     }
-    api.areaList({pageNum: 1, pageSize: 100}).then(rs => {
+    api.areaList({ pageNum: 1, pageSize: 100 }).then(rs => {
       if (rs.code === 200 && rs.data.totalCount > 0) {
         this.options = rs.data.list
       }
     })
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .scroll {
