@@ -314,42 +314,22 @@ export default {
   created () {
     this.$nextTick(_ => {
       this.failureInit() // 设备报修
-      this.assetPlaceInit() // 科室设备数量
       this.complaintInit() // 设备投诉
       this.initAssetNum() // 概览数据
-      this.abnormalInit() // 科室设备故障率
       this.spendDeptList() // 科室设备开机率
+      this.initDept() // 科室设备数量 科室设备故障率
       this.query()
       this.assetTime = window.setInterval(_ => {
         this.initAssetNum()
       }, 30000)
     })
-    let params = {
-      'ctime': '2019-09-26 03:38:33',
-      'assetStatus': '20',
-      'energy': 0,
-      'extra': 'aaa',
-      'inputI': 0,
-      'inputV': 0,
-      'macAddr': '00124B0015FE5EA4',
-      'mtime': '2019-09-26 03:38:33',
-      'orgId': 0,
-      'orgName': '234',
-      'pos1': 0,
-      'pos2': 0,
-      'pos3': 0,
-      'powerFactor': 0,
-      'powerHz': 0,
-      'realPower': 0,
-      'routerNo1': 0,
-      'routerNo2': 0,
-      'routerNo3': 0,
-      'status': 0,
-      'temperature': 0
-    }
-    api.publicCreate(params)
   },
   methods: {
+    async initDept () {
+      let deptList = await api.deptList({ pageNum: 1, pageSize: 200 })
+      this.assetPlaceInit(deptList) // 科室设备数量
+      this.abnormalInit(deptList) // 科室设备故障率
+    },
     query () {
       this.assetInfo.chart = echarts.init(this.$refs.historyEc)
       this.assetInfo.chart.showLoading()
@@ -545,7 +525,7 @@ export default {
         if (rs.code === 200 && rs.data && rs.data.list) {
           let len = 0
           rs.data.list.forEach(item => {
-            if (item.fixStep !== 'abort' || item.fixStep !== 'done') {
+            if (item.fixStep !== 'abort' && item.fixStep !== 'done') {
               len++
             }
           })
@@ -571,11 +551,12 @@ export default {
 
             // 当前在线： 就是在线设备。 当前活跃： 处于激活状态的设备。 当前开待机： 处于开机和待机的设备。当前故障：处于故障状态的设备
             if (item.networkStatus === '在线') {
-              if (item.assetStatus === '40') {
+              let assetStatus = String(item.assetStatus)
+              if (assetStatus === '40') {
                 dqhy++
-              } else if (item.assetStatus === '20' || item.assetStatus === '30') {
+              } else if (assetStatus === '20' || assetStatus === '30') {
                 kdj++
-              } else if (item.assetStatus === '50') {
+              } else if (assetStatus === '50') {
                 gz++
               } else {
                 qt++
@@ -701,19 +682,29 @@ export default {
         this.assetfailureInfo.chart.setOption(option, true)
       })
     },
-    assetPlaceInit () {
+    async assetPlaceInit (deptList) {
+      let list = deptList.data.list || []
       api.findGroupByDept().then(rs => {
         let data = []
         let data1 = []
-        rs.data.sort(function (a, b) {
+        list.forEach(item => {
+          let deptInfo = rs.data.find(lab => lab.deptId === item.id) || ''
+          if (deptInfo) {
+            item.count = deptInfo.count
+          } else {
+            item.count = 0
+          }
+        })
+        let arr = JSON.parse(JSON.stringify(list))
+        arr.sort(function (a, b) {
           return a.count - b.count
         })
-        rs.data.forEach(item => {
-          data.push(item.deptName)
+        arr.forEach(item => {
+          data.push(item.name)
           data1.push(item.count)
         })
-        if (rs.data.length < 10) {
-          for (let i = 0; i < 10 - rs.data.length; i++) {
+        if (arr.length < 10) {
+          for (let i = 0; i < 10 - arr.length; i++) {
             data.unshift('--')
             data1.unshift(0)
           }
@@ -887,20 +878,26 @@ export default {
       }
       this.fullLoadInfo.chart.setOption(option, true)
     },
-    abnormalInit () {
+    async abnormalInit (deptList) {
       api.countDeptFault().then(rs => {
         let data = []
         let data1 = []
         if (rs.data && rs.data.length > 0) {
-          rs.data.forEach(item => {
-            item.value = (item.faultCount * 100 / item.deptAssetCount).toFixed(2)
+          let list = deptList.data.list || []
+          list.forEach(item => {
+            let deptInfo = rs.data.find(lab => lab.id === item.id) || ''
+            if (deptInfo) {
+              item.value = (deptInfo.faultCount * 100 / deptInfo.deptAssetCount).toFixed(2)
+            } else {
+              item.value = 0
+            }
           })
-          let arr = JSON.parse(JSON.stringify(rs.data))
+          let arr = JSON.parse(JSON.stringify(list))
           arr.sort((a, b) => {
             return a.value - b.value
           })
           arr.forEach(item => {
-            data.push(item.deptName)
+            data.push(item.name)
             data1.push(item.value)
           })
           if (arr.length < 10) {

@@ -11,68 +11,76 @@
         </template>
       </ever-form2>
     </div>
-    <el-table v-loading="loading" :data="tableData" style="width: 100%" stripe>
-      <el-table-column type="index" width="30" label="">
-      </el-table-column>
-      <el-table-column prop="name" label="设备名称" width="150">
-      </el-table-column>
-      <el-table-column prop="purchasePrice" label="采购价格">
-        <template slot-scope="scope">
-          {{scope.row.purchasePrice | formatToFinacial}}
-        </template>
-      </el-table-column>
-      <el-table-column prop="depreciationCharge" label="折旧费">
-        <template slot-scope="scope">
-          {{scope.row.depreciationCharge | formatToFinacial}}
-        </template>
-      </el-table-column>
-      <el-table-column prop="responsiblePersonName" label="责任工程师">
-      </el-table-column>
-      <el-table-column prop="matainExpiryDate" width="110" label="保修截止日期">
-        <template slot-scope="scope">
-          {{scope.row.matainExpiryDate&&scope.row.matainExpiryDate.split(' ')[0]}}
-        </template>
-      </el-table-column>
-      <el-table-column prop="deptName" label="科室">
-      </el-table-column>
-      <el-table-column prop="no" label="设备编号">
-      </el-table-column>
-      <el-table-column prop="acceptStatus" label="验收状态">
-      </el-table-column>
-      <!-- <el-table-column prop="dept" label="临床科室">
-      </el-table-column> -->
-      <el-table-column prop="contractUrlList" label="采购合同照片" width="110">
-        <template slot-scope="scope">
-          <fileshow :type="'img'" :tailor="true" :isNoShowBtn="true" :fileurlList="scope.row.contractUrlList"></fileshow>
-        </template>
-      </el-table-column>
-      <el-table-column prop="receiptUrlList" label="票据照片" width="100">
-        <template slot-scope="scope">
-          <fileshow :type="'img'" :tailor="true" :isNoShowBtn="true" :fileurlList="scope.row.receiptUrlList"></fileshow>
-        </template>
-      </el-table-column>
-      <el-table-column prop="manualUrlList" label="用户手册照片" width="110">
-        <template slot-scope="scope">
-          <fileshow :type="'img'" :tailor="true" :isNoShowBtn="true" :fileurlList="scope.row.manualUrlList"></fileshow>
-        </template>
-      </el-table-column>
-      <el-table-column prop="name" align="center" label="操作" width="250">
-        <template slot-scope="scope">
-          <el-button type="text" icon="el-icon-search" @click="seeDetail(scope.row)">详情</el-button>
-          <el-button type="text" icon="el-icon-edit" @click="emitInfo(scope.row)">编辑</el-button>
-          <el-button type="text" class="delete-btn-color"  icon="el-icon-delete" @click="delInfo(scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <div class="table-contant">
+      <el-table v-loading="loading" :data="tableData" style="width: 100%" height="100%" stripe>
+        <el-table-column  type="index" width="40" label="">
+        </el-table-column>
+        <el-table-column show-overflow-tooltip prop="name" label="设备名称" width="170">
+        </el-table-column>
+        <el-table-column show-overflow-tooltip prop="sn" label="SN序列号" width="140">
+        </el-table-column>
+        <el-table-column show-overflow-tooltip prop="deptName" label="科室" width="110">
+        </el-table-column>
+        <el-table-column show-overflow-tooltip prop="no" label="设备编号" width="110">
+        </el-table-column>
+        <el-table-column show-overflow-tooltip prop="purchasePrice" label="采购价格" width="110">
+          <template slot-scope="scope">
+            {{scope.row.purchasePrice | formatToFinacial}}
+          </template>
+        </el-table-column>
+        <el-table-column show-overflow-tooltip prop="depreciationCharge" label="折旧费" width="110">
+          <template slot-scope="scope">
+            {{scope.row.depreciationCharge | formatToFinacial}}
+          </template>
+        </el-table-column>
+        <el-table-column show-overflow-tooltip prop="responsiblePersonName" width="110" label="责任工程师">
+        </el-table-column>
+        <el-table-column show-overflow-tooltip prop="matainExpiryDate" width="110" label="保修截止日期">
+          <template slot-scope="scope">
+            {{scope.row.matainExpiryDate&&scope.row.matainExpiryDate.split(' ')[0]}}
+          </template>
+        </el-table-column>
+        <el-table-column show-overflow-tooltip prop="acceptStatus" label="验收状态">
+        </el-table-column>
+        <el-table-column show-overflow-tooltip prop="contractUrlList" label="采购合同照片" width="150">
+          <template slot-scope="scope">
+            <fileshow :type="'img'" :tailor="true" :isNoShowBtn="true" :fileurlList="scope.row.contractUrlList"></fileshow>
+          </template>
+        </el-table-column>
+        <el-table-column show-overflow-tooltip prop="receiptUrlList" label="票据照片" width="150">
+          <template slot-scope="scope">
+            <fileshow :type="'img'" :tailor="true" :isNoShowBtn="true" :fileurlList="scope.row.receiptUrlList"></fileshow>
+          </template>
+        </el-table-column>
+        <el-table-column show-overflow-tooltip prop="manualUrlList" label="用户手册照片" width="150">
+          <template slot-scope="scope">
+            <fileshow :type="'img'" :tailor="true" :isNoShowBtn="true" :fileurlList="scope.row.manualUrlList"></fileshow>
+          </template>
+        </el-table-column>
+        <el-table-column prop="name" align="center" fixed="right" label="操作" width="250">
+          <template slot-scope="scope">
+            <el-button type="text" icon="el-icon-search" @click="seeDetail(scope.row)">详情</el-button>
+            <el-button type="text" icon="el-icon-edit" @click="emitInfo(scope.row)">编辑</el-button>
+            <el-button type="text" class="delete-btn-color"  icon="el-icon-delete" @click="delInfo(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
     <div class="page-container">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="20" :layout="layout" :total="totalCount">
       </el-pagination>
     </div>
-    <div style="height: 50px;visibility: hidden;overflow: hidden;">
+    <div style="height: 10px;visibility: hidden;overflow: hidden;">
       <el-table :data="tableData" style="width: 100%" stripe id="excelTable">
         <el-table-column type="index" width="30" label="">
         </el-table-column>
         <el-table-column prop="name" label="设备名称">
+        </el-table-column>
+        <el-table-column prop="sn" label="SN序列号" width="140">
+        </el-table-column>
+        <el-table-column prop="deptName" label="科室" width="110">
+        </el-table-column>
+        <el-table-column prop="no" label="设备编号" width="110">
         </el-table-column>
         <el-table-column prop="purchasePrice" label="采购价格">
           <template slot-scope="scope">
@@ -90,8 +98,6 @@
           <template slot-scope="scope">
             {{scope.row.matainExpiryDate&&scope.row.matainExpiryDate.split(' ')[0]}}
           </template>
-        </el-table-column>
-        <el-table-column prop="no" label="设备编号">
         </el-table-column>
         <el-table-column prop="acceptStatus" label="验收状态">
         </el-table-column>
@@ -185,10 +191,6 @@ let schema = [
   {
     label: '设备编号',
     name: 'no'
-  },
-  {
-    name: 'dept',
-    label: '临床科室'
   },
   {
     name: 'kind',
@@ -422,6 +424,18 @@ export default {
           }
         })
         .then(() => {})
+    }
+  },
+  created () {
+    this.$nextTick(_ => {
+      let height = document.documentElement.clientHeight
+      document.querySelector('.table-contant').style.height = height - 300 + 'px'
+    })
+    window.onresize = () => {
+      if (document.querySelector('.table-contant')) {
+        let height = document.documentElement.clientHeight
+        document.querySelector('.table-contant').style.height = height - 300 + 'px'
+      }
     }
   }
 }

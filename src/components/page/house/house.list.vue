@@ -96,7 +96,7 @@
         </el-table-column>
         <el-table-column prop="floorNo" label="楼层">
           <template slot-scope="scope">
-            {{Number(scope.row.floorNo) < 0 ?'B':''}}{{Math.abs(scope.row.floorNo) + " 层"}}
+            {{Number(scope.row.floorNo) < 0 ? 'B':''}}{{Math.abs(scope.row.floorNo) + " 层"}}
           </template>
         </el-table-column>
         <el-table-column prop="roomNo" label="房间号">

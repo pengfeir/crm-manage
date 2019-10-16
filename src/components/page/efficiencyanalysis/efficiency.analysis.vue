@@ -38,23 +38,23 @@
             <div style="color:#409EFF;font-size:50px;text-align:center;height:190px;line-height:150px;">{{totalCount}} 台</div>
             <div style="border-top:2px solid #eee;">
               <el-row>
-                <el-col :span="5" style="text-align:left">
+                <el-col :span="4" style="text-align:left">
                   开机率 <span style="color:#409EFF;">{{assetInfo.turnOnRate}}</span>
                 </el-col>
-                <el-col :span="5" style="text-align:right">
+                <el-col :span="4" style="text-align:right">
                   故障率 <span style="color:#409EFF;">{{assetInfo.failureRate}}</span>
                 </el-col>
-                <el-col :span="7" style="text-align:right">
-                  总激活时间 <span style="color:#409EFF;">{{assetInfo.totalActivationTime}}</span>
+                <el-col :span="8" style="text-align:right">
+                  总激活时间 <span style="color:#409EFF;">{{assetInfo.totalActivationTime | initTime}}</span>
                 </el-col>
-                <el-col :span="7" style="text-align:right">
-                  平均激活时间 <span style="color:#409EFF;">{{assetInfo.averageActivationTime}}</span>
+                <el-col :span="8" style="text-align:right">
+                  平均激活时间 <span style="color:#409EFF;">{{assetInfo.averageActivationTime | initTime}}</span>
                 </el-col>
               </el-row>
             </div>
           </div>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="12" style="padding-right:0;">
           <div class="demo-css">
             <div ref="asset" class="asset" style="height:250px;width:100%;"></div>
           </div>
@@ -72,36 +72,40 @@
             </div>
             <div>
               <el-table v-loading="loading" :data="tableData" style="width: 100%" border stripe max-height="470">
-                <el-table-column type="index" width="50" align="center" label="序号">
+                <el-table-column type="index" width="50" fixed="left" align="center" label="序号">
                 </el-table-column>
                 <el-table-column prop="assetName" width="160" align="center" label="设备名称">
                   <template slot-scope="scope">
                     <a href="#mao" @click="seeAsssetDetail(scope.row)">{{scope.row.assetName}}</a>
                   </template>
                 </el-table-column>
-                <el-table-column prop="deptName" width="150" align="center" label="安装地址">
+                <el-table-column prop="sn" align="center" label="SN序列号" width="150">
                 </el-table-column>
-                <el-table-column prop="utilize" width="100" align="center" label="利用率">
+                <el-table-column prop="no" align="center" label="设备编号">
+                </el-table-column>
+                <el-table-column prop="deptName" align="center" label="科室">
+                </el-table-column>
+                <el-table-column prop="utilize" align="center" label="利用率">
                   <template slot-scope="scope">
                     {{scope.row.utilize + ' %'}}
                   </template>
                 </el-table-column>
-                <el-table-column prop="powerOffTime" width="100" align="center" label="开机次数">
+                <el-table-column prop="powerOffTime" align="center" label="开机次数">
                   <template slot-scope="scope">
                     {{scope.row.count}}
                   </template>
                 </el-table-column>
-                <el-table-column prop="powerOffTime" width="100" align="center" label="开机时间">
+                <el-table-column prop="powerOffTime" align="center" label="开机时间">
                   <template slot-scope="scope">
                     {{scope.row.powerOffTime | initTime}}
                   </template>
                 </el-table-column>
-                <el-table-column prop="standbyTime" width="100" align="center" label="待机时间">
+                <el-table-column prop="standbyTime" align="center" label="待机时间">
                   <template slot-scope="scope">
                     {{scope.row.standbyTime | initTime}}
                   </template>
                 </el-table-column>
-                <el-table-column prop="powerOnTime" width="100" align="center" label="关机时间">
+                <el-table-column prop="powerOnTime" align="center" label="关机时间">
                   <template slot-scope="scope">
                     {{scope.row.powerOnTime | initTime}}
                   </template>
@@ -118,7 +122,7 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="24">
+        <el-col :span="24" style="padding:5px 0;">
           <div class="demo-css" id="mao">
             <el-row>
               <el-col :span="4">
@@ -235,7 +239,9 @@ export default {
         averageActivationTime: 0 // 平均激活时间
       },
       dataAsset: {},
-      timeData: {}
+      timeData: {},
+      assetDeptInfo: {},
+      isLen: false
     }
   },
   created () {
@@ -246,6 +252,9 @@ export default {
   },
   filters: {
     initTime (value) {
+      if (!value) {
+        return 0
+      }
       if (value > 86400000) {
         return (value / (86400000)).toFixed(2) + 'T'
       } else {
@@ -254,13 +263,31 @@ export default {
     }
   },
   methods: {
+    async initAssetDeptInfo (callback, params) {
+      let assets = await api.assetList({ pageNum: 1, pageSize: 2000 })
+      assets.data.list.forEach(item => {
+        this.assetDeptInfo[item.id] = {
+          sn: item.sn,
+          deptName: item.deptName,
+          no: item.no
+        }
+      })
+      this.isLen = true
+      if (callback) {
+        callback(params)
+      }
+    },
     query () {
       let params = {
         deptId: this.queryObj.dept,
         beginDate: moment(this.queryObj.time[0]).format('YYYY-MM-DD') + ' 00:00:00',
         endDate: moment(this.queryObj.time[1]).format('YYYY-MM-DD') + ' 23:59:59'
       }
-      this.getDeptAssetList(params)
+      if (this.isLen) {
+        this.getDeptAssetList(params)
+      } else {
+        this.initAssetDeptInfo(this.getDeptAssetList, params)
+      }
     },
     exportData () {
       this.$router.push('/page/exportdata')
@@ -269,7 +296,7 @@ export default {
       api.deptList({ pageNum: 1, pageSize: 500 }).then(rs => {
         this.deptArr = rs.data.list || []
         this.queryObj.dept = rs.data.list[0]['id']
-        this.query()
+        this.initAssetDeptInfo(this.query)
       })
     },
     async getDeptAssetList (data) {
@@ -339,9 +366,17 @@ export default {
         }
         powerOffTime += item.powerOffTime
         item.count = this.dataAsset[item.assetId]
+        item.sn = this.assetDeptInfo[item.assetId]['sn']
+        item.no = this.assetDeptInfo[item.assetId]['no']
+        item.deptName = this.assetDeptInfo[item.assetId]['deptName']
       })
-      this.assetInfo.totalActivationTime = powerOffTime
-      this.assetInfo.averageActivationTime = (powerOffTime / tableData.length) === 0 ? 0 : (powerOffTime / tableData.length).toFixed(2)
+      if (tableData.length > 0) {
+        this.assetInfo.totalActivationTime = powerOffTime
+        this.assetInfo.averageActivationTime = (powerOffTime / tableData.length) === 0 ? 0 : (powerOffTime / tableData.length).toFixed(2)
+      } else {
+        this.assetInfo.totalActivationTime = 0
+        this.assetInfo.averageActivationTime = 0
+      }
       this.tableData = tableData
       this.initAssetRanking()
     },
@@ -395,7 +430,7 @@ export default {
       let data = []
       let data1 = []
       arr.forEach(item => {
-        data.push(item.assetName)
+        data.push(item.assetName + ' ' + item.sn)
         data1.push(item.utilize)
       })
       if (arr.length < 10) {
@@ -462,7 +497,7 @@ export default {
               // formatter: '{c}',
               formatter: function (v) {
                 var val = v.data
-                if (val == 0) {
+                if (val === 0) {
                   return ''
                 }
                 return val
@@ -513,16 +548,19 @@ export default {
           {
             name: '开机时间',
             type: 'bar',
+            barMaxWidth: 30,
             data: data1
           },
           {
             name: '待机时间',
             type: 'bar',
+            barMaxWidth: 30,
             data: data2
           },
           {
             name: '关机时间',
             type: 'bar',
+            barMaxWidth: 30,
             data: data3
           }
         ]
@@ -559,10 +597,11 @@ export default {
       let data2 = [] // 待机时间
       let data3 = [] // 关机时间
       data.forEach(item => {
-        times.push((item.beginDate || '').split(' ')[0])
-        data1.push(item.powerOnTime || 0)
-        data3.push(item.powerOffTime || 0)
-        data2.push(item.standbyTime || 0)
+        let info = item.powerTimes[0]
+        times.push((info.ctime || '').split(' ')[0])
+        data1.push((info.powerOnTime / (60 * 60 * 1000)).toFixed(2) || 0)
+        data3.push((info.powerOffTime / (60 * 60 * 1000)).toFixed(2) || 0)
+        data2.push((info.standbyTime / (60 * 60 * 1000)).toFixed(2) || 0)
       })
       this.initAssetDetails(times, data1, data2, data3)
     },

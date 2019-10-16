@@ -40,6 +40,8 @@
           </el-table-column>
           <el-table-column prop="assetNo" align="center" label="设备编号" width="150">
           </el-table-column>
+          <el-table-column prop="deptName" label="科室" width="150">
+          </el-table-column>
           <el-table-column prop="macAddr" align="center" width="180" label="设备的MAC地址">
           </el-table-column>
           <el-table-column prop="networkStatus" align="center" label="网络状态" width="100">
@@ -172,6 +174,8 @@
         <el-table-column prop="assetSn" label="设备SN序列号" width="150">
         </el-table-column>
         <el-table-column prop="assetNo" label="设备编号" width="120">
+        </el-table-column>
+        <el-table-column prop="deptName" label="科室" width="150">
         </el-table-column>
         <el-table-column prop="macAddr" width="130" label="设备的MAC地址">
         </el-table-column>
@@ -335,7 +339,9 @@ export default {
       listApiName: 'tempList',
       queryTime: null,
       automaticTime: null,
-      banAutomatic: true
+      banAutomatic: true,
+      assetList: {},
+      isLen: false
     }
   },
   methods: {
@@ -352,7 +358,7 @@ export default {
     },
     query () {
       this.banAutomatic = false
-      this.list()
+      this.getList()
       this.queryTime = window.setTimeout(_ => {
         this.banAutomatic = true
         window.clearTimeout(this.queryTime)
@@ -362,7 +368,7 @@ export default {
     automaticQuery () {
       this.automaticTime = window.setInterval(_ => {
         if (this.banAutomatic) {
-          this.list()
+          this.getList()
         }
       }, 60000)
     },
@@ -371,6 +377,13 @@ export default {
     },
     seeEcharts () {
       this.$router.push('/page/home')
+    },
+    getList () {
+      if (this.isLen) {
+        this.list()
+      } else {
+        this.getAssetList(this.list)
+      }
     },
     list () {
       let params = {
@@ -411,9 +424,25 @@ export default {
                 table.push(item)
               }
             }
+            item.deptName = this.assetList[item.assetId]
           })
           let tableData = [...faultTable, ...offTable, ...table]
           this.tableData = tableData
+        }
+      })
+    },
+    getAssetList (callback) {
+      let params = {
+        pageNum: 1,
+        pageSize: 2000
+      }
+      api.assetList(params).then(rs => {
+        if (rs.code === 200 && rs.data.totalCount > 0) {
+          rs.data.list.forEach(item => {
+            this.assetList[item.id] = item.deptName
+          })
+          this.isLen = true
+          callback()
         }
       })
     }

@@ -147,10 +147,13 @@ export default {
       superAdmin: true,
       options: [],
       iconoptions: [],
+      currentUser: {},
       orgs: []
     }
   },
   created () {
+    let currentUser = window.localStorage.getItem('currentUser')
+    this.currentUser = JSON.parse(currentUser)
     this.detailId = this.$route.query.id || ''
     this.init()
   },
@@ -161,7 +164,7 @@ export default {
       if (Number(this.currentUser.orgId) === 0) {
         this.superAdmin = true
       } else {
-        this.obj.orgId = this.currentUser.orgId
+        this.queryObj.orgId = this.currentUser.orgId
         this.superAdmin = false
       }
       if (this.detailId) {
