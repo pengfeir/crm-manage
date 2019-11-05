@@ -772,7 +772,7 @@ export default {
               // formatter: '{c}',
               formatter: function (v) {
                 var val = v.data
-                if (val == 0) {
+                if (val === 0) {
                   return ''
                 }
                 return val
@@ -865,7 +865,7 @@ export default {
               // formatter: '{c}',
               formatter: function (v) {
                 var val = v.data
-                if (val == 0) {
+                if (val === 0) {
                   return ''
                 }
                 return val
@@ -885,7 +885,7 @@ export default {
         if (rs.data && rs.data.length > 0) {
           let list = deptList.data.list || []
           list.forEach(item => {
-            let deptInfo = rs.data.find(lab => lab.id === item.id) || ''
+            let deptInfo = rs.data.find(lab => lab.deptId === item.id) || ''
             if (deptInfo) {
               item.value = (deptInfo.faultCount * 100 / deptInfo.deptAssetCount).toFixed(2)
             } else {
@@ -966,7 +966,7 @@ export default {
               // formatter: '{c}',
               formatter: function (v) {
                 var val = v.data
-                if (val == 0) {
+                if (val === 0) {
                   return ''
                 }
                 return val
@@ -1134,7 +1134,7 @@ export default {
               // formatter: '{c}',
               formatter: function (v) {
                 var val = v.data
-                if (val == 0) {
+                if (val === 0) {
                   return ''
                 }
                 return val

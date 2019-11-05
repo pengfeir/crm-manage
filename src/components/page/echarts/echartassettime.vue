@@ -23,7 +23,7 @@
       </el-col>
     </el-row>
     <div v-show="visibile" ref="assetTime" class="asset" style="height:400px;width:100%;"></div>
-    <div v-show="!visibile" class="noData">暂无数据</div>
+    <div v-show="!visibile" class="noData" v-loading="loading">暂无数据</div>
   </div>
 </template>
 <script>
@@ -67,6 +67,7 @@ export default {
       ],
       assetTimeChart: null,
       assetId: '',
+      loading: false,
       consultTime: '', // 参考水平
       averageValue: 0 // 平均值
     }
@@ -91,6 +92,7 @@ export default {
       this.seeAsssetTime()
     },
     async query () {
+      this.loading = true
       this.getAssetTimeData()
     },
     getAssetTimeData () {
@@ -102,6 +104,7 @@ export default {
       api.findAll(params).then(rs => {
         if (rs.code === 200 && rs.data.length > 0) {
           this.visibile = true
+          this.loading = false
           let data = rs.data.sort((a, b) => {
             a.ctimeDate = new Date(a.ctime).getTime()
             b.ctimeDate = new Date(b.ctime).getTime()
@@ -110,7 +113,10 @@ export default {
           this.initData(data)
         } else {
           this.visibile = false
+          this.loading = false
         }
+      }, rj => {
+        this.loading = false
       })
     },
     initData (data) {
@@ -143,6 +149,7 @@ export default {
       this.seeAsssetTime(data1, data2)
     },
     seeAsssetTime (data1, data2) {
+      this.loading = false
       this.assetTimeChart = echarts.init(this.$refs.assetTime)
       this.assetTimeChart.hideLoading()
       var option = {

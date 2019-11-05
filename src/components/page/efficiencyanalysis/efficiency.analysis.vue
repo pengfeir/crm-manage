@@ -81,11 +81,11 @@
                 </el-table-column>
                 <el-table-column prop="sn" align="center" label="SN序列号" width="150">
                 </el-table-column>
-                <el-table-column prop="no" align="center" label="设备编号">
+                <el-table-column prop="no" align="center" label="设备编号" width="200">
                 </el-table-column>
                 <el-table-column prop="deptName" align="center" label="科室">
                 </el-table-column>
-                <el-table-column prop="utilize" align="center" label="利用率">
+                <el-table-column prop="utilize" align="center" label="利用率" width="100">
                   <template slot-scope="scope">
                     {{scope.row.utilize + ' %'}}
                   </template>
@@ -263,7 +263,7 @@ export default {
     }
   },
   methods: {
-    async initAssetDeptInfo (callback, params) {
+    async initAssetDeptInfo (callback, params) { // 先获取科室列表，再根据科室列表的第一个科室获取对应的具体信息
       let assets = await api.assetList({ pageNum: 1, pageSize: 2000 })
       assets.data.list.forEach(item => {
         this.assetDeptInfo[item.id] = {
@@ -283,7 +283,7 @@ export default {
         beginDate: moment(this.queryObj.time[0]).format('YYYY-MM-DD') + ' 00:00:00',
         endDate: moment(this.queryObj.time[1]).format('YYYY-MM-DD') + ' 23:59:59'
       }
-      if (this.isLen) {
+      if (this.isLen) { // 如果在已进入页面就点击查询按钮，假如当时科室列表还没获取到，则走 获取科室列表逻辑
         this.getDeptAssetList(params)
       } else {
         this.initAssetDeptInfo(this.getDeptAssetList, params)
@@ -314,12 +314,18 @@ export default {
         endDate: data.endDate, // 结束时间
         deptId: data.deptId
       }
+      // this.assetData(data.deptId)
       let quencyTable = await api.findByParam(frequencyParams)
       let assetTable = await api.powerTimeStatistics(params)
       this.initQuencyTable(quencyTable.data)
       this.initTableData(assetTable.data)
       this.totalCount = this.tableData.length
       this.initAssetEcharts(assetTable.data)
+      if (assetTable.data[0]['powerTimes'].length > 0) { // 科室有设备
+        this.initAssetTime(data.deptId, assetTable.data)
+      } else { // 科室无设备
+        this.assetInfo.turnOnRate = 0
+      }
     },
     initQuencyTable (data) {
       let timeData = {} // 根据时间来整合每天的开机次数
@@ -581,7 +587,7 @@ export default {
       let params = {
         pageNum: 0,
         pageSize: 1000,
-        timeDivide: false, // 是否间隔
+        timeDivide: true, // 是否间隔
         interval: 1, // 间隔天数
         beginDate: moment(this.dateValue[0]).format('YYYY-MM-DD') + ' 00:00:00', // 开始时间
         endDate: moment(this.dateValue[1]).format('YYYY-MM-DD') + ' 23:59:59', // 结束时间
@@ -598,10 +604,17 @@ export default {
       let data3 = [] // 关机时间
       data.forEach(item => {
         let info = item.powerTimes[0]
-        times.push((info.ctime || '').split(' ')[0])
-        data1.push((info.powerOnTime / (60 * 60 * 1000)).toFixed(2) || 0)
-        data3.push((info.powerOffTime / (60 * 60 * 1000)).toFixed(2) || 0)
-        data2.push((info.standbyTime / (60 * 60 * 1000)).toFixed(2) || 0)
+        if (info) {
+          times.push((item.beginDate || '').split(' ')[0])
+          data1.push((info.powerOffTime / (60 * 60 * 1000)).toFixed(2) || 0)
+          data3.push((info.powerOnTime / (60 * 60 * 1000)).toFixed(2) || 0)
+          data2.push((info.standbyTime / (60 * 60 * 1000)).toFixed(2) || 0)
+        } else {
+          times.push((item.beginDate || '').split(' ')[0])
+          data1.push(0)
+          data3.push(0)
+          data2.push(0)
+        }
       })
       this.initAssetDetails(times, data1, data2, data3)
     },
@@ -628,6 +641,7 @@ export default {
       })
     },
     initAssetTime (deptId, data) {
+      console.log(data, 1111)
       let obj = {}
       // let len = 0
       // let allTime = 0

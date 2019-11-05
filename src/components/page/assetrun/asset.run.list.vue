@@ -42,8 +42,6 @@
           </el-table-column>
           <el-table-column prop="deptName" label="科室" width="150">
           </el-table-column>
-          <el-table-column prop="macAddr" align="center" width="180" label="设备的MAC地址">
-          </el-table-column>
           <el-table-column prop="networkStatus" align="center" label="网络状态" width="100">
             <template slot-scope="scope">
               <div :class="{zx: scope.row.networkStatus === '在线',lx: scope.row.networkStatus === '离线'}">
@@ -57,7 +55,52 @@
                 {{scope.row.assetStatus | filterAssetStatus}}
               </div>
               <div v-else>
-                --
+                未知
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="routerNo1" label="位置1" width="400">
+            <template slot-scope="scope">
+              <div v-if="scope.row.networkStatus == '离线'">
+                未知
+              </div>
+              <div v-else>
+                <div v-if="scope.row.room1">
+                  <span style="color:red;"> ( {{scope.row.room1.area || '未知'}} / {{scope.row.room1.building}} / {{scope.row.room1.roomNo}} )</span>
+                </div>
+                <div v-else>
+                  {{scope.row.routerNo1}}
+                </div>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="routerNo2" label="位置2" width="400">
+            <template slot-scope="scope">
+              <div v-if="scope.row.networkStatus == '离线'">
+                未知
+              </div>
+              <div v-else>
+                <div v-if="scope.row.room2">
+                  <span style="color:red;"> ( {{scope.row.room2.area}} / {{scope.row.room2.building}} / {{scope.row.room2.roomNo}} )</span>
+                </div>
+                <div v-else>
+                  {{scope.row.routerNo2}}
+                </div>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="routerNo3" label="位置3" width="400">
+            <template slot-scope="scope">
+              <div v-if="scope.row.networkStatus == '离线'">
+                未知
+              </div>
+              <div v-else>
+                <div v-if="scope.row.room3">
+                  <span style="color:red;"> ( {{scope.row.room3.area}} / {{scope.row.room3.building}} / {{scope.row.room3.roomNo}} )</span>
+                </div>
+                <div v-else>
+                  {{scope.row.routerNo3}}
+                </div>
               </div>
             </template>
           </el-table-column>
@@ -93,69 +136,11 @@
               {{scope.row.realPower}}<span style="color:#409EFF;">{{scope.row.realPower&&scope.row.networkStatus == '在线'? ' W': ''}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="routerNo1" label="位置1" width="400">
-            <template slot-scope="scope">
-              <div v-if="scope.row.networkStatus == '离线'">
-                --
-              </div>
-              <div v-else>
-                <div v-if="scope.row.room1">
-                  <span>{{scope.row.room1.macAddr}}</span>
-                  <span style="color:red;"> ( {{scope.row.room1.area || '--'}} / {{scope.row.room1.building}} / {{scope.row.room1.roomNo}} )</span>
-                </div>
-                <div v-else>
-                  {{scope.row.routerNo1}}
-                </div>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="routerNo2" label="位置2" width="400">
-            <template slot-scope="scope">
-              <div v-if="scope.row.networkStatus == '离线'">
-                --
-              </div>
-              <div v-else>
-                <div v-if="scope.row.room2">
-                  <span>{{scope.row.room2.macAddr}}</span>
-                  <span style="color:red;"> ( {{scope.row.room2.area}} / {{scope.row.room2.building}} / {{scope.row.room2.roomNo}} )</span>
-                </div>
-                <div v-else>
-                  {{scope.row.routerNo2}}
-                </div>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="routerNo3" label="位置3" width="400">
-            <template slot-scope="scope">
-              <div v-if="scope.row.networkStatus == '离线'">
-                --
-              </div>
-              <div v-else>
-                <div v-if="scope.row.room3">
-                  <span>{{scope.row.room3.macAddr}}</span>
-                  <span style="color:red;"> ( {{scope.row.room3.area}} / {{scope.row.room3.building}} / {{scope.row.room3.roomNo}} )</span>
-                </div>
-                <div v-else>
-                  {{scope.row.routerNo3}}
-                </div>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="pos1" label="定位信号1" width="130">
-          </el-table-column>
-          <el-table-column prop="pos2" label="定位信号2" width="130">
-          </el-table-column>
-          <el-table-column prop="pos3" label="定位信号3" width="130">
-          </el-table-column>
           <el-table-column prop="mtime" label="更新时间" width="180">
           </el-table-column>
-          <el-table-column prop="ctime" label="创建时间"  width="180">
+          <el-table-column prop="extra" label="其他扩展信息" width="180">
           </el-table-column>
-          <el-table-column prop="extra" label="其他扩展信息" width="150">
-          </el-table-column>
-          <!--
-          <el-table-column prop="userId" label="创建者ID" width="180">
-          </el-table-column> -->
+          
           <el-table-column prop="name" align="center" label="操作" fixed="right" width="100">
             <template slot-scope="scope">
               <el-button type="text" icon="el-icon-search" @click="seeDetails(scope.row)">查看</el-button>
@@ -177,8 +162,6 @@
         </el-table-column>
         <el-table-column prop="deptName" label="科室" width="150">
         </el-table-column>
-        <el-table-column prop="macAddr" width="130" label="设备的MAC地址">
-        </el-table-column>
         <el-table-column prop="assetStatus" align="center" label="网络状态" width="100">
           <template slot-scope="scope">
             {{scope.row.networkStatus}}
@@ -187,6 +170,54 @@
         <el-table-column prop="assetStatus" label="运行状态" width="100">
           <template slot-scope="scope">
             {{scope.row.assetStatus | filterAssetStatus}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="routerNo1" label="位置1" width="400">
+          <template slot-scope="scope">
+            <div v-if="scope.row.networkStatus == '离线'">
+              未知
+            </div>
+            <div v-else>
+              <div v-if="scope.row.room1">
+                <span>{{scope.row.room1.macAddr}}</span>
+                <span style="color:red;"> ( {{scope.row.room1.area || '未知'}} / {{scope.row.room1.building}} / {{scope.row.room1.roomNo}} )</span>
+              </div>
+              <div v-else>
+                {{scope.row.routerNo1}}
+              </div>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="routerNo2" label="位置2" width="400">
+          <template slot-scope="scope">
+            <div v-if="scope.row.networkStatus == '离线'">
+              未知
+            </div>
+            <div v-else>
+              <div v-if="scope.row.room2">
+                <span>{{scope.row.room2.macAddr}}</span>
+                <span style="color:red;"> ( {{scope.row.room2.area}} / {{scope.row.room2.building}} / {{scope.row.room2.roomNo}} )</span>
+              </div>
+              <div v-else>
+                {{scope.row.routerNo2}}
+              </div>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="routerNo3" label="位置3" width="400">
+          <template slot-scope="scope">
+            <div v-if="scope.row.networkStatus == '离线'">
+              未知
+            </div>
+            <div v-else>
+              <div v-if="scope.row.room3">
+                <span>{{scope.row.room3.macAddr}}</span>
+                <span style="color:red;"> ( {{scope.row.room3.area}} / {{scope.row.room3.building}} / {{scope.row.room3.roomNo}} )</span>
+              </div>
+              <div v-else>
+                {{scope.row.routerNo3}}
+              </div>
+            </div>
           </template>
         </el-table-column>
         <el-table-column prop="temperature" label="温度" width="50">
@@ -203,65 +234,7 @@
         </el-table-column>
         <el-table-column prop="realPower" label="有功功率" width="80">
         </el-table-column>
-        <el-table-column prop="routerNo1" label="位置1" width="400">
-          <template slot-scope="scope">
-            <div v-if="scope.row.networkStatus == '离线'">
-              --
-            </div>
-            <div v-else>
-              <div v-if="scope.row.room1">
-                <span>{{scope.row.room1.macAddr}}</span>
-                <span style="color:red;"> ( {{scope.row.room1.area || '--'}} / {{scope.row.room1.building}} / {{scope.row.room1.roomNo}} )</span>
-              </div>
-              <div v-else>
-                {{scope.row.routerNo1}}
-              </div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="routerNo2" label="位置2" width="400">
-          <template slot-scope="scope">
-            <div v-if="scope.row.networkStatus == '离线'">
-              --
-            </div>
-            <div v-else>
-              <div v-if="scope.row.room2">
-                <span>{{scope.row.room2.macAddr}}</span>
-                <span style="color:red;"> ( {{scope.row.room2.area}} / {{scope.row.room2.building}} / {{scope.row.room2.roomNo}} )</span>
-              </div>
-              <div v-else>
-                {{scope.row.routerNo2}}
-              </div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="routerNo3" label="位置3" width="400">
-          <template slot-scope="scope">
-            <div v-if="scope.row.networkStatus == '离线'">
-              --
-            </div>
-            <div v-else>
-              <div v-if="scope.row.room3">
-                <span>{{scope.row.room3.macAddr}}</span>
-                <span style="color:red;"> ( {{scope.row.room3.area}} / {{scope.row.room3.building}} / {{scope.row.room3.roomNo}} )</span>
-              </div>
-              <div v-else>
-                {{scope.row.routerNo3}}
-              </div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="pos1" label="定位信号1" width="130">
-        </el-table-column>
-        <el-table-column prop="pos2" label="定位信号2" width="130">
-        </el-table-column>
-        <el-table-column prop="pos3" label="定位信号3" width="130">
-        </el-table-column>
         <el-table-column prop="mtime" label="更新时间" width="180">
-        </el-table-column>
-        <el-table-column prop="ctime" label="创建时间"  width="180">
-        </el-table-column>
-        <el-table-column prop="extra" label="其他扩展信息" width="150">
         </el-table-column>
         <el-table-column prop="userId" label="创建者ID" width="180">
         </el-table-column>
@@ -402,16 +375,16 @@ export default {
             let curTime = new Date(item.ctime).getTime()
             if (curTime + 2 * 60 * 1000 < time) {
               item.networkStatus = '离线'
-              item.temperature = '--'
-              item.energy = '--'
-              item.inputI = '--'
-              item.inputV = '--'
-              item.powerFactor = '--'
-              item.powerHz = '--'
-              item.realPower = '--'
-              item.pos1 = '--'
-              item.pos2 = '--'
-              item.pos3 = '--'
+              item.temperature = '未知'
+              item.energy = '未知'
+              item.inputI = '未知'
+              item.inputV = '未知'
+              item.powerFactor = '未知'
+              item.powerHz = '未知'
+              item.realPower = '未知'
+              item.pos1 = '未知'
+              item.pos2 = '未知'
+              item.pos3 = '未知'
             } else {
               item.networkStatus = '在线'
             }

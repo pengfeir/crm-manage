@@ -36,22 +36,14 @@
           <el-table :data="tableData" style="width: 100%" border stripe>
             <el-table-column prop="name" align="center" label="阈值类型">
             </el-table-column>
-            <el-table-column prop="value1" align="center" label="设定值">
+            <el-table-column prop="value1" align="center" label="设定值上限">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.value1" @blur="thresholdCheck1(scope.row)"></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="value2" align="center" label="设定值2(预留)">
+            <el-table-column prop="value2" align="center" label="设定值下限">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.value2" @blur="thresholdCheck2(scope.row)"></el-input>
-              </template>
-            </el-table-column>
-            <el-table-column prop="deviation" align="center" label="允许误差">
-              <template slot-scope="scope">
-                <div style="display:flex">
-                  <div><el-input v-model="scope.row.deviation"></el-input></div>
-                  <div style="line-height: 1;position: relative;top: 12px;margin-left: 10px;">%</div>
-                </div>
               </template>
             </el-table-column>
             <el-table-column prop="company" align="center" label="单位">
@@ -170,7 +162,7 @@ export default {
       }
       if (row.value1 && row.value2) {
         if (Number(row.value1) < Number(row.value2)) {
-          let title = `${row.name}的设定值应大于设定值2`
+          let title = `${row.name}的设定值上限应大于设定值下限`
           this.$messageTips(this, 'error', title)
         }
       }
@@ -185,7 +177,7 @@ export default {
       }
       if (row.value1 && row.value2) {
         if (Number(row.value1) < Number(row.value2)) {
-          let title = `${row.name}的设定值应大于设定值2`
+          let title = `${row.name}的设定值上限应大于设定值下限`
           this.$messageTips(this, 'error', title)
         }
       }

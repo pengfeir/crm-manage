@@ -8,19 +8,19 @@
       <el-col :span="10" style="height:241px;">
         <div class="demo-css">
           <!-- 设备名称  设备编号-->
-          <div><h3>{{info.assetName || '--'}} {{info.assetNo || '--'}}</h3></div>
+          <div><h3>{{info.assetName || '未知'}} {{info.assetNo || '未知'}}</h3></div>
           <!-- 设备型号 -->
-          <div><span style="color:#409EFF;">{{info.assetModel || '--'}}</span></div>
+          <div><span style="color:#409EFF;">{{info.assetModel || '未知'}}</span></div>
           <div style="text-align:center;position: absolute;width: calc( 100% - 40px);bottom: 30px">
             <!-- 设备SN序列号 -->
             <!-- 设备品牌  -->
             <!-- 科室 -->
             <!-- 位置 -->
             <span class="asset-info-ul">
-              <span>{{info.assetSn || '--'}}</span>
-              <span>{{info.brand || '--'}}</span>
-              <span>{{info.deptName || '--'}}</span>
-              <span>{{info.seat || '--'}}</span>
+              <span>{{info.assetSn || '未知'}}</span>
+              <span>{{info.brand || '未知'}}</span>
+              <span>{{info.deptName || '未知'}}</span>
+              <span>{{info.seat || '未知'}}</span>
             </span>
           </div>
         </div>
@@ -159,19 +159,19 @@
         <div class="demo-css data-module">
           <div class="title">实时有效电压(V)</div>
           <div class="data" v-if="infoQueryObj.networkStatus === '在线'">{{info.inputV}}</div>
-          <div class="data" v-if="infoQueryObj.networkStatus === '离线'">--</div>
+          <div class="data" v-if="infoQueryObj.networkStatus === '离线'">未知</div>
           <div class="ranage">正常范围：{{`${ranage.V.min} ~ ${ranage.V.max}`}}</div>
         </div>
         <div class="demo-css data-module">
           <div class="title">实时有效电流(A)</div>
           <div class="data" v-if="infoQueryObj.networkStatus === '在线'">{{info.inputI}}</div>
-          <div class="data" v-if="infoQueryObj.networkStatus === '离线'">--</div>
+          <div class="data" v-if="infoQueryObj.networkStatus === '离线'">未知</div>
           <div class="ranage"></div>
         </div>
         <div class="demo-css data-module">
           <div class="title">实时有效功率(W)</div>
           <div class="data" v-if="infoQueryObj.networkStatus === '在线'">{{info.realPower}}</div>
-          <div class="data" v-if="infoQueryObj.networkStatus === '离线'">--</div>
+          <div class="data" v-if="infoQueryObj.networkStatus === '离线'">未知</div>
           <div class="ranage"></div>
         </div>
       </el-col>
@@ -504,12 +504,13 @@ export default {
     getRange () {
       api.findByMacAddr({ macAddr: this.$route.query.id }).then(rs => {
         if (rs.code === 200) {
+          console.log(rs)
           let table = JSON.parse(rs.data.extra)
           this.ranage.V.max = table[3]['value1']
           this.ranage.V.min = table[3]['value2']
           this.assetTypeTable = table
           this.info.deptName = rs.data.deptName
-          this.info.seat = `${rs.data.areaName || '--'} / ${rs.data.buildingName || '--'}`
+          this.info.seat = `${rs.data.areaName || '未知'} / ${rs.data.buildingName || '未知'} / ${rs.data.roomNo || '未知'}`
         }
       })
     },

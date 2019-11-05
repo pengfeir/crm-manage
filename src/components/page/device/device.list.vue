@@ -116,14 +116,9 @@
                 <el-table :data="thresholdData" style="width: 100%" border stripe>
                   <el-table-column prop="name" align="center" label="阈值类型">
                   </el-table-column>
-                  <el-table-column prop="value1" align="center" label="设定值">
+                  <el-table-column prop="value1" align="center" label="设定值上限">
                   </el-table-column>
-                  <el-table-column prop="value2" align="center" label="设定值2(预留)">
-                  </el-table-column>
-                  <el-table-column prop="deviation" align="center" label="允许误差">
-                    <template slot-scope="scope">
-                      {{scope.row.deviation? scope.row.deviation + '%': ''}}
-                    </template>
+                  <el-table-column prop="value2" align="center" label="设定值下限">
                   </el-table-column>
                   <el-table-column prop="company" align="center" label="单位">
                   </el-table-column>
