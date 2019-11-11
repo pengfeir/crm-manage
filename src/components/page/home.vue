@@ -3,110 +3,16 @@
   <div>
     <el-row>
       <el-col :span="24">
-        <div style="height: 235px;display:flex;background-color:#fff;padding-top:10px;">
-          <div style="flex:1;">
+        <div class="home-module-only">
+          <div v-for="(item,index) in overviewInfo" :key="index" style="flex:1;">
             <div class="echart-content">
-              <div class="vice-title">概览</div>
-                <div class="vice-content">
-                  <div class="module">
-                    <div>设备总量</div>
-                    <div class="content">{{assetNum.allNum}}</div>
-                    <div class="company"><span>台</span></div>
-                  </div>
-                </div>
+              <div :class="{'no-border': index!==0, 'vice-title':true}">
+                <div v-if="index ===0 ">概览</div>
               </div>
-            </div>
-          <div style="flex:1;">
-            <div class="echart-content">
-              <div class="vice-title no-border"></div>
               <div class="vice-content">
                 <div class="module">
-                  <div>当前在线</div>
-                  <div class="content">{{assetNum.dqzx}}</div>
-                  <div class="company"><span>台</span></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div style="flex:1;">
-            <div class="echart-content">
-              <div class="vice-title no-border"></div>
-              <div class="vice-content">
-                <div class="module">
-                  <div>当前活跃</div>
-                  <div class="content">{{assetNum.dqhy}}</div>
-                  <div class="company"><span>台</span></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div style="flex:1;">
-            <div class="echart-content">
-              <div class="vice-title no-border"></div>
-              <div class="vice-content">
-                <div class="module">
-                  <div>当前开机</div>
-                  <div class="content">{{assetNum.kdj}}</div>
-                  <div class="company"><span>台</span></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div style="flex:1;">
-            <div class="echart-content">
-              <div class="vice-title no-border"></div>
-              <div class="vice-content">
-                <div class="module">
-                  <div>当前故障</div>
-                  <div class="content">{{assetNum.gz}}</div>
-                  <div class="company"><span>台</span></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div style="flex:1;">
-            <div class="echart-content">
-              <div class="vice-title no-border"></div>
-              <div class="vice-content">
-                <div class="module">
-                  <div>当前维修</div>
-                  <div class="content">{{assetNum.wx}}</div>
-                  <div class="company"><span>台</span></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div style="flex:1;">
-            <div class="echart-content">
-              <div class="vice-title no-border"></div>
-              <div class="vice-content">
-                <div class="module">
-                  <div>设备保养</div>
-                  <div class="content">{{assetNum.maintainCount}}</div>
-                  <div class="company"><span>台</span></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div style="flex:1;">
-            <div class="echart-content">
-              <div class="vice-title no-border"></div>
-              <div class="vice-content">
-                <div class="module">
-                  <div>设备质控</div>
-                  <div class="content">{{assetNum.qaCount}}</div>
-                  <div class="company"><span>台</span></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div style="flex:1;">
-            <div class="echart-content">
-              <div class="vice-title no-border"></div>
-              <div class="vice-content">
-                <div class="module">
-                  <div>设备投诉</div>
-                  <div class="content">{{assetNum.complaintCount}}</div>
+                  <div>{{item.title}}</div>
+                  <div class="content">{{item.value}}</div>
                   <div class="company"><span>台</span></div>
                 </div>
               </div>
@@ -115,8 +21,67 @@
         </div>
       </el-col>
     </el-row>
-    <el-row>
-      <el-col style="background-color:#fff;padding-top:10px;" :span="24">
+    <el-row class="home-module">
+      <el-col :span="24">
+        <span class="title title-sty">待办事项</span>
+        <div class="rotation-chart-container">
+          <div>
+            <div style="padding:5px;">设备报修 <span style="color:#409eff;margin-left:5px;">({{toDoList.assetFailure.length/2}}台)</span></div>
+            <div class="rotation-chart asset-failure">
+              <ul>
+                <li v-for="(item, index) in toDoList.assetFailure" :key="index">
+                  <span class="name-ellipsis">{{item.name}}</span>
+                  <span style="position:absolute;">{{'(' + item.sn + ')'}}</span>
+                  <span class="btn">查看</span>
+                  <span class="status">未完成</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <div style="padding:5px;">设备保养 <span style="color:#409eff;margin-left:5px;">({{toDoList.assetMain.length/2}}台)</span></div>
+            <div class="rotation-chart asset-main">
+              <ul>
+                <li v-for="(item, index) in toDoList.assetMain" :key="index">
+                  <span class="name-ellipsis">{{item.name}}</span>
+                  <span style="position:absolute;">{{'(' + item.sn + ')'}}</span>
+                  <span class="btn">查看</span>
+                  <span class="status">未完成</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <div style="padding:5px;">设备质控 <span style="color:#409eff;margin-left:5px;">({{toDoList.assetQa.length/2}}台)</span></div>
+            <div class="rotation-chart asset-qa">
+              <ul>
+                <li v-for="(item, index) in toDoList.assetQa" :key="index">
+                  <span class="name-ellipsis">{{item.name}}</span>
+                  <span style="position:absolute;">{{'(' + item.sn + ')'}}</span>
+                  <span class="btn">查看</span>
+                  <span class="status">未完成</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <div style="padding:5px;">设备投诉 <span style="color:#409eff;margin-left:5px;">({{toDoList.assetComplaint.length/2}}台)</span></div>
+            <div class="rotation-chart asset-complaint">
+              <ul>
+                <li v-for="(item, index) in toDoList.assetComplaint" :key="index">
+                  <span class="name-ellipsis">{{item.name}}</span>
+                  <span style="position:absolute;">{{'(' + item.sn + ')'}}</span>
+                  <span class="btn">查看</span>
+                  <span class="status">未完成</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row class="home-module">
+      <el-col :span="24">
         <span class="title title-sty">设备趋势</span>
         <div style="margin: 10px 0 0 30px; ">
           <ever-form2 :schema="querySchema" v-model="queryObj" @query="query" ref="form" class="package-sale" :info="true" :labelWidth="140" label-position="right" :nosubmit="true" :inline="true">
@@ -139,7 +104,7 @@
         <div ref="historyEc" class="historyEc" style="height:350px;width:100%;"></div>
       </el-col>
     </el-row>
-    <el-row style="background-color:#fff;padding-top:10px;">
+    <el-row class="home-module">
       <el-col :span="8">
         <div class="echart-content">
           <div class="vice-title">设备状态</div>
@@ -189,12 +154,6 @@
         </div>
       </el-col>
     </el-row>
-    <!-- <el-row>
-      <el-col style="background-color:#fff;padding-top:10px;" :span="24">
-        <span class="title title-sty">位置分布</span>
-        <div ref="roomEc" class="roomEc" style="height:800px;width:100%;"></div>
-      </el-col>
-    </el-row> -->
   </div>
 </template>
 <script>
@@ -242,26 +201,19 @@ export default {
     return {
       querySchema: schema,
       queryObj: obj,
-      assetNum: {
-        dqzx: 0, // 当前在线
-        dqhy: 0, // 当前活跃
-        allNum: 0, // 总量
-        kdj: 0, // 当前开待机
-        complaintCount: 0, // 投诉设备
-        gz: 0, // 故障设备
-        wx: 0, // 维修设备
-        maintainCount: 0, // 保养设备
-        qaCount: 0 // 质控设备
-      },
-      assetInfo: {
-        x: [],
-        y: [],
-        data: [],
-        now: +new Date(),
-        oneDay: 24 * 60 * 60 * 1000,
-        value: Math.random() * 20,
-        chart: null
-      },
+      overviewInfo: [
+        { title: '当前在修台数', value: 0 },
+        { title: '当前待修台数', value: 0 },
+        { title: '当前已修台数', value: 0 },
+        { title: '当前故障台数', value: 0 },
+        { title: '当前在线台数', value: 0 },
+        { title: '当前开机台数', value: 0 },
+        { title: '当前激活台数', value: 0 },
+        { title: '当前设备总数', value: 0 },
+        { title: '当前保养台数', value: 0 },
+        { title: '当前质控台数', value: 0 },
+        { title: '当前投诉台数', value: 0 }
+      ],
       assetfailureInfo: { // 报修设备
         chart: null,
         text: '设备报修',
@@ -289,60 +241,198 @@ export default {
           { value: 0, name: '很轻' }
         ]
       },
-      assetPlaceInfo: {
-        chart: null
-      },
-      fullLoadInfo: {
-        chart: null
-      },
-      abnormalInfo: {
-        chart: null
-      },
       spendInfo: {
         chart: null
       },
-      deptLen: 0,
-      deptCallbackLen: 0,
-      turnOnArr: {},
-      standbyTimeArr: {},
-      failureType: ['reported', 'todo', 'doing', 'unknown'], // 维修中的状态值
-      spendDeptArr: [],
-      spendDeptArrData: [],
-      assetTime: null
+      chartObj: {
+        assetChart: null,
+        assetPlaceChart: null,
+        fullLoadChart: null,
+        abnormalChart: null,
+        spendChart: null
+      },
+      assetTime: null,
+      toDoList: {
+        assetFailure: [], // 设备维修
+        assetMain: [], // 设备保养
+        assetQa: [], // 设备质控
+        assetComplaint: [] // 设备投诉
+      }
     }
   },
   created () {
     this.$nextTick(_ => {
       this.failureInit() // 设备报修
       this.complaintInit() // 设备投诉
-      this.initAssetNum() // 概览数据
-      this.spendDeptList() // 科室设备开机率
-      this.initDept() // 科室设备数量 科室设备故障率
-      this.query()
-      this.assetTime = window.setInterval(_ => {
-        this.initAssetNum()
-      }, 30000)
+      this.initOverviewInfo() // 概览数据
+      this.spendInit() // 设备开机率
+      this.fullLoadInit() // 设备平均开机时间
+      this.assetPlaceInit() // 科室设备数量
+      this.abnormalInit() // 科室设备故障率
+      this.query() // 设备趋势查询按钮
+      // this.assetTime = window.setInterval(_ => {
+      //   this.initOverviewInfo()
+      // }, 30000)
     })
+    this.initToDoList() // 待办事项
   },
   methods: {
-    async initDept () {
-      let deptList = await api.deptList({ pageNum: 1, pageSize: 200 })
-      this.assetPlaceInit(deptList) // 科室设备数量
-      this.abnormalInit(deptList) // 科室设备故障率
+    initOverviewInfo () {
+    },
+    initToDoList () {
+      let assetFailure = [
+        {
+          name: 'STORZ内窥镜STORZ内窥镜STORZ内窥镜',
+          sn: '7612340',
+          type: '1',
+          id: '1'
+        },
+        {
+          name: '基站自身',
+          sn: 'FHHY001',
+          type: '1',
+          id: '2'
+        },
+        {
+          name: '奥林巴斯超声刀',
+          sn: 'B001345',
+          type: '1',
+          id: '3'
+        },
+        {
+          name: 'STORZ内窥镜',
+          sn: 'XS774089-P',
+          type: '1',
+          id: '4'
+        },
+        {
+          name: 'STORZ冷光源',
+          sn: 'PS0713453',
+          type: '1',
+          id: '5'
+        }
+      ]
+      let assetMain = [
+        {
+          name: 'STORZ内窥镜',
+          sn: '7612340',
+          type: '1',
+          id: '1'
+        },
+        {
+          name: '基站自身',
+          sn: 'FHHY001',
+          type: '1',
+          id: '2'
+        },
+        {
+          name: '奥林巴斯超声刀',
+          sn: 'B001345',
+          type: '1',
+          id: '3'
+        },
+        {
+          name: 'STORZ内窥镜',
+          sn: 'XS774089-P',
+          type: '1',
+          id: '4'
+        }
+      ]
+      let assetQa = [
+        {
+          name: 'STORZ内窥镜',
+          sn: '7612340',
+          type: '1',
+          id: '1'
+        },
+        {
+          name: '基站自身',
+          sn: 'FHHY001',
+          type: '1',
+          id: '2'
+        },
+        {
+          name: '奥林巴斯超声刀',
+          sn: 'B001345',
+          type: '1',
+          id: '3'
+        }
+      ]
+      let assetComplaint = [
+        {
+          name: 'STORZ内窥镜',
+          sn: '7612340',
+          type: '1',
+          id: '1'
+        },
+        {
+          name: '基站自身',
+          sn: 'FHHY001',
+          type: '1',
+          id: '2'
+        },
+        {
+          name: '奥林巴斯超声刀',
+          sn: 'B001345',
+          type: '1',
+          id: '3'
+        },
+        {
+          name: 'STORZ内窥镜',
+          sn: 'XS774089-P',
+          type: '1',
+          id: '4'
+        },
+        {
+          name: 'STORZ冷光源',
+          sn: 'PS0713453',
+          type: '1',
+          id: '5'
+        }
+      ]
+      this.toDoList.assetFailure = [...assetFailure, ...assetFailure]
+      this.toDoList.assetMain = [...assetMain, ...assetMain]
+      this.toDoList.assetQa = [...assetQa, ...assetQa]
+      this.toDoList.assetComplaint = [...assetComplaint, ...assetComplaint]
+      let failure = this.initFramesStype(assetFailure.length, 'frames-failure', 'asset-failure')
+      let main = this.initFramesStype(assetMain.length, 'frames-main', 'asset-main')
+      let qa = this.initFramesStype(assetQa.length, 'frames-qa', 'asset-qa')
+      let complaint = this.initFramesStype(assetComplaint.length, 'frames-complaint', 'asset-complaint')
+      let style = document.createElement('style')
+      style.type = 'text/css'
+      style.id = 'key-frames'
+      style.innerText = failure + '' + main + '' + qa + '' + complaint
+      document.getElementsByTagName('head')[0].appendChild(style)
+    },
+    initFramesStype (len, framesName, containerClass) {
+      if (len === 0) return ''
+      let text = `@keyframes ${framesName} {
+        from {
+          transform: translateY(${-len * 36}px);
+        }
+        to {
+          transform: translateY(0px);
+        }
+      }
+      .${containerClass} ul {
+        width: 100%;
+        list-style: none;
+        cursor: pointer;
+        animation: ${framesName} ${len * 1.5}s linear infinite;
+      }`
+      return text
     },
     query () {
-      this.assetInfo.chart = echarts.init(this.$refs.historyEc)
-      this.assetInfo.chart.showLoading()
+      this.chartObj.assetChart = echarts.init(this.$refs.historyEc)
+      this.chartObj.assetChart.showLoading()
       let data = this.getAll(this.queryObj.time[0].split(' ')[0], this.queryObj.time[1].split(' ')[0])
       if (this.queryObj.type === '1') {
         this.getAssetList(data) // 总量
       } else if (this.queryObj.type === '2') {
         this.getFaultRage(data) // 故障数
       } else if (this.queryObj.type === '3') {
-        this.turnOnArr = data
         this.getTurnOnRate() // 开机数
       } else {
-        this.standbyTimeArr = data
         this.getTurnOnRate() // 激活数
       }
     },
@@ -361,56 +451,6 @@ export default {
       }
       return arr
     },
-    getTurnOnRate (data) {
-      api.deptList({ pageNum: 1, pageSize: 500 }).then(rs => {
-        this.deptLen = rs.data.totalCount
-        rs.data.list.forEach(item => {
-          this.getDeptAsset(item.id)
-        })
-      })
-    },
-    getFaultRage () {
-      api.faultList({ pageNum: 1, pageSize: 500 }).then(rs => {
-        this.initFaultData(rs.data.list)
-      })
-    },
-    initFaultData (data) {
-      let timeArr = this.getAll(this.queryObj.time[0].split(' ')[0], this.queryObj.time[1].split(' ')[0])
-      data.forEach(item => {
-        let ctime = item.ctime.split(' ')[0]
-        let mtime = item.mtime.split(' ')[0]
-        if (timeArr[ctime] === 0 || !!timeArr[ctime]) { // 创建时间在查询时间段内
-          if (this.failureType.includes(item.fixStep)) { // 当前还是未完成状态
-            let start = ctime
-            let end = this.queryObj.time[1].split(' ')[0]
-            this.setDataTime(start, end, timeArr)
-          } else { // 当前是完成或取消状态
-            let start = ctime
-            let end = mtime
-            this.setDataTime(start, end, timeArr)
-          }
-        } else { // 创建时间不在查询时间段内
-          if (this.failureType.includes(item.fixStep)) { // 当前还是未完成状态
-            let start = ctime
-            let end = this.queryObj.time[1].split(' ')[0]
-            this.setDataTime(start, end, timeArr)
-          } else { // 当前是完成或取消状态
-            if (timeArr[mtime] === 0 || !!timeArr[mtime]) { // 完成或者取消时间在查询时间段内
-              let start = ctime
-              let end = mtime
-              this.setDataTime(start, end, timeArr)
-            }
-          }
-        }
-      })
-      let data1 = []
-      let data2 = []
-      for (let key in timeArr) {
-        data1.push(key)
-        data2.push(timeArr[key])
-      }
-      this.initEchart(data1, data2)
-    },
     setDataTime (start, end, data) { // ('2019-01-01', '2019-01-03', {2019-01-02':0, '2019-01-02':0, '2019-01-03':0})
       let arr = this.getAll(start, end)
       for (let key in arr) {
@@ -419,172 +459,23 @@ export default {
         }
       }
     },
-    getDeptAsset (deptId) {
-      let params = {
-        pageNum: 0,
-        pageSize: 1000,
-        timeDivide: true, // 是否间隔
-        interval: 1, // 间隔天数
-        beginDate: moment(this.queryObj.time[0]).format('YYYY-MM-DD') + ' 00:00:00', // 开始时间
-        endDate: moment(this.queryObj.time[1]).format('YYYY-MM-DD') + ' 23:59:59', // 结束时间
-        deptId: deptId
-      }
-      api.powerTimeStatistics(params).then(rs => {
-        this.initTurnOnRateData(rs.data)
-      })
-    },
-    initTurnOnRateData (data) {
-      this.deptCallbackLen++
-      data.forEach(item => {
-        let time = item.beginDate.split(' ')[0]
-        item.powerTimes.forEach(lab => {
-          if (this.queryObj.type === '3') {
-            if (lab.powerOffTime > 0) {
-              this.turnOnArr[time] += 1
-            }
-          } else {
-            if (lab.standbyTime > 0) {
-              this.standbyTimeArr[time] += 1
-            }
-          }
-        })
-      })
-      if (this.deptCallbackLen === this.deptLen) {
-        let data1 = []
-        let data2 = []
-        if (this.queryObj.type === '3') {
-          for (let key in this.turnOnArr) {
-            data1.push(key)
-            data2.push(this.turnOnArr[key])
-          }
-        } else {
-          for (let key in this.standbyTimeArr) {
-            data1.push(key)
-            data2.push(this.standbyTimeArr[key])
-          }
-        }
-        this.initEchart(data1, data2)
-      }
-    },
-    getAssetList (data) {
-      api.assetList({ pageNum: 1, pageSize: 2000 }).then(rs => {
-        if (rs.code === 200 && rs.data.list.length > 0) {
-          let len = 0
-          let startTime = new Date(this.queryObj.time[0].split(' ')[0]).getTime()
-          rs.data.list.forEach(item => {
-            let time = item.ctime.split(' ')[0]
-            if (data[time] === 0 || !!data[time]) {
-              data[time] += 1
-            }
-            if (new Date(time) < startTime) {
-              len++
-            }
-          })
-          this.initData(data, len)
-        }
-      })
-    },
-    initData (data, len) {
+    getTurnOnRate (data) { // 获取开机数和激活数
       let data1 = []
       let data2 = []
-      let index = -1
-      for (let key in data) {
-        data1.push(key)
-        if (index === -1) {
-          data2.push(data[key] + len)
-        } else {
-          data2.push(data[key] + data2[index])
-        }
-        index++
-      }
       this.initEchart(data1, data2)
     },
-    randomNum (minNum, maxNum) {
-      switch (arguments.length) {
-        case 1:
-          return parseInt(Math.random() * minNum + 1, 10)
-          break
-        case 2:
-          return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10)
-          break
-        default:
-          return 0
-          break
-      }
+    getFaultRage () { // 获取设备故障数
+      let data1 = []
+      let data2 = []
+      this.initEchart(data1, data2)
     },
-    initAssetNum () {
-      // 获取设备总量
-      api.assetList({ pageNum: 1, pageSize: 20 }).then(rs => {
-        if (rs.code === 200) {
-          this.assetNum.allNum = rs.data.totalCount
-        } else {
-          this.assetNum.allNum = '--'
-        }
-      })
-      api.faultList({ pageNum: 1, pageSize: 2000 }).then(rs => {
-        if (rs.code === 200 && rs.data && rs.data.list) {
-          let len = 0
-          rs.data.list.forEach(item => {
-            if (item.fixStep !== 'abort' && item.fixStep !== 'done') {
-              len++
-            }
-          })
-          this.assetNum.wx = len
-        } else {
-          this.assetNum.wx = '--'
-        }
-      })
-      api.tempList({}).then(rs => {
-        if (rs.code === 200) {
-          let time = new Date().getTime()
-          let dqhy = 0
-          let kdj = 0
-          let gz = 0
-          let qt = 0
-          rs.data.forEach(item => {
-            let curTime = new Date(item.ctime).getTime()
-            if (curTime + 2 * 60 * 1000 < time) {
-              item.networkStatus = '离线'
-            } else {
-              item.networkStatus = '在线'
-            }
-
-            // 当前在线： 就是在线设备。 当前活跃： 处于激活状态的设备。 当前开待机： 处于开机和待机的设备。当前故障：处于故障状态的设备
-            if (item.networkStatus === '在线') {
-              let assetStatus = String(item.assetStatus)
-              if (assetStatus === '40') {
-                dqhy++
-              } else if (assetStatus === '20' || assetStatus === '30') {
-                kdj++
-              } else if (assetStatus === '50') {
-                gz++
-              } else {
-                qt++
-              }
-            }
-          })
-          this.assetNum.dqzx = dqhy + kdj + gz + qt
-          this.assetNum.dqhy = dqhy
-          this.assetNum.gz = gz
-          this.assetNum.kdj = kdj
-        }
-      })
-      api.notDone().then(rs => {
-        if (rs.code === 200) {
-          Object.assign(this.assetNum, rs.data)
-        }
-      })
-    },
-    randomData () {
-      this.assetInfo.now = new Date(+this.assetInfo.now - this.assetInfo.oneDay)
-      this.assetInfo.value = this.assetInfo.value + Math.random() * 2
-      let minutes = (this.assetInfo.now.getMinutes() < 10 ? '0' : '') + this.assetInfo.now.getMinutes()
-      let seconds = (this.assetInfo.now.getSeconds() < 10 ? '0' : '') + this.assetInfo.now.getSeconds()
-      this.assetInfo.x.unshift(this.assetInfo.now.getFullYear() + '-' + (this.assetInfo.now.getMonth() + 1) + '-' + this.assetInfo.now.getDate()),
-      this.assetInfo.y.push(Math.round(this.assetInfo.value))
+    getAssetList (data) { // 获取设备总数
+      let data1 = []
+      let data2 = []
+      this.initEchart(data1, data2)
     },
     initEchart (data1, data2) {
-      this.assetInfo.chart.hideLoading()
+      this.chartObj.assetChart.hideLoading()
       var option = {
         tooltip: {
           trigger: 'axis',
@@ -626,9 +517,9 @@ export default {
           large: true
         }]
       }
-      this.assetInfo.chart.setOption(option, true)
+      this.chartObj.assetChart.setOption(option, true)
     },
-    initOptions (obj) {
+    initOptions (obj) { // 饼图模版
       var option = {
         title: {
           text: obj.text,
@@ -682,109 +573,6 @@ export default {
         this.assetfailureInfo.chart.setOption(option, true)
       })
     },
-    async assetPlaceInit (deptList) {
-      let list = deptList.data.list || []
-      api.findGroupByDept().then(rs => {
-        let data = []
-        let data1 = []
-        list.forEach(item => {
-          let deptInfo = rs.data.find(lab => lab.deptId === item.id) || ''
-          if (deptInfo) {
-            item.count = deptInfo.count
-          } else {
-            item.count = 0
-          }
-        })
-        let arr = JSON.parse(JSON.stringify(list))
-        arr.sort(function (a, b) {
-          return a.count - b.count
-        })
-        arr.forEach(item => {
-          data.push(item.name)
-          data1.push(item.count)
-        })
-        if (arr.length < 10) {
-          for (let i = 0; i < 10 - arr.length; i++) {
-            data.unshift('--')
-            data1.unshift(0)
-          }
-        }
-        this.assetPlaceEchart(data, data1)
-      })
-    },
-    assetPlaceEchart (data, data1) {
-      this.assetPlaceInfo.chart = echarts.init(this.$refs.placeEc)
-      let option = {
-        color: ['#3398DB'],
-        title: {
-          text: '科室设备数量',
-          x: 'center'
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow'
-          },
-          formatter: '{b} <br> 设备数: {c}'
-        },
-        grid: {
-          left: '3%',
-          right: '3%',
-          bottom: '2%',
-          containLabel: true
-        },
-        xAxis: {
-          type: 'value',
-          // boundaryGap: [0, 0.01],
-          // min: 0,
-          // max: 200,
-          interval: 20,
-          axisLabel: {
-            formatter: '{value}',
-            textStyle: {
-              // color: '#fff',
-              fontWeight: '80'
-            }
-          }
-        },
-        yAxis: {
-          type: 'category',
-          data: data,
-          axisLabel: {
-            show: true,
-            interval: 0,
-            rotate: 0,
-            margin: 10,
-            inside: false,
-            textStyle: {
-              fontWeight: '50'
-            },
-            formatter: function (name) {
-              return (name.length > 4 ? (name.slice(0, 4) + '...') : name)
-            }
-          }
-        },
-        series: [{
-          type: 'bar',
-          label: {
-            normal: {
-              show: true,
-              // formatter: '{c}',
-              formatter: function (v) {
-                var val = v.data
-                if (val === 0) {
-                  return ''
-                }
-                return val
-              },
-              color: '#fff'
-            }
-          },
-          data: data1
-        }]
-      }
-      this.assetPlaceInfo.chart.setOption(option, true)
-    },
     // 初始化设备投诉
     complaintInit () {
       let params = {
@@ -805,12 +593,11 @@ export default {
       var option = this.initOptions(this.complaintInfo)
       this.complaintInfo.chart.setOption(option, true)
     },
-    fullLoadInit (data1, data2) {
-      this.fullLoadInfo.chart.hideLoading()
+    rankingOptions (data1, data2, title, subtitle, unit) {
       let option = {
         color: ['#3398DB'],
         title: {
-          text: '设备开机时间',
+          text: title,
           x: 'center'
         },
         tooltip: {
@@ -818,7 +605,7 @@ export default {
           axisPointer: {
             type: 'shadow'
           },
-          formatter: '{b} <br> 开机时间: {c} H'
+          formatter: '{b} <br> ' + subtitle + ': {c} ' + unit
         },
         grid: {
           left: '3%',
@@ -828,9 +615,6 @@ export default {
         },
         xAxis: {
           type: 'value',
-          // boundaryGap: [0, 0.01],
-          // min: 0,
-          // max: 200,
           interval: 20,
           axisLabel: {
             formatter: '{value}',
@@ -862,7 +646,6 @@ export default {
           label: {
             normal: {
               show: true,
-              // formatter: '{c}',
               formatter: function (v) {
                 var val = v.data
                 if (val === 0) {
@@ -876,281 +659,43 @@ export default {
           data: data2
         }]
       }
-      this.fullLoadInfo.chart.setOption(option, true)
+      return option
     },
-    async abnormalInit (deptList) {
-      api.countDeptFault().then(rs => {
-        let data = []
-        let data1 = []
-        if (rs.data && rs.data.length > 0) {
-          let list = deptList.data.list || []
-          list.forEach(item => {
-            let deptInfo = rs.data.find(lab => lab.deptId === item.id) || ''
-            if (deptInfo) {
-              item.value = (deptInfo.faultCount * 100 / deptInfo.deptAssetCount).toFixed(2)
-            } else {
-              item.value = 0
-            }
-          })
-          let arr = JSON.parse(JSON.stringify(list))
-          arr.sort((a, b) => {
-            return a.value - b.value
-          })
-          arr.forEach(item => {
-            data.push(item.name)
-            data1.push(item.value)
-          })
-          if (arr.length < 10) {
-            for (let i = 0; i < 10 - arr.length; i++) {
-              data.unshift('--')
-              data1.unshift(0)
-            }
-          }
-        }
-        this.abnormalEchart(data, data1)
-      })
-    },
-    abnormalEchart (data, data1) {
-      this.abnormalInfo.chart = echarts.init(this.$refs.abnormal)
-      let option = {
-        color: ['#3398DB'],
-        title: {
-          text: '科室设备故障率',
-          x: 'center'
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow'
-          },
-          formatter: '{b} <br> 故障率: {c} %'
-        },
-        grid: {
-          left: '3%',
-          right: '3%',
-          bottom: '2%',
-          containLabel: true
-        },
-        xAxis: {
-          type: 'value',
-          interval: 20,
-          axisLabel: {
-            formatter: '{value}',
-            textStyle: {
-              fontWeight: '80'
-            }
-          }
-        },
-        yAxis: {
-          type: 'category',
-          data: data,
-          axisLabel: {
-            show: true,
-            interval: 0,
-            rotate: 0,
-            margin: 10,
-            inside: false,
-            textStyle: {
-              fontWeight: '50'
-            },
-            formatter: function (name) {
-              return (name.length > 4 ? (name.slice(0, 4) + '...') : name)
-            }
-          }
-        },
-        series: [{
-          type: 'bar',
-          label: {
-            normal: {
-              show: true,
-              // formatter: '{c}',
-              formatter: function (v) {
-                var val = v.data
-                if (val === 0) {
-                  return ''
-                }
-                return val
-              },
-              color: '#fff'
-            }
-          },
-          data: data1
-        }]
-      }
-      this.abnormalInfo.chart.setOption(option, true)
-    },
-    spendDeptList () {
-      this.spendInfo.chart = echarts.init(this.$refs.spend)
-      this.fullLoadInfo.chart = echarts.init(this.$refs.fullLoad)
-      this.spendInfo.chart.showLoading()
-      this.fullLoadInfo.chart.showLoading()
-      api.deptList({ pageNum: 1, pageSize: 500 }).then(rs => {
-        this.spendDeptArr = rs.data.list
-        rs.data.list.forEach(item => {
-          this.assetData(item.id)
-        })
-      })
-    },
-    assetData (deptId) {
-      let params = {
-        pageNum: 0,
-        pageSize: 1000,
-        timeDivide: true, // 是否间隔
-        interval: 1, // 间隔天数
-        beginDate: moment('2019-06-01').format('YYYY-MM-DD') + ' 00:00:00', // 开始时间
-        endDate: moment(new Date()).format('YYYY-MM-DD') + ' 23:59:59', // 结束时间
-        deptId: deptId
-      }
-      api.powerTimeStatistics(params).then(rs => {
-        if (rs.data[0]['powerTimes'].length > 0) { // 科室有设备
-          this.initAssetTime(deptId, rs.data)
-        } else { // 科室无设备
-          this.initNoAssetTime(deptId)
-        }
-      })
-    },
-    initNoAssetTime (deptId) {
-      let deptInfo = {
-        deptName: this.spendDeptArr.find(item => item.id === deptId)['name'],
-        time: 0,
-        allTurnOnRate: 0
-      }
-      this.spendDeptArrData.push(deptInfo)
-      if (this.spendDeptArrData.length === this.spendDeptArr.length) {
-        this.spendInitData()
-      }
-    },
-    initAssetTime (deptId, data) {
-      let obj = {}
-      let len = 0
-      let allTime = 0
-      let allTurnOnRate = 0
-      data.forEach(item => {
-        len++
-        item.powerTimes.forEach(lab => {
-          allTime += (Number(lab.powerOffTime) + Number(lab.standbyTime))
-          if (obj[lab.assetId]) {
-            if (lab.powerOffTime > 0 || lab.standbyTime > 0) {
-              obj[lab.assetId]['turnOnRate'] += 1
-              obj[lab.assetId]['time'] += (Number(lab.powerOffTime) + Number(lab.standbyTime))
-            }
-          } else {
-            if (lab.powerOffTime > 0 || lab.standbyTime > 0) {
-              obj[lab.assetId] = { turnOnRate: 1, time: (Number(lab.powerOffTime) + Number(lab.standbyTime)) }
-            } else {
-              obj[lab.assetId] = { turnOnRate: 0, time: 0 }
-              // turnOnRate 当天激活就+1，最后激活率就是激活次数/总天数 ，time激活时间
-            }
-          }
-        })
-      })
-      for (let key in obj) {
-        obj[key]['turnOnRate'] = (obj[key]['turnOnRate'] / len === 0) ? 0 : (obj[key]['turnOnRate'] / len).toFixed(2)
-        allTurnOnRate += obj[key]['turnOnRate']
-      }
-      let deptInfo = {
-        deptName: this.spendDeptArr.find(item => item.id === deptId)['name'],
-        time: allTime,
-        allTurnOnRate: allTurnOnRate / (data[0]['powerTimes'].length) === 0 ? 0 : (allTurnOnRate / (data[0]['powerTimes'].length)).toFixed(2)
-      }
-      this.spendDeptArrData.push(deptInfo)
-      if (this.spendDeptArrData.length === this.spendDeptArr.length) {
-        this.spendInitData()
-      }
-    },
-    spendInitData () {
+    fullLoadInit () {
+      this.chartObj.assetPlaceChart = echarts.init(this.$refs.fullLoad)
       let data1 = []
       let data2 = []
-      let data3 = []
-      this.spendDeptArrData.forEach(item => {
-        data1.push(item.deptName)
-        data2.push(item.allTurnOnRate)
-        data3.push((item.time / (60 * 60 * 1000)).toFixed(2))
-      })
-      if (this.spendDeptArrData.length < 10) {
-        for (let i = 0; i < 10 - this.spendDeptArrData.length; i++) {
-          data1.unshift('--')
-          data2.unshift(0)
-          data3.unshift(0)
-        }
-      }
-      this.spendInit(data1, data2)
-      this.fullLoadInit(data1, data3)
+      let option = this.rankingOptions(data1, data2, '设备平均开机时间', '平均开机时间', 'H')
+      this.chartObj.fullLoadChart.hideLoading()
+      this.chartObj.fullLoadChart.setOption(option, true)
     },
-    spendInit (data1, data2) {
-      this.spendInfo.chart.hideLoading()
-      let option = {
-        color: ['#3398DB'],
-        title: {
-          text: '科室设备开机率',
-          x: 'center'
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow'
-          },
-          formatter: '{b} <br> 开机率: {c}%'
-        },
-        grid: {
-          left: '3%',
-          right: '3%',
-          bottom: '2%',
-          containLabel: true
-        },
-        xAxis: {
-          type: 'value',
-          interval: 20,
-          axisLabel: {
-            formatter: '{value}',
-            textStyle: {
-              // color: '#fff',
-              fontWeight: '80'
-            }
-          }
-        },
-        yAxis: {
-          type: 'category',
-          data: data1,
-          axisLabel: {
-            show: true,
-            interval: 0,
-            rotate: 0,
-            margin: 10,
-            inside: false,
-            textStyle: {
-              fontWeight: '50'
-            },
-            formatter: function (name) {
-              return (name.length > 4 ? (name.slice(0, 4) + '...') : name)
-            }
-          }
-        },
-        series: [{
-          type: 'bar',
-          label: {
-            normal: {
-              show: true,
-              // formatter: '{c}',
-              formatter: function (v) {
-                var val = v.data
-                if (val === 0) {
-                  return ''
-                }
-                return val
-              },
-              color: '#fff'
-            }
-          },
-          data: data2
-        }]
-      }
-      this.spendInfo.chart.setOption(option, true)
+    assetPlaceInit () {
+      this.chartObj.assetPlaceChart = echarts.init(this.$refs.placeEc)
+      let data1 = []
+      let data2 = []
+      let option = this.rankingOptions(data1, data2, '科室设备数量', '设备数', '')
+      this.chartObj.assetPlaceChart.setOption(option, true)
+    },
+    abnormalInit () {
+      this.chartObj.abnormalChart = echarts.init(this.$refs.abnormal)
+      let data1 = []
+      let data2 = []
+      let option = this.rankingOptions(data1, data2, '科室设备故障率', '故障率', '%')
+      this.chartObj.abnormalChart.setOption(option, true)
+    },
+    spendInit () {
+      this.chartObj.assetPlaceChart = echarts.init(this.$refs.spend)
+      let data1 = []
+      let data2 = []
+      let option = this.rankingOptions(data1, data2, '科室设备开机率', '开机率', '%')
+      this.chartObj.spendChart.hideLoading()
+      this.chartObj.spendChart.setOption(option, true)
     }
   },
   beforeDestroy () {
     window.clearInterval(this.assetTime)
     this.assetTime = null
+    document.getElementsByTagName('head')[0].removeChild(document.querySelector('#key-frames'))
   },
   watch: {
   }
@@ -1220,5 +765,58 @@ export default {
     .el-input__icon {
       line-height: 25px;
     }
+  }
+  .home-module-only {
+    height: 235px;
+    display: flex;
+    background-color:#fff;
+    padding-top: 10px;
+  }
+  .home-module {
+    background-color:#fff;
+    padding-top: 10px;
+    .rotation-chart-container {
+      margin: 10px 0 10px 30px;
+      display: flex;
+      &>div {
+        flex:1;margin:5px;box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+        .rotation-chart {
+          height: 36px;
+          overflow: hidden;
+          margin-top: 10px;
+        }
+        ul {
+          width:100%;
+        }
+        ul:hover {
+          animation-play-state: paused;
+        }
+        li {
+          height: 36px;
+          padding: 0 5px;
+          font-size: 14px;
+          line-height: 36px;
+          position: relative;
+          .btn,.status{
+            float:right;
+          }
+          .status {
+            margin-right: 10px;
+          }
+          .btn {
+            margin-right: 5px;
+            cursor: pointer;
+            color:#409eff;
+          }
+        }
+      }
+    }
+  }
+  .name-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 150px;
   }
 </style>

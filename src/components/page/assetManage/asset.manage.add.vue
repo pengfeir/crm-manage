@@ -2,66 +2,85 @@
   <div class="layout_inner">
     <ever-bread-crumb :showTitle="'设备'"></ever-bread-crumb>
     <div class="scroll">
-        <ever-form2 :schema="querySchema" v-model="queryObj" ref="form" class="package-sale" labelWidth="180px" label-position="right" :rules="rules">
-          <template slot="acceptStatus">
-            <el-autocomplete class="inline-input" v-model="queryObj.acceptStatus" :fetch-suggestions="queryComp" placeholder="请输入内容" style="width: 100%"></el-autocomplete>
-          </template>
-          <template slot="depreciationCharge">
-            <el-input v-model="queryObj.depreciationCharge">
-              <template slot="append">元/年</template>
-            </el-input>
-          </template>
-          <template slot="purchasePrice">
-            <el-input v-model="queryObj.purchasePrice">
-              <template slot="append">元</template>
-            </el-input>
-          </template>
-          <template slot="responsiblePerson">
-            <el-select v-model="queryObj.responsiblePerson" clearable placeholder="请选择">
+      <ever-form2 :schema="querySchema" v-model="queryObj" ref="form" class="package-sale" labelWidth="180px" label-position="right" :rules="rules">
+        <template slot="template">
+          <div>
+            <el-select filterable v-model="templateValue" placeholder="请选择" style="width:200px;margin-right: 20px;">
               <el-option
-                v-for="item in options"
+                v-for="item in templateList"
                 :key="item.id"
-                :label="item.username"
+                :label="item.name"
                 :value="item.id">
               </el-option>
             </el-select>
-          </template>
-          <template slot="manualUrlList">
-            <el-upload :action="uploadUrl" list-type="picture" :file-list="detailId?filelistObj.manualList:[]" :on-remove="handleManualRemove" :on-success="handleManualSuccess" :data="uploadData" :before-upload="beforeUploadGetKey">
-              <el-button size="small" type="primary">点击上传</el-button>
-            </el-upload>
-          </template>
-          <template slot="receiptUrlList">
-            <el-upload :action="uploadUrl" list-type="picture" :file-list="detailId?filelistObj.receiptList:[]" :on-remove="handleReceiptRemove" :on-success="handleReceiptSuccess" :data="uploadData" :before-upload="beforeUploadGetKey">
-              <el-button size="small" type="primary">点击上传</el-button>
-            </el-upload>
-          </template>
-          <template slot="contractUrlList">
-            <el-upload :action="uploadUrl" list-type="picture" :file-list="detailId?filelistObj.contractList:[]" :on-remove="handleContractRemove" :on-success="handleContractSuccess" :data="uploadData" :before-upload="beforeUploadGetKey">
-              <el-button size="small" type="primary">点击上传</el-button>
-            </el-upload>
-          </template>
-          <template slot="iotDeviceIds">
-            <el-select v-model="queryObj.iotDeviceIds" multiple placeholder="请选择">
-              <el-option v-for="item in iotDeviceIdsOptions" :key="item.id" :label="item.macAddr" :value="item.id">
-              </el-option>
-            </el-select>
-          </template>
-          <template slot="default">
-            <div></div>
-          </template>
-        </ever-form2>
-      </div>
-      <div class="log-btn-container" style="margin-bottom:60px;padding-left:180px;">
-        <el-button type="primary" @click="prev">保存</el-button>
-        <el-button @click="handleClose">取消</el-button>
-      </div>
+            <el-button size="mini" type="primary" @click="importTemplate">导入模版</el-button>
+            <el-button size="mini" @click="empty">清空</el-button>
+          </div>
+        </template>
+        <template slot="acceptStatus">
+          <el-autocomplete class="inline-input" v-model="queryObj.acceptStatus" :fetch-suggestions="queryComp" placeholder="请输入内容" style="width: 100%"></el-autocomplete>
+        </template>
+        <template slot="depreciationCharge">
+          <el-input v-model="queryObj.depreciationCharge">
+            <template slot="append">元/年</template>
+          </el-input>
+        </template>
+        <template slot="purchasePrice">
+          <el-input v-model="queryObj.purchasePrice">
+            <template slot="append">元</template>
+          </el-input>
+        </template>
+        <template slot="responsiblePerson">
+          <el-select v-model="queryObj.responsiblePerson" clearable placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.id"
+              :label="item.username"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </template>
+        <template slot="manualUrlList">
+          <el-upload :action="uploadUrl" list-type="picture" :file-list="detailId?filelistObj.manualList:[]" :on-remove="handleManualRemove" :on-success="handleManualSuccess" :data="uploadData" :before-upload="beforeUploadGetKey">
+            <el-button size="small" type="primary">点击上传</el-button>
+          </el-upload>
+        </template>
+        <template slot="receiptUrlList">
+          <el-upload :action="uploadUrl" list-type="picture" :file-list="detailId?filelistObj.receiptList:[]" :on-remove="handleReceiptRemove" :on-success="handleReceiptSuccess" :data="uploadData" :before-upload="beforeUploadGetKey">
+            <el-button size="small" type="primary">点击上传</el-button>
+          </el-upload>
+        </template>
+        <template slot="contractUrlList">
+          <el-upload :action="uploadUrl" list-type="picture" :file-list="detailId?filelistObj.contractList:[]" :on-remove="handleContractRemove" :on-success="handleContractSuccess" :data="uploadData" :before-upload="beforeUploadGetKey">
+            <el-button size="small" type="primary">点击上传</el-button>
+          </el-upload>
+        </template>
+        <template slot="iotDeviceIds">
+          <el-select v-model="queryObj.iotDeviceIds" multiple placeholder="请选择">
+            <el-option v-for="item in iotDeviceIdsOptions" :key="item.id" :label="item.macAddr" :value="item.id">
+            </el-option>
+          </el-select>
+        </template>
+        <template slot="default">
+          <div></div>
+        </template>
+      </ever-form2>
+    </div>
+    <div class="log-btn-container" style="margin-bottom:60px;padding-left:180px;">
+      <el-button type="primary" @click="prev">保存</el-button>
+      <el-button @click="handleClose">取消</el-button>
+    </div>
   </div>
 </template>
 <script>
 import api from '@/api/api'
 import token from '@/plugins/getUploadToken'
 let schema = [
+  {
+    name: 'template',
+    label: '选择模版',
+    comp: 'custom'
+  },
   {
     name: 'no',
     label: '设备编号',
@@ -287,6 +306,8 @@ export default {
         contractList: []
       },
       options: [],
+      templateList: [],
+      templateValue: '',
       rules: {
         no: [
           { required: true, message: '必填项', trigger: 'blur' }
@@ -307,6 +328,30 @@ export default {
     }
   },
   methods: {
+    importTemplate () {
+      if (!this.templateValue) {
+        this.$messageTips(this, 'error', '请选择模版设备')
+        return
+      }
+      let templateInfo = this.templateList.find(item => item.id === this.templateValue)
+      for (let key in this.queryObj) {
+        let excludeKey = ['no', 'iotDeviceIds', 'sn', 'acceptStatus', 'setupEndAt', 'setupStartAt', 'setupStep', 'manualUrlList', 'receiptUrlList', 'contractUrlList']
+        if (!excludeKey.includes(key)) {
+          this.queryObj[key] = templateInfo[key]
+        }
+      }
+    },
+    empty () {
+      for (let key in this.queryObj) {
+        this.queryObj[key] = ''
+      }
+      this.imgObj.manualImg = []
+      this.imgObj.receiptImg = []
+      this.imgObj.contractImg = []
+      this.filelistObj.manualList = []
+      this.filelistObj.receiptList = []
+      this.filelistObj.contractList = []
+    },
     async getDeviceIdsOptions () {
       try {
         let data = await api.unPageiotDeviceList()
@@ -483,6 +528,15 @@ export default {
     api.userList({ name: '', id: '' }).then(rs => {
       if (rs.code === 200 && rs.data.length > 0) {
         this.options = rs.data
+      }
+    })
+    api.assetList({ pageNum: 1, pageSize: 20 }).then(rs => {
+      if (rs && rs.data && rs.data.totalCount > 0) {
+        this.templateList = rs.data.list
+        if (!this.detailId) {
+          this.templateValue = this.templateList[0]['id']
+          this.importTemplate()
+        }
       }
     })
   },
