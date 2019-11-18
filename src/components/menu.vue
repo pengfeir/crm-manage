@@ -48,7 +48,6 @@ export default {
   watch: {
     status: {
       handler: function (val, oldval) {
-        console.log(val)
         if (val.isGetMenu) {
           this.getMenuTree()
         }

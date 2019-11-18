@@ -145,7 +145,10 @@ export default {
       } else {
         this.averageValue = 0
       }
-      this.$emit('getAverageTime', this.averageValue)
+      if (this.averageValue === 'NaN') {
+        this.averageValue = 0
+      }
+      this.$emit('getAverageTime', this.averageValue || 0)
       this.seeAsssetTime(data1, data2)
     },
     seeAsssetTime (data1, data2) {

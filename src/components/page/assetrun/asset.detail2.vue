@@ -355,7 +355,6 @@ export default {
   },
   methods: {
     getAverageTime (val) {
-      console.log(val)
       this.timeInfo.averageTime = val
     },
     go () {
@@ -391,7 +390,7 @@ export default {
       }
       api.powerTimeStatistics(monthParams).then(rs => {
         if (rs.data[0]['powerTimes'] && rs.data[0]['powerTimes'].length > 0) {
-          this.timeInfo.monthTime = rs.data[0]['powerTimes'][0]['powerOffTime']
+          this.timeInfo.monthTime = rs.data[0]['powerTimes'][0]['powerOnTime']
         }
       })
       let dayParams = {
@@ -404,7 +403,7 @@ export default {
       }
       api.powerTimeStatistics(dayParams).then(rs => {
         if (rs.data[0]['powerTimes'] && rs.data[0]['powerTimes'].length > 0) {
-          this.timeInfo.dayTime = rs.data[0]['powerTimes'][0]['powerOffTime']
+          this.timeInfo.dayTime = rs.data[0]['powerTimes'][0]['powerOnTime']
         }
       })
       let frequencyParams = {
@@ -413,8 +412,7 @@ export default {
         macAddress: this.id
       }
       api.findByParam(frequencyParams).then(rs => {
-        console.log(rs)
-        this.timeInfo.frequency = rs.data.length > 0 ? rs.data[0]['count'] : 0
+        this.timeInfo.frequency = rs.data.length > 0 ? rs.data.length : 0
       })
     },
     getHistoryData () {
@@ -454,7 +452,7 @@ export default {
       // let endDate = this.getTime()
       api.tempList({ macAddress: this.id }).then(rs => {
         this.assetId = rs.data[rs.data.length - 1]['assetId']
-        Object.assign(rs.data[rs.data.length - 1], { seat: this.info.seat, deptName: this.info.deptName })
+        Object.assign(rs.data[rs.data.length - 1], { seat: this.info.seat, deptName: this.info.deptName, brand: this.info.brand, assetSn: this.info.assetSn })
         this.info = rs.data[rs.data.length - 1]
         this.initData(rs.data[rs.data.length - 1])
         this.initAssetType(rs.data[rs.data.length - 1])
@@ -504,11 +502,11 @@ export default {
     getRange () {
       api.findByMacAddr({ macAddr: this.$route.query.id }).then(rs => {
         if (rs.code === 200) {
-          console.log(rs)
           let table = JSON.parse(rs.data.extra)
           this.ranage.V.max = table[3]['value1']
           this.ranage.V.min = table[3]['value2']
           this.assetTypeTable = table
+          this.info.brand = rs.data.brand
           this.info.deptName = rs.data.deptName
           this.info.seat = `${rs.data.areaName || '未知'} / ${rs.data.buildingName || '未知'} / ${rs.data.roomNo || '未知'}`
         }

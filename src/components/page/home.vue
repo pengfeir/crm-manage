@@ -338,13 +338,14 @@ export default {
         this.getAssetList(data) // 总量
       } else if (this.queryObj.type === '2') {
         this.getFaultRage(data) // 故障数
-      } else if (this.queryObj.type === '3') {
+      } else { //  if (this.queryObj.type === '3')
         this.turnOnArr = data
         this.getTurnOnRate() // 开机数
-      } else {
-        this.standbyTimeArr = data
-        this.getTurnOnRate() // 激活数
       }
+      // else {
+      //   this.standbyTimeArr = data
+      //   this.getTurnOnRate() // 激活数
+      // }
     },
     getAll (begin, end) {			// 开始日期和结束日期
       let start = new Date(begin).getTime()
@@ -499,19 +500,19 @@ export default {
       }
       this.initEchart(data1, data2)
     },
-    randomNum (minNum, maxNum) {
-      switch (arguments.length) {
-        case 1:
-          return parseInt(Math.random() * minNum + 1, 10)
-          break
-        case 2:
-          return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10)
-          break
-        default:
-          return 0
-          break
-      }
-    },
+    // randomNum (minNum, maxNum) {
+    //   switch (arguments.length) {
+    //     case 1:
+    //       return parseInt(Math.random() * minNum + 1, 10)
+    //       break;
+    //     case 2:
+    //       return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10)
+    //       break;
+    //     default:
+    //       return 0
+    //       break
+    //   }
+    // },
     initAssetNum () {
       // 获取设备总量
       api.assetList({ pageNum: 1, pageSize: 20 }).then(rs => {
@@ -879,36 +880,57 @@ export default {
       this.fullLoadInfo.chart.setOption(option, true)
     },
     async abnormalInit (deptList) {
-      api.countDeptFault().then(rs => {
-        let data = []
-        let data1 = []
-        if (rs.data && rs.data.length > 0) {
-          let list = deptList.data.list || []
-          list.forEach(item => {
-            let deptInfo = rs.data.find(lab => lab.deptId === item.id) || ''
-            if (deptInfo) {
-              item.value = (deptInfo.faultCount * 100 / deptInfo.deptAssetCount).toFixed(2)
-            } else {
-              item.value = 0
-            }
-          })
-          let arr = JSON.parse(JSON.stringify(list))
-          arr.sort((a, b) => {
-            return a.value - b.value
-          })
-          arr.forEach(item => {
-            data.push(item.name)
-            data1.push(item.value)
-          })
-          if (arr.length < 10) {
-            for (let i = 0; i < 10 - arr.length; i++) {
-              data.unshift('--')
-              data1.unshift(0)
-            }
-          }
-        }
-        this.abnormalEchart(data, data1)
+      let data = []
+      let data1 = []
+      // api.countDeptFault().then(rs => {
+      //   let data = []
+      //   let data1 = []
+      //   if (rs.data && rs.data.length > 0) {
+      //     let list = deptList.data.list || []
+      //     list.forEach(item => {
+      //       let deptInfo = rs.data.find(lab => lab.deptId === item.id) || ''
+      //       if (deptInfo) {
+      //         item.value = (deptInfo.faultCount * 100 / deptInfo.deptAssetCount).toFixed(2)
+      //       } else {
+      //         item.value = 0
+      //       }
+      //     })
+      //     let arr = JSON.parse(JSON.stringify(list))
+      //     arr.sort((a, b) => {
+      //       return a.value - b.value
+      //     })
+      //     arr.forEach(item => {
+      //       data.push(item.name)
+      //       data1.push(item.value)
+      //     })
+      //     if (arr.length < 10) {
+      //       for (let i = 0; i < 10 - arr.length; i++) {
+      //         data.unshift('--')
+      //         data1.unshift(0)
+      //       }
+      //     }
+      //   }
+      //   this.abnormalEchart(data, data1)
+      // })
+      let list = deptList.data.list || []
+      list.forEach(item => {
+        item.value = (Math.random()).toFixed(2)
       })
+      let arr = JSON.parse(JSON.stringify(list))
+      arr.sort((a, b) => {
+        return a.value - b.value
+      })
+      arr.forEach(item => {
+        data.push(item.name)
+        data1.push(item.value)
+      })
+      if (arr.length < 10) {
+        for (let i = 0; i < 10 - arr.length; i++) {
+          data.unshift('--')
+          data1.unshift(0)
+        }
+      }
+      this.abnormalEchart(data, data1)
     },
     abnormalEchart (data, data1) {
       this.abnormalInfo.chart = echarts.init(this.$refs.abnormal)
@@ -1046,12 +1068,12 @@ export default {
       })
       for (let key in obj) {
         obj[key]['turnOnRate'] = (obj[key]['turnOnRate'] / len === 0) ? 0 : (obj[key]['turnOnRate'] / len).toFixed(2)
-        allTurnOnRate += obj[key]['turnOnRate']
+        allTurnOnRate += Number(obj[key]['turnOnRate'])
       }
       let deptInfo = {
         deptName: this.spendDeptArr.find(item => item.id === deptId)['name'],
         time: allTime,
-        allTurnOnRate: allTurnOnRate / (data[0]['powerTimes'].length) === 0 ? 0 : (allTurnOnRate / (data[0]['powerTimes'].length)).toFixed(2)
+        allTurnOnRate: allTurnOnRate / (data[0]['powerTimes'].length) === 0 ? 0 : (allTurnOnRate * 100 / (data[0]['powerTimes'].length)).toFixed(2)
       }
       this.spendDeptArrData.push(deptInfo)
       if (this.spendDeptArrData.length === this.spendDeptArr.length) {

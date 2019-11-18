@@ -95,9 +95,9 @@
                     {{scope.row.count}}
                   </template>
                 </el-table-column>
-                <el-table-column prop="powerOffTime" align="center" label="开机时间">
+                <el-table-column prop="powerOnTime" align="center" label="开机时间">
                   <template slot-scope="scope">
-                    {{scope.row.powerOffTime | initTime}}
+                    {{scope.row.powerOnTime | initTime}}
                   </template>
                 </el-table-column>
                 <el-table-column prop="standbyTime" align="center" label="待机时间">
@@ -105,9 +105,9 @@
                     {{scope.row.standbyTime | initTime}}
                   </template>
                 </el-table-column>
-                <el-table-column prop="powerOnTime" align="center" label="关机时间">
+                <el-table-column prop="powerOffTime" align="center" label="关机时间">
                   <template slot-scope="scope">
-                    {{scope.row.powerOnTime | initTime}}
+                    {{scope.row.powerOffTime | initTime}}
                   </template>
                 </el-table-column>
               </el-table>
@@ -339,7 +339,7 @@ export default {
           timeData[date] = Number(item.count) || 0
         }
         if (assetData[assetId] || assetData[assetId] === 0) {
-          assetData[assetId] += Number(item.count)
+          assetData[assetId] += 1
         } else {
           assetData[assetId] = Number(item.count) || 0
         }
@@ -349,7 +349,7 @@ export default {
     },
     initTableData (data) {
       let tableData = JSON.parse(JSON.stringify(data[0]['powerTimes']))
-      let powerOffTime = 0
+      let powerOnTime = 0
       data.forEach(item => {
         if (item.powerTimes && item.powerTimes.length > 0) {
           item.powerTimes.forEach(lab => {
@@ -365,20 +365,20 @@ export default {
         }
       })
       tableData.forEach(item => {
-        if (item.standbyTime === 0 && item.powerOffTime === 0) {
+        if (item.standbyTime === 0 && item.powerOnTime === 0) {
           item.utilize = 0
         } else {
-          item.utilize = (item.powerOffTime * 100 / (item.powerOnTime + item.standbyTime + item.powerOffTime)).toFixed(2)
+          item.utilize = (item.powerOnTime * 100 / (item.powerOnTime + item.standbyTime + item.powerOffTime)).toFixed(2)
         }
-        powerOffTime += item.powerOffTime
+        powerOnTime += item.powerOnTime
         item.count = this.dataAsset[item.assetId]
         item.sn = this.assetDeptInfo[item.assetId]['sn']
         item.no = this.assetDeptInfo[item.assetId]['no']
         item.deptName = this.assetDeptInfo[item.assetId]['deptName']
       })
       if (tableData.length > 0) {
-        this.assetInfo.totalActivationTime = powerOffTime
-        this.assetInfo.averageActivationTime = (powerOffTime / tableData.length) === 0 ? 0 : (powerOffTime / tableData.length).toFixed(2)
+        this.assetInfo.totalActivationTime = powerOnTime
+        this.assetInfo.averageActivationTime = (powerOnTime / tableData.length) === 0 ? 0 : (powerOnTime / tableData.length).toFixed(2)
       } else {
         this.assetInfo.totalActivationTime = 0
         this.assetInfo.averageActivationTime = 0
@@ -574,7 +574,6 @@ export default {
       this.assetDetailsChart.setOption(option, true)
     },
     seeAsssetDetail (row) {
-      console.log(row)
       this.dateValue = [
         moment(new Date().getTime() - 86400000 * 7).format('YYYY-MM-DD HH:mm:ss'),
         moment(new Date().getTime()).format('YYYY-MM-DD HH:mm:ss')
@@ -641,7 +640,6 @@ export default {
       })
     },
     initAssetTime (deptId, data) {
-      console.log(data, 1111)
       let obj = {}
       // let len = 0
       // let allTime = 0

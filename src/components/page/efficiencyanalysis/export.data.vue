@@ -58,8 +58,10 @@
       <!-- <el-table-column prop="i" label="故障率">
       </el-table-column> -->
       <el-table-column prop="time" label="总激活时间">
+        <template slot-scope="scope">{{scope.row.time | initTime}}</template>
       </el-table-column>
       <el-table-column prop="averageTime" label="平均激活时间">
+        <template slot-scope="scope">{{scope.row.averageTime | initTime}}</template>
       </el-table-column>
     </el-table>
   </div>
@@ -133,6 +135,21 @@ export default {
       assetList: {}
     }
   },
+  filters: {
+    initTime (value) {
+      if (!value) {
+        return 0
+      }
+      if (!Number(value)) {
+        return value
+      }
+      if (value > 86400000) {
+        return (value / (86400000)).toFixed(2) + 'T'
+      } else {
+        return (value / (60 * 60 * 1000)).toFixed(2) + 'H'
+      }
+    }
+  },
   created () {
     api.assetList({ pageNum: 1, pageSize: 2000 }).then(rs => {
       let obj = {}
@@ -187,15 +204,15 @@ export default {
       data.forEach(item => {
         len++
         item.powerTimes.forEach(lab => {
-          allTime += (Number(lab.powerOffTime) + Number(lab.standbyTime))
+          allTime += (Number(lab.powerOnTime) + Number(lab.standbyTime))
           if (obj[lab.assetId]) {
-            if (lab.powerOffTime > 0 || lab.standbyTime > 0) {
+            if (lab.powerOnTime > 0 || lab.standbyTime > 0) {
               obj[lab.assetId]['turnOnRate'] += 1
-              obj[lab.assetId]['time'] += (Number(lab.powerOffTime) + Number(lab.standbyTime))
+              obj[lab.assetId]['time'] += (Number(lab.powerOnTime) + Number(lab.standbyTime))
             }
           } else {
-            if (lab.powerOffTime > 0 || lab.standbyTime > 0) {
-              obj[lab.assetId] = { turnOnRate: 1, time: (Number(lab.powerOffTime) + Number(lab.standbyTime)), assetName: lab.assetName, vender: this.assetList[lab.assetId]['vender'], areaName: areaName, num: 1, kind: this.assetList[lab.assetId]['kind'] }
+            if (lab.powerOnTime > 0 || lab.standbyTime > 0) {
+              obj[lab.assetId] = { turnOnRate: 1, time: (Number(lab.powerOnTime) + Number(lab.standbyTime)), assetName: lab.assetName, vender: this.assetList[lab.assetId]['vender'], areaName: areaName, num: 1, kind: this.assetList[lab.assetId]['kind'] }
             } else {
               obj[lab.assetId] = { turnOnRate: 0, time: 0, assetName: lab.assetName, vender: this.assetList[lab.assetId]['vender'], areaName: areaName, num: 1, kind: this.assetList[lab.assetId]['kind'] }
               // turnOnRate 当天激活就+1，最后激活率就是激活次数/总天数 ，time激活时间，averageTime平均激活时间，assetName设备名称，vender厂家名称，areaname院区 ，num个数, kind设备类别
@@ -236,7 +253,7 @@ export default {
       })
     },
     async getAssetMacId (deptId, data) {
-      let mac = await api.findById({ id: data[0]['powerTimes'][0]['iotDeviceId'] }) // 根据mac对应id获取mac地址
+      let mac = await api.findById({ id: '2019101818025458933' }) // 根据mac对应id获取mac地址
       let areaName = await api.findByMacAddr({ macAddr: mac.data.macAddr }) // 根据mac地址获取对应的物联院区信息
       this.areaNameInfo[deptId] = areaName.data.areaName
       this.initAssetTime(data, deptId, areaName.data.areaName)

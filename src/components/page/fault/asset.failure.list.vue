@@ -480,7 +480,6 @@ export default {
       return wbout
     },
     fixStepChange (val, row) {
-      console.log(val, row)
     },
     seeDetail (row) {
       arr.forEach(item => {

@@ -2,11 +2,11 @@
  * @Author: renpengfei
  * @Date: 2019-03-16 18:31:01
  * @Last Modified by: renpengfei
- * @Last Modified time: 2019-09-04 18:03:56
+ * @Last Modified time: 2019-11-11 10:52:33
  */
 import axios from 'axios'
 import router from '../router'
-import { Notification } from 'element-ui'
+// import { Notification } from 'element-ui'
 const service = axios.create({
   timeout: 60000 // 超时时间,
 })
@@ -43,20 +43,22 @@ service
           return
         }
         if (response.data.code !== 200 && response.data.code !== 502) {
-          Notification.error(response.data.message || '操作失败')
+          console.log(response.data.message || '操作失败')
+          // Notification.error(response.data.message || '操作失败')
         } else {
           return response.data
         }
         // return Promise.resolve(response.data)
       } else {
-        Notification.error('操作失败')
+        console.log('操作失败')
+        // Notification.error('操作失败')
         return Promise.reject(response)
       }
     },
     // Do something with response error
     error => {
-      console.log(error)
-      Notification.error('网络请求失败，请稍后再试')
+      console.log('网络请求失败，请稍后再试')
+      // Notification.error('网络请求失败，请稍后再试')
       if (error.response) {
         switch (error.response.status) {
           case 401:
