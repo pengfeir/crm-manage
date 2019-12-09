@@ -426,52 +426,30 @@ export default {
       this.chartObj.assetChart = echarts.init(this.$refs.historyEc)
       this.chartObj.assetChart.showLoading()
       let data = this.getAll(this.queryObj.time[0].split(' ')[0], this.queryObj.time[1].split(' ')[0])
+      let echartData = []
+      let title = ''
       if (this.queryObj.type === '1') {
-        this.getAssetList(data) // 总量
+        title = '设备总量'
+        echartData = data
       } else if (this.queryObj.type === '2') {
-        this.getFaultRage(data) // 故障数
+        title = '设备故障数'
+        echartData = data
       } else if (this.queryObj.type === '3') {
-        this.getTurnOnRate() // 开机数
+        title = '设备开机数'
+        echartData = data
       } else {
-        this.getTurnOnRate() // 激活数
+        title = '设备激活数'
+        echartData = data
       }
+      this.initAssetTimeDataEchart(title, echartData)
     },
-    getAll (begin, end) {			// 开始日期和结束日期
-      let start = new Date(begin).getTime()
-      let end1 = new Date(end).getTime()
-      let arr = {}
-      if (end1 > new Date().getTime()) {
-        end1 = new Date().getTime()
-      } else {
-        end1 += 24 * 60 * 60 * 1000
-      }
-      while (start < end1) {
-        arr[moment(start).format('YYYY-MM-DD')] = 0
-        start += 24 * 60 * 60 * 1000
-      }
-      return arr
-    },
-    setDataTime (start, end, data) { // ('2019-01-01', '2019-01-03', {2019-01-02':0, '2019-01-02':0, '2019-01-03':0})
-      let arr = this.getAll(start, end)
-      for (let key in arr) {
-        if (data[key] === 0 || !!data[key]) {
-          data[key] += 1
-        }
-      }
-    },
-    getTurnOnRate (data) { // 获取开机数和激活数
+    initAssetTimeDataEchart (title, data) { // 处理设备趋势数据
       let data1 = []
       let data2 = []
-      this.initEchart(data1, data2)
-    },
-    getFaultRage () { // 获取设备故障数
-      let data1 = []
-      let data2 = []
-      this.initEchart(data1, data2)
-    },
-    getAssetList (data) { // 获取设备总数
-      let data1 = []
-      let data2 = []
+      data.forEach(item => {
+        data1.push(item.date)
+        data2.push(item.value)
+      })
       this.initEchart(data1, data2)
     },
     initEchart (data1, data2) {
@@ -490,11 +468,6 @@ export default {
           bottom: '50',
           containLabel: true
         },
-        dataZoom: [{
-          type: 'inside'
-        }, {
-          type: 'slider'
-        }],
         xAxis: {
           data: data1,
           silent: false,
@@ -690,6 +663,29 @@ export default {
       let option = this.rankingOptions(data1, data2, '科室设备开机率', '开机率', '%')
       this.chartObj.spendChart.hideLoading()
       this.chartObj.spendChart.setOption(option, true)
+    },
+    getAll (begin, end) {			// 开始日期和结束日期
+      let start = new Date(begin).getTime()
+      let end1 = new Date(end).getTime()
+      let arr = []
+      if (end1 > new Date().getTime()) {
+        end1 = new Date().getTime()
+      } else {
+        end1 += 24 * 60 * 60 * 1000
+      }
+      while (start < end1) {
+        arr.push({ date: moment(start).format('YYYY-MM-DD'), value: Math.floor(Math.random() * 10) })
+        start += 24 * 60 * 60 * 1000
+      }
+      return arr
+    },
+    setDataTime (start, end, data) { // ('2019-01-01', '2019-01-03', {2019-01-02':0, '2019-01-02':0, '2019-01-03':0})
+      let arr = this.getAll(start, end)
+      for (let key in arr) {
+        if (data[key] === 0 || !!data[key]) {
+          data[key] += 1
+        }
+      }
     }
   },
   beforeDestroy () {
