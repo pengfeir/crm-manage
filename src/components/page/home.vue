@@ -140,7 +140,7 @@
       </el-col>
     </el-row>
     <el-row style="background-color:#fff;padding-top:10px;">
-      <el-col :span="8">
+      <el-col :span="12">
         <div class="echart-content">
           <div class="vice-title">设备状态</div>
           <div class="vice-content">
@@ -148,15 +148,15 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="8">
+      <!-- <el-col :span="8">
         <div class="echart-content">
          <div class="vice-title no-border"></div>
           <div class="vice-content">
             <div ref="complaintEc" class="complaintEc" style="height:500px;width:100%;"></div>
           </div>
         </div>
-      </el-col>
-      <el-col :span="8">
+      </el-col> -->
+      <el-col :span="12">
         <div class="echart-content">
          <div class="vice-title no-border"></div>
           <div class="vice-content">
@@ -164,7 +164,7 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="8">
+      <!-- <el-col :span="8">
         <div class="echart-content">
          <div class="vice-title no-border"></div>
           <div class="vice-content">
@@ -187,7 +187,7 @@
             <div ref="spend" class="placeEc" style="height:500px;width:100%;"></div>
           </div>
         </div>
-      </el-col>
+      </el-col> -->
     </el-row>
     <!-- <el-row>
       <el-col style="background-color:#fff;padding-top:10px;" :span="24">
@@ -314,9 +314,9 @@ export default {
   created () {
     this.$nextTick(_ => {
       this.failureInit() // 设备报修
-      this.complaintInit() // 设备投诉
+      // this.complaintInit() // 设备投诉
       this.initAssetNum() // 概览数据
-      this.spendDeptList() // 科室设备开机率
+      // this.spendDeptList() // 科室设备开机率
       this.initDept() // 科室设备数量 科室设备故障率
       this.query()
       this.assetTime = window.setInterval(_ => {
@@ -328,7 +328,7 @@ export default {
     async initDept () {
       let deptList = await api.deptList({ pageNum: 1, pageSize: 200 })
       this.assetPlaceInit(deptList) // 科室设备数量
-      this.abnormalInit(deptList) // 科室设备故障率
+      // this.abnormalInit(deptList) // 科室设备故障率
     },
     query () {
       this.assetInfo.chart = echarts.init(this.$refs.historyEc)
@@ -1003,7 +1003,7 @@ export default {
     },
     spendDeptList () {
       this.spendInfo.chart = echarts.init(this.$refs.spend)
-      this.fullLoadInfo.chart = echarts.init(this.$refs.fullLoad)
+      // this.fullLoadInfo.chart = echarts.init(this.$refs.fullLoad)
       this.spendInfo.chart.showLoading()
       this.fullLoadInfo.chart.showLoading()
       api.deptList({ pageNum: 1, pageSize: 500 }).then(rs => {
@@ -1097,7 +1097,7 @@ export default {
         }
       }
       this.spendInit(data1, data2)
-      this.fullLoadInit(data1, data3)
+      // this.fullLoadInit(data1, data3)
     },
     spendInit (data1, data2) {
       this.spendInfo.chart.hideLoading()

@@ -37,7 +37,7 @@
             <div><h3>设备总保有量</h3></div>
             <div style="color:#409EFF;font-size:50px;text-align:center;height:190px;line-height:150px;">{{totalCount}} 台</div>
             <div style="border-top:2px solid #eee;">
-              <el-row>
+              <el-row style="visibility:hidden;">
                 <el-col :span="4" style="text-align:left">
                   开机率 <span style="color:#409EFF;">{{assetInfo.turnOnRate}}</span>
                 </el-col>
@@ -61,7 +61,7 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="16" style="padding-left:0;">
+        <el-col :span="24" style="padding-left:0;">
           <div class="demo-css" style="height:600px;">
             <div>
               <el-row>
@@ -85,7 +85,7 @@
                 </el-table-column>
                 <el-table-column prop="deptName" align="center" label="科室">
                 </el-table-column>
-                <el-table-column prop="utilize" align="center" label="利用率" width="100">
+                <el-table-column prop="utilize" align="center" label="满负荷率" width="100">
                   <template slot-scope="scope">
                     {{scope.row.utilize + ' %'}}
                   </template>
@@ -105,21 +105,21 @@
                     {{scope.row.standbyTime | initTime}}
                   </template>
                 </el-table-column>
-                <el-table-column prop="powerOffTime" align="center" label="关机时间">
+                <el-table-column prop="activateTime" align="center" label="激活时间">
                   <template slot-scope="scope">
-                    {{scope.row.powerOffTime | initTime}}
+                    {{scope.row.activateTime | initTime}}
                   </template>
                 </el-table-column>
               </el-table>
             </div>
           </div>
         </el-col>
-        <el-col :span="8" style="padding-right:0;">
+        <!-- <el-col :span="8" style="padding-right:0;">
           <div class="demo-css" style="height:600px;">
             <div><h3>设备满负荷率</h3></div>
             <div ref="assetRanking" class="asset" style="height:500px;width:100%;"></div>
           </div>
-        </el-col>
+        </el-col> -->
       </el-row>
       <el-row>
         <el-col :span="24" style="padding:5px 0;">
@@ -255,11 +255,7 @@ export default {
       if (!value) {
         return 0
       }
-      if (value > 86400000) {
-        return (value / (86400000)).toFixed(2) + 'T'
-      } else {
-        return (value / (60 * 60 * 1000)).toFixed(2) + 'H'
-      }
+      return (value / (60 * 60 * 1000)).toFixed(2) + ' H'
     }
   },
   methods: {
@@ -358,6 +354,7 @@ export default {
               info.powerOffTime += lab.powerOffTime
               info.powerOnTime += lab.powerOnTime
               info.standbyTime += lab.standbyTime
+              info.activateTime += lab.activateTime
             } else {
               tableData.push(JSON.parse(JSON.stringify(lab)))
             }
@@ -368,7 +365,7 @@ export default {
         if (item.standbyTime === 0 && item.powerOnTime === 0) {
           item.utilize = 0
         } else {
-          item.utilize = (item.powerOnTime * 100 / (item.powerOnTime + item.standbyTime + item.powerOffTime)).toFixed(2)
+          item.utilize = (item.powerOnTime * 100 / (data.length * 86400000)).toFixed(2)
         }
         powerOnTime += item.powerOnTime
         item.count = this.dataAsset[item.assetId]
@@ -384,7 +381,7 @@ export default {
         this.assetInfo.averageActivationTime = 0
       }
       this.tableData = tableData
-      this.initAssetRanking()
+      // this.initAssetRanking()
     },
     initAssetEcharts (json) {
       this.assetChart = echarts.init(this.$refs.asset)
@@ -531,7 +528,7 @@ export default {
           containLabel: true
         },
         legend: {
-          data: ['开机时间', '待机时间', '关机时间']
+          data: ['开机时间', '待机时间', '激活时间']
         },
         xAxis: [
           {
@@ -564,7 +561,7 @@ export default {
             data: data2
           },
           {
-            name: '关机时间',
+            name: '激活时间',
             type: 'bar',
             barMaxWidth: 30,
             data: data3
@@ -606,7 +603,7 @@ export default {
         if (info) {
           times.push((item.beginDate || '').split(' ')[0])
           data1.push((info.powerOffTime / (60 * 60 * 1000)).toFixed(2) || 0)
-          data3.push((info.powerOnTime / (60 * 60 * 1000)).toFixed(2) || 0)
+          data3.push((info.activateTime / (60 * 60 * 1000)).toFixed(2) || 0)
           data2.push((info.standbyTime / (60 * 60 * 1000)).toFixed(2) || 0)
         } else {
           times.push((item.beginDate || '').split(' ')[0])

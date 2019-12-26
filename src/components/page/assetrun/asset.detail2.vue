@@ -25,18 +25,18 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="14">
+      <el-col :span="14" style="height:241px;">
         <div class="demo-css">
           <el-row style="margin-bottom:30px;">
-            <el-col :span="6">
+            <!-- <el-col :span="6">
               <div class="type-container">
                 <div>年利用率</div>
                 <div>
                   <el-button type="success" plain>{{((timeInfo.yearTime)/(365*24 * 60 * 60 * 10)).toFixed(2)}}%</el-button>
                 </div>
               </div>
-            </el-col>
-            <el-col :span="6">
+            </el-col> -->
+            <el-col :span="8">
               <div class="type-container">
                 <div>保修状态</div>
                 <div>
@@ -45,7 +45,7 @@
                 </div>
               </div>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="8">
               <div class="type-container">
                 <div>网络状态</div>
                 <div>
@@ -54,7 +54,7 @@
                 </div>
               </div>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="8">
               <div class="type-container">
                 <div>运行状态</div>
                 <div v-if="infoQueryObj.networkStatus === '在线'">
@@ -69,7 +69,7 @@
               </div>
             </el-col>
           </el-row>
-          <el-row class="asset-run-info">
+          <!-- <el-row class="asset-run-info">
             <el-col :span="4" style="">
               <div class="max-size green">{{timeInfo.yearTime | initTime}}</div>
               <div class="min-size">本年开机时间</div>
@@ -94,7 +94,7 @@
               <div class="max-size green">{{timeInfo.averageTime}} H</div>
               <div class="min-size">平均开机间隔时间</div>
             </el-col>
-          </el-row>
+          </el-row> -->
         </div>
       </el-col>
     </el-row>
@@ -160,7 +160,7 @@
           <div class="title">实时有效电压(V)</div>
           <div class="data" v-if="infoQueryObj.networkStatus === '在线'">{{info.inputV}}</div>
           <div class="data" v-if="infoQueryObj.networkStatus === '离线'">未知</div>
-          <div class="ranage">正常范围：{{`${ranage.V.min} ~ ${ranage.V.max}`}}</div>
+          <div class="ranage">正常范围：{{`${ranage.V.max} ~ ${ranage.V.min}`}}</div>
         </div>
         <div class="demo-css data-module">
           <div class="title">实时有效电流(A)</div>
@@ -176,13 +176,13 @@
         </div>
       </el-col>
     </el-row>
-    <el-row>
-        <el-col :span="24">
-          <div class="demo-css">
-            <echarts-asset-time @getAverageTime="getAverageTime"></echarts-asset-time>
-          </div>
-        </el-col>
-      </el-row>
+    <!-- <el-row>
+      <el-col :span="24">
+        <div class="demo-css">
+          <echarts-asset-time @getAverageTime="getAverageTime"></echarts-asset-time>
+        </div>
+      </el-col>
+    </el-row> -->
     <el-row>
       <el-col :span="24">
         <div class="demo-css">
@@ -452,10 +452,11 @@ export default {
       // let endDate = this.getTime()
       api.tempList({ macAddress: this.id }).then(rs => {
         this.assetId = rs.data[rs.data.length - 1]['assetId']
-        Object.assign(rs.data[rs.data.length - 1], { seat: this.info.seat, deptName: this.info.deptName, brand: this.info.brand, assetSn: this.info.assetSn })
+        Object.assign(rs.data[rs.data.length - 1], { deptName: this.info.deptName, brand: this.info.brand })
         this.info = rs.data[rs.data.length - 1]
         this.initData(rs.data[rs.data.length - 1])
         this.initAssetType(rs.data[rs.data.length - 1])
+        this.info.seat = this.infoQueryObj.networkStatus === '在线' ? `${this.info.room1.area || '未知'} / ${this.info.room1.building || '未知'} / ${this.info.room1.roomNo || '未知'}` : '未知'
       })
     },
     initData (data) {
@@ -508,7 +509,6 @@ export default {
           this.assetTypeTable = table
           this.info.brand = rs.data.brand
           this.info.deptName = rs.data.deptName
-          this.info.seat = `${rs.data.areaName || '未知'} / ${rs.data.buildingName || '未知'} / ${rs.data.roomNo || '未知'}`
         }
       })
     },

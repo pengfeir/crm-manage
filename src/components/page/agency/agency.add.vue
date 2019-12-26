@@ -65,7 +65,7 @@ export default {
     getInfo () {
       api.agencyFindById({ id: this.detailId }).then(rs => {
         if (rs.code === 200) {
-          this.infoQueryObj = Object.assign(this.infoQueryObj, rs.data)
+          this.infoQueryObj = Object.assign(this.infoQueryObj, rs.data.list[0])
         }
       })
     },

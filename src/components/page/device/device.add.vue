@@ -225,10 +225,6 @@ export default {
     prev (id) {
       this.$refs.form.$refs.form.validate(valid => {
         if (valid) {
-          if (this.checkThreshold()) {
-            this.$messageTips(this, 'error', '请完善阈值信息')
-            return
-          }
           let url = 'createIotDevice'
           if (this.detailId) {
             url = 'updateIotDevice'
