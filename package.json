@@ -16,7 +16,7 @@
     "moment": "^2.24.0",
     "vue": "^2.6.6",
     "vue-router": "^3.0.1",
-    "xlsx": "^0.14.2"
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.5.0",
