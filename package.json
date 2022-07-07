@@ -13,7 +13,7 @@
     "echarts": "^4.2.1",
     "element-ui": "^2.4.5",
     "file-saver": "^2.0.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "vue": "^2.6.6",
     "vue-router": "^3.0.1",
     "xlsx": "^0.14.2"
